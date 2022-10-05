@@ -24,6 +24,7 @@ namespace AK_DLL
         public Hediff_Operator hediff;
         //public Thing apparel; //我觉得衣服一般不会被移除。摆烂。
         public Dictionary<SkillDef, int> skillLevel;
+        public VoicePackDef voicePack;
 
         public OperatorDocument(string defName, Pawn p, Thing weapon, OperatorDef operatorDef) : this()
         {
@@ -49,6 +50,7 @@ namespace AK_DLL
             {
                 this.RecordSkills();
             }
+            Scribe_Defs.Look(ref this.voicePack, "voicePackDef");
             Scribe_Values.Look(ref this.defName, "defName");
             Scribe_Values.Look(ref this.currentExist, "alive");
             Scribe_References.Look<Pawn>(ref this.pawn, "operator", true);
@@ -73,6 +75,12 @@ namespace AK_DLL
                 }
             }
         }
+
+        public void Tick()
+        {
+            if (!this.currentExist) return;
+        }
+
     }
 
     public class GameComp_OperatorDocumentation : GameComponent
@@ -144,6 +152,15 @@ namespace AK_DLL
                 destroyHeritage(operatorDocument[defName]);
                 ReRecruit(operatorDocument[defName] , defName, pawn, weapon);
             }
+        }
+
+        public override void GameComponentTick()
+        {
+            //base.GameComponentTick(); 感觉没用
+            /*foreach (KeyValuePair<string, OperatorDocument> node in operatorDocument)
+            {
+                node.Value.Tick();
+            }*/
         }
 
         public static void destroyHeritage (OperatorDocument doc)

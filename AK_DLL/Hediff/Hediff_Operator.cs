@@ -9,24 +9,21 @@ namespace AK_DLL
 {
     public class Hediff_Operator : Hediff
     {
-       
         public override bool ShouldRemove => false;
         public override void Notify_PawnDied()
         {
-            this.voicePackDef.diedSound.PlayOneShot(null);
-            document.RecordSkills();
-            document.currentExist = false;
+            this.document.voicePack.diedSound.PlayOneShot(null);
+            this.document.RecordSkills();
+            this.document.currentExist = false;
             base.Notify_PawnDied();
         }
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Defs.Look(ref this.voicePackDef, "AK_VoicePackDef");
             Scribe_References.Look(ref this.document, "AK_Document");
         }
 
         public OperatorDocument document;
-        public VoicePackDef voicePackDef;
 
     }
 }

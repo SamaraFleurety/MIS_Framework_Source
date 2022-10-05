@@ -17,9 +17,9 @@ namespace AK_DLL
             if (__instance.pawn.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("AK_Operator")) is Hediff_Operator hediff)
             {
                 if (__instance.Drafted)
-                    hediff.voicePackDef.draftSounds.RandomElement().PlaySound();
+                    hediff.document.voicePack.draftSounds.RandomElement().PlaySound();
                 else
-                    hediff.voicePackDef.undraftSound.PlaySound();
+                    hediff.document.voicePack.undraftSound.PlaySound();
             }
         }
     }

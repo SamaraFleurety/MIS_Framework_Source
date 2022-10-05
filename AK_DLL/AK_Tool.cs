@@ -25,8 +25,7 @@ namespace AK_DLL
 
 		public static void autoFillOperators()
         {
-			Log.Message("MIS.开始初始化");
-			if (doneAutoFill) return;
+			if (doneAutoFill) return; 
 			for (int i = 0; i <= 7; ++i)
 			{
 				operatorDefs[i] = new Dictionary<string, OperatorDef>();
@@ -90,8 +89,8 @@ namespace AK_DLL
 		public static void PlaySound(this Pawn pawn, SFXType type)
         {
 			abilitySFX[(int)type].PlayOneShot(null);
-			Log.Message((pawn.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("AK_Operator")) as Hediff_Operator).voicePackDef.abilitySounds.RandomElement().defName);
-			(pawn.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("AK_Operator")) as Hediff_Operator).voicePackDef.abilitySounds.RandomElement().PlaySound();
+			Log.Message((pawn.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("AK_Operator")) as Hediff_Operator).document.voicePack.abilitySounds.RandomElement().defName);
+			(pawn.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("AK_Operator")) as Hediff_Operator).document.voicePack.abilitySounds.RandomElement().PlaySound();
         }
 
 		public static void LoadedGame()

@@ -34,6 +34,11 @@ namespace AK_DLL
             this.CDandChargesList.Append(num0);
         }
 
+        public override void CompTickLong()
+        {
+            base.CompTickLong();
+        }
+
         public override void CompTick()
         {
             base.CompTick();

@@ -7,8 +7,8 @@ using HarmonyLib;
 
 namespace AK_DLL
 {
-    [HarmonyPatch(typeof(MainMenuDrawer), "DoExpansionIcons")]
-    public class PatchDoExpansionIcons
+    [HarmonyPatch(typeof(MainMenuDrawer), "Init")]
+    public class PatchInit
     {
         [HarmonyPostfix]
         public static void postfix ()

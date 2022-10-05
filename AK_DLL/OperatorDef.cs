@@ -168,8 +168,8 @@ namespace AK_DLL
                     }
 
                     //播放语音
-                    hediff.voicePackDef = this.voicePackDef;
                     this.voicePackDef.recruitSound.PlaySound();
+
                     //童年背景设置
                     if (this.age < 20)
                     {
@@ -180,7 +180,7 @@ namespace AK_DLL
                     //档案系统
                     GameComp_OperatorDocumentation.AddPawn(this.getDefName(), this, operator_Pawn, weapon);
                     hediff.document = GameComp_OperatorDocumentation.operatorDocument[this.getDefName()];
-
+                    hediff.document.voicePack = this.voicePackDef;
 
                     //向数据库记录已生成的干员
                     //if (Operator_Recruited.RecruitedOperators != null)
@@ -262,6 +262,7 @@ namespace AK_DLL
             {
                 //添加干员同名衣服
                 if (this.apparels.Contains(tempThing) == false) this.apparels.Add(tempThing);
+
                 #region 自动添加技能
                 tempThing.comps = new List<CompProperties>();
                 CompProperties_Ability comp;
@@ -276,7 +277,7 @@ namespace AK_DLL
                         else Log.Error($"detected dump operator ability {(k as CompProperties_Ability).abilityDef.defName}");
                     }
                 }
-                //读取干员Def里面的技能
+                //读取干员Def里面的技能并绑定进衣服
                 foreach (OperatorAbilityDef i in this.abilities)
                 {
                     comp = new CompProperties_Ability();
@@ -304,6 +305,7 @@ namespace AK_DLL
                 abilityHash.Clear();
             }
             #endregion
+
             foreach (string thingType in AK_Tool.apparelType)
             {
                 tempThing = DefDatabase<ThingDef>.GetNamedSilentFail(AK_Tool.GetThingsDefName(this.defName, thingType));

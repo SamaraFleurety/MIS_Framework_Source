@@ -16,7 +16,7 @@ namespace AK_DLL
         {
             if (obj is Pawn pawn && pawn.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("AK_Operator")) is Hediff_Operator hediff) 
             {
-                hediff.voicePackDef.selectSounds.RandomElement().PlaySound();
+                hediff.document.voicePack.selectSounds.RandomElement().PlaySound();
             }
         }
     }

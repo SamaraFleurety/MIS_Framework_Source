@@ -11,7 +11,7 @@ namespace AK_DLL
     //MOD设置 是跨存档全局的 细节没写
     public class AK_ModSettings : ModSettings
     {
-        public static bool playOperatorVoice;
+        public static bool playOperatorVoice = true;
         public static int voiceIntervalTime = 2;
         public List<Pawn> exampleListOfPawns = new List<Pawn>();
         //public Dictionary<string, Pawn>;

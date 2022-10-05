@@ -9,7 +9,13 @@ namespace AK_DLL
 {
     public class CompAbility : CompReloadable
     {
-        public new CompProperties_Ability Props =>(CompProperties_Ability)this.props;
+        public string UniqueID { 
+            get
+            {
+                return this.AbilityDef.defName.Split('_').Last();
+            }
+        }
+        public new CompProperties_Ability Props => (CompProperties_Ability)this.props;
         public OperatorAbilityDef AbilityDef => this.Props.abilityDef;
         public int MaxSummon => Props.maxSummoned;
         public void Summon()
@@ -22,28 +28,48 @@ namespace AK_DLL
             this.summoned--;
         }
 
+        public new int MaxCharges
+        {
+            get { return this.CDandCharges.maxCharge; }
+        }
+
         public override void PostPostMake()
         {
             base.PostPostMake();
-            int maxCharge_var = this.AbilityDef.maxCharge == 0 ? 1 : AbilityDef.maxCharge;
+            this.CDandCharges = new CDandCharge(1, this.AbilityDef.maxCharge, this.AbilityDef.CD);
+            /*int maxCharge_var = this.AbilityDef.maxCharge == 0 ? 1 : AbilityDef.maxCharge;
             int CD_var = 0;
             CDandCharge CDandCharge = new CDandCharge(CD_var, maxCharge_var, AbilityDef.CD);
             this.CDandChargesList.Add(CDandCharge);
             
             CDandCharge num0 = new CDandCharge(1,1,1);
-            this.CDandChargesList.Append(num0);
-        }
-
-        public override void CompTickLong()
-        {
-            base.CompTickLong();
+            this.CDandChargesList.Append(num0);*/
         }
 
         public override void CompTick()
         {
+            if (!this.Props.enabled) return;
+            base.CompTick();
+            if (this.CDandCharges.charge == this.CDandCharges.maxCharge)
+            {
+                return;
+            }
+            this.CDandCharges.CD -= 1;
+            if (this.CDandCharges.CD <= 0)
+            {
+                this.CDandCharges.charge += 1;
+                if (this.CDandCharges.charge < this.CDandCharges.maxCharge)
+                {
+                    this.CDandCharges.CD = this.CDandCharges.maxCD;
+                }
+            }
+        }
+
+        /*public override void CompTick()
+        {
             base.CompTick();
             List<CDandCharge> CDandCharge_var = new List<CDandCharge>();
-            foreach (CDandCharge CDandCharge in this.CDandChargesList) 
+            foreach (CDandCharge CDandCharge in this.CDandChargesList)
             {
                 if (CDandCharge.charge != CDandCharge.maxCharge)
                 {
@@ -57,81 +83,83 @@ namespace AK_DLL
                     CDandCharge_Loop.charge = charge_var;
                     CDandCharge_var.Add(CDandCharge_Loop);
                 }
-                else 
+                else
                 {
                     int CD_var = 0;
-                    CDandCharge CDandCharge_Loop = new CDandCharge(CD_var, CDandCharge.maxCharge,CDandCharge.maxCD);
+                    CDandCharge CDandCharge_Loop = new CDandCharge(CD_var, CDandCharge.maxCharge, CDandCharge.maxCD);
                     CDandCharge_var.Add(CDandCharge_Loop);
                 }
             }
             this.CDandChargesList.Clear();
             this.CDandChargesList.AddRange(CDandCharge_var);
-        }
+        }*/
         public override IEnumerable<Gizmo> CompGetWornGizmosExtra()
         {
             List<Gizmo> commandList = new List<Gizmo>();
+            if (!this.Props.enabled) return commandList;
             int i = 0;
-                Command_Abilities ability_Command = new Command_Abilities();
-                if (AbilityDef.icon!= null) 
+            Command_Abilities ability_Command = new Command_Abilities();
+            if (AbilityDef.icon != null)
+            {
+                ability_Command.icon = ContentFinder<Texture2D>.Get(AbilityDef.icon);
+            }
+            ability_Command.defaultLabel = AbilityDef.label;
+            ability_Command.defaultDesc = AbilityDef.description;
+            ability_Command.verb = this.GetVerb(AbilityDef.verb, i, true);
+            ability_Command.iconAngle = 0f;
+            ability_Command.iconOffset = new Vector2(0, 0);
+            ability_Command.needTarget = AbilityDef.needTarget;
+            ability_Command.pawn = ((Apparel)parent).Wearer;
+            ability_Command.charge = this.CDandCharges.charge;
+            ability_Command.maxCharge = this.CDandCharges.maxCharge;
+            if (AbilityDef.abilityType == AbilityType.Summon)
+            {
+                if (this.summoned == this.MaxSummon)
                 {
-                    ability_Command.icon = ContentFinder<Texture2D>.Get(AbilityDef.icon);
+                    ability_Command.Disable("AK_SummonedReachedMax".Translate(this.MaxSummon.ToString()));
                 }
-                ability_Command.defaultLabel = AbilityDef.label;
-                ability_Command.defaultDesc = AbilityDef.description;
-                ability_Command.verb = this.GetVerb(AbilityDef.verb,i,true);
-                ability_Command.iconAngle = 0f;
-                ability_Command.iconOffset = new Vector2(0, 0);
-                ability_Command.needTarget = AbilityDef.needTarget;
-                ability_Command.pawn = ((Apparel)parent).Wearer;
-                ability_Command.charge = this.CDandChargesList[i].charge;
-                ability_Command.maxCharge = this.CDandChargesList[i].maxCharge;
-                if (AbilityDef.abilityType == AbilityType.Summon)
+                Command_Abilities reclaim = ability_Command;
+                Verb_Reclaim verb_Reclaim = this.GetVerb(AbilityDef.verb_Reclaim, i, false) as Verb_Reclaim;
+                verb_Reclaim.pawn = AbilityDef.canReclaimPawn;
+                reclaim.verb = verb_Reclaim;
+                reclaim.icon = ContentFinder<Texture2D>.Get(AbilityDef.iconReclaim);
+                reclaim.defaultLabel = AbilityDef.reclaimLabel;
+                reclaim.defaultDesc = AbilityDef.reclaimDesc;
+                reclaim.needTarget = true;
+                commandList.Add(reclaim);
+                i += 1;
+            }
+            else
+            {
+                if (AbilityDef.needCD)
                 {
-                    if (this.summoned == this.MaxSummon)
-                    {
-                        ability_Command.Disable("AK_SummonedReachedMax".Translate(this.MaxSummon.ToString()));
-                    }
-                    Command_Abilities reclaim = ability_Command;
-                    Verb_Reclaim verb_Reclaim = this.GetVerb(AbilityDef.verb_Reclaim,i,false) as Verb_Reclaim;
-                    verb_Reclaim.pawn = AbilityDef.canReclaimPawn;
-                    reclaim.verb = verb_Reclaim;
-                    reclaim.icon = ContentFinder<Texture2D>.Get(AbilityDef.iconReclaim);
-                    reclaim.defaultLabel = AbilityDef.reclaimLabel;
-                    reclaim.defaultDesc = AbilityDef.reclaimDesc;
-                    reclaim.needTarget = true;
-                    commandList.Add(reclaim);
-                    i += 1;
+                    ability_Command.CD = this.CDandCharges.CD;
                 }
-                else
+                ability_Command.maxCD = AbilityDef.CD;
+                if (this.CDandCharges.charge == 0)
                 {
-                    if (AbilityDef.needCD)
-                    {
-                        ability_Command.CD = this.CDandChargesList[i].CD;
-                    }
-                    ability_Command.maxCD = AbilityDef.CD;
-                    if (this.CDandChargesList[i].charge == 0)
-                    {
-                        ability_Command.Disable("AK_ChargeIsZero".Translate());
-                    }
-                    i+= 1;
+                    ability_Command.Disable("AK_ChargeIsZero".Translate());
                 }
-                commandList.Add(ability_Command);
+                i += 1;
+            }
+            commandList.Add(ability_Command);
             return commandList;
         }
 
-        public Verb GetVerb(VerbProperties verbProp,int num,bool isntReclaim) 
+        public Verb GetVerb(VerbProperties verbProp, int num, bool isntReclaim)
         {
             if (isntReclaim)
             {
-                    Verb_Ability verb_var = (Verb_Ability)Activator.CreateInstance(verbProp.verbClass);
-                    verb_var.caster = ((Apparel)parent).Wearer;
-                    verb_var.verbProps = verbProp;
-                    verb_var.verbTracker = new VerbTracker(this);
-                    verb_var.ability = this.AbilityDef;
-                    verb_var.i = num;
-                    return verb_var;
+                Verb_Ability verb_var = (Verb_Ability)Activator.CreateInstance(verbProp.verbClass);
+                verb_var.caster = ((Apparel)parent).Wearer;
+                verb_var.verbProps = verbProp;
+                verb_var.verbTracker = new VerbTracker(this);
+                verb_var.ability = this.AbilityDef;
+                verb_var.i = num;
+                verb_var.CDs = this.CDandCharges;
+                return verb_var;
             }
-            else 
+            else
             {
                 Verb verb = (Verb)Activator.CreateInstance(verbProp.verbClass);
                 verb.caster = ((Apparel)parent).Wearer;
@@ -140,7 +168,7 @@ namespace AK_DLL
                 return verb;
             }
 
-        
+
         }
 
         public override string CompInspectStringExtra()
@@ -151,11 +179,12 @@ namespace AK_DLL
         public override void PostExposeData()
         {
             base.PostExposeData();
-            Scribe_Collections.Look<CDandCharge>(ref CDandChargesList, "CDandChargesList", LookMode.Deep);
-            Scribe_Values.Look(ref summoned, "summoned");
+            Scribe_Deep.Look(ref this.CDandCharges, UniqueID + "CD");
+            //Scribe_Collections.Look<CDandCharge>(ref CDandChargesList, "CDandChargesList", LookMode.Deep);
+            Scribe_Values.Look(ref summoned, UniqueID + "summoned");
         }
 
-        public List<CDandCharge> CDandChargesList = new List<CDandCharge>();
+        public CDandCharge CDandCharges;
         public int summoned = 0;
     }
 }

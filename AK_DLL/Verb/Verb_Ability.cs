@@ -17,21 +17,16 @@ namespace AK_DLL
 			this.CasterPawn.PlaySound(this.ability.typeSFX);
 
 			ThingWithComps apparel = base.EquipmentSource;
-			CompAbility compAbility = apparel.TryGetComp<CompAbility>();
 			if (this.ability.debuff != null)
 			{
 				HealthUtility.AdjustSeverity(casterPawn,this.ability.debuff,this.ability.debuffSeverity);
 			}
             if (this.ability.needCD)
 			{
-				compAbility.CDandChargesList[i].charge --;
-				compAbility.CDandChargesList[i].CD = compAbility.CDandChargesList[i].maxCD;
+				this.CDs.charge -= 1;
+				this.CDs.CD += this.CDs.maxCD;
 			}
-			if (compAbility == null) 
-			{
-				Messages.Message("AK_CanntUseAbility_PawnIsNull".Translate(), MessageTypeDefOf.CautionInput);
-				return false;
-			}
+			
 			IntVec3 intVec3 = this.currentTarget.Cell;
 			if (!this.ability.isSectorAbility)
 			{
@@ -140,6 +135,7 @@ namespace AK_DLL
 
 		public AbilityEffectBase effect;
 		public OperatorAbilityDef ability;
+		public CDandCharge CDs;
 		public int i;
     }
 }

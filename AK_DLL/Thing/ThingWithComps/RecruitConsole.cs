@@ -44,13 +44,13 @@ namespace AK_DLL
 
         //招募干员放进class operatorDef了
 
-        public override void ExposeData()
+        /*public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Collections.Look(ref recruitedOperators, "spawnedOperators", LookMode.Def);
-        } 
+            //Scribe_Collections.Look(ref recruitedOperators, "spawnedOperators", LookMode.Def);
+        } */
         public CompPowerTrader compPower;
         public CompRefuelable compRefuelable;
-        public List<OperatorDef> recruitedOperators = new List<OperatorDef>();
+        //public List<OperatorDef> recruitedOperators = new List<OperatorDef>();
     }
 }

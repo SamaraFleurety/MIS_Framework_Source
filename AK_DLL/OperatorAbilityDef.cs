@@ -35,5 +35,7 @@ namespace AK_DLL
         public float debuffSeverity;
 
         public int maxCharge = 1;
+        public bool displayOnUndraft = false;
+        public bool grouped = false;
     }
 }

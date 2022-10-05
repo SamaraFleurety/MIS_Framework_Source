@@ -66,7 +66,7 @@ namespace AK_DLL
                 Widgets.Label(rect,label??"寄");
             }
             //特性显示绘制
-            Rect rect_AbilityImage = new Rect(rect.x, rect.y + 50f, 60f, 60f);
+            Rect rect_AbilityImage = new Rect(rect.x, rect.y + 65f, 60f, 60f);
             Rect rect_AbilityText = new Rect(rect.x + 70f,rect.y + 50f,100f,60f);
 
             if (operator_Def.abilities != null && operator_Def.abilities.Count > 0)
@@ -79,11 +79,11 @@ namespace AK_DLL
                     text.AppendLine(ability.label);
                     text.AppendLine(ability.description);
                     Widgets.Label(rect_AbilityText, text.ToString().Trim());
-                    rect_AbilityImage.y += 50f;
-                    rect_AbilityText.y += 50f;
+                    rect_AbilityImage.y += 65f;
+                    rect_AbilityText.y += 65f;
                 }
             }
-            //绘制技能
+            //绘制技能(放的那种)
 
             rect1.x = 80f;
             rect1.y = 350f;
@@ -138,12 +138,20 @@ namespace AK_DLL
             //技能绘制
 
             rect_Back.x -= 145f;
+            OperatorDocument doc = null;
+            if (GameComp_OperatorDocumentation.operatorDocument.ContainsKey(operator_Def.getDefName()))
+            {
+                doc = GameComp_OperatorDocumentation.operatorDocument[operator_Def.getDefName()];
+            }
+
             if (Widgets.ButtonText(rect_Back, recruitText))
             {
-                if (GameComp_OperatorDocumentation.operatorDocument.ContainsKey(operator_Def.getDefName()) && !GameComp_OperatorDocumentation.operatorDocument[operator_Def.getDefName()].currentExist)
+                //如果招募曾经招过的干员
+                if (doc != null && !doc.currentExist)
                 {
                 }
-                if (!GameComp_OperatorDocumentation.operatorDocument.ContainsKey(operator_Def.getDefName()) || !GameComp_OperatorDocumentation.operatorDocument[operator_Def.getDefName()].currentExist)
+                //如果干员未招募过，或已死亡
+                if (doc == null || !doc.currentExist)
                 {
                     RecruitConsole.TryGetComp<CompRefuelable>().ConsumeFuel(1);
                     operator_Def.Recruit(RecruitConsole.Map);
@@ -155,7 +163,21 @@ namespace AK_DLL
                 }
             }
             //招募
+            if (doc != null && doc.currentExist)
+            {
+                rect_Back.x -= 145f;
+                if (Widgets.ButtonText(rect_Back, switchSkillText))
+                {
+                    doc.groupedAbilities[doc.preferedAbility].enabled = false;
+                    doc.preferedAbility = (doc.preferedAbility + 1) % doc.groupedAbilities.Count;
+                    doc.groupedAbilities[doc.preferedAbility].enabled = true;
+                    Log.Message($"切换技能至{doc.groupedAbilities[doc.preferedAbility].abilityDef.defName}");
+                }
+            }
+            
         }
+
+        private string switchSkillText = "AK_SwitchSkill".Translate();
         public string recruitText = "AK_RecruitOperator".Translate();
         public OperatorDef operator_Def;
         public Thing RecruitConsole;

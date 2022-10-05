@@ -25,6 +25,8 @@ namespace AK_DLL
         //public Thing apparel; //我觉得衣服一般不会被移除。摆烂。
         public Dictionary<SkillDef, int> skillLevel;
         public VoicePackDef voicePack;
+        public List<CompProperties_Ability> groupedAbilities;
+        public int preferedAbility = 0;
 
         public OperatorDocument(string defName, Pawn p, Thing weapon, OperatorDef operatorDef) : this()
         {
@@ -37,6 +39,7 @@ namespace AK_DLL
         }
         public OperatorDocument() {
             this.skillLevel = new Dictionary<SkillDef, int>();
+            groupedAbilities = new List<CompProperties_Ability>();
         }
 
         public string GetUniqueLoadID()
@@ -166,6 +169,8 @@ namespace AK_DLL
         public static void destroyHeritage (OperatorDocument doc)
         {
             doc.currentExist = false;
+            doc.groupedAbilities.Clear();
+            doc.preferedAbility = 0;
             if (doc.pawn != null) 
             { 
                 if (doc.pawn.Destroyed == false) doc.pawn.Destroy();

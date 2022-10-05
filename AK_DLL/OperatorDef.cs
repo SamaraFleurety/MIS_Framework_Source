@@ -100,12 +100,7 @@ namespace AK_DLL
                     }
                     //特性更改
 
-                    operator_Pawn.apparel.DestroyAll();
-                    foreach (ThingDef apparelDef in this.apparels)
-                    {
-                        operator_Pawn.apparel.Wear((Apparel)ThingMaker.MakeThing(apparelDef), true, true);
-                    }
-                    //装备衣物
+                    
 
 
                     ThingWithComps weapon = (ThingWithComps)ThingMaker.MakeThing(this.weapon);
@@ -181,6 +176,26 @@ namespace AK_DLL
                     GameComp_OperatorDocumentation.AddPawn(this.getDefName(), this, operator_Pawn, weapon);
                     hediff.document = GameComp_OperatorDocumentation.operatorDocument[this.getDefName()];
                     hediff.document.voicePack = this.voicePackDef;
+
+                    operator_Pawn.apparel.DestroyAll();
+                    foreach (ThingDef apparelDef in this.apparels)
+                    {
+                        Apparel apparel = (Apparel)ThingMaker.MakeThing(apparelDef);
+                        operator_Pawn.apparel.Wear(apparel, true, true);
+                        foreach (ThingComp i in apparel.AllComps)
+                        {
+                            if (i.props is CompProperties_Ability && (i.props as CompProperties_Ability).abilityDef.grouped)
+                            {
+                                hediff.document.groupedAbilities.Add(i.props as CompProperties_Ability);
+                            }
+                        }
+                    }
+                    //装备衣物
+
+                    for (int i = 1; i < hediff.document.groupedAbilities.Count; ++i)
+                    {
+                        hediff.document.groupedAbilities[i].enabled = false;
+                    }
 
                     //向数据库记录已生成的干员
                     //if (Operator_Recruited.RecruitedOperators != null)
@@ -280,16 +295,14 @@ namespace AK_DLL
                 //读取干员Def里面的技能并绑定进衣服
                 foreach (OperatorAbilityDef i in this.abilities)
                 {
-                    comp = new CompProperties_Ability();
-                    comp.abilityDef = i;
+                    comp = new CompProperties_Ability(i);
                     if (abilityHash.Contains(i) == false) tempThing.comps.Add(comp);
                 }
                 //自动绑定合规范的技能
                 OperatorAbilityDef j = DefDatabase<OperatorAbilityDef>.GetNamedSilentFail(tempString = AK_Tool.GetThingsDefName(this.defName, "Ability"));
                 if (j != null && abilityHash.Contains(j) == false)
                 {
-                    comp = new CompProperties_Ability();
-                    comp.abilityDef = j;
+                    comp = new CompProperties_Ability(j);
                     tempThing.comps.Add(comp);
                 }
                 for (int i = 0; i < 10 && (j = DefDatabase<OperatorAbilityDef>.GetNamedSilentFail(tempString + AK_Tool.romanNumber[i])) != null; ++i)
@@ -297,8 +310,7 @@ namespace AK_DLL
 
                     if (abilityHash.Contains(j) == false)
                     {
-                        comp = new CompProperties_Ability();
-                        comp.abilityDef = j;
+                        comp = new CompProperties_Ability(j);
                         tempThing.comps.Add(comp);
                     }
                 }

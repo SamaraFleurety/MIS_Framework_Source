@@ -24,7 +24,7 @@ namespace AK_DLL
 
         public Texture2D blackBack
         {
-            get 
+            get
             {
                 return ContentFinder<Texture2D>.Get("UI/Frame/Frame_Skills");
             }
@@ -32,7 +32,14 @@ namespace AK_DLL
 
         public override void DoWindowContents(Rect inRect)
         {
-            Widgets.DrawTextureFitted(new Rect(inRect.x += 350f + operator_Def.standOffset.x, inRect.y+40f + operator_Def.standOffset.y, inRect.width - 870f, inRect.height), ContentFinder<Texture2D>.Get(operator_Def.stand), 3f);
+            try
+            {
+                Widgets.DrawTextureFitted(new Rect(inRect.x += 350f + operator_Def.standOffset.x, inRect.y + 40f + operator_Def.standOffset.y, inRect.width - 870f, inRect.height), ContentFinder<Texture2D>.Get(operator_Def.stand), 3f);
+            }
+            catch
+            {
+                Log.Error("立绘错误");
+            }
             //立绘绘制
             GUI.DrawTexture(new Rect(970f, 0f, 550f, 720f), blackBack);
             //背景绘制
@@ -48,7 +55,7 @@ namespace AK_DLL
             }
             //返回按钮的绘制
 
-            Widgets.Label(rect,operator_Def.nickname+"："+operator_Def.name);
+            Widgets.Label(rect, operator_Def.nickname + "：" + operator_Def.name);
             //人名绘制
             Rect rect1 = new Rect(rect);
             rect.y += 20f;
@@ -58,16 +65,16 @@ namespace AK_DLL
             rect.height -= 35f;
             rect.y += 100f;
             Widgets.Label(rect, "AK_Terait".Translate());
-            foreach (TraitAndDegree TraitAndDegree in operator_Def.traits) 
+            foreach (TraitAndDegree TraitAndDegree in operator_Def.traits)
             {
                 rect.y += 25f;
                 string label = "寄";
                 label = TraitAndDegree.def.DataAtDegree(TraitAndDegree.degree)?.label;
-                Widgets.Label(rect,label??"寄");
+                Widgets.Label(rect, label ?? "寄");
             }
             //特性显示绘制
             Rect rect_AbilityImage = new Rect(rect.x, rect.y + 65f, 60f, 60f);
-            Rect rect_AbilityText = new Rect(rect.x + 70f,rect.y + 50f,100f,60f);
+            Rect rect_AbilityText = new Rect(rect.x + 70f, rect.y + 50f, 100f, 60f);
 
             if (operator_Def.abilities != null && operator_Def.abilities.Count > 0)
             {
@@ -100,13 +107,13 @@ namespace AK_DLL
             rect3.height = 152f;
             rect3.width = 152f;
             rect3.y -= 250f;
-            Widgets.DrawTextureFitted(new Rect(rect3.x + operator_Def.headPortraitOffset.x , rect3.y + operator_Def.headPortraitOffset.y,rect3.width,rect3.height), ContentFinder<Texture2D>.Get("UI/Frame/Frame_HeadPortrait"), 1f);
-            Widgets.DrawTextureFitted(new Rect(rect3.x + 3f + operator_Def.headPortraitOffset.x, rect3.y+ 2f + operator_Def.headPortraitOffset.y, 145f, 148f), ContentFinder<Texture2D>.Get(operator_Def.headPortrait), 1f);
+            Widgets.DrawTextureFitted(new Rect(rect3.x + operator_Def.headPortraitOffset.x, rect3.y + operator_Def.headPortraitOffset.y, rect3.width, rect3.height), ContentFinder<Texture2D>.Get("UI/Frame/Frame_HeadPortrait"), 1f);
+            Widgets.DrawTextureFitted(new Rect(rect3.x + 3f + operator_Def.headPortraitOffset.x, rect3.y + 2f + operator_Def.headPortraitOffset.y, 145f, 148f), ContentFinder<Texture2D>.Get(operator_Def.headPortrait), 1f);
             //绘制头像框与头像
             rect3.height = 150f;
             rect3.width = 150f;
             rect3.x += 5f;
-            Widgets.DrawTextureFitted(new Rect(rect2.x-45f,rect2.y+95f,180f,105f),blackBack, 3f);
+            Widgets.DrawTextureFitted(new Rect(rect2.x - 45f, rect2.y + 95f, 180f, 105f), blackBack, 3f);
 
             foreach (SkillAndFire skillAndFire in operator_Def.Skills)
             {
@@ -119,17 +126,17 @@ namespace AK_DLL
                 {
                     skillLv = skillAndFire.level;
                 }
-                Widgets.FillableBar(new Rect(rect2.x,rect2.y,170f,20f), skillLv / 20f, SolidColorMaterials.NewSolidColorTexture(new Color(1f, 1f, 1f,0.3f)), ContentFinder<Texture2D>.Get("UI/Frame/Null"), false);
-                Widgets.Label(new Rect(rect1.x - 35f, rect1.y, 150f, rect1.height),skillAndFire.skill.label);
+                Widgets.FillableBar(new Rect(rect2.x, rect2.y, 170f, 20f), skillLv / 20f, SolidColorMaterials.NewSolidColorTexture(new Color(1f, 1f, 1f, 0.3f)), ContentFinder<Texture2D>.Get("UI/Frame/Null"), false);
+                Widgets.Label(new Rect(rect1.x - 35f, rect1.y, 150f, rect1.height), skillAndFire.skill.label);
                 Widgets.Label(new Rect(rect1.x + 75f, rect1.y, 100f, rect1.height), skillLv.ToString());
                 Rect rect4 = new Rect(rect1.x + 50f, rect1.y + 4f, 10f, 10f);
                 if (skillAndFire.fireLevel == Passion.Minor)
                 {
-                    Widgets.DrawTextureFitted(rect4, smallFire,2.5f);
+                    Widgets.DrawTextureFitted(rect4, smallFire, 2.5f);
                 }
                 if (skillAndFire.fireLevel == Passion.Major)
                 {
-                    Widgets.DrawTextureFitted(rect4, bigFire,2.5f);
+                    Widgets.DrawTextureFitted(rect4, bigFire, 2.5f);
                 }
                 rect1.y += 25f;
                 rect2.y += 25f;
@@ -157,7 +164,7 @@ namespace AK_DLL
                     operator_Def.Recruit(RecruitConsole.Map);
                     this.Close();
                 }
-                else 
+                else
                 {
                     recruitText = "AK_CanntRecruitOperator".Translate();
                 }
@@ -174,7 +181,7 @@ namespace AK_DLL
                     Log.Message($"切换技能至{doc.groupedAbilities[doc.preferedAbility].abilityDef.defName}");
                 }
             }
-            
+
         }
 
         private string switchSkillText = "AK_SwitchSkill".Translate();

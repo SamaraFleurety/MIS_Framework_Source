@@ -241,7 +241,36 @@ namespace AK_DLL
         }
         public void AutoFill()
         {
+            //默认名字
+            AutoFill_Name();
 
+            //默认体型
+            //if (this.bodyTypeDef == null) this.bodyTypeDef = BodyTypeDefOf.Thin;
+
+            //默认武器
+            AutoFill_Weapon();
+
+            //默认衣服
+            AutoFill_ApparelAbility();
+
+            //默认发型，没有也无所谓，生成时有另一个默认值
+            if (this.hair == null)
+            {
+                this.hair = DefDatabase<HairDef>.GetNamedSilentFail(AK_Tool.GetThingsDefName(this.defName, "Hair"));
+            }
+
+            //默认头像和立绘
+            AutoFill_StandPortrait();
+
+            //默认语音
+            AutoFill_VoicePack();
+
+        }
+
+
+        #region AutoFillSubMethods
+        private void AutoFill_Name()
+        {
             if (this.name == null && this.nickname == null)
             {
                 Log.Error($"{this.defName}缺乏任何形式的名字。");
@@ -255,9 +284,9 @@ namespace AK_DLL
                 this.surname = "Rhodes";
                 Log.Error(this.nickname + "缺乏姓。");
             }
-            //if (this.bodyTypeDef == null) this.bodyTypeDef = BodyTypeDefOf.Thin;
-
-            //默认武器
+        }
+        private void AutoFill_Weapon()
+        {
             if (this.weapon == null)
             {
                 this.weapon = DefDatabase<ThingDef>.GetNamedSilentFail(AK_Tool.GetThingsDefName(this.defName, "Weapon"));
@@ -267,8 +296,54 @@ namespace AK_DLL
                     Log.Error($"缺乏{this.nickname}的武器，随便发一把。");
                 }
             }
+        }
+        private void AutoFill_VoicePack()
+        {
+            if (this.voicePackDef == null)
+            {
+                this.voicePackDef = DefDatabase<VoicePackDef>.GetNamedSilentFail($"AK_VoicePack_" + this.getDefName());
+                if (this.voicePackDef == null)
+                {
+                    this.voicePackDef = new VoicePackDef(AK_Tool.GetOperatorNameFromDefName(this.defName));
+                    return;
+                }
+            }
+            this.voicePackDef.AutoFillVoicePack(this.getDefName());
+        }
+        private void AutoFill_StandPortrait()
+        {
+            if (this.headPortrait == null)
+            {
+                string portraitPath = "UI/Image/" + AK_Tool.operatorTypeStiring[(int)this.operatorType] + "/" + AK_Tool.GetOperatorNameFromDefName(this.defName) + "Portrait";
+                this.headPortrait = portraitPath;
+                try
+                {
+                    ContentFinder<Texture2D>.Get(this.headPortrait);
+                }
+                catch
+                {
+                    Log.Error($"{this.nickname}缺乏头像。");
+                    this.headPortrait = "UI/Image/Caster/DuskPortrait";
+                }
+            }
 
-            //默认衣服
+            if (this.stand == null)
+            {
+                string standPath = "UI/Image/" + AK_Tool.operatorTypeStiring[(int)this.operatorType] + "/" + AK_Tool.GetOperatorNameFromDefName(this.defName) + "Stand";
+                this.stand = standPath;
+                try
+                {
+                    ContentFinder<Texture2D>.Get(this.stand);
+                }
+                catch
+                {
+                    Log.Error($"{this.nickname}缺乏立绘。");
+                    this.stand = "UI/Image/Caster/DuskStand";
+                }
+            }
+        }
+        private void AutoFill_ApparelAbility()
+        {
             string tempString = AK_Tool.GetThingsDefName(this.defName, "Apparel");
             ThingDef tempThing = DefDatabase<ThingDef>.GetNamedSilentFail(tempString);
             if (this.apparels == null) this.apparels = new List<ThingDef>();
@@ -279,7 +354,7 @@ namespace AK_DLL
                 if (this.apparels.Contains(tempThing) == false) this.apparels.Add(tempThing);
 
                 #region 自动添加技能
-                tempThing.comps = new List<CompProperties>();
+                if (tempThing.comps == null) tempThing.comps = new List<CompProperties>();
                 CompProperties_Ability comp;
                 //保存有的技能
                 HashSet<OperatorAbilityDef> abilityHash = new HashSet<OperatorAbilityDef>();
@@ -289,14 +364,17 @@ namespace AK_DLL
                     if (k is CompProperties_Ability)
                     {
                         if (abilityHash.Contains((k as CompProperties_Ability).abilityDef) == false) abilityHash.Add((k as CompProperties_Ability).abilityDef);
-                        else Log.Error($"detected dump operator ability {(k as CompProperties_Ability).abilityDef.defName}");
+                        else Log.Error($"detected duplicate operator ability {(k as CompProperties_Ability).abilityDef.defName}");
                     }
                 }
                 //读取干员Def里面的技能并绑定进衣服
-                foreach (OperatorAbilityDef i in this.abilities)
+                if (this.abilities != null)
                 {
-                    comp = new CompProperties_Ability(i);
-                    if (abilityHash.Contains(i) == false) tempThing.comps.Add(comp);
+                    foreach (OperatorAbilityDef i in this.abilities)
+                    {
+                        comp = new CompProperties_Ability(i);
+                        if (abilityHash.Contains(i) == false) tempThing.comps.Add(comp);
+                    }
                 }
                 //自动绑定合规范的技能
                 OperatorAbilityDef j = DefDatabase<OperatorAbilityDef>.GetNamedSilentFail(tempString = AK_Tool.GetThingsDefName(this.defName, "Ability"));
@@ -324,57 +402,9 @@ namespace AK_DLL
                 if (tempThing != null && !this.apparels.Contains(tempThing)) this.apparels.Add(tempThing);
             }
 
-            //默认发型，没有也无所谓，生成时有另一个默认值
-            if (this.hair == null)
-            {
-                this.hair = DefDatabase<HairDef>.GetNamedSilentFail(AK_Tool.GetThingsDefName(this.defName, "Hair"));
-            }
-
-            //默认头像
-            if (this.headPortrait == null)
-            {
-                string portraitPath = "UI/Image/" + AK_Tool.operatorTypeStiring[(int)this.operatorType] + "/" + AK_Tool.GetOperatorNameFromDefName(this.defName) + "Portrait";
-                this.headPortrait = portraitPath;
-                try
-                {
-                    ContentFinder<Texture2D>.Get(this.headPortrait);
-                }
-                catch
-                {
-                    Log.Error($"{this.nickname}缺乏头像。");
-                    this.headPortrait = "UI/Image/Caster/DuskPortrait";
-                }
-            }
-
-            //默认立绘
-            if (this.stand == null)
-            {
-                string standPath = "UI/Image/" + AK_Tool.operatorTypeStiring[(int)this.operatorType] + "/" + AK_Tool.GetOperatorNameFromDefName(this.defName) + "Stand";
-                this.stand = standPath;
-                try
-                {
-                    ContentFinder<Texture2D>.Get(this.stand);
-                }
-                catch
-                {
-                    Log.Error($"{this.nickname}缺乏立绘。");
-                    this.stand = "UI/Image/Caster/DuskStand";
-                }
-            }
-
-            //默认语音
-            if (this.voicePackDef == null)
-            {
-                this.voicePackDef = DefDatabase<VoicePackDef>.GetNamedSilentFail($"AK_VoicePack_" + this.getDefName());
-                if (this.voicePackDef == null)
-                {
-                    this.voicePackDef = new VoicePackDef(AK_Tool.GetOperatorNameFromDefName(this.defName));
-                    return;
-                }
-            }
-            this.voicePackDef.AutoFillVoicePack(this.getDefName());
 
         }
+        #endregion
 
     }
 }

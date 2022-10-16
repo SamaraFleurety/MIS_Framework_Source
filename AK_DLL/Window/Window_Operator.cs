@@ -4,7 +4,6 @@ using RimWorld.Planet;
 using System.Text;
 using RimWorld;
 using UnityEngine;
-using StoriesRetold;
 using HarmonyLib;
 
 namespace AK_DLL

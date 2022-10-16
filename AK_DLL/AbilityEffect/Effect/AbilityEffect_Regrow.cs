@@ -161,12 +161,14 @@ namespace AK_DLL
 
         private void HealRandomInjury(Pawn pawn, float points)
         {
+            //FIXME:晚点修
+            /*wn.health.hediffSet.GetHediffs<Hediff_Injury>();
             if ((from x in pawn.health.hediffSet.GetHediffs<Hediff_Injury>()
                  where x.CanHealNaturally() || x.CanHealFromTending()
                  select x).TryRandomElement(out Hediff_Injury hediff_Injury))
             {
                 hediff_Injury.Heal(points);
-            }
+            }*/
         }
 
     }

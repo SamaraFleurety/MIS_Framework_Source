@@ -2,7 +2,6 @@
 using RimWorld;
 using Verse;
 using System.Text;
-using StoriesRetold;
 using System.Collections.Generic;
 using UnityEngine;
 using RimWorld.Planet;
@@ -21,8 +20,8 @@ namespace AK_DLL
         [MustTranslate]
         public string nickname;//昵称
 
-        public SRBackstoryDef childHood;//童年背景故事
-        public SRBackstoryDef adultHood;//成年背景故事
+        public BackstoryDef childHood;//童年背景故事
+        public BackstoryDef adultHood;//成年背景故事
 
         public List<OperatorAbilityDef> abilities;//技能
 
@@ -38,8 +37,8 @@ namespace AK_DLL
         public List<ThingDef> apparels;//干员衣服
         public BodyTypeDef bodyTypeDef;//干员的体型
         private List<SkillAndFire> skills;//技能列表
-        public Color skinColor = PawnSkinColors.GetSkinColor(0.5f);//皮肤颜色
-        public Color hairColor = PawnSkinColors.GetSkinColor(1f);//头发颜色
+        public Color skinColor /*= PawnSkinColors.GetSkinColor(0.5f)*/;//皮肤颜色
+        public Color hairColor /*= PawnSkinColors.GetSkinColor(1f)*/;//头发颜色
         public HairDef hair;//头发类型
         public BeardDef beard;//胡须
 
@@ -87,8 +86,8 @@ namespace AK_DLL
 
                     operator_Pawn.story.bodyType = this.bodyTypeDef;
                     operator_Pawn.story.skinColorOverride = this.skinColor;
-                    operator_Pawn.story.hairColor = this.hairColor;
-                    operator_Pawn.story.hairDef = this.hair == null ? HairDefOf.Shaved : this.hair;
+                    operator_Pawn.story.HairColor = this.hairColor;
+                    operator_Pawn.story.hairDef = this.hair == null ? HairDefOf.Bald : this.hair;
                     operator_Pawn.style.beardDef = this.beard == null ? BeardDefOf.NoBeard : this.beard;
                     //发型与体型设置
                     operator_Pawn.Name = new NameTriple(this.name, this.nickname, this.surname);//“名”“简”“姓”
@@ -141,7 +140,7 @@ namespace AK_DLL
                     Recruit_AddRelations(operator_Pawn);
                     //关系归零
 
-                    operator_Pawn.story.crownType = CrownType.Average;
+                    //operator_Pawn.story.CrownType = CrownType.Average;
 
                     GenSpawn.Spawn(operator_Pawn, intVec, map);
                     Hediff_Operator hediff = HediffMaker.MakeHediff(HediffDef.Named("AK_Operator"), operator_Pawn, operator_Pawn.health.hediffSet.GetBrain()) as Hediff_Operator;
@@ -150,27 +149,33 @@ namespace AK_DLL
                     //增加语音hediff
 
                     CameraJumper.TryJump(new GlobalTargetInfo(intVec, map));
-                    foreach (Backstory back in BackstoryDatabase.allBackstories.Values)
+
+                    /*foreach (Backstory back in BackstoryDatabase.allBackstories.Values)
                     {
                         if (this.childHood != null && back.title == this.childHood.title)
                         {
-                            operator_Pawn.story.childhood = back;
+                            operator_Pawn.story.Childhood = back;
                         }
                         if (this.adultHood != null && back.title == this.adultHood.title)
                         {
-                            operator_Pawn.story.adulthood = back;
+                            operator_Pawn.story.Adulthood = back;
                         }
-                    }
+                    }*/
 
-                    //播放语音
-                    this.voicePackDef.recruitSound.PlaySound();
-
+                    operator_Pawn.story.Childhood = this.childHood;
                     //童年背景设置
                     if (this.age < 20)
                     {
-                        operator_Pawn.story.adulthood = null;
+                        operator_Pawn.story.Adulthood = null;
+                    }
+                    else
+                    {
+                        operator_Pawn.story.Adulthood = this.adultHood;
                     }
                     //成年背景设置
+
+                    //播放语音
+                    this.voicePackDef.recruitSound.PlaySound();
 
                     //档案系统
                     GameComp_OperatorDocumentation.AddPawn(this.getDefName(), this, operator_Pawn, weapon);

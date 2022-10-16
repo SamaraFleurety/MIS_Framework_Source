@@ -18,7 +18,7 @@ namespace AK_DLL
         }
         public override void DrawIcon(Rect rect, Material buttonMat, GizmoRenderParms parms)
         {
-            Texture2D badTex = this.icon;
+            Texture2D badTex = this.icon as Texture2D;
             if (badTex == null)
             {
                 badTex = BaseContent.BadTex;

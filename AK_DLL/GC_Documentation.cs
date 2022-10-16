@@ -92,12 +92,13 @@ namespace AK_DLL
 
         public GameComp_OperatorDocumentation(Game game)
         {
+            operatorDocument = new Dictionary<string, OperatorDocument>();
         }
 
         public override void StartedNewGame()
         {
             base.StartedNewGame();
-            operatorDocument = new Dictionary<string, OperatorDocument>();
+            if (operatorDocument == null) operatorDocument = new Dictionary<string, OperatorDocument>();
         }
 
         public override void LoadedGame()

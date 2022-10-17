@@ -51,7 +51,7 @@ namespace AK_DLL
                         hediffComp.HealAmount = Math.Max(hediffComp.HealAmount, this.healAmount);
                         hediffComp.parent.Severity += this.severity;
                     }
-                    else if (newlyAdded || (this.regrowType == RegrowType.compare && NewRegrowIsBetter(hediffComp))|| this.regrowType == RegrowType.replace || this.regrowType == RegrowType.chronic || hediffComp.isFinal == true)
+                    else if (newlyAdded || (this.regrowType == RegrowType.compare && NewRegrowIsBetter(hediffComp)) || this.regrowType == RegrowType.replace || this.regrowType == RegrowType.chronic || hediffComp.isFinal == true)
                     {
                         hediffComp.HealInterval = this.healInterval;
                         hediffComp.HealAmount = this.healAmount;
@@ -161,7 +161,12 @@ namespace AK_DLL
 
         private void HealRandomInjury(Pawn pawn, float points)
         {
-            //FIXME:晚点修
+            if (pawn.health.hediffSet.GetInjuriesTendable() != null && pawn.health.hediffSet.GetInjuriesTendable().Count() > 0)
+            {
+                Hediff_Injury x = pawn.health.hediffSet.GetInjuriesTendable().RandomElement();
+                x.Heal(points);
+            }
+            //这函数被太难扬咯，改用上面的丐版方法
             /*wn.health.hediffSet.GetHediffs<Hediff_Injury>();
             if ((from x in pawn.health.hediffSet.GetHediffs<Hediff_Injury>()
                  where x.CanHealNaturally() || x.CanHealFromTending()

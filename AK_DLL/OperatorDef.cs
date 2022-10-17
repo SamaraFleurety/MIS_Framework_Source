@@ -85,6 +85,7 @@ namespace AK_DLL
                     //调整
 
                     operator_Pawn.story.bodyType = this.bodyTypeDef;
+                    operator_Pawn.story.headType = DefDatabase<HeadTypeDef>.GetNamed("Female_AverageNormal");
                     operator_Pawn.story.skinColorOverride = this.skinColor;
                     operator_Pawn.story.HairColor = this.hairColor;
                     operator_Pawn.story.hairDef = this.hair == null ? HairDefOf.Bald : this.hair;

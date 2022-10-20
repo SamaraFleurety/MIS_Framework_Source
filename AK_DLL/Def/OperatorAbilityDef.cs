@@ -31,7 +31,7 @@ namespace AK_DLL
         public bool needCD;
         public bool needTarget;
 
-        public HediffDef debuff;
+        public List<HediffDef> selfHediff;
         public float debuffSeverity;
 
         public int maxCharge = 1;

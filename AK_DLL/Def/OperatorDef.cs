@@ -198,6 +198,7 @@ namespace AK_DLL
                     }
                     //装备衣物
 
+                    //禁用非第一个的可选技能
                     for (int i = 1; i < hediff.document.groupedAbilities.Count; ++i)
                     {
                         hediff.document.groupedAbilities[i].enabled = false;

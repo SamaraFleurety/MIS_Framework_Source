@@ -51,9 +51,12 @@ namespace AK_DLL
             }
             else 
             {
-                foreach (AbilityEffectBase abilityEffectBase in ability.compEffectList) 
+                if (ability.compEffectList != null & ability.compEffectList.Count() > 0)
                 {
-                    abilityEffectBase.DoEffect_IntVec(pawn.Position, pawn.Map);
+                    foreach (AbilityEffectBase abilityEffectBase in ability.compEffectList)
+                    {
+                        abilityEffectBase.DoEffect_IntVec(pawn.Position, pawn.Map);
+                    }
                 }
             }
         }

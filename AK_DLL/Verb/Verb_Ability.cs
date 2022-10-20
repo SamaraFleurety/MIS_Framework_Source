@@ -17,9 +17,10 @@ namespace AK_DLL
 			this.CasterPawn.PlaySound(this.ability.typeSFX);
 
 			ThingWithComps apparel = base.EquipmentSource;
-			if (this.ability.debuff != null)
+			if (this.ability.selfHediff != null && this.ability.selfHediff.Count > 0)
 			{
-				HealthUtility.AdjustSeverity(casterPawn,this.ability.debuff,this.ability.debuffSeverity);
+				foreach (HediffDef i in this.ability.selfHediff)
+				{ HealthUtility.AdjustSeverity(casterPawn, i, this.ability.debuffSeverity); }
 			}
             if (this.ability.needCD)
 			{

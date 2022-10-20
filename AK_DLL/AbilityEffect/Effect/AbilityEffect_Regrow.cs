@@ -107,7 +107,7 @@ namespace AK_DLL
         }
 
         public bool isFinal;
-        private int healTick;
+        private int healTick = 0;
 
         private bool CanHealNow
         {

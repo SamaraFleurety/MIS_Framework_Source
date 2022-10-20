@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,7 +29,7 @@ namespace AK_DLL
             }
         }
 
-        public float Damage
+        public int Damage
         {
             get
             {
@@ -81,7 +82,8 @@ namespace AK_DLL
             this.remainingTick--;
             if (this.remainingTick <= 0)
             {
-                //fixme:doexplosion
+                if (this.Pawn.Map != null)
+                    GenExplosion.DoExplosion(this.Pawn.Position, this.Pawn.Map, this.Radius, DamageDefOf.Flame, null, this.Damage, -1f, null, null, null, null, null, 0f, 1, null, true, null, 0f, 1, 0f, false, null, null, null, true, 1f, 0f, true, null, 1f);
                 HealthUtility.AdjustSeverity(Pawn, base.Def, -100f);
             }
         }

@@ -9,9 +9,9 @@ namespace AK_DLL
 {
     class HCP_SelfExplosion : HediffCompProperties
     {
-        int afterTicks = 1;
-        float raidiuradius = 2.2f;
-        float damage = 10f;
+        public int afterTicks = 1;
+        public float radius = 2.2f;
+        public int damage = 10;
 
         public HCP_SelfExplosion()
         {

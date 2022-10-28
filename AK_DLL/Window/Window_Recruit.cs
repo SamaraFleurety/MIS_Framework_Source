@@ -102,6 +102,6 @@ namespace AK_DLL
             //干员绘制
         }
         public Thing Recruit;
-        public OperatorType operatorType;
+        private static OperatorType operatorType = OperatorType.Caster;
     }
 }

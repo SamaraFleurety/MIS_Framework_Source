@@ -67,9 +67,11 @@ namespace AK_DLL
                 RCellFinder.TryFindRandomPawnEntryCell(out intVec, map, 0.2f, false, null);
                 if (intVec != null)
                 {
+                    //PawnGenerationRequest request = new PawnGenerationRequest(PawnKindDefOf.Colonist, Faction.OfPlayer, PawnGenerationContext.NonPlayer, -1, false, false, false, false, true, 0f, false, false, false, true, false, false, false, false, false, 1f, 1f, null, 1f, null, null, null, null, null, this.age * (long)timeToTick.year, this.age * (long)timeToTick.year, this.isMale ? Gender.Male : Gender.Female, null, null, null, null, true, true, false, false, null, null, null, null, null, 1f, DevelopmentalStage.Adult, null, null, null, false);
                     Pawn operator_Pawn = PawnGenerator.GeneratePawn(PawnKindDefOf.Colonist, Faction.OfPlayer);
-                    operator_Pawn.ageTracker.AgeBiologicalTicks = this.age * 3600000L;
-                    operator_Pawn.ageTracker.AgeChronologicalTicks = this.age * 3600000L;
+                    //Pawn operator_Pawn = PawnGenerator.GeneratePawn(request);
+                    operator_Pawn.ageTracker.AgeBiologicalTicks = this.age * (long)timeToTick.year;
+                    operator_Pawn.ageTracker.AgeChronologicalTicks = this.age * (long)timeToTick.year;
                     operator_Pawn.health.hediffSet.Clear();
 
                     foreach (Hediff hediff_Pawn in operator_Pawn.health.hediffSet.hediffs)
@@ -80,20 +82,21 @@ namespace AK_DLL
                         }
                     }
 
-                    operator_Pawn.story.traits.allTraits.Clear();
                     operator_Pawn.inventoryStock.stockEntries.Clear();
                     //调整
 
                     operator_Pawn.story.bodyType = this.bodyTypeDef;
                     operator_Pawn.story.headType = DefDatabase<HeadTypeDef>.GetNamed("Female_AverageNormal");
-                    operator_Pawn.story.skinColorOverride = this.skinColor;
-                    operator_Pawn.story.HairColor = this.hairColor;
                     operator_Pawn.story.hairDef = this.hair == null ? HairDefOf.Bald : this.hair;
                     operator_Pawn.style.beardDef = this.beard == null ? BeardDefOf.NoBeard : this.beard;
+                    operator_Pawn.story.skinColorOverride = this.skinColor;
+                    operator_Pawn.story.HairColor = this.hairColor;
                     //发型与体型设置
                     operator_Pawn.Name = new NameTriple(this.name, this.nickname, this.surname);//“名”“简”“姓”
                     //名字更改
 
+
+                    operator_Pawn.story.traits.allTraits.Clear();
                     foreach (TraitAndDegree TraitAndDegree in this.traits)
                     {
                         operator_Pawn.story.traits.GainTrait(new Trait(TraitAndDegree.def, TraitAndDegree.degree));
@@ -112,7 +115,14 @@ namespace AK_DLL
                     operator_Pawn.equipment.AddEquipment(weapon);
                     //装备武器
 
+                    operator_Pawn.story.Childhood = this.childHood;
+                    //童年背景设置
+                    operator_Pawn.story.Adulthood = this.age < 20 ? null : this.adultHood;
+                    //成年背景设置
+
+                    operator_Pawn.Notify_DisabledWorkTypesChanged();
                     operator_Pawn.skills.skills.Clear();
+                    //operator_Pawn.skills.skills[0].def.dis
                     foreach (SkillAndFire skillDef in this.skills)
                     {
                         SkillRecord skill = new SkillRecord(operator_Pawn, skillDef.skill);
@@ -163,17 +173,9 @@ namespace AK_DLL
                         }
                     }*/
 
-                    operator_Pawn.story.Childhood = this.childHood;
-                    //童年背景设置
-                    if (this.age < 20)
-                    {
-                        operator_Pawn.story.Adulthood = null;
-                    }
-                    else
-                    {
-                        operator_Pawn.story.Adulthood = this.adultHood;
-                    }
-                    //成年背景设置
+                    //基因
+                    operator_Pawn.genes = new Pawn_GeneTracker(operator_Pawn);
+                    operator_Pawn.genes.SetXenotype(DefDatabase<XenotypeDef>.GetNamed("AK_BaseType"));
 
                     //播放语音
                     this.voicePackDef.recruitSound.PlaySound();

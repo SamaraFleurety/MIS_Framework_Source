@@ -161,7 +161,12 @@ namespace AK_DLL
                 {
                     RecruitConsole.TryGetComp<CompRefuelable>().ConsumeFuel(1);
                     operator_Def.Recruit(RecruitConsole.Map);
-                    this.Close();
+                    this.Close(); 
+                    
+                    Window_Recruit window = new Window_Recruit(new DiaNode(new TaggedString()), true);
+                    window.soundAmbient = SoundDefOf.RadioComms_Ambience;
+                    window.Recruit = RecruitConsole;
+                    Find.WindowStack.Add(window);
                 }
                 else
                 {

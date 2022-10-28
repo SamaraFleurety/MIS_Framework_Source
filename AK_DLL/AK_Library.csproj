@@ -256,11 +256,13 @@
     <Compile Include="AK_Tool.cs" />
     <Compile Include="CDandCharge.cs" />
     <Compile Include="Gizmo\Command\Command_Abilities.cs" />
+    <Compile Include="Hediff\Comps\HC_DpsEnhance_Melee.cs" />
     <Compile Include="Hediff\Comps\HC_SelfExplosion.cs" />
     <Compile Include="Hediff\Comps\HediffComp_Bandage.cs" />
     <Compile Include="Hediff\Comps\HediffComp_Heal.cs" />
     <Compile Include="Hediff\Comps\HediffComp_RemoveTrait.cs" />
     <Compile Include="Hediff\Hediff_Operator.cs" />
+    <Compile Include="Hediff\Properties\HCP_DpsEnhance_Melee.cs" />
     <Compile Include="Hediff\Properties\HCP_SelfExplosion.cs" />
     <Compile Include="Hediff\Properties\HediffCompProperties_Bandage.cs" />
     <Compile Include="Hediff\Properties\HediffCompProperties_Heal.cs" />

@@ -7,7 +7,7 @@ using Verse;
 
 namespace AK_DLL
 {
-    class HCP_SelfExplosion : HediffCompProperties
+    public class HCP_SelfExplosion : HediffCompProperties
     {
         public int afterTicks = 1;
         public float radius = 2.2f;

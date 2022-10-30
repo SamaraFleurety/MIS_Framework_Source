@@ -106,9 +106,10 @@ namespace AK_DLL
             ability_Command.defaultLabel = AbilityDef.label;
             ability_Command.defaultDesc = AbilityDef.description;
             ability_Command.verb = this.GetVerb(AbilityDef.verb, i, true);
+            ability_Command.ability = this.AbilityDef;
             ability_Command.iconAngle = 0f;
             ability_Command.iconOffset = new Vector2(0, 0);
-            ability_Command.needTarget = AbilityDef.needTarget;
+            ability_Command.targetMode = AbilityDef.targetMode;
             ability_Command.pawn = ((Apparel)parent).Wearer;
             ability_Command.charge = this.CDandCharges.charge;
             ability_Command.maxCharge = this.CDandCharges.maxCharge;
@@ -125,7 +126,7 @@ namespace AK_DLL
                 reclaim.icon = ContentFinder<Texture2D>.Get(AbilityDef.iconReclaim);
                 reclaim.defaultLabel = AbilityDef.reclaimLabel;
                 reclaim.defaultDesc = AbilityDef.reclaimDesc;
-                reclaim.needTarget = true;
+                reclaim.targetMode = TargetMode.Single;
                 commandList.Add(reclaim);
                 i += 1;
             }

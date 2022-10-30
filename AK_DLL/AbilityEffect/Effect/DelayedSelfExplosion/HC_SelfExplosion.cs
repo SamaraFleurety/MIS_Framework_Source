@@ -10,22 +10,22 @@ namespace AK_DLL
 {
     class HC_SelfExplosion : HediffComp
     {
+        #region 属性 
+
+        private HCP_SelfExplosion exactProps = new HCP_SelfExplosion();
         public HCP_SelfExplosion Props
         {
             get { return (HCP_SelfExplosion)base.props; }
         }
-
-        private HCP_SelfExplosion exactProps = new HCP_SelfExplosion();
-
         public int AfterTick
         {
             get
             {
-                return exactProps.afterTicks;
+                return this.exactProps.afterTicks;
             }
             set
             {
-                exactProps.afterTicks = value;
+                this.exactProps.afterTicks = value;
             }
         }
 
@@ -33,24 +33,26 @@ namespace AK_DLL
         {
             get
             {
-                return exactProps.damage;
+                return this.exactProps.damage;
             }
             set
             {
-                exactProps.damage = value;
+                this.exactProps.damage = value;
             }
         }
 
-        public float Radius { 
+        public float Radius
+        {
             get
             {
-                return exactProps.radius;
+                return this.exactProps.radius;
             }
             set
             {
-                exactProps.radius = value;
+                this.exactProps.radius = value;
             }
         }
+        #endregion
 
         private int remainingTick = 100;
 
@@ -84,7 +86,7 @@ namespace AK_DLL
             {
                 if (this.Pawn.Map != null)
                     GenExplosion.DoExplosion(this.Pawn.Position, this.Pawn.Map, this.Radius, DamageDefOf.Flame, null, this.Damage, -1f, null, null, null, null, null, 0f, 1, null, true, null, 0f, 1, 0f, false, null, null, null, true, 1f, 0f, true, null, 1f);
-                HealthUtility.AdjustSeverity(Pawn, base.Def, -100f);
+                HealthUtility.AdjustSeverity(Pawn, base.Def, -10f);
             }
         }
     }

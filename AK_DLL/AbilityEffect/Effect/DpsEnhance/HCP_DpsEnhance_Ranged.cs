@@ -5,10 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Verse;
 
-namespace AK_DLL { 
-    class HCP_DpsEnhance_Melee : HediffCompProperties
+namespace AK_DLL
+{
+    class HCP_DpsEnhance_Ranged : HediffCompProperties
     {
-        
-
     }
 }

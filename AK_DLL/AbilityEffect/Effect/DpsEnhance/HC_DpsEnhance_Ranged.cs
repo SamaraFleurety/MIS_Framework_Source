@@ -7,7 +7,7 @@ using Verse;
 
 namespace AK_DLL
 {
-    public class HC_DpsEnhance_Melee : HediffComp
+    class HC_DpsEnhance_Ranged : HediffComp
     {
     }
 }

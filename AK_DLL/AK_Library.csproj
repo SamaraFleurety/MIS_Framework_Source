@@ -250,20 +250,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbilityEffect\Effect\AbilityEffect_DisableAttack.cs" />
-    <Compile Include="AbilityEffect\Effect\AbilityEffect_Regrow.cs" />
+    <Compile Include="AbilityEffect\Effect\DpsEnhance\AE_DpsEnhance_Melee.cs" />
+    <Compile Include="AbilityEffect\Effect\DpsEnhance\HCP_DpsEnhance_Ranged.cs" />
+    <Compile Include="AbilityEffect\Effect\DpsEnhance\HC_DpsEnhance_Ranged.cs" />
+    <Compile Include="AbilityEffect\Effect\Regrow\AE_Regrow.cs" />
+    <Compile Include="AbilityEffect\Effect\DelayedSelfExplosion\AE_DelayedSelfExplosion.cs" />
     <Compile Include="AbilityEffect\Effect\Debug_Angle.cs" />
     <Compile Include="AbilityType.cs" />
     <Compile Include="AK_Tool.cs" />
     <Compile Include="CDandCharge.cs" />
     <Compile Include="Gizmo\Command\Command_Abilities.cs" />
-    <Compile Include="Hediff\Comps\HC_DpsEnhance_Melee.cs" />
-    <Compile Include="Hediff\Comps\HC_SelfExplosion.cs" />
+    <Compile Include="AbilityEffect\Effect\DpsEnhance\HC_DpsEnhance_Melee.cs" />
+    <Compile Include="AbilityEffect\Effect\Regrow\HC_Regrow.cs" />
+    <Compile Include="AbilityEffect\Effect\DelayedSelfExplosion\HC_SelfExplosion.cs" />
     <Compile Include="Hediff\Comps\HediffComp_Bandage.cs" />
     <Compile Include="Hediff\Comps\HediffComp_Heal.cs" />
     <Compile Include="Hediff\Comps\HediffComp_RemoveTrait.cs" />
     <Compile Include="Hediff\Hediff_Operator.cs" />
-    <Compile Include="Hediff\Properties\HCP_DpsEnhance_Melee.cs" />
-    <Compile Include="Hediff\Properties\HCP_SelfExplosion.cs" />
+    <Compile Include="AbilityEffect\Effect\DpsEnhance\HCP_DpsEnhance_Melee.cs" />
+    <Compile Include="AbilityEffect\Effect\Regrow\HCP_Regrow.cs" />
+    <Compile Include="AbilityEffect\Effect\DelayedSelfExplosion\HCP_SelfExplosion.cs" />
     <Compile Include="Hediff\Properties\HediffCompProperties_Bandage.cs" />
     <Compile Include="Hediff\Properties\HediffCompProperties_Heal.cs" />
     <Compile Include="Hediff\Comps\HediffComp_IncreaseAttackPower.cs" />

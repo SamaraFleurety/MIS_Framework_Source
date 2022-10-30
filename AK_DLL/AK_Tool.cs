@@ -77,7 +77,7 @@ namespace AK_DLL
 		}
 		public static void PlaySound(this SoundDef sound)
 		{
-			Log.Message($"尝试播放{sound.defName}.{Time.realtimeSinceStartup} : {lastVoiceTime}");
+			//Log.Message($"尝试播放{sound.defName}.{Time.realtimeSinceStartup} : {lastVoiceTime}");
 			if (Time.realtimeSinceStartup - lastVoiceTime <= AK_ModSettings.voiceIntervalTime / 2.0 || Time.realtimeSinceStartup - lastVoiceTime <= lastVoiceLength || !AK_ModSettings.playOperatorVoice) return;
 			lastVoiceLength = sound.Duration.max;
 			sound.PlayOneShotOnCamera(null);
@@ -89,7 +89,7 @@ namespace AK_DLL
 		public static void PlaySound(this Pawn pawn, SFXType type)
         {
 			abilitySFX[(int)type].PlayOneShot(null);
-			Log.Message((pawn.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("AK_Operator")) as Hediff_Operator).document.voicePack.abilitySounds.RandomElement().defName);
+			//Log.Message((pawn.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("AK_Operator")) as Hediff_Operator).document.voicePack.abilitySounds.RandomElement().defName);
 			(pawn.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("AK_Operator")) as Hediff_Operator).document.voicePack.abilitySounds.RandomElement().PlaySound();
         }
 
@@ -98,5 +98,10 @@ namespace AK_DLL
 			lastVoiceTime = 0;
 			lastVoiceLength = 0;
         }
+
+		public static OperatorDocument GetDoc(Pawn p)
+        {
+			return p.health.hediffSet.GetFirstHediff<Hediff_Operator>().document;
+        } 
 	}
 }

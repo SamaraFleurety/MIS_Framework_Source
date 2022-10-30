@@ -6,9 +6,16 @@ using System.Threading.Tasks;
 
 namespace AK_DLL
 {
+    public enum TargetMode : Byte
+    {
+        Single = 0,
+        Self,
+        Auto, //没做
+        Multi //没做，别用
+    }
     public enum timeToTick
     {
-        tick = 1,
+        tick = 1, //游戏中
         hour = 2500,
         day = hour * 24,
         season = day * 15,

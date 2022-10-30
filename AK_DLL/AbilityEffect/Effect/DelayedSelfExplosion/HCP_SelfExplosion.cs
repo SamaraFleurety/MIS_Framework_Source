@@ -15,7 +15,7 @@ namespace AK_DLL
 
         public HCP_SelfExplosion()
         {
-            this.compClass = typeof(HCP_SelfExplosion);
+            this.compClass = typeof(HC_SelfExplosion);
         }
     }
 }

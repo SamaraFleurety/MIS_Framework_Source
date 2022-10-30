@@ -29,7 +29,8 @@ namespace AK_DLL
 
         public List<AbilityEffectBase> compEffectList;
         public bool needCD;
-        public bool needTarget;
+        //public bool needTarget;
+        public TargetMode targetMode = TargetMode.Self;
 
         public List<HediffDef> selfHediff;
         public float debuffSeverity;

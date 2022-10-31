@@ -22,7 +22,7 @@ namespace AK_DLL
         public Pawn pawn;
         public Thing weapon;
         public Hediff_Operator hediff;
-        //public Thing apparel; //我觉得衣服一般不会被移除。摆烂。
+        public Thing apparel; 
         public Dictionary<SkillDef, int> skillLevel;
         public VoicePackDef voicePack;
         public List<CompProperties_Ability> groupedAbilities;

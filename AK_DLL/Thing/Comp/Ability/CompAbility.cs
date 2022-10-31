@@ -95,6 +95,11 @@ namespace AK_DLL
         }*/
         public override IEnumerable<Gizmo> CompGetWornGizmosExtra()
         {
+            return DrawGizmo();
+        }
+
+        public IEnumerable<Gizmo> DrawGizmo()
+        {
             List<Gizmo> commandList = new List<Gizmo>();
             if (!this.Props.enabled) return commandList;
             int i = 0;
@@ -146,7 +151,6 @@ namespace AK_DLL
             commandList.Add(ability_Command);
             return commandList;
         }
-
         public Verb GetVerb(VerbProperties verbProp, int num, bool isntReclaim)
         {
             if (isntReclaim)
@@ -155,7 +159,7 @@ namespace AK_DLL
                 verb_var.caster = ((Apparel)parent).Wearer;
                 verb_var.verbProps = verbProp;
                 verb_var.verbTracker = new VerbTracker(this);
-                verb_var.ability = this.AbilityDef;
+                //verb_var.ability = this.AbilityDef;
                 verb_var.i = num;
                 verb_var.CDs = this.CDandCharges;
                 return verb_var;
@@ -168,8 +172,6 @@ namespace AK_DLL
                 verb.verbTracker = new VerbTracker(this);
                 return verb;
             }
-
-
         }
 
         public override string CompInspectStringExtra()
@@ -179,12 +181,13 @@ namespace AK_DLL
 
         public override void PostExposeData()
         {
-            base.PostExposeData();
+            base.PostExposeData(); 
+            //Scribe_References.Look(ref this.doc, "doc");
             Scribe_Deep.Look(ref this.CDandCharges, UniqueID + "CD");
-            //Scribe_Collections.Look<CDandCharge>(ref CDandChargesList, "CDandChargesList", LookMode.Deep);
             Scribe_Values.Look(ref summoned, UniqueID + "summoned");
         }
 
+        //public OperatorDocument doc;
         public CDandCharge CDandCharges;
         public int summoned = 0;
     }

@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace AK_DLL
 {
-    [HarmonyPatch(typeof(Thing), "TakeDamage",new Type[] { typeof(DamageInfo)})]
+    /*[HarmonyPatch(typeof(Thing), "TakeDamage",new Type[] { typeof(DamageInfo)})]
     public class Patch_IncreasePower
     {
         [HarmonyPrefix]
@@ -26,5 +26,5 @@ namespace AK_DLL
             }
             return true;
         }
-    }
+    }*/
 }

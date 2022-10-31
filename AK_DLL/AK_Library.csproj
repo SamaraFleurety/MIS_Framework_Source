@@ -265,6 +265,7 @@
     <Compile Include="AbilityEffect\Effect\Regrow\HC_Regrow.cs" />
     <Compile Include="AbilityEffect\Effect\DelayedSelfExplosion\HC_SelfExplosion.cs" />
     <Compile Include="HarmonyPatch\ExtendProjectileProperties.cs" />
+    <Compile Include="Hediff\Comps\HC_DrawAbility.cs" />
     <Compile Include="Hediff\Comps\HediffComp_Bandage.cs" />
     <Compile Include="Hediff\Comps\HediffComp_Heal.cs" />
     <Compile Include="Hediff\Comps\HediffComp_RemoveTrait.cs" />
@@ -272,6 +273,7 @@
     <Compile Include="AbilityEffect\Effect\DpsEnhance\HCP_DpsEnhance_Melee.cs" />
     <Compile Include="AbilityEffect\Effect\Regrow\HCP_Regrow.cs" />
     <Compile Include="AbilityEffect\Effect\DelayedSelfExplosion\HCP_SelfExplosion.cs" />
+    <Compile Include="Hediff\Properties\HCP_DrawAbility.cs" />
     <Compile Include="Hediff\Properties\HediffCompProperties_Bandage.cs" />
     <Compile Include="Hediff\Properties\HediffCompProperties_Heal.cs" />
     <Compile Include="Hediff\Comps\HediffComp_IncreaseAttackPower.cs" />

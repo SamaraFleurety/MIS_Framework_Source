@@ -6,8 +6,8 @@ using Verse;
 
 namespace AK_DLL
 {
-    public class HediffComp_IncreaseAttackPower : HediffComp
+    /*public class HediffComp_IncreaseAttackPower : HediffComp
     {
         public HediffCompProperties_IncreaseAttackPower Props => (HediffCompProperties_IncreaseAttackPower)this.props;
-    }
+    }*/
 }

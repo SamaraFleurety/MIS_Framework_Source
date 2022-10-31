@@ -7,7 +7,7 @@ using Verse.Sound;
 
 namespace AK_DLL
 {
-    public class Hediff_Operator : Hediff
+    public class Hediff_Operator : HediffWithComps
     {
         public override bool ShouldRemove => false;
         public override void Notify_PawnDied()

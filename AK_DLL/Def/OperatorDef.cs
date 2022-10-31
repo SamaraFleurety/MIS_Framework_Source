@@ -67,9 +67,7 @@ namespace AK_DLL
                 RCellFinder.TryFindRandomPawnEntryCell(out intVec, map, 0.2f, false, null);
                 if (intVec != null)
                 {
-                    //PawnGenerationRequest request = new PawnGenerationRequest(PawnKindDefOf.Colonist, Faction.OfPlayer, PawnGenerationContext.NonPlayer, -1, false, false, false, false, true, 0f, false, false, false, true, false, false, false, false, false, 1f, 1f, null, 1f, null, null, null, null, null, this.age * (long)timeToTick.year, this.age * (long)timeToTick.year, this.isMale ? Gender.Male : Gender.Female, null, null, null, null, true, true, false, false, null, null, null, null, null, 1f, DevelopmentalStage.Adult, null, null, null, false);
                     Pawn operator_Pawn = PawnGenerator.GeneratePawn(PawnKindDefOf.Colonist, Faction.OfPlayer);
-                    //Pawn operator_Pawn = PawnGenerator.GeneratePawn(request);
                     operator_Pawn.ageTracker.AgeBiologicalTicks = this.age * (long)timeToTick.year;
                     operator_Pawn.ageTracker.AgeChronologicalTicks = this.age * (long)timeToTick.year;
                     operator_Pawn.health.hediffSet.Clear();
@@ -95,16 +93,12 @@ namespace AK_DLL
                     operator_Pawn.Name = new NameTriple(this.name, this.nickname, this.surname);//“名”“简”“姓”
                     //名字更改
 
-
                     operator_Pawn.story.traits.allTraits.Clear();
                     foreach (TraitAndDegree TraitAndDegree in this.traits)
                     {
                         operator_Pawn.story.traits.GainTrait(new Trait(TraitAndDegree.def, TraitAndDegree.degree));
                     }
                     //特性更改
-
-                    
-
 
                     ThingWithComps weapon = (ThingWithComps)ThingMaker.MakeThing(this.weapon);
                     weapon.GetComp<CompBiocodable>().CodeFor(operator_Pawn);
@@ -120,9 +114,10 @@ namespace AK_DLL
                     operator_Pawn.story.Adulthood = this.age < 20 ? null : this.adultHood;
                     //成年背景设置
 
+                    //清除因为自动生成的故事和特性导致的，某些工作被禁用的缓存
                     operator_Pawn.Notify_DisabledWorkTypesChanged();
+
                     operator_Pawn.skills.skills.Clear();
-                    //operator_Pawn.skills.skills[0].def.dis
                     foreach (SkillAndFire skillDef in this.skills)
                     {
                         SkillRecord skill = new SkillRecord(operator_Pawn, skillDef.skill);
@@ -161,18 +156,6 @@ namespace AK_DLL
 
                     CameraJumper.TryJump(new GlobalTargetInfo(intVec, map));
 
-                    /*foreach (Backstory back in BackstoryDatabase.allBackstories.Values)
-                    {
-                        if (this.childHood != null && back.title == this.childHood.title)
-                        {
-                            operator_Pawn.story.Childhood = back;
-                        }
-                        if (this.adultHood != null && back.title == this.adultHood.title)
-                        {
-                            operator_Pawn.story.Adulthood = back;
-                        }
-                    }*/
-
                     //基因
                     operator_Pawn.genes = new Pawn_GeneTracker(operator_Pawn);
                     operator_Pawn.genes.SetXenotype(DefDatabase<XenotypeDef>.GetNamed("AK_BaseType"));
@@ -181,20 +164,36 @@ namespace AK_DLL
                     this.voicePackDef.recruitSound.PlaySound();
 
                     //档案系统
-                    GameComp_OperatorDocumentation.AddPawn(this.getDefName(), this, operator_Pawn, weapon);
-                    hediff.document = GameComp_OperatorDocumentation.operatorDocument[this.getDefName()];
+                    GameComp_OperatorDocumentation.AddPawn(this.getOperatorName(), this, operator_Pawn, weapon);
+                    hediff.document = GameComp_OperatorDocumentation.operatorDocument[this.getOperatorName()];
                     hediff.document.voicePack = this.voicePackDef;
 
                     operator_Pawn.apparel.DestroyAll();
+                    bool foundCloth = false;
                     foreach (ThingDef apparelDef in this.apparels)
                     {
                         Apparel apparel = (Apparel)ThingMaker.MakeThing(apparelDef);
-                        operator_Pawn.apparel.Wear(apparel, true, true);
-                        foreach (ThingComp i in apparel.AllComps)
+                        operator_Pawn.apparel.Wear(apparel, true, false);
+                        //找身上穿的那件衣服
+                        if (!foundCloth)
                         {
-                            if (i.props is CompProperties_Ability && (i.props as CompProperties_Ability).abilityDef.grouped)
+                            foreach (ThingComp i in apparel.AllComps)
                             {
-                                hediff.document.groupedAbilities.Add(i.props as CompProperties_Ability);
+                                //找技能组件 如果找到了就记录进技能组，和文档里的衣服
+                                if (i is CompAbility)
+                                {
+                                    if (!foundCloth)
+                                    {
+                                        foundCloth = true;
+                                        hediff.document.apparel = apparel;
+                                    }
+                                    //(i as CompAbility).doc = hediff.document;
+                                    if ((i.props as CompProperties_Ability).abilityDef.grouped)
+                                    {
+                                        hediff.document.groupedAbilities.Add(i.props as CompProperties_Ability);
+                                    }
+
+                                }
                             }
                         }
                     }
@@ -244,7 +243,7 @@ namespace AK_DLL
                 }
             }
         }
-        public string getDefName()
+        public string getOperatorName()
         {
             return AK_Tool.GetOperatorNameFromDefName(this.defName);
         }
@@ -310,14 +309,14 @@ namespace AK_DLL
         {
             if (this.voicePackDef == null)
             {
-                this.voicePackDef = DefDatabase<VoicePackDef>.GetNamedSilentFail($"AK_VoicePack_" + this.getDefName());
+                this.voicePackDef = DefDatabase<VoicePackDef>.GetNamedSilentFail($"AK_VoicePack_" + this.getOperatorName());
                 if (this.voicePackDef == null)
                 {
                     this.voicePackDef = new VoicePackDef(AK_Tool.GetOperatorNameFromDefName(this.defName));
                     return;
                 }
             }
-            this.voicePackDef.AutoFillVoicePack(this.getDefName());
+            this.voicePackDef.AutoFillVoicePack(this.getOperatorName());
         }
         private void AutoFill_StandPortrait()
         {
@@ -392,10 +391,10 @@ namespace AK_DLL
                     comp = new CompProperties_Ability(j);
                     tempThing.comps.Add(comp);
                 }
-                for (int i = 0; i < 10 && (j = DefDatabase<OperatorAbilityDef>.GetNamedSilentFail(tempString + AK_Tool.romanNumber[i])) != null; ++i)
+                for (int i = 0; i < 4; ++i)
                 {
 
-                    if (abilityHash.Contains(j) == false)
+                    if ((j = DefDatabase<OperatorAbilityDef>.GetNamedSilentFail(tempString + AK_Tool.romanNumber[i])) != null && abilityHash.Contains(j) == false)
                     {
                         comp = new CompProperties_Ability(j);
                         tempThing.comps.Add(comp);

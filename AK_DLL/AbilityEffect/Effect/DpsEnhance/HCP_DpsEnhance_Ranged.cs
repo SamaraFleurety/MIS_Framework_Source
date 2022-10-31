@@ -7,7 +7,15 @@ using Verse;
 
 namespace AK_DLL
 {
-    class HCP_DpsEnhance_Ranged : HediffCompProperties
+    public class HCP_DpsEnhance_Ranged : HediffCompProperties
     {
+        public RangedStat statOffset;
+        public int duration = 1;
+
+        public HCP_DpsEnhance_Ranged()
+        {
+            this.statOffset = new RangedStat();
+            this.compClass = typeof(HC_DpsEnhance_Ranged);
+        }
     }
 }

@@ -56,15 +56,8 @@ namespace AK_DLL
 
         public override void CompExposeData()
         {
-            base.CompExposeData(); 
-            Scribe_Values.Look<int>(ref this.tick, "tick");
-            Scribe_Values.Look<int>(ref this.pastRSec, "sec");
-            if (Scribe.mode == LoadSaveMode.PostLoadInit)
-            {
-                this.exactProps = this.Props;
-            }
+            this.endEnhance();
         }
-
         #endregion
 
         private int tick = 0;
@@ -81,10 +74,15 @@ namespace AK_DLL
                 if (pastRSec < this.ProcedureCount) enhanceTools(AK_Tool.GetDoc(base.Pawn).weapon.def.tools, this.Enhances);
                 else if (pastRSec >= this.EnhanceEndTime)
                 {
-                    restoreTools(Enhances);
-                    this.parent.Severity -= 10f;
+                    this.endEnhance();
                 }
             }
+        }
+
+        private void endEnhance ()
+        {
+            restoreTools(this.Enhances);
+            this.parent.Severity -= 10f;
         }
 
         private void restoreTools (List<toolEnhance> enhances)
@@ -117,7 +115,6 @@ namespace AK_DLL
             {
                 if (i.cooldownTime == enhance.originalCD && i.power == enhance.originalPower)
                 {
-                    Log.Message($"CD:{enhance.originalCD} dmg:{enhance.originalPower} 找到对应攻击方式");
                     return i;
                 }
             }

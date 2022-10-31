@@ -16,14 +16,14 @@ namespace AK_DLL
         public Tool tool = null;               //缓存
         public bool shouldSkip = false;        //缓存
     }
-    class AE_DpsEnhanceMelee : AbilityEffect_AddHediff
+    class AE_DpsEnhance_Melee : AbilityEffect_AddHediff
     {
         List<toolEnhance> enhances;
         public int interval = 1;                //多少 秒 渐进一次。默认是1，不建议改。
         public int procedureCount = 1;          //一共渐进多少次来增加攻击力。应该小于总渐进次数
         public int enhanceEndTime = 2;          //渐进多少次后这个buff消失(上个渐进次数内会缓慢强化伤害，而到了这个时间所有buff会消失。)
 
-        public AE_DpsEnhanceMelee()
+        public AE_DpsEnhance_Melee()
         {
             this.onSelf = true;
             this.severity = 1f;

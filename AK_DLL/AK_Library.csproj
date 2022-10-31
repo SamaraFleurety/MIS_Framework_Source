@@ -251,6 +251,7 @@
   <ItemGroup>
     <Compile Include="AbilityEffect\Effect\AbilityEffect_DisableAttack.cs" />
     <Compile Include="AbilityEffect\Effect\DpsEnhance\AE_DpsEnhance_Melee.cs" />
+    <Compile Include="AbilityEffect\Effect\DpsEnhance\AE_DpsEnhance_Ranged.cs" />
     <Compile Include="AbilityEffect\Effect\DpsEnhance\HCP_DpsEnhance_Ranged.cs" />
     <Compile Include="AbilityEffect\Effect\DpsEnhance\HC_DpsEnhance_Ranged.cs" />
     <Compile Include="AbilityEffect\Effect\Regrow\AE_Regrow.cs" />
@@ -263,6 +264,7 @@
     <Compile Include="AbilityEffect\Effect\DpsEnhance\HC_DpsEnhance_Melee.cs" />
     <Compile Include="AbilityEffect\Effect\Regrow\HC_Regrow.cs" />
     <Compile Include="AbilityEffect\Effect\DelayedSelfExplosion\HC_SelfExplosion.cs" />
+    <Compile Include="HarmonyPatch\ExtendProjectileProperties.cs" />
     <Compile Include="Hediff\Comps\HediffComp_Bandage.cs" />
     <Compile Include="Hediff\Comps\HediffComp_Heal.cs" />
     <Compile Include="Hediff\Comps\HediffComp_RemoveTrait.cs" />

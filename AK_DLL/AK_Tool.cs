@@ -22,7 +22,15 @@ namespace AK_DLL
 
 		public static Dictionary<string, OperatorDef>[] operatorDefs = new Dictionary<string, OperatorDef>[(int)OperatorType.Count];
 
+		public static void printfHairColor(this Pawn p)
+        {
+			Log.Message($"pawnHC: {p.story.HairColor.r}, {p.story.HairColor.g}, {p.story.HairColor.b},{p.story.HairColor.a}");
+		}
 
+		public static void prinftSkinColor(this Pawn p)
+        {
+			Log.Message($"pawnSC: {p.story.SkinColor.r}, {p.story.SkinColor.g}, {p.story.SkinColor.b},{p.story.SkinColor.a}");
+		}
 		public static void autoFillOperators()
         {
 			if (doneAutoFill) return; 
@@ -59,7 +67,6 @@ namespace AK_DLL
 			}
 			return result;
 		}
-			
 		public static string GetOperatorNameFromDefName(string defName)
         {
 			string[] temp = defName.Split('_');

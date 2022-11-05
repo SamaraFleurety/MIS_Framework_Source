@@ -159,7 +159,7 @@ namespace AK_DLL
                 verb_var.caster = ((Apparel)parent).Wearer;
                 verb_var.verbProps = verbProp;
                 verb_var.verbTracker = new VerbTracker(this);
-                //verb_var.ability = this.AbilityDef;
+                verb_var.ability = this.AbilityDef;
                 verb_var.i = num;
                 verb_var.CDs = this.CDandCharges;
                 return verb_var;

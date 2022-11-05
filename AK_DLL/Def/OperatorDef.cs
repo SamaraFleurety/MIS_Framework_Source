@@ -37,8 +37,8 @@ namespace AK_DLL
         public List<ThingDef> apparels;//干员衣服
         public BodyTypeDef bodyTypeDef;//干员的体型
         private List<SkillAndFire> skills;//技能列表
-        public Color skinColor /*= PawnSkinColors.GetSkinColor(0.5f)*/;//皮肤颜色
-        public Color hairColor /*= PawnSkinColors.GetSkinColor(1f)*/;//头发颜色
+        public Color skinColor = new Color(1, 1, 1, 1); /*= PawnSkinColors.GetSkinColor(0.5f)*///皮肤颜色
+        public Color hairColor = new Color(1, 1, 1, 1); /*= PawnSkinColors.GetSkinColor(1f)*///头发颜色
         public HairDef hair;//头发类型
         public BeardDef beard;//胡须
 
@@ -149,17 +149,40 @@ namespace AK_DLL
                     //operator_Pawn.story.CrownType = CrownType.Average;
 
                     GenSpawn.Spawn(operator_Pawn, intVec, map);
-                    Hediff_Operator hediff = HediffMaker.MakeHediff(HediffDef.Named("AK_Operator"), operator_Pawn, operator_Pawn.health.hediffSet.GetBrain()) as Hediff_Operator;
+
+                    HediffDef hediffDef = HediffDef.Named("AK_Operator");
+                    if (ModLister.GetActiveModWithIdentifier("erdelf.HumanoidAlienRaces") != null)
+                    {
+                        HCP_ForceColors comp = new HCP_ForceColors
+                        {
+                            skinColor = this.skinColor,
+                            hairColor = this.hairColor
+                        };
+                        hediffDef.comps = new List<HediffCompProperties>();
+                        hediffDef.comps.Add(comp);
+                    }
+                    Hediff_Operator hediff = HediffMaker.MakeHediff(hediffDef, operator_Pawn, operator_Pawn.health.hediffSet.GetBrain()) as Hediff_Operator;
 
                     operator_Pawn.health.AddHediff(hediff, null, null, null);
                     //增加语音hediff
+                    //修复外星人会改发色的问题
+                    if (ModLister.GetActiveModWithIdentifier("erdelf.HumanoidAlienRaces") != null)
+                    {
+                        Log.Message("有外星人");
+                    }
+                    else
+                    {
+                        Log.Message("无外星人");
+                    }
 
                     CameraJumper.TryJump(new GlobalTargetInfo(intVec, map));
 
                     //基因
-                    operator_Pawn.genes = new Pawn_GeneTracker(operator_Pawn);
-                    operator_Pawn.genes.SetXenotype(DefDatabase<XenotypeDef>.GetNamed("AK_BaseType"));
-
+                    if (ModLister.BiotechInstalled)
+                    {
+                        operator_Pawn.genes = new Pawn_GeneTracker(operator_Pawn);
+                        operator_Pawn.genes.SetXenotype(DefDatabase<XenotypeDef>.GetNamed("AK_BaseType"));
+                    }
                     //播放语音
                     this.voicePackDef.recruitSound.PlaySound();
 

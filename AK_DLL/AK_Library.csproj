@@ -296,8 +296,8 @@
     <Compile Include="HarmonyPatch\PatchSelectSound.cs" />
     <Compile Include="Originium\Thing\Gas.cs" />
     <Compile Include="Originium\Thing\GasDef.cs" />
-    <Compile Include="Originium\Thing\GasEmitter.cs" />
-    <Compile Include="Originium\Thing\GasEmitterDef.cs" />
+    <Compile Include="Originium\Thing\Comp\TC_GasEmitter.cs" />
+    <Compile Include="Originium\Thing\Comp\TCP_GasEmitter.cs" />
     <Compile Include="Patch\PatchMain.cs" />
     <Compile Include="Patch\Patch_IncreasePower.cs" />
     <Compile Include="Patch\Patch_KillCorpse.cs" />

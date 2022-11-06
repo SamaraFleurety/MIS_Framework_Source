@@ -7,11 +7,9 @@ using Verse;
 
 namespace AK_DLL
 {
-    public class GasEmitterDef : ThingDef
+    public class TCP_GasEmitter : CompProperties
 	{
 		public int ticksBetweenPulse = 120;
-
-		public float chanceToFillEachCell = 0.8f;
 
 		public float areaFillRadius = 3.5f;
 
@@ -22,5 +20,10 @@ namespace AK_DLL
 		public float fuelCostPerSpawn;
 
 		public bool addToExsistingStacks;
-	}
+
+        public TCP_GasEmitter()
+        {
+			this.compClass = typeof(TC_GasEmitter);
+        }
+    }
 }

@@ -5,11 +5,8 @@ using Verse;
 
 namespace AK_DLL
 {
-	// Token: 0x02000015 RID: 21
 	public class Gas : RimWorld.Gas
 	{
-		// Token: 0x17000008 RID: 8
-		// (get) Token: 0x06000069 RID: 105 RVA: 0x000047AD File Offset: 0x000029AD
 		public GasDef Def
 		{
 			get
@@ -18,7 +15,6 @@ namespace AK_DLL
 			}
 		}
 
-		// Token: 0x0600006A RID: 106 RVA: 0x000047BA File Offset: 0x000029BA
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
@@ -29,7 +25,6 @@ namespace AK_DLL
 			this.tickCounter = this.ticksPerApplication;
 		}
 
-		// Token: 0x0600006B RID: 107 RVA: 0x000047EF File Offset: 0x000029EF
 		public override void Tick()
 		{
 			if (base.Destroyed)
@@ -102,16 +97,13 @@ namespace AK_DLL
 			
 		}
 
-		// Token: 0x0600006E RID: 110 RVA: 0x00004B0C File Offset: 0x00002D0C
 		private bool PawnCanBeAffected(Pawn pawn)
 		{
 			return (!this.Def.ignoreAnimals || !pawn.RaceProps.Animal) && (!this.Def.ignoreInsectFlesh || pawn.RaceProps.FleshType != FleshTypeDefOf.Insectoid) && (!this.Def.ignoreMechanoidFlesh || pawn.RaceProps.FleshType != FleshTypeDefOf.Mechanoid) && (!this.Def.ignoreNormalFlesh || pawn.RaceProps.FleshType != FleshTypeDefOf.Normal);
 		}
 
-		// Token: 0x0400006A RID: 106
 		private int tickCounter = 30;
 
-		// Token: 0x0400006B RID: 107
 		private int ticksPerApplication = 30;
 	}
 }

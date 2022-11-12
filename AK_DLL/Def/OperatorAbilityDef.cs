@@ -10,7 +10,8 @@ namespace AK_DLL
     public class OperatorAbilityDef : Def
     {
         public string icon;
-        public int CD;
+        public int CD = 1;
+        public timeToTick CDUnit = timeToTick.day;
         public AbilityType abilityType;
         public int? range;
         public VerbProperties verb;

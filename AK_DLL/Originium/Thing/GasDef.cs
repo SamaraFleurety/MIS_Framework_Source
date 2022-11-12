@@ -12,9 +12,7 @@ namespace AK_DLL
 
 		public float hediffSeverity = 0.05f;
 
-		public int ticksPerApplication = 150;
-
-		public bool onlyAffectLungs = true;
+		public int interval = 1;
 
 		public bool isAcid;
 
@@ -26,7 +24,7 @@ namespace AK_DLL
 
 		public bool ignoreMechanoidFlesh;
 
-		public bool ignoreToxicSensitivity;
+		//public bool ignoreToxicSensitivity;
 
 		public StatDef resistedBy = StatDefOf.ToxicResistance;
 	}

@@ -10,17 +10,17 @@ namespace AK_DLL
     {
         Single = 0,
         Self,
-        Auto, //没做
+        AutoEnemy, //没做
         Multi //没做，别用
     }
     public enum timeToTick
     {
-        tick = 1, //游戏中
+        tick = 1,          //游戏中
         hour = 2500,
-        day = hour * 24,
-        season = day * 15,
-        year = season * 4,
-        rSecond = 60 //现实中的1秒
+        day = hour * 24,   //60k
+        season = day * 15, //0.9M
+        year = season * 4, //3.6M
+        rSecond = 60       //现实中的1秒
     }
 
     public enum OperatorType : Byte

@@ -39,8 +39,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>S:\Program Files (x86)\Steam\steamapps\workshop\content\294100\839005762\1.4\Assemblies\AlienRace.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>D:\R\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
+    <Reference Include="Assembly-CSharp, Version=1.4.8347.18814, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>D:\R\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
@@ -255,20 +256,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbilityEffect\Effect\AbilityEffect_DisableAttack.cs" />
-    <Compile Include="AbilityEffect\Effect\DpsEnhance\AE_DpsEnhance_Melee.cs" />
-    <Compile Include="AbilityEffect\Effect\DpsEnhance\AE_DpsEnhance_Ranged.cs" />
-    <Compile Include="AbilityEffect\Effect\DpsEnhance\HCP_DpsEnhance_Ranged.cs" />
-    <Compile Include="AbilityEffect\Effect\DpsEnhance\HC_DpsEnhance_Ranged.cs" />
-    <Compile Include="AbilityEffect\Effect\Regrow\AE_Regrow.cs" />
-    <Compile Include="AbilityEffect\Effect\DelayedSelfExplosion\AE_DelayedSelfExplosion.cs" />
+    <Compile Include="AbilityEffect\AddHediff\DelayedBloodLoss\AE_DelayedBloodLoss.cs" />
+    <Compile Include="AbilityEffect\AddHediff\DelayedBloodLoss\HCP_BloodLoss.cs" />
+    <Compile Include="AbilityEffect\AddHediff\DelayedBloodLoss\HC_BloodLoss.cs" />
+    <Compile Include="AbilityEffect\AddHediff\DpsEnhance\AE_DpsEnhance_Melee.cs" />
+    <Compile Include="AbilityEffect\AddHediff\DpsEnhance\AE_DpsEnhance_Ranged.cs" />
+    <Compile Include="AbilityEffect\AddHediff\DpsEnhance\HCP_DpsEnhance_Ranged.cs" />
+    <Compile Include="AbilityEffect\AddHediff\DpsEnhance\HC_DpsEnhance_Ranged.cs" />
+    <Compile Include="AbilityEffect\AddHediff\Regrow\AE_Regrow.cs" />
+    <Compile Include="AbilityEffect\AddHediff\DelayedSelfExplosion\AE_DelayedSelfExplosion.cs" />
     <Compile Include="AbilityEffect\Effect\Debug_Angle.cs" />
     <Compile Include="AbilityType.cs" />
     <Compile Include="AK_Tool.cs" />
     <Compile Include="CDandCharge.cs" />
     <Compile Include="Gizmo\Command\Command_Abilities.cs" />
-    <Compile Include="AbilityEffect\Effect\DpsEnhance\HC_DpsEnhance_Melee.cs" />
-    <Compile Include="AbilityEffect\Effect\Regrow\HC_Regrow.cs" />
-    <Compile Include="AbilityEffect\Effect\DelayedSelfExplosion\HC_SelfExplosion.cs" />
+    <Compile Include="AbilityEffect\AddHediff\DpsEnhance\HC_DpsEnhance_Melee.cs" />
+    <Compile Include="AbilityEffect\AddHediff\Regrow\HC_Regrow.cs" />
+    <Compile Include="AbilityEffect\AddHediff\DelayedSelfExplosion\HC_SelfExplosion.cs" />
     <Compile Include="HarmonyPatch\ExtendProjectileProperties.cs" />
     <Compile Include="Hediff\Comps\HC_DrawAbility.cs" />
     <Compile Include="Hediff\Comps\HC_ForceColors.cs" />
@@ -276,9 +280,9 @@
     <Compile Include="Hediff\Comps\HediffComp_Heal.cs" />
     <Compile Include="Hediff\Comps\HediffComp_RemoveTrait.cs" />
     <Compile Include="Hediff\Hediff_Operator.cs" />
-    <Compile Include="AbilityEffect\Effect\DpsEnhance\HCP_DpsEnhance_Melee.cs" />
-    <Compile Include="AbilityEffect\Effect\Regrow\HCP_Regrow.cs" />
-    <Compile Include="AbilityEffect\Effect\DelayedSelfExplosion\HCP_SelfExplosion.cs" />
+    <Compile Include="AbilityEffect\AddHediff\DpsEnhance\HCP_DpsEnhance_Melee.cs" />
+    <Compile Include="AbilityEffect\AddHediff\Regrow\HCP_Regrow.cs" />
+    <Compile Include="AbilityEffect\AddHediff\DelayedSelfExplosion\HCP_SelfExplosion.cs" />
     <Compile Include="Hediff\Properties\HCP_DrawAbility.cs" />
     <Compile Include="Hediff\Properties\HCP_ForceColors.cs" />
     <Compile Include="Hediff\Properties\HediffCompProperties_Bandage.cs" />
@@ -306,7 +310,7 @@
     <Compile Include="SkillAndFire.cs" />
     <Compile Include="Thing\CompProperties\CompProperties_Ability.cs" />
     <Compile Include="Thing\CompProperties\CompProperties_AbilityEffectPush.cs" />
-    <Compile Include="AbilityEffect\Effect\AbilityEffect_AddHediff.cs" />
+    <Compile Include="AbilityEffect\AddHediff\AbilityEffect_AddHediff.cs" />
     <Compile Include="Thing\Comp\Ability\CompAbility.cs" />
     <Compile Include="AbilityEffect\Effect\AbilityEffectBase.cs" />
     <Compile Include="AbilityEffect\Effect\AbilityEffect_Heal.cs" />

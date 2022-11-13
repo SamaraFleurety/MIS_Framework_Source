@@ -18,6 +18,7 @@ namespace AK_DLL
         public new CompProperties_Ability Props => (CompProperties_Ability)this.props;
         public OperatorAbilityDef AbilityDef => this.Props.abilityDef;
         public int MaxSummon => Props.maxSummoned;
+        Command_Abilities ability_Command = null;
         public void Summon()
         {
             this.summoned++;
@@ -36,6 +37,7 @@ namespace AK_DLL
         public override void PostPostMake()
         {
             base.PostPostMake();
+            //从def读取cd
             this.CDandCharges = new CDandCharge(1, this.AbilityDef.maxCharge, this.AbilityDef.CD * (int)this.AbilityDef.CDUnit);
             /*int maxCharge_var = this.AbilityDef.maxCharge == 0 ? 1 : AbilityDef.maxCharge;
             int CD_var = 0;
@@ -49,11 +51,18 @@ namespace AK_DLL
         public override void CompTick()
         {
             if (!this.Props.enabled) return;
-            base.CompTick();
+            base.CompTick(); 
+            if (this.autoCast && this.CDandCharges.charge >= 1 && Find.TickManager.TicksGame % 180 == 0)
+            {
+                LocalTargetInfo target = this.Wearer.TargetCurrentlyAimingAt;
+                if (!this.Wearer.Drafted || target == null) return;
+                this.ability_Command.verb.TryStartCastOn(new LocalTargetInfo(this.Wearer), target);
+            }
             if (this.CDandCharges.charge == this.CDandCharges.maxCharge)
             {
                 return;
             }
+            
             this.CDandCharges.CD -= 1;
             if (this.CDandCharges.CD <= 0)
             {
@@ -98,27 +107,28 @@ namespace AK_DLL
             return DrawGizmo();
         }
 
-        public IEnumerable<Gizmo> DrawGizmo()
+        private void InitGizmo()
         {
-            List<Gizmo> commandList = new List<Gizmo>();
-            if (!this.Props.enabled) return commandList;
-            int i = 0;
-            Command_Abilities ability_Command = new Command_Abilities();
+            this.ability_Command = new Command_Abilities();
+            ability_Command.parent = this;
+            ability_Command.defaultLabel = AbilityDef.label;
+            ability_Command.defaultDesc = AbilityDef.description;
+            ability_Command.verb = this.GetVerb(AbilityDef.verb, 0, true);
+            ability_Command.abilityDef = this.AbilityDef;
+            ability_Command.iconAngle = 0f;
+            ability_Command.iconOffset = new Vector2(0, 0);
+            ability_Command.pawn = ((Apparel)parent).Wearer;
             if (AbilityDef.icon != null)
             {
                 ability_Command.icon = ContentFinder<Texture2D>.Get(AbilityDef.icon);
             }
-            ability_Command.defaultLabel = AbilityDef.label;
-            ability_Command.defaultDesc = AbilityDef.description;
-            ability_Command.verb = this.GetVerb(AbilityDef.verb, i, true);
-            ability_Command.ability = this.AbilityDef;
-            ability_Command.iconAngle = 0f;
-            ability_Command.iconOffset = new Vector2(0, 0);
-            ability_Command.targetMode = AbilityDef.targetMode;
-            ability_Command.pawn = ((Apparel)parent).Wearer;
-            ability_Command.charge = this.CDandCharges.charge;
-            ability_Command.maxCharge = this.CDandCharges.maxCharge;
-            if (AbilityDef.abilityType == AbilityType.Summon)
+        }
+        public IEnumerable<Gizmo> DrawGizmo()
+        {
+            if (this.ability_Command == null) InitGizmo();
+
+            //FIXME:召唤的回收技能 移动到生物的comp上面去。
+            /*if (AbilityDef.abilityType == AbilityType.Summon)
             {
                 if (this.summoned == this.MaxSummon)
                 {
@@ -136,33 +146,28 @@ namespace AK_DLL
                 i += 1;
             }
             else
+            {*/
+            if (this.CDandCharges.charge == 0)
             {
-                if (AbilityDef.needCD)
-                {
-                    ability_Command.CD = this.CDandCharges.CD;
-                }
-                ability_Command.maxCD = AbilityDef.CD * (int)AbilityDef.CDUnit;
-                if (this.CDandCharges.charge == 0)
-                {
-                    ability_Command.Disable("AK_ChargeIsZero".Translate());
-                }
-                i += 1;
+                ability_Command.Disable("AK_ChargeIsZero".Translate());
             }
-            commandList.Add(ability_Command);
-            return commandList;
+            if (!this.Props.enabled) {
+                ability_Command.Disable("AK_GroupedAbilityNotSelected".Translate());
+            }
+            return new List<Gizmo>() { this.ability_Command };
         }
         public Verb GetVerb(VerbProperties verbProp, int num, bool isntReclaim)
         {
-            if (isntReclaim)
+            Verb_Ability verb_var = (Verb_Ability)Activator.CreateInstance(verbProp.verbClass);
+            verb_var.caster = ((Apparel)parent).Wearer;
+            verb_var.verbProps = verbProp;
+            verb_var.verbTracker = new VerbTracker(this);
+            verb_var.ability = this.AbilityDef;
+            verb_var.i = num;
+            verb_var.CDs = this.CDandCharges;
+            return verb_var;
+            /*if (isntReclaim)
             {
-                Verb_Ability verb_var = (Verb_Ability)Activator.CreateInstance(verbProp.verbClass);
-                verb_var.caster = ((Apparel)parent).Wearer;
-                verb_var.verbProps = verbProp;
-                verb_var.verbTracker = new VerbTracker(this);
-                verb_var.ability = this.AbilityDef;
-                verb_var.i = num;
-                verb_var.CDs = this.CDandCharges;
-                return verb_var;
             }
             else
             {
@@ -171,7 +176,7 @@ namespace AK_DLL
                 verb.verbProps = verbProp;
                 verb.verbTracker = new VerbTracker(this);
                 return verb;
-            }
+            }*/
         }
 
         public override string CompInspectStringExtra()
@@ -184,11 +189,13 @@ namespace AK_DLL
             base.PostExposeData(); 
             //Scribe_References.Look(ref this.doc, "doc");
             Scribe_Deep.Look(ref this.CDandCharges, UniqueID + "CD");
+            Scribe_Values.Look(ref this.autoCast, UniqueID + "auto");
             Scribe_Values.Look(ref summoned, UniqueID + "summoned");
         }
 
         //public OperatorDocument doc;
         public CDandCharge CDandCharges;
         public int summoned = 0;
+        public bool autoCast = false;
     }
 }

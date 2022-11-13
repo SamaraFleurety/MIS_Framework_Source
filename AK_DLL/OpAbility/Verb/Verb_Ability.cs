@@ -12,16 +12,15 @@ namespace AK_DLL
 	{
         protected override bool TryCastShot()
 		{
-			//this.ability.useSound.PlayOneShot(null);
 			Pawn casterPawn = this.CasterPawn;
 			this.CasterPawn.PlaySound(this.ability.typeSFX);
 
 			ThingWithComps apparel = base.EquipmentSource;
-			if (this.ability.selfHediff != null && this.ability.selfHediff.Count > 0)
+			/*if (this.ability.selfHediff != null && this.ability.selfHediff.Count > 0)
 			{
 				foreach (HediffDef i in this.ability.selfHediff)
 				{ HealthUtility.AdjustSeverity(casterPawn, i, this.ability.debuffSeverity); }
-			}
+			}*/
             if (this.ability.needCD)
 			{
 				this.CDs.charge -= 1;

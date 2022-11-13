@@ -16,6 +16,26 @@ namespace AK_DLL
                 return this.defaultIconColor;
             }
         }
+
+        public CompAbility parent;
+        public bool Toggled
+        {
+            get { return this.parent.autoCast; }
+            set { this.parent.autoCast = value; }
+        }
+        public CDandCharge CDs
+        {
+            get { return this.parent.CDandCharges; }
+        }
+
+        //public bool needTarget = true;
+        public TargetMode targetMode
+        {
+            get { return this.abilityDef.targetMode; }
+        }
+        public OperatorAbilityDef abilityDef;
+        public Pawn pawn;
+
         public override void DrawIcon(Rect rect, Material buttonMat, GizmoRenderParms parms)
         {
             Texture2D badTex = this.icon as Texture2D;
@@ -33,11 +53,14 @@ namespace AK_DLL
                 GUI.color = GUI.color.ToTransparent(0.6f);
             }
             Widgets.DrawTextureFitted(rect, badTex, this.iconDrawScale * 0.85f, this.iconProportions, this.iconTexCoords, this.iconAngle, null);
-            Widgets.Label(rect, this.charge + "/" + this.maxCharge);
+            Widgets.Label(rect, this.CDs.charge + "/" + this.CDs.maxCharge);
             GUI.DrawTexture(new Rect(rect.x, rect.y, width(rect.width), rect.height), ContentFinder<Texture2D>.Get("UI/Abilities/White"));
             GUI.color = Color.white;
+            if (this.targetMode == TargetMode.AutoEnemy)
+            {
+                GUI.DrawTexture(new Rect(rect.x + rect.width - 24f, rect.y, 24f, 24f), this.Toggled ? Widgets.CheckboxOnTex : Widgets.CheckboxOffTex);
+            }
         }
-
         public override bool GroupsWith(Gizmo other)
         {
             return false;
@@ -56,6 +79,9 @@ namespace AK_DLL
                     break;
                 case TargetMode.Self:
                     this.verb.TryStartCastOn(new LocalTargetInfo(this.pawn), new LocalTargetInfo(this.pawn));
+                    break;
+                case TargetMode.AutoEnemy:
+                    this.parent.autoCast = !this.parent.autoCast;
                     break;
                 default:
                     break;
@@ -82,18 +108,9 @@ namespace AK_DLL
 
         private float width(float rect_heiget)
         {
-            float percentage = (float)CD / (float)maxCD;
+            float percentage = (float)this.CDs.CD / (float)this.CDs.maxCD;
             return rect_heiget * percentage;
         }
 
-        public int CD;
-        public int maxCD;
-        public AbilityType abilityType;
-        //public bool needTarget = true;
-        public TargetMode targetMode;
-        public OperatorAbilityDef ability;
-        public Pawn pawn;
-        public int charge;
-        public int maxCharge;
     }
 }

@@ -408,7 +408,7 @@ namespace AK_DLL
                     }
                 }
                 //自动绑定合规范的技能
-                OperatorAbilityDef j = DefDatabase<OperatorAbilityDef>.GetNamedSilentFail(tempString = AK_Tool.GetThingsDefName(this.defName, "Ability"));
+                /*OperatorAbilityDef j = DefDatabase<OperatorAbilityDef>.GetNamedSilentFail(tempString = AK_Tool.GetThingsDefName(this.defName, "Ability"));
                 if (j != null && abilityHash.Contains(j) == false)
                 {
                     comp = new CompProperties_Ability(j);
@@ -422,7 +422,7 @@ namespace AK_DLL
                         comp = new CompProperties_Ability(j);
                         tempThing.comps.Add(comp);
                     }
-                }
+                }*/
                 abilityHash.Clear();
             }
             #endregion

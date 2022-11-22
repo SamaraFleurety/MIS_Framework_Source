@@ -166,15 +166,7 @@ namespace AK_DLL
                     operator_Pawn.health.AddHediff(hediff, null, null, null);
                     //增加语音hediff
                     //修复外星人会改发色的问题
-                    if (ModLister.GetActiveModWithIdentifier("erdelf.HumanoidAlienRaces") != null)
-                    {
-                        Log.Message("有外星人");
-                    }
-                    else
-                    {
-                        Log.Message("无外星人");
-                    }
-
+                    
                     CameraJumper.TryJump(new GlobalTargetInfo(intVec, map));
 
                     //基因
@@ -190,6 +182,7 @@ namespace AK_DLL
                     GameComp_OperatorDocumentation.AddPawn(this.getOperatorName(), this, operator_Pawn, weapon);
                     hediff.document = GameComp_OperatorDocumentation.operatorDocument[this.getOperatorName()];
                     hediff.document.voicePack = this.voicePackDef;
+                    hediff.document.operatorDef = this;
 
                     operator_Pawn.apparel.DestroyAll();
                     bool foundCloth = false;

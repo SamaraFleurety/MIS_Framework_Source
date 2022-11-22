@@ -22,16 +22,16 @@ namespace AK_DLL
 
 		public static Dictionary<string, OperatorDef>[] operatorDefs = new Dictionary<string, OperatorDef>[(int)OperatorType.Count];
 
-		public static void printfHairColor(this Pawn p)
+		public static void PrintfHairColor(this Pawn p)
         {
 			Log.Message($"pawnHC: {p.story.HairColor.r}, {p.story.HairColor.g}, {p.story.HairColor.b},{p.story.HairColor.a}");
 		}
 
-		public static void prinftSkinColor(this Pawn p)
+		public static void PrinftSkinColor(this Pawn p)
         {
 			Log.Message($"pawnSC: {p.story.SkinColor.r}, {p.story.SkinColor.g}, {p.story.SkinColor.b},{p.story.SkinColor.a}");
 		}
-		public static void autoFillOperators()
+		public static void AutoFillOperators()
         {
 			if (doneAutoFill) return; 
 			for (int i = 0; i <= 7; ++i)
@@ -108,7 +108,20 @@ namespace AK_DLL
 
 		public static OperatorDocument GetDoc(Pawn p)
         {
+			if (p.health.hediffSet.GetFirstHediff<Hediff_Operator>() == null) return null;
 			return p.health.hediffSet.GetFirstHediff<Hediff_Operator>().document;
         } 
+
+		public static void DrawBottomLeftPortrait()
+        {
+			if (Find.World == null || Find.CurrentMap == null || Find.Selector == null || Find.Selector.AnyPawnSelected == false || Find.Selector.SelectedPawns.Count == 0) return;
+			Pawn p = Find.Selector.SelectedPawns.First();
+			OperatorDocument doc = AK_Tool.GetDoc(p);
+			if (doc == null) return;
+			if (true)
+			{
+				Widgets.DrawTextureFitted(new Rect(0, 26 * 2 + 125, 408, 408), ContentFinder<Texture2D>.Get(AK_Tool.GetDoc(p).operatorDef.stand), 0.9f);
+			}
+		}
 	}
 }

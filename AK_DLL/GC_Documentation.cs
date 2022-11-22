@@ -27,6 +27,7 @@ namespace AK_DLL
         public VoicePackDef voicePack;
         public List<CompProperties_Ability> groupedAbilities;
         public int preferedAbility = 0;
+        public OperatorDef operatorDef;
 
         public OperatorDocument(string defName, Pawn p, Thing weapon, OperatorDef operatorDef) : this()
         {

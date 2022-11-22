@@ -80,9 +80,8 @@ C:\Users\22\Desktop\RW\RWclass\AK_DLL\AK_DLL\bin\Debug\com.rlabrecque.steamworks
 C:\Users\22\Desktop\RW\RWclass\AK_DLL\AK_DLL\obj\Debug\AK_Library.csproj.AssemblyReference.cache
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\AK_DLL.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\AK_DLL.pdb
+C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\AlienRace.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\obj\Debug\AK_Library.csproj.CoreCompileInputs.cache
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\obj\Debug\AK_Library.csproj.CopyComplete
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\obj\Debug\AK_DLL.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\obj\Debug\AK_DLL.pdb
-C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\AlienRace.dll
-C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\obj\Debug\AK_Library.csproj.AssemblyReference.cache

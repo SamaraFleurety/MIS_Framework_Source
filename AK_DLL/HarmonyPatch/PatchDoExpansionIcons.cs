@@ -13,7 +13,7 @@ namespace AK_DLL
         [HarmonyPostfix]
         public static void postfix ()
         {
-            AK_Tool.autoFillOperators();
+            AK_Tool.AutoFillOperators();
         }
     }
 }

@@ -116,11 +116,12 @@ namespace AK_DLL
         {
 			if (Find.World == null || Find.CurrentMap == null || Find.Selector == null || Find.Selector.AnyPawnSelected == false || Find.Selector.SelectedPawns.Count == 0) return;
 			Pawn p = Find.Selector.SelectedPawns.First();
+			if (p == null) return;
 			OperatorDocument doc = AK_Tool.GetDoc(p);
 			if (doc == null) return;
 			if (true)
 			{
-				Widgets.DrawTextureFitted(new Rect(0, 26 * 2 + 125, 408, 408), ContentFinder<Texture2D>.Get(AK_Tool.GetDoc(p).operatorDef.stand), 0.9f);
+				Widgets.DrawTextureFitted(new Rect(0, 400, 408, 408), ContentFinder<Texture2D>.Get(AK_Tool.GetDoc(p).operatorDef.stand), 1f);
 			}
 		}
 	}

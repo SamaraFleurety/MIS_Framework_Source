@@ -20,7 +20,7 @@ namespace AK_DLL
         }
     }*/
     [HarmonyPatch(typeof(Window), "WindowOnGUI")]
-    public class test1
+    public class PatchWindowOnGUI
     {
         [HarmonyPrefix]
         public static void Prefix ()

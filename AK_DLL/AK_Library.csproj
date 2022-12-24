@@ -256,7 +256,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HarmonyPatch\PatchP.cs" />
-    <Compile Include="HarmonyPatch\test.cs" />
+    <Compile Include="HarmonyPatch\PatchWindowsOnGui%28Bottom Portrait%29.cs" />
     <Compile Include="OpAbility\AbilityEffect\AE_ShootProjectile.cs" />
     <Compile Include="OpAbility\AbilityEffect\Effect\AbilityEffect_DisableAttack.cs" />
     <Compile Include="OpAbility\AbilityEffect\AddHediff\DelayedBloodLoss\AE_DelayedBloodLoss.cs" />

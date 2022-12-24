@@ -60,6 +60,7 @@ namespace AK_DLL
             Scribe_References.Look<Pawn>(ref this.pawn, "operator", true);
             Scribe_References.Look(ref this.weapon, "weapon", true);
             Scribe_Collections.Look(ref this.skillLevel, "skill", LookMode.Def, LookMode.Value);
+            Scribe_Defs.Look(ref this.operatorDef, "def");
             //if (this.pawn == null) { return; }
         }
 

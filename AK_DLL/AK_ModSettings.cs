@@ -11,9 +11,15 @@ namespace AK_DLL
     //MOD设置 是跨存档全局的 细节没写
     public class AK_ModSettings : ModSettings
     {
+        //语音
         public static bool playOperatorVoice = true;
         public static int voiceIntervalTime = 2;
-        public List<Pawn> exampleListOfPawns = new List<Pawn>();
+        //立绘
+        public static bool displayBottomLeftPortrait = true;
+        public static int xOffset = 0;
+        public static int yOffset = 0;
+        public static int ratio = 20;
+        //public List<Pawn> exampleListOfPawns = new List<Pawn>();
         //public Dictionary<string, Pawn>;
 
 
@@ -25,7 +31,11 @@ namespace AK_DLL
             //自动填充
             Scribe_Values.Look(ref playOperatorVoice, "playVoice");
             Scribe_Values.Look(ref voiceIntervalTime, "voiceInterTime", 1);
-            Scribe_Collections.Look(ref exampleListOfPawns, "exampleListOfPawns", LookMode.Reference);
+            Scribe_Values.Look(ref displayBottomLeftPortrait, "displayP");
+            Scribe_Values.Look(ref xOffset, "xOff");
+            Scribe_Values.Look(ref yOffset, "yOff");
+            Scribe_Values.Look(ref ratio, "ratio");
+            //Scribe_Collections.Look(ref exampleListOfPawns, "exampleListOfPawns", LookMode.Reference);
             base.ExposeData();
         }
     }
@@ -43,9 +53,15 @@ namespace AK_DLL
         {
             Listing_Standard listingStandard = new Listing_Standard();
             listingStandard.Begin(inRect);
-            listingStandard.CheckboxLabeled("AK_Option_Play".Translate(), ref AK_ModSettings.playOperatorVoice, "Play operators' voice when: recruting, selecting, drafting and died".Translate());
-            listingStandard.Label($"Interval time between voices: {(float)AK_ModSettings.voiceIntervalTime / 2.0}");
+            listingStandard.CheckboxLabeled("AK_Option_Play".Translate(), ref AK_ModSettings.playOperatorVoice, "AK_Option_PlayD".Translate());
+            listingStandard.Label("AK_Option_Interval".Translate() + $"{(float)AK_ModSettings.voiceIntervalTime / 2.0}");
             AK_ModSettings.voiceIntervalTime = (int)listingStandard.Slider(AK_ModSettings.voiceIntervalTime, 0, 60f);
+
+            listingStandard.CheckboxLabeled("AK_Option_DisP".Translate(), ref AK_ModSettings.displayBottomLeftPortrait);
+            listingStandard.Label("AK_Option_xOffset".Translate() + $"{AK_ModSettings.xOffset * 5}");
+            listingStandard.Label("AK_Option_yOffset".Translate() + $"{AK_ModSettings.yOffset * 5}");
+            listingStandard.Label("AK_Option_ratio".Translate() + $"{(float)AK_ModSettings.ratio * 0.05}");
+
             listingStandard.End();
             base.DoSettingsWindowContents(inRect);
         }

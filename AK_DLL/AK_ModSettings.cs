@@ -54,13 +54,12 @@ namespace AK_DLL
             Listing_Standard listingStandard = new Listing_Standard();
             listingStandard.Begin(inRect);
             listingStandard.CheckboxLabeled("AK_Option_Play".Translate(), ref AK_ModSettings.playOperatorVoice, "AK_Option_PlayD".Translate());
-            listingStandard.Label("AK_Option_Interval".Translate() + $"{(float)AK_ModSettings.voiceIntervalTime / 2.0}");
-            AK_ModSettings.voiceIntervalTime = (int)listingStandard.Slider(AK_ModSettings.voiceIntervalTime, 0, 60f);
+            AK_ModSettings.voiceIntervalTime = (int)listingStandard.SliderLabeled("AK_Option_Interval".Translate() + $"{(float)AK_ModSettings.voiceIntervalTime / 2.0}", AK_ModSettings.voiceIntervalTime, 0, 60f);
 
             listingStandard.CheckboxLabeled("AK_Option_DisP".Translate(), ref AK_ModSettings.displayBottomLeftPortrait);
-            listingStandard.Label("AK_Option_xOffset".Translate() + $"{AK_ModSettings.xOffset * 5}");
-            listingStandard.Label("AK_Option_yOffset".Translate() + $"{AK_ModSettings.yOffset * 5}");
-            listingStandard.Label("AK_Option_ratio".Translate() + $"{(float)AK_ModSettings.ratio * 0.05}");
+            AK_ModSettings.xOffset = (int)listingStandard.SliderLabeled("AK_Option_xOffset".Translate() + $"{AK_ModSettings.xOffset * 5}", AK_ModSettings.xOffset, 0, 600);
+            AK_ModSettings.yOffset = (int)listingStandard.SliderLabeled("AK_Option_yOffset".Translate() + $"{AK_ModSettings.yOffset * 5}", AK_ModSettings.yOffset, 0, 600);
+            AK_ModSettings.ratio = (int)listingStandard.SliderLabeled("AK_Option_ratio".Translate() + $"{(float)AK_ModSettings.ratio * 0.05f}", AK_ModSettings.ratio, 1, 40);
 
             listingStandard.End();
             base.DoSettingsWindowContents(inRect);

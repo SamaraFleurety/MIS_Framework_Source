@@ -255,6 +255,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Def\OperatorClassDef.cs" />
     <Compile Include="HarmonyPatch\PatchP.cs" />
     <Compile Include="HarmonyPatch\PatchWindowsOnGui%28Bottom Portrait%29.cs" />
     <Compile Include="OpAbility\AbilityEffect\AE_ShootProjectile.cs" />

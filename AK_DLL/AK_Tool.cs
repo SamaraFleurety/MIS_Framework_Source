@@ -11,7 +11,7 @@ namespace AK_DLL
 {
     public static class AK_Tool
 	{
-		static bool doneAutoFill = false;
+		static bool doneInitialization = false;
 		static float lastVoiceTime = 0;
 		public static string[] operatorTypeStiring = new string[] { "Caster", "Defender", "Guard", "Vanguard", "Specialist", "Supporter", "Medic", "Sniper" };
 		public static string[] romanNumber = new string[] { "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X" , "XI"};
@@ -20,7 +20,10 @@ namespace AK_DLL
 		public static float lastVoiceLength = 0;
 		public static SoundDef[] abilitySFX = new SoundDef[4] {DefDatabase<SoundDef>.GetNamed("AK_SFX_Atkboost"), DefDatabase<SoundDef>.GetNamed("AK_SFX_Defboost"), DefDatabase<SoundDef>.GetNamed("AK_SFX_Healboost"), DefDatabase<SoundDef>.GetNamed("AK_SFX_Tactboost") };
 
-		public static Dictionary<string, OperatorDef>[] operatorDefs = new Dictionary<string, OperatorDef>[(int)OperatorType.Count];
+		public static Dictionary<int, Dictionary<string, OperatorDef>> operatorDefs = new Dictionary<int, Dictionary<string, OperatorDef>>();
+		//public static Dictionary<string, OperatorDef>[] operatorDefs = new Dictionary<string, OperatorDef>[(int)OperatorType.Count];
+
+		public static Dictionary<int, string> operatorClasses = new Dictionary<int, string>();
 
 		public static void PrintfHairColor(this Pawn p)
         {
@@ -31,28 +34,59 @@ namespace AK_DLL
         {
 			Log.Message($"pawnSC: {p.story.SkinColor.r}, {p.story.SkinColor.g}, {p.story.SkinColor.b},{p.story.SkinColor.a}");
 		}
+
+		public static void Initialization()
+        {
+			if (doneInitialization) return;
+			LoadOperatorClasses();
+			AutoFillOperators();
+			Log.Message("MIS.初始化完成");
+			doneInitialization = true;
+		}
 		public static void AutoFillOperators()
         {
-			if (doneAutoFill) return; 
-			for (int i = 0; i <= 7; ++i)
-			{
+			foreach (int i in operatorClasses.Keys)
+            {
 				operatorDefs[i] = new Dictionary<string, OperatorDef>();
-			}
+            }
 			foreach (OperatorDef i in DefDatabase<OperatorDef>.AllDefs)
 			{
 				i.AutoFill();
 				try
 				{
-					operatorDefs[(int)i.operatorType].Add(i.nickname, i);
+					operatorDefs[i.operatorType.sortingOrder].Add(i.nickname, i);
 				}
 				catch (Exception)
 				{
-					Log.Message("没加起" + i.nickname);
+					Log.Error("没加起" + i.nickname);
 				}
 			}
-			doneAutoFill = true;
-			Log.Message("MIS.初始化完成");
 		}
+		public static void LoadOperatorClasses()
+        {
+			foreach(OperatorClassDef i in DefDatabase<OperatorClassDef>.AllDefs)
+            {
+				int tempOrder = 10000001;
+				if (i.sortingOrder >= 10000000)
+                {
+					Log.Error(i.label + "'s sorting order must lower than 10000000");
+                }
+				else if (operatorClasses.ContainsKey(i.sortingOrder))
+                {
+					Log.Error(i.label + "has duplicate loading order with" + operatorClasses[i.sortingOrder]);
+					operatorClasses.Add(tempOrder, i.label);
+					tempOrder++;
+                }
+				else
+                {
+					operatorClasses.Add(i.sortingOrder, i.label);
+                }
+				if (operatorClasses.Count >= 1)
+                {
+					Window_Recruit.operatorType = operatorClasses.First().Key;
+				}
+			}
+        }
 		public static List<IntVec3> GetSector(OperatorAbilityDef ability,Pawn caster)
         {
 			List<IntVec3> result = new List<IntVec3>();

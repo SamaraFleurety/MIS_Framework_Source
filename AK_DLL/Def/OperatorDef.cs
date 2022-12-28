@@ -42,7 +42,7 @@ namespace AK_DLL
         public HairDef hair;//头发类型
         public BeardDef beard;//胡须
 
-        public OperatorType operatorType;//干员类型
+        public OperatorClassDef operatorType;//干员类型
         public string stand;//立绘
         public Vector2 standOffset;
         public string headPortrait;//头像
@@ -338,7 +338,7 @@ namespace AK_DLL
         {
             if (this.headPortrait == null)
             {
-                string portraitPath = "UI/Image/" + AK_Tool.operatorTypeStiring[(int)this.operatorType] + "/" + AK_Tool.GetOperatorNameFromDefName(this.defName) + "Portrait";
+                string portraitPath = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorNameFromDefName(this.defName) + "Portrait";
                 this.headPortrait = portraitPath;
                 try
                 {
@@ -353,7 +353,7 @@ namespace AK_DLL
 
             if (this.stand == null)
             {
-                string standPath = "UI/Image/" + AK_Tool.operatorTypeStiring[(int)this.operatorType] + "/" + AK_Tool.GetOperatorNameFromDefName(this.defName) + "Stand";
+                string standPath = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorNameFromDefName(this.defName) + "Stand";
                 this.stand = standPath;
                 try
                 {

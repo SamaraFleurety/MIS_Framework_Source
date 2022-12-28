@@ -32,17 +32,28 @@ namespace AK_DLL
             {
                 this.Close();
             }
+            if (operatorType == -1)
+            {
+                Log.WarningOnce("MIS.No operator classes found.", 1);
+                return;
+            }
             //退出按钮
+            int xOffset = 0;
+            foreach (KeyValuePair<int, string> i in AK_Tool.operatorClasses)
+            {
+                if (Widgets.ButtonText(new Rect(inRect.x + xOffset, inRect.y + 15f, 60f, 20f), i.Value.Translate(), true, true, operatorType != i.Key)) operatorType = i.Key;
+                xOffset += 80;
+            }
 
-            if (Widgets.ButtonText(new Rect(inRect.x, inRect.y + 15f, 60f, 20f), "Type_Caster".Translate(), true, true, operatorType != OperatorType.Caster)) 
+            /*if (Widgets.ButtonText(new Rect(inRect.x, inRect.y + 15f, 60f, 20f), "Type_Caster".Translate(), true, true, operatorType != OperatorType.Caster))
             {
                 operatorType = OperatorType.Caster;
             }
-            else if (Widgets.ButtonText(new Rect(inRect.x+100f, inRect.y + 15f, 60f, 20f), "Type_Defender".Translate(), true, true, operatorType != OperatorType.Defender))
+            else if (Widgets.ButtonText(new Rect(inRect.x + 100f, inRect.y + 15f, 60f, 20f), "Type_Defender".Translate(), true, true, operatorType != OperatorType.Defender))
             {
                 operatorType = OperatorType.Defender;
             }
-            else if(Widgets.ButtonText(new Rect(inRect.x + 200f, inRect.y + 15f, 60f, 20f), "Type_Guard".Translate(), true, true, operatorType != OperatorType.Guard))
+            else if (Widgets.ButtonText(new Rect(inRect.x + 200f, inRect.y + 15f, 60f, 20f), "Type_Guard".Translate(), true, true, operatorType != OperatorType.Guard))
             {
                 operatorType = OperatorType.Guard;
             }
@@ -58,25 +69,33 @@ namespace AK_DLL
             {
                 operatorType = OperatorType.Supporter;
             }
-            else if(Widgets.ButtonText(new Rect(inRect.x + 600f, inRect.y + 15f, 60f, 20f), "Type_Medic".Translate(), true, true, operatorType != OperatorType.Medic))
+            else if (Widgets.ButtonText(new Rect(inRect.x + 600f, inRect.y + 15f, 60f, 20f), "Type_Medic".Translate(), true, true, operatorType != OperatorType.Medic))
             {
                 operatorType = OperatorType.Medic;
             }
-            else if(Widgets.ButtonText(new Rect(inRect.x + 700f, inRect.y + 15f, 60f, 20f), "Type_Sinoer".Translate(),true, true, operatorType != OperatorType.Sniper))
+            else if (Widgets.ButtonText(new Rect(inRect.x + 700f, inRect.y + 15f, 60f, 20f), "Type_Sinoer".Translate(), true, true, operatorType != OperatorType.Sniper))
             {
                 operatorType = OperatorType.Sniper;
-            }
+            }*/
             //绘制选干员的tab
 
-            if (AK_Tool.operatorDefs == null) Log.Error("MIS. 干员库红黑树是空的.");
-            if (AK_Tool.operatorDefs[(int)operatorType] == null) Log.Error("MIS.干员库是空的.");
-            DrawOperator(inRect, AK_Tool.operatorDefs[(int)operatorType]);
+            if (AK_Tool.operatorDefs == null)
+            {
+                Log.Error("MIS. 干员库字典是空的.");
+                return;
+            }
+            if (AK_Tool.operatorDefs[(int)operatorType] == null)
+            {
+                Log.Error($"MIS.{operatorType}号干员库是null.");
+                return;
+            }
+            DrawOperator(inRect, AK_Tool.operatorDefs[operatorType]);
             //统一绘制干员            
 
-            
+
         }
 
-        public void DrawOperator(Rect inRect,Dictionary<string, OperatorDef> operators) 
+        public void DrawOperator(Rect inRect, Dictionary<string, OperatorDef> operators)
         {
             Rect rect_operatorFrame = new Rect(inRect.x += 5f, inRect.y += 45f, 100f, 100f);
             foreach (OperatorDef operator_Def in operators.Values)
@@ -84,7 +103,7 @@ namespace AK_DLL
                 Texture2D operatorTex = ContentFinder<Texture2D>.Get(operator_Def.headPortrait);
                 Widgets.LabelFit(new Rect(rect_operatorFrame.x + 20f, rect_operatorFrame.y + 110f, 100f, 50f), operator_Def.nickname);
                 Widgets.DrawTextureFitted(new Rect(rect_operatorFrame.x, rect_operatorFrame.y, rect_operatorFrame.width + 2f, rect_operatorFrame.height + 2f), ContentFinder<Texture2D>.Get("UI/Frame/Frame_HeadPortrait"), 1f);
-                if (Widgets.ButtonImage(new Rect(rect_operatorFrame.x+3f,rect_operatorFrame.y+5f,97f,95f), operatorTex))
+                if (Widgets.ButtonImage(new Rect(rect_operatorFrame.x + 3f, rect_operatorFrame.y + 5f, 97f, 95f), operatorTex))
                 {
                     this.Close();
                     Window_Operator window_Operator = new Window_Operator(new DiaNode(new TaggedString(operator_Def.name)), true);
@@ -102,6 +121,7 @@ namespace AK_DLL
             //干员绘制
         }
         public Thing Recruit;
-        private static OperatorType operatorType = OperatorType.Caster;
+        //private static OperatorType operatorType = OperatorType.Caster;
+        public static int operatorType = -1;
     }
 }

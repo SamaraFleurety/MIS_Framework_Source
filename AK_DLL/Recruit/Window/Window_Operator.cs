@@ -33,7 +33,7 @@ namespace AK_DLL
         {
             try
             {
-                Widgets.DrawTextureFitted(new Rect(inRect.x += 350f + operator_Def.standOffset.x, inRect.y + 40f + operator_Def.standOffset.y, inRect.width - 870f, inRect.height), ContentFinder<Texture2D>.Get(operator_Def.stand), 3f);
+                Widgets.DrawTextureFitted(new Rect(inRect.x += 350f + operator_Def.standOffset.x, inRect.y + 40f + operator_Def.standOffset.y, inRect.width - 870f, inRect.height), ContentFinder<Texture2D>.Get(operator_Def.stand), operator_Def.standRatio);
             }
             catch
             {
@@ -140,7 +140,6 @@ namespace AK_DLL
                 rect1.y += 25f;
                 rect2.y += 25f;
             }
-
             //技能绘制
 
             rect_Back.x -= 145f;
@@ -157,24 +156,34 @@ namespace AK_DLL
                 {
                 }
                 //如果干员未招募过，或已死亡
-                if (doc == null || !doc.currentExist)
+                Log.Message((RecruitConsole == null).ToString() + "  " + (RecruitConsole.TryGetComp<CompRefuelable>() == null).ToString() + "  " + RecruitConsole.TryGetComp<CompRefuelable>().Fuel);
+                if (RecruitConsole.TryGetComp<CompRefuelable>().Fuel >= 0.99)
                 {
-                    RecruitConsole.TryGetComp<CompRefuelable>().ConsumeFuel(1);
-                    operator_Def.Recruit(RecruitConsole.Map);
-                    this.Close(); 
-                    
-                    Window_Recruit window = new Window_Recruit(new DiaNode(new TaggedString()), true);
-                    window.soundAmbient = SoundDefOf.RadioComms_Ambience;
-                    window.Recruit = RecruitConsole;
-                    Find.WindowStack.Add(window);
+                    if (doc == null || !doc.currentExist)
+                    {
+                        RecruitConsole.TryGetComp<CompRefuelable>().ConsumeFuel(1);
+                        operator_Def.Recruit(RecruitConsole.Map);
+                        this.Close();
+
+                        Window_Recruit window = new Window_Recruit(new DiaNode(new TaggedString()), true);
+                        window.soundAmbient = SoundDefOf.RadioComms_Ambience;
+                        window.Recruit = RecruitConsole;
+                        Find.WindowStack.Add(window);
+                    }
+                    else
+                    {
+                        recruitText = "AK_CanntRecruitOperator".Translate();
+                    }
                 }
                 else
                 {
-                    recruitText = "AK_CanntRecruitOperator".Translate();
+                    recruitText = "AK_NoTicket".Translate();
                 }
+                
             }
             //招募
-            if (doc != null && doc.currentExist)
+            //切换技能
+            if (false && doc != null && doc.currentExist)
             {
                 rect_Back.x -= 145f;
                 if (Widgets.ButtonText(rect_Back, switchSkillText))
@@ -184,8 +193,7 @@ namespace AK_DLL
                     doc.groupedAbilities[doc.preferedAbility].enabled = true;
                     Log.Message($"切换技能至{doc.groupedAbilities[doc.preferedAbility].abilityDef.defName}");
                 }
-            }
-
+            }  
         }
 
         private string switchSkillText = "AK_SwitchSkill".Translate();

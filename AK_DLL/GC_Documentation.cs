@@ -100,6 +100,7 @@ namespace AK_DLL
         public override void StartedNewGame()
         {
             base.StartedNewGame();
+            Find.LetterStack.ReceiveLetter(LetterMaker.MakeLetter(Translator.Translate("AK_StartLabel"), Translator.Translate("AK_StartDesc"), LetterDefOf.NeutralEvent, null, null));
             if (operatorDocument == null) operatorDocument = new Dictionary<string, OperatorDocument>();
         }
 
@@ -107,6 +108,7 @@ namespace AK_DLL
         {
             base.LoadedGame();
             AK_Tool.LoadedGame();
+            if (operatorDocument == null) operatorDocument = new Dictionary<string, OperatorDocument>();
         }
 
         public override void ExposeData()

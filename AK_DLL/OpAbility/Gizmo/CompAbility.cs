@@ -58,7 +58,7 @@ namespace AK_DLL
                 if (!this.Wearer.Drafted || target == null) return;
                 this.ability_Command.verb.TryStartCastOn(new LocalTargetInfo(this.Wearer), target);
             }
-            if (this.CDandCharges.charge == this.CDandCharges.maxCharge)
+            if (this.CDandCharges.charge >= this.CDandCharges.maxCharge)
             {
                 return;
             }

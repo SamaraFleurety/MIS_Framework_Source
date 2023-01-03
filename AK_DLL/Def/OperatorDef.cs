@@ -45,6 +45,7 @@ namespace AK_DLL
         public OperatorClassDef operatorType;//干员类型
         public string stand;//立绘
         public Vector2 standOffset;
+        public float standRatio = 3f;
         public string headPortrait;//头像
         public Vector2 headPortraitOffset;
 

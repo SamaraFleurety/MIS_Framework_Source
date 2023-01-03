@@ -69,17 +69,17 @@ namespace AK_DLL
 				int tempOrder = 10000001;
 				if (i.sortingOrder >= 10000000)
                 {
-					Log.Error(i.label + "'s sorting order must lower than 10000000");
+					Log.Error(i.label.Translate() + "'s sorting order must lower than 10000000");
                 }
 				else if (operatorClasses.ContainsKey(i.sortingOrder))
                 {
-					Log.Error(i.label + "has duplicate loading order with" + operatorClasses[i.sortingOrder]);
-					operatorClasses.Add(tempOrder, i.label);
+					Log.Error(i.label.Translate() + "has duplicate loading order with" + operatorClasses[i.sortingOrder]);
+					operatorClasses.Add(tempOrder, i.label.Translate());
 					tempOrder++;
                 }
 				else
                 {
-					operatorClasses.Add(i.sortingOrder, i.label);
+					operatorClasses.Add(i.sortingOrder, i.label.Translate());
                 }
 				if (operatorClasses.Count >= 1)
                 {

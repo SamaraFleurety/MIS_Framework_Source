@@ -41,8 +41,8 @@ namespace AK_DLL
             int xOffset = 0;
             foreach (KeyValuePair<int, string> i in AK_Tool.operatorClasses)
             {
-                if (Widgets.ButtonText(new Rect(inRect.x + xOffset, inRect.y + 15f, 60f, 20f), i.Value.Translate(), true, true, operatorType != i.Key)) operatorType = i.Key;
-                xOffset += 80;
+                if (Widgets.ButtonText(new Rect(inRect.x + xOffset, inRect.y + 15f, 80f, 20f), i.Value, true, true, operatorType != i.Key)) operatorType = i.Key;
+                xOffset += 100;
             }
 
             /*if (Widgets.ButtonText(new Rect(inRect.x, inRect.y + 15f, 60f, 20f), "Type_Caster".Translate(), true, true, operatorType != OperatorType.Caster))

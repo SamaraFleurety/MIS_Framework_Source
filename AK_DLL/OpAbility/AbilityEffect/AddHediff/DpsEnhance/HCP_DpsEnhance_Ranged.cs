@@ -10,7 +10,7 @@ namespace AK_DLL
     public class HCP_DpsEnhance_Ranged : HediffCompProperties
     {
         public RangedStat statOffset;
-        public int duration = 1;
+        public int duration = 1; //rsec
 
         public HCP_DpsEnhance_Ranged()
         {

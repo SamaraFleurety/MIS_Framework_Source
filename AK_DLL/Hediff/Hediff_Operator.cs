@@ -15,11 +15,13 @@ namespace AK_DLL
             this.document.voicePack.diedSound.PlayOneShot(null);
             this.document.RecordSkills();
             this.document.currentExist = false;
+            this.comps.Clear();
             base.Notify_PawnDied();
         }
         public override void ExposeData()
         {
             base.ExposeData();
+            Scribe_Deep.Look(ref this.comps, "comps");
             Scribe_References.Look(ref this.document, "AK_Document");
         }
 

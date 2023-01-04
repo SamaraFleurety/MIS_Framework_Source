@@ -156,7 +156,6 @@ namespace AK_DLL
                 {
                 }
                 //如果干员未招募过，或已死亡
-                Log.Message((RecruitConsole == null).ToString() + "  " + (RecruitConsole.TryGetComp<CompRefuelable>() == null).ToString() + "  " + RecruitConsole.TryGetComp<CompRefuelable>().Fuel);
                 if (RecruitConsole.TryGetComp<CompRefuelable>().Fuel >= 0.99)
                 {
                     if (doc == null || !doc.currentExist)

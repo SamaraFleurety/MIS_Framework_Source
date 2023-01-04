@@ -256,6 +256,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Def\OperatorClassDef.cs" />
+    <Compile Include="Def\OperatorDef\ItemOnSpawn.cs" />
     <Compile Include="HarmonyPatch\PatchP.cs" />
     <Compile Include="HarmonyPatch\PatchWindowsOnGui%28Bottom Portrait%29.cs" />
     <Compile Include="OpAbility\AbilityEffect\AE_ShootProjectile.cs" />
@@ -296,7 +297,7 @@
     <Compile Include="Recruit\Job\JobDriver_UseRecruitTable.cs" />
     <Compile Include="AK_ModSettings.cs" />
     <Compile Include="Def\OperatorAbilityDef.cs" />
-    <Compile Include="Def\OperatorDef.cs" />
+    <Compile Include="Def\OperatorDef\OperatorDef.cs" />
     <Compile Include="GC_Documentation.cs" />
     <Compile Include="HarmonyPatch\PatchDraftSound.cs" />
     <Compile Include="HarmonyPatch\PatchDoExpansionIcons.cs" />
@@ -310,12 +311,12 @@
     <Compile Include="HarmonyPatch\Patch\Patch_KillCorpse.cs" />
     <Compile Include="HarmonyPatch\Patch\Patch_ForbidDrop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Recruit\SkillAndFire.cs" />
+    <Compile Include="Def\OperatorDef\SkillAndFire.cs" />
     <Compile Include="OpAbility\Gizmo\CompProperties_Ability.cs" />
     <Compile Include="Thing\CompProperties\CompProperties_AbilityEffectPush.cs" />
     <Compile Include="OpAbility\AbilityEffect\AddHediff\AbilityEffect_AddHediff.cs" />
     <Compile Include="OpAbility\Gizmo\CompAbility.cs" />
-    <Compile Include="OpAbility\AbilityEffect\Effect\AbilityEffectBase.cs" />
+    <Compile Include="OpAbility\AbilityEffect\AbilityEffectBase.cs" />
     <Compile Include="OpAbility\AbilityEffect\Effect\AbilityEffect_Heal.cs" />
     <Compile Include="OpAbility\AbilityEffect\Effect\CompAbilityEffect_Push.cs" />
     <Compile Include="OpAbility\AbilityEffect\Effect\AbilityEffect_ReclaimSummoned.cs" />
@@ -327,13 +328,13 @@
     <Compile Include="Thing\ThingWithComps\OperatorWeapon.cs" />
     <Compile Include="Recruit\RecruitConsole.cs" />
     <Compile Include="Thing\ThingWithComps\Trap.cs" />
-    <Compile Include="Recruit\TraitAndDegree.cs" />
+    <Compile Include="Def\OperatorDef\TraitAndDegree.cs" />
     <Compile Include="TypeDef.cs" />
     <Compile Include="OpAbility\Verb\Verb_Ability.cs" />
     <Compile Include="OpAbility\Verb\Verb_Reclaim.cs" />
     <Compile Include="Def\VoicePackDef.cs" />
     <Compile Include="Recruit\Window\Window_Operator.cs" />
-    <Compile Include="Recruit\Window\Window_Recruit.cs" />
+    <Compile Include="Recruit\Window\Window_OperatorList.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DeathWorker\" />

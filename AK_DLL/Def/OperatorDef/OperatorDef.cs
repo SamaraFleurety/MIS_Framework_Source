@@ -35,6 +35,7 @@ namespace AK_DLL
         public List<TraitAndDegree> traits;//干员特性
         public ThingDef weapon;//干员武器                                                  
         public List<ThingDef> apparels;//干员衣服
+        public List<ItemOnSpawn> items;
         public BodyTypeDef bodyTypeDef;//干员的体型
         private List<SkillAndFire> skills;//技能列表
         public Color skinColor = new Color(1, 1, 1, 1); /*= PawnSkinColors.GetSkinColor(0.5f)*///皮肤颜色
@@ -103,10 +104,6 @@ namespace AK_DLL
 
                     ThingWithComps weapon = (ThingWithComps)ThingMaker.MakeThing(this.weapon);
                     weapon.GetComp<CompBiocodable>().CodeFor(operator_Pawn);
-                    /*CompOperatorWeapon compOperatorWeapon = new CompOperatorWeapon();
-                    compOperatorWeapon.operatorDef = this;
-                    weapon.AllComps.Add(compOperatorWeapon);
-                    ((OperatorWeapon)weapon).operator_Pawn = operator_Pawn; */ //已经整合进成长系统的指针
                     operator_Pawn.equipment.AddEquipment(weapon);
                     //装备武器
 
@@ -149,6 +146,16 @@ namespace AK_DLL
 
                     //operator_Pawn.story.CrownType = CrownType.Average;
 
+                    //增加物品
+                    if (this.items != null && this.items.Count > 0)
+                    {
+                        foreach (ItemOnSpawn i in this.items)
+                        {
+                            Thing newThing = ThingMaker.MakeThing(i.item);
+                            newThing.stackCount = i.amount;
+                            operator_Pawn.inventory.TryAddAndUnforbid(newThing);
+                        }
+                    }
                     GenSpawn.Spawn(operator_Pawn, intVec, map);
 
                     HediffDef hediffDef = HediffDef.Named("AK_Operator");
@@ -178,6 +185,14 @@ namespace AK_DLL
                     }
                     //播放语音
                     this.voicePackDef.recruitSound.PlaySound();
+
+                    /*CompProperties_Ability compa;
+                    foreach (OperatorAbilityDef i in this.abilities)
+                    {
+                        compa = new CompProperties_Ability(i);
+                        operator_Pawn
+                        if (abilityHash.Contains(i) == false) tempThing.comps.Add(comp);
+                    }*/
 
                     //档案系统
                     GameComp_OperatorDocumentation.AddPawn(this.getOperatorName(), this, operator_Pawn, weapon);
@@ -222,29 +237,6 @@ namespace AK_DLL
                         hediff.document.groupedAbilities[i].enabled = false;
                     }
 
-                    //向数据库记录已生成的干员
-                    //if (Operator_Recruited.RecruitedOperators != null)
-                    //{
-                    //    Operator_Recruited.RecruitedOperators.Add(operator_Def);//全局数据添加干员
-                    //}
-                    //else
-                    //{
-                    //    if (!Operator_Recruited.RecruitedOperators.Contains(operator_Def)) 
-                    //    {
-                    //        Operator_Recruited.RecruitedOperators.Add(operator_Def);
-                    //    }
-                    //}
-                    //if (recruitedOperators != null)
-                    //{
-                    //    recruitedOperators.Clear();//清除招募台自己的数据
-                    //    recruitedOperators.AddRange(Operator_Recruited.RecruitedOperators);//令招募台的数据与全局数据相等
-                    //}
-                    //else
-                    //{
-                    //    recruitedOperators = new List<OperatorDef>();
-                    //    recruitedOperators.Clear();
-                    //    recruitedOperators.AddRange(Operator_Recruited.RecruitedOperators);
-                    //}
                 }
             }
         }
@@ -291,6 +283,9 @@ namespace AK_DLL
             AutoFill_VoicePack();
 
         }
+
+        #region RecruitSubMethods
+        #endregion
 
 
         #region AutoFillSubMethods

@@ -310,10 +310,10 @@
     <Compile Include="HarmonyPatch\Patch\Patch_ForbidDrop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Def\OperatorDef\SkillAndFire.cs" />
-    <Compile Include="OpAbility\Gizmo\HCP_Ability.cs" />
+    <Compile Include="OpAbility\HediffComp\HCP_Ability.cs" />
     <Compile Include="Thing\CompProperties\CompProperties_AbilityEffectPush.cs" />
     <Compile Include="OpAbility\AbilityEffect\AddHediff\AbilityEffect_AddHediff.cs" />
-    <Compile Include="OpAbility\Gizmo\HC_Ability.cs" />
+    <Compile Include="OpAbility\HediffComp\HC_Ability.cs" />
     <Compile Include="OpAbility\AbilityEffect\AbilityEffectBase.cs" />
     <Compile Include="OpAbility\AbilityEffect\Effect\AbilityEffect_Heal.cs" />
     <Compile Include="OpAbility\AbilityEffect\Effect\CompAbilityEffect_Push.cs" />

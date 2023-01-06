@@ -69,112 +69,18 @@ namespace AK_DLL
                 RCellFinder.TryFindRandomPawnEntryCell(out intVec, map, 0.2f, false, null);
                 if (intVec != null)
                 {
-                    Pawn operator_Pawn = PawnGenerator.GeneratePawn(PawnKindDefOf.Colonist, Faction.OfPlayer);
-                    operator_Pawn.ageTracker.AgeBiologicalTicks = this.age * (long)timeToTick.year;
-                    operator_Pawn.ageTracker.AgeChronologicalTicks = this.age * (long)timeToTick.year;
-                    operator_Pawn.health.hediffSet.Clear();
+                    operator_Pawn = PawnGenerator.GeneratePawn(PawnKindDefOf.Colonist, Faction.OfPlayer); 
+                    Hediff_Operator hediff = Recruit_Hediff();
 
-                    foreach (Hediff hediff_Pawn in operator_Pawn.health.hediffSet.hediffs)
-                    {
-                        if (hediff_Pawn.def.isBad)
-                        {
-                            operator_Pawn.health.RemoveHediff(hediff_Pawn);
-                        }
-                    }
+                    Recruit_PersonalStat();                 
 
-                    operator_Pawn.inventoryStock.stockEntries.Clear();
-                    //调整
-
-                    operator_Pawn.story.bodyType = this.bodyTypeDef;
-                    operator_Pawn.story.headType = DefDatabase<HeadTypeDef>.GetNamed("Female_AverageNormal");
-                    operator_Pawn.story.hairDef = this.hair == null ? HairDefOf.Bald : this.hair;
-                    operator_Pawn.style.beardDef = this.beard == null ? BeardDefOf.NoBeard : this.beard;
-                    operator_Pawn.story.skinColorOverride = this.skinColor;
-                    operator_Pawn.story.HairColor = this.hairColor;
-                    //发型与体型设置
-                    operator_Pawn.Name = new NameTriple(this.name, this.nickname, this.surname);//“名”“简”“姓”
-                    //名字更改
-
-                    operator_Pawn.story.traits.allTraits.Clear();
-                    foreach (TraitAndDegree TraitAndDegree in this.traits)
-                    {
-                        operator_Pawn.story.traits.GainTrait(new Trait(TraitAndDegree.def, TraitAndDegree.degree));
-                    }
-                    //特性更改
-
-                    ThingWithComps weapon = (ThingWithComps)ThingMaker.MakeThing(this.weapon);
-                    weapon.GetComp<CompBiocodable>().CodeFor(operator_Pawn);
-                    operator_Pawn.equipment.AddEquipment(weapon);
-                    //装备武器
-
-                    operator_Pawn.story.Childhood = this.childHood;
-                    //童年背景设置
-                    operator_Pawn.story.Adulthood = this.age < 20 ? null : this.adultHood;
-                    //成年背景设置
-
-                    //清除因为自动生成的故事和特性导致的，某些工作被禁用的缓存
-                    operator_Pawn.Notify_DisabledWorkTypesChanged();
-
-                    operator_Pawn.skills.skills.Clear();
-                    foreach (SkillAndFire skillDef in this.skills)
-                    {
-                        SkillRecord skill = new SkillRecord(operator_Pawn, skillDef.skill);
-                        skill.passion = skillDef.fireLevel;
-                        skill.Level = skillDef.level;
-                        operator_Pawn.skills.skills.Add(skill);
-                    }
-                    //技能属性更改
-                    if (GameComp_OperatorDocumentation.operatorDocument.ContainsKey(AK_Tool.GetOperatorNameFromDefName(this.defName)))
-                    {
-                        Dictionary<SkillDef, int> skills = GameComp_OperatorDocumentation.operatorDocument[AK_Tool.GetOperatorNameFromDefName(this.defName)].skillLevel;
-                        foreach (SkillRecord i in operator_Pawn.skills.skills)
-                        {
-                            i.Level = skills[i.def];
-                        }
-                    }
-                    //从干员文档更新属性
-
-                    operator_Pawn.needs.food.CurLevel = operator_Pawn.needs.food.MaxLevel;
-                    //避免Bug更改
-
-                    operator_Pawn.gender = (this.isMale) ? Gender.Male : Gender.Female;
-                    //性别更改
-
-                    operator_Pawn.relations.ClearAllRelations();
-                    Recruit_AddRelations(operator_Pawn);
-                    //关系归零
+                    Recruit_AddRelations();
 
                     //operator_Pawn.story.CrownType = CrownType.Average;
 
-                    //增加物品
-                    if (this.items != null && this.items.Count > 0)
-                    {
-                        foreach (ItemOnSpawn i in this.items)
-                        {
-                            Thing newThing = ThingMaker.MakeThing(i.item);
-                            newThing.stackCount = i.amount;
-                            operator_Pawn.inventory.TryAddAndUnforbid(newThing);
-                        }
-                    }
+                    Thing weapon = Recruit_Inventory();
+
                     GenSpawn.Spawn(operator_Pawn, intVec, map);
-
-                    HediffDef hediffDef = HediffDef.Named("AK_Operator");
-                    if (ModLister.GetActiveModWithIdentifier("erdelf.HumanoidAlienRaces") != null)
-                    {
-                        HCP_ForceColors comp = new HCP_ForceColors
-                        {
-                            skinColor = this.skinColor,
-                            hairColor = this.hairColor
-                        };
-                        hediffDef.comps = new List<HediffCompProperties>();
-                        hediffDef.comps.Add(comp);
-                    }
-                    Hediff_Operator hediff = HediffMaker.MakeHediff(hediffDef, operator_Pawn, operator_Pawn.health.hediffSet.GetBrain()) as Hediff_Operator;
-
-                    operator_Pawn.health.AddHediff(hediff, null, null, null);
-                    //增加语音hediff
-                    //修复外星人会改发色的问题
-                    
                     CameraJumper.TryJump(new GlobalTargetInfo(intVec, map));
 
                     //基因
@@ -186,76 +92,193 @@ namespace AK_DLL
                     //播放语音
                     this.voicePackDef.recruitSound.PlaySound();
 
-                    /*CompProperties_Ability compa;
-                    foreach (OperatorAbilityDef i in this.abilities)
-                    {
-                        compa = new CompProperties_Ability(i);
-                        operator_Pawn
-                        if (abilityHash.Contains(i) == false) tempThing.comps.Add(comp);
-                    }*/
-
                     //档案系统
                     GameComp_OperatorDocumentation.AddPawn(this.getOperatorName(), this, operator_Pawn, weapon);
                     hediff.document = GameComp_OperatorDocumentation.operatorDocument[this.getOperatorName()];
                     hediff.document.voicePack = this.voicePackDef;
-                    hediff.document.operatorDef = this;
+                    //hediff.document.operatorDef = this;
 
-                    operator_Pawn.apparel.DestroyAll();
-                    bool foundCloth = false;
-                    foreach (ThingDef apparelDef in this.apparels)
-                    {
-                        Apparel apparel = (Apparel)ThingMaker.MakeThing(apparelDef);
-                        operator_Pawn.apparel.Wear(apparel, true, false);
-                        //找身上穿的那件衣服
-                        if (!foundCloth)
-                        {
-                            foreach (ThingComp i in apparel.AllComps)
-                            {
-                                //找技能组件 如果找到了就记录进技能组，和文档里的衣服
-                                if (i is CompAbility)
-                                {
-                                    if (!foundCloth)
-                                    {
-                                        foundCloth = true;
-                                        hediff.document.apparel = apparel;
-                                    }
-                                    //(i as CompAbility).doc = hediff.document;
-                                    if ((i.props as CompProperties_Ability).abilityDef.grouped)
-                                    {
-                                        hediff.document.groupedAbilities.Add(i.props as CompProperties_Ability);
-                                    }
-
-                                }
-                            }
-                        }
-                    }
-                    //装备衣物
-
-                    //禁用非第一个的可选技能
-                    for (int i = 1; i < hediff.document.groupedAbilities.Count; ++i)
-                    {
-                        hediff.document.groupedAbilities[i].enabled = false;
-                    }
-
+                    Recruit_Ability(hediff);
                 }
             }
         }
 
-        private void Recruit_AddRelations(Pawn p)
+        
+
+        #region RecruitSubMethods
+        private static Pawn operator_Pawn;
+        private void Recruit_Ability(Hediff_Operator hediff)
         {
+            //技能
+            if (this.abilities != null && this.abilities.Count > 0)
+            {
+
+                foreach (OperatorAbilityDef i in this.abilities)
+                {
+                    HC_Ability HC = new HC_Ability(i);
+                    hediff.comps.Add(HC);
+                    HC.parent = hediff;
+                    hediff.document.groupedAbilities.Add(HC);
+                }
+            }
+            //禁用非第一个的可选技能
+            for (int i = 1; i < hediff.document.groupedAbilities.Count; ++i)
+            {
+                hediff.document.groupedAbilities[i].enabled = false;
+            }
+        } 
+        private void Recruit_AddRelations()
+        {
+            operator_Pawn.relations.ClearAllRelations();
             if (this.relations == null || this.relations.Count == 0) return;
             foreach (KeyValuePair<string, PawnRelationDef> node in relations)
             {
                 if (GameComp_OperatorDocumentation.operatorDocument.ContainsKey(node.Key))
                 {
-                    p.relations.AddDirectRelation(node.Value, GameComp_OperatorDocumentation.operatorDocument[node.Key].pawn);
+                    operator_Pawn.relations.AddDirectRelation(node.Value, GameComp_OperatorDocumentation.operatorDocument[node.Key].pawn);
                 }
             }
         }
+        private Hediff_Operator Recruit_Hediff()
+        {
+            operator_Pawn.health.hediffSet.Clear();
+            foreach (Hediff hediff_Pawn in operator_Pawn.health.hediffSet.hediffs)
+            {
+                if (hediff_Pawn.def.isBad)
+                {
+                    operator_Pawn.health.RemoveHediff(hediff_Pawn);
+                }
+            }
+
+            HediffDef hediffDef = HediffDef.Named("AK_Operator");
+            //修复外星人会改发色的问题
+            if (ModLister.GetActiveModWithIdentifier("erdelf.HumanoidAlienRaces") != null)
+            {
+                HCP_ForceColors comp = new HCP_ForceColors
+                {
+                    skinColor = this.skinColor,
+                    hairColor = this.hairColor
+                };
+                hediffDef.comps = new List<HediffCompProperties>();
+                hediffDef.comps.Add(comp);
+            }
+            Hediff_Operator hediff = HediffMaker.MakeHediff(hediffDef, operator_Pawn, operator_Pawn.health.hediffSet.GetBrain()) as Hediff_Operator;
+
+            //增加多功能hediff
+            operator_Pawn.health.AddHediff(hediff, null, null, null);
+            return hediff;
+        }
+        private void Recruit_PersonalStat()
+        {
+            //避免Bug更改
+            operator_Pawn.needs.food.CurLevel = operator_Pawn.needs.food.MaxLevel;
+
+            operator_Pawn.Name = new NameTriple(this.name, this.nickname, this.surname);//“名”“简”“姓”
+
+            //性别更改
+            operator_Pawn.gender = (this.isMale) ? Gender.Male : Gender.Female;
+            operator_Pawn.ageTracker.AgeBiologicalTicks = this.age * (long)timeToTick.year;
+            operator_Pawn.ageTracker.AgeChronologicalTicks = this.age * (long)timeToTick.year;
+
+            //发型与体型设置
+            operator_Pawn.story.bodyType = this.bodyTypeDef;
+            operator_Pawn.story.headType = DefDatabase<HeadTypeDef>.GetNamed("Female_AverageNormal");
+            operator_Pawn.story.hairDef = this.hair == null ? HairDefOf.Bald : this.hair;
+            operator_Pawn.style.beardDef = this.beard == null ? BeardDefOf.NoBeard : this.beard;
+            operator_Pawn.story.skinColorOverride = this.skinColor;
+            operator_Pawn.story.HairColor = this.hairColor;
+
+            operator_Pawn.story.traits.allTraits.Clear();
+            foreach (TraitAndDegree TraitAndDegree in this.traits)
+            {
+                operator_Pawn.story.traits.GainTrait(new Trait(TraitAndDegree.def, TraitAndDegree.degree));
+            }
+            //特性更改
+            operator_Pawn.story.Childhood = this.childHood;
+            operator_Pawn.story.Adulthood = this.age < 20 ? null : this.adultHood;
+            //背景设置
+
+            //清除因为自动生成的故事和特性导致的，某些工作被禁用的缓存
+            operator_Pawn.Notify_DisabledWorkTypesChanged();
+
+            operator_Pawn.skills.skills.Clear();
+            foreach (SkillAndFire skillDef in this.skills)
+            {
+                SkillRecord skill = new SkillRecord(operator_Pawn, skillDef.skill)
+                {
+                    passion = skillDef.fireLevel,
+                    Level = skillDef.level
+                };
+                operator_Pawn.skills.skills.Add(skill);
+            }
+            //技能属性更改
+            if (GameComp_OperatorDocumentation.operatorDocument.ContainsKey(AK_Tool.GetOperatorNameFromDefName(this.defName)))
+            {
+                Dictionary<SkillDef, int> skills = GameComp_OperatorDocumentation.operatorDocument[AK_Tool.GetOperatorNameFromDefName(this.defName)].skillLevel;
+                foreach (SkillRecord i in operator_Pawn.skills.skills)
+                {
+                    i.Level = skills[i.def];
+                }
+            }
+            //从干员文档更新属性
+        }
+        private Thing Recruit_Inventory()
+        {
+            operator_Pawn.inventoryStock.stockEntries.Clear();
+            //增加物品
+            if (this.items != null && this.items.Count > 0)
+            {
+                foreach (ItemOnSpawn i in this.items)
+                {
+                    Thing newThing = ThingMaker.MakeThing(i.item);
+                    newThing.stackCount = i.amount;
+                    operator_Pawn.inventory.TryAddAndUnforbid(newThing);
+                }
+            }
+            //装备武器
+            ThingWithComps weapon = (ThingWithComps)ThingMaker.MakeThing(this.weapon);
+            weapon.GetComp<CompBiocodable>().CodeFor(operator_Pawn);
+            operator_Pawn.equipment.AddEquipment(weapon);
+
+            //装备衣物
+            operator_Pawn.apparel.DestroyAll();
+            foreach (ThingDef apparelDef in this.apparels)
+            {
+                Apparel apparel = (Apparel)ThingMaker.MakeThing(apparelDef);
+                apparel.GetComp<CompBiocodable>().CodeFor(operator_Pawn);
+                operator_Pawn.apparel.Wear(apparel, true, false);
+                //找身上穿的那件衣服
+                /*if (!foundCloth)
+                {
+                    foreach (ThingComp i in apparel.AllComps)
+                    {
+                        //找技能组件 如果找到了就记录进技能组，和文档里的衣服
+                        if (i is CompAbility)
+                        {
+                            if (!foundCloth)
+                            {
+                                foundCloth = true;
+                                hediff.document.apparel = apparel;
+                            }
+                            //(i as CompAbility).doc = hediff.document;
+                            if ((i.props as CompProperties_Ability).abilityDef.grouped)
+                            {
+                                hediff.document.groupedAbilities.Add(i.props as CompProperties_Ability);
+                            }
+
+                        }
+                    }
+                }*/
+            }
+            return weapon;
+        }
+        #endregion
         public string getOperatorName()
         {
             return AK_Tool.GetOperatorNameFromDefName(this.defName);
         }
+
+
         public void AutoFill()
         {
             //默认名字
@@ -268,7 +291,7 @@ namespace AK_DLL
             AutoFill_Weapon();
 
             //默认衣服
-            AutoFill_ApparelAbility();
+            AutoFill_Apparel();
 
             //默认发型，没有也无所谓，生成时有另一个默认值
             if (this.hair == null)
@@ -283,10 +306,6 @@ namespace AK_DLL
             AutoFill_VoicePack();
 
         }
-
-        #region RecruitSubMethods
-        #endregion
-
 
         #region AutoFillSubMethods
         private void AutoFill_Name()
@@ -362,7 +381,7 @@ namespace AK_DLL
                 }
             }
         }
-        private void AutoFill_ApparelAbility()
+        private void AutoFill_Apparel()
         {
             string tempString = AK_Tool.GetThingsDefName(this.defName, "Apparel");
             ThingDef tempThing = DefDatabase<ThingDef>.GetNamedSilentFail(tempString);
@@ -373,7 +392,7 @@ namespace AK_DLL
                 //添加干员同名衣服
                 if (this.apparels.Contains(tempThing) == false) this.apparels.Add(tempThing);
 
-                #region 自动添加技能
+                /*
                 if (tempThing.comps == null) tempThing.comps = new List<CompProperties>();
                 CompProperties_Ability comp;
                 //保存有的技能
@@ -411,10 +430,9 @@ namespace AK_DLL
                         comp = new CompProperties_Ability(j);
                         tempThing.comps.Add(comp);
                     }
-                }*/
-                abilityHash.Clear();
+                }
+                abilityHash.Clear();*/
             }
-            #endregion
 
             foreach (string thingType in AK_Tool.apparelType)
             {

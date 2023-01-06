@@ -25,12 +25,13 @@ namespace AK_DLL
         public Thing apparel; 
         public Dictionary<SkillDef, int> skillLevel;
         public VoicePackDef voicePack;
-        public List<CompProperties_Ability> groupedAbilities;
+        public List<HC_Ability> groupedAbilities;
         public int preferedAbility = 0;
         public OperatorDef operatorDef;
 
         public OperatorDocument(string defName, Pawn p, Thing weapon, OperatorDef operatorDef) : this()
         {
+            this.operatorDef = operatorDef;
             this.defName = defName;
             this.currentExist = true;
             this.pawn = p;
@@ -40,7 +41,7 @@ namespace AK_DLL
         }
         public OperatorDocument() {
             this.skillLevel = new Dictionary<SkillDef, int>();
-            groupedAbilities = new List<CompProperties_Ability>();
+            groupedAbilities = new List<HC_Ability>();
         }
 
         public string GetUniqueLoadID()
@@ -61,6 +62,7 @@ namespace AK_DLL
             Scribe_References.Look(ref this.weapon, "weapon", true);
             Scribe_Collections.Look(ref this.skillLevel, "skill", LookMode.Def, LookMode.Value);
             Scribe_Defs.Look(ref this.operatorDef, "def");
+            Scribe_Values.Look<int>(ref this.preferedAbility, "preferedAbility", 0, true);
             //if (this.pawn == null) { return; }
         }
 
@@ -100,7 +102,10 @@ namespace AK_DLL
         public override void StartedNewGame()
         {
             base.StartedNewGame();
-            Find.LetterStack.ReceiveLetter(LetterMaker.MakeLetter(Translator.Translate("AK_StartLabel"), Translator.Translate("AK_StartDesc"), LetterDefOf.NeutralEvent, null, null));
+            if (ModLister.GetActiveModWithIdentifier("MIS.Arknights") != null)
+            {
+                Find.LetterStack.ReceiveLetter(LetterMaker.MakeLetter(Translator.Translate("AK_StartLabel"), Translator.Translate("AK_StartDesc"), LetterDefOf.NeutralEvent, null, null));
+            }
             if (operatorDocument == null) operatorDocument = new Dictionary<string, OperatorDocument>();
         }
 

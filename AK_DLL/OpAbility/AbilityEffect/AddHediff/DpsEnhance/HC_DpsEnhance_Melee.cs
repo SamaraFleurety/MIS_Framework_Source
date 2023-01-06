@@ -56,7 +56,7 @@ namespace AK_DLL
 
         public override void CompExposeData()
         {
-            this.endEnhance();
+            this.EndEnhance();
         }
         #endregion
 
@@ -71,21 +71,21 @@ namespace AK_DLL
             {
                 pastRSec++;
                 this.tick = 0;
-                if (pastRSec < this.ProcedureCount) enhanceTools(AK_Tool.GetDoc(base.Pawn).weapon.def.tools, this.Enhances);
+                if (pastRSec < this.ProcedureCount) EnhanceTools(AK_Tool.GetDoc(base.Pawn).weapon.def.tools, this.Enhances);
                 else if (pastRSec >= this.EnhanceEndTime)
                 {
-                    this.endEnhance();
+                    this.EndEnhance();
                 }
             }
         }
 
-        private void endEnhance ()
+        private void EndEnhance ()
         {
-            restoreTools(this.Enhances);
+            RestoreTools(this.Enhances);
             this.parent.Severity -= 10f;
         }
 
-        private void restoreTools (List<toolEnhance> enhances)
+        private void RestoreTools (List<toolEnhance> enhances)
         {
             if (enhances == null) return;
             foreach (toolEnhance i in enhances)
@@ -95,7 +95,7 @@ namespace AK_DLL
                 i.tool.cooldownTime = i.originalCD;
             }
         }
-        private void enhanceTools (List<Tool> tools, List<toolEnhance> enhances)
+        private void EnhanceTools (List<Tool> tools, List<toolEnhance> enhances)
         {
             if (tools == null || enhances == null) return;
             foreach (toolEnhance enhance in enhances)

@@ -17,7 +17,7 @@ namespace AK_DLL
             }
         }
 
-        public CompAbility parent;
+        public HC_Ability parent;
         public bool Toggled
         {
             get { return this.parent.autoCast; }

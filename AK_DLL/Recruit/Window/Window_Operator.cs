@@ -125,10 +125,11 @@ namespace AK_DLL
                 {
                     skillLv = skillAndFire.level;
                 }
-                Widgets.FillableBar(new Rect(rect2.x, rect2.y, 170f, 20f), skillLv / 20f, SolidColorMaterials.NewSolidColorTexture(new Color(1f, 1f, 1f, 0.3f)), ContentFinder<Texture2D>.Get("UI/Frame/Null"), false);
-                Widgets.Label(new Rect(rect1.x - 35f, rect1.y, 150f, rect1.height), skillAndFire.skill.label);
-                Widgets.Label(new Rect(rect1.x + 75f, rect1.y, 100f, rect1.height), skillLv.ToString());
-                Rect rect4 = new Rect(rect1.x + 50f, rect1.y + 4f, 10f, 10f);
+                float verticalOffset = 25f * TypeDef.statType[skillAndFire.skill.defName];
+                Widgets.FillableBar(new Rect(rect2.x, rect2.y + verticalOffset, 170f, 20f), skillLv / 20f, SolidColorMaterials.NewSolidColorTexture(new Color(1f, 1f, 1f, 0.3f)), ContentFinder<Texture2D>.Get("UI/Frame/Null"), false);
+                Widgets.Label(new Rect(rect1.x - 35f, rect1.y + verticalOffset, 150f, rect1.height), skillAndFire.skill.label);
+                Widgets.Label(new Rect(rect1.x + 50f, rect1.y + verticalOffset, 100f, rect1.height), skillLv.ToString());
+                Rect rect4 = new Rect(rect1.x + 25f, rect1.y + 4f + verticalOffset, 10f, 10f);
                 if (skillAndFire.fireLevel == Passion.Minor)
                 {
                     Widgets.DrawTextureFitted(rect4, smallFire, 2.5f);
@@ -137,8 +138,6 @@ namespace AK_DLL
                 {
                     Widgets.DrawTextureFitted(rect4, bigFire, 2.5f);
                 }
-                rect1.y += 25f;
-                rect2.y += 25f;
             }
             //技能绘制
 
@@ -190,7 +189,7 @@ namespace AK_DLL
                     doc.groupedAbilities[doc.preferedAbility].enabled = false;
                     doc.preferedAbility = (doc.preferedAbility + 1) % doc.groupedAbilities.Count;
                     doc.groupedAbilities[doc.preferedAbility].enabled = true;
-                    Log.Message($"切换技能至{doc.groupedAbilities[doc.preferedAbility].abilityDef.defName}");
+                    Log.Message($"切换技能至{doc.groupedAbilities[doc.preferedAbility].AbilityDef.defName}");
                 }
             }  
         }

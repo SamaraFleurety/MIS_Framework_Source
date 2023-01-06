@@ -15,7 +15,7 @@ namespace AK_DLL
                 Messages.Message("AK_CanntUseAbility_ThereIsThingInTarget".Translate(), MessageTypeDefOf.CautionInput);
                 return;
             };
-            parent.TryGetComp<CompAbility>().Summon();
+            //parent.TryGetComp<CompAbility>().Summon();
             PawnKindDef pawnKind = this.summoned;
             Pawn pawn = PawnGenerator.GeneratePawn(pawnKind,Find.FactionManager.OfPlayer);
             Summoned summoned = pawn as Summoned;

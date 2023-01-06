@@ -16,24 +16,22 @@ namespace AK_DLL
 			this.CasterPawn.PlaySound(this.ability.typeSFX);
 
 			ThingWithComps apparel = base.EquipmentSource;
-			/*if (this.ability.selfHediff != null && this.ability.selfHediff.Count > 0)
+
+			if (this.ability.needCD)
 			{
-				foreach (HediffDef i in this.ability.selfHediff)
-				{ HealthUtility.AdjustSeverity(casterPawn, i, this.ability.debuffSeverity); }
-			}*/
-            if (this.ability.needCD)
-			{
+				if (this.CDs.charge == this.CDs.maxCharge) this.CDs.CD = this.CDs.maxCD;
 				this.CDs.charge -= 1;
-				this.CDs.CD += this.CDs.maxCD;
 			}
-			
+
 			IntVec3 intVec3 = this.currentTarget.Cell;
 			if (!this.ability.isSectorAbility)
 			{
+				//只要选了格子就可以释放对格子的技能
 				foreach (AbilityEffectBase compEffect in this.ability.compEffectList)
 				{
 					compEffect.DoEffect_IntVec(intVec3, Caster.Map);
 				}
+				//单个目标
 				if (this.ability.range == null)
 				{
 					Thing thing = this.currentTarget.Thing;
@@ -45,8 +43,8 @@ namespace AK_DLL
 					{
 						compEffect.DoEffect_Pawn(casterPawn, thing);
 					}
-					return true;
 				}
+				//多目标?
 				else
 				{
 					List<Pawn> targets_Pawns = new List<Pawn>();
@@ -81,15 +79,15 @@ namespace AK_DLL
 					else
 					{
 						Messages.Message("AK_NoTarget".Translate(), MessageTypeDefOf.CautionInput);
+						return false;
 					}
-					return true;
 				}
 			}
 			else 
 			{
 				this.DoSectorAbilityEffect(casterPawn);
-				return true;
 			}
+			return true;
 		}
 		public override void DrawHighlight(LocalTargetInfo target)
 		{

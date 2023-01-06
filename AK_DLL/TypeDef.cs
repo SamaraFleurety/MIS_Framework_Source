@@ -6,6 +6,23 @@ using System.Threading.Tasks;
 
 namespace AK_DLL
 {
+    public class TypeDef
+    {
+        public static Dictionary<string, int> statType = new Dictionary<string, int>() {
+            { "Shooting", 0 },
+            { "Melee", 1},
+            { "Construction", 2},
+            { "Mining", 3},
+            { "Cooking", 4 },
+            { "Plants", 5 },
+            { "Animals", 6 },
+            { "Crafting", 7 },
+            { "Artistic", 8 },
+            { "Medicine", 9 },
+            { "Social", 10 },
+            { "Intellectual", 11 }
+        };
+    }
     public enum AbilityType : Byte
     {
         Summon,//召唤
@@ -37,7 +54,7 @@ namespace AK_DLL
         def,
         heal,
         tact
-    } 
+    }
 
     public enum RegrowType : Byte
     {

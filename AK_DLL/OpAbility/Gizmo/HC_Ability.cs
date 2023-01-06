@@ -7,17 +7,32 @@ using System.Collections.Generic;
 
 namespace AK_DLL
 {
-    public class CompAbility : CompReloadable
+    public class HC_Ability : HediffComp, IExposable
     {
-        public string UniqueID { 
+        public OperatorDocument Document
+        {
+            get { return ((Hediff_Operator)this.parent).document; }
+        }
+        public HC_Ability()
+        {
+            this.CDandCharges = new CDandCharge();
+        }
+        public HC_Ability(OperatorAbilityDef abilityDef)
+        {
+            AbilityDef = abilityDef;
+            this.CDandCharges = new CDandCharge(1, this.AbilityDef.maxCharge, this.AbilityDef.CD * (int)this.AbilityDef.CDUnit);
+        }
+
+
+        public string UniqueID
+        {
             get
             {
                 return this.AbilityDef.defName.Split('_').Last();
             }
         }
-        public new CompProperties_Ability Props => (CompProperties_Ability)this.props;
-        public OperatorAbilityDef AbilityDef => this.Props.abilityDef;
-        public int MaxSummon => Props.maxSummoned;
+        public HCP_Ability Props => new HCP_Ability();
+        public int MaxSummon = 0;
         Command_Abilities ability_Command = null;
         public void Summon()
         {
@@ -29,40 +44,32 @@ namespace AK_DLL
             this.summoned--;
         }
 
-        public new int MaxCharges
+        /*public new int MaxCharges
         {
             get { return this.CDandCharges.maxCharge; }
-        }
+        }*/
 
-        public override void PostPostMake()
+        public override void CompPostMake()
         {
-            base.PostPostMake();
+            base.CompPostMake();
             //从def读取cd
             this.CDandCharges = new CDandCharge(1, this.AbilityDef.maxCharge, this.AbilityDef.CD * (int)this.AbilityDef.CDUnit);
-            /*int maxCharge_var = this.AbilityDef.maxCharge == 0 ? 1 : AbilityDef.maxCharge;
-            int CD_var = 0;
-            CDandCharge CDandCharge = new CDandCharge(CD_var, maxCharge_var, AbilityDef.CD);
-            this.CDandChargesList.Add(CDandCharge);
-            
-            CDandCharge num0 = new CDandCharge(1,1,1);
-            this.CDandChargesList.Append(num0);*/
         }
 
-        public override void CompTick()
+        public override void CompPostTick(ref float severityAdjustment)
         {
-            if (!this.Props.enabled) return;
-            base.CompTick(); 
+            if (!this.enabled) return;
             if (this.autoCast && this.CDandCharges.charge >= 1 && Find.TickManager.TicksGame % 180 == 0)
             {
-                LocalTargetInfo target = this.Wearer.TargetCurrentlyAimingAt;
-                if (!this.Wearer.Drafted || target == null) return;
-                this.ability_Command.verb.TryStartCastOn(new LocalTargetInfo(this.Wearer), target);
+                LocalTargetInfo target = this.Document.pawn.TargetCurrentlyAimingAt;
+                if (!this.Document.pawn.Drafted || target == null) return;
+                this.ability_Command.verb.TryStartCastOn(new LocalTargetInfo(this.Document.pawn), target);
             }
             if (this.CDandCharges.charge >= this.CDandCharges.maxCharge)
             {
                 return;
             }
-            
+
             this.CDandCharges.CD -= 1;
             if (this.CDandCharges.CD <= 0)
             {
@@ -74,39 +81,10 @@ namespace AK_DLL
             }
         }
 
-        /*public override void CompTick()
-        {
-            base.CompTick();
-            List<CDandCharge> CDandCharge_var = new List<CDandCharge>();
-            foreach (CDandCharge CDandCharge in this.CDandChargesList)
-            {
-                if (CDandCharge.charge != CDandCharge.maxCharge)
-                {
-                    int CD_var = (CDandCharge.CD <= 0) ? 0 : CDandCharge.CD - 1;
-                    int charge_var = CDandCharge.charge;
-                    if (CD_var == 0)
-                    {
-                        charge_var = CDandCharge.charge + 1;
-                    }
-                    CDandCharge CDandCharge_Loop = new CDandCharge(CD_var, CDandCharge.maxCharge, CDandCharge.maxCD);
-                    CDandCharge_Loop.charge = charge_var;
-                    CDandCharge_var.Add(CDandCharge_Loop);
-                }
-                else
-                {
-                    int CD_var = 0;
-                    CDandCharge CDandCharge_Loop = new CDandCharge(CD_var, CDandCharge.maxCharge, CDandCharge.maxCD);
-                    CDandCharge_var.Add(CDandCharge_Loop);
-                }
-            }
-            this.CDandChargesList.Clear();
-            this.CDandChargesList.AddRange(CDandCharge_var);
-        }*/
-        public override IEnumerable<Gizmo> CompGetWornGizmosExtra()
+        public override IEnumerable<Gizmo> CompGetGizmos()
         {
             return DrawGizmo();
         }
-
         private void InitGizmo()
         {
             this.ability_Command = new Command_Abilities();
@@ -117,7 +95,7 @@ namespace AK_DLL
             ability_Command.abilityDef = this.AbilityDef;
             ability_Command.iconAngle = 0f;
             ability_Command.iconOffset = new Vector2(0, 0);
-            ability_Command.pawn = ((Apparel)parent).Wearer;
+            ability_Command.pawn = this.Document.pawn;
             if (AbilityDef.icon != null)
             {
                 ability_Command.icon = ContentFinder<Texture2D>.Get(AbilityDef.icon);
@@ -126,7 +104,6 @@ namespace AK_DLL
         public IEnumerable<Gizmo> DrawGizmo()
         {
             if (this.ability_Command == null) InitGizmo();
-
             //FIXME:召唤的回收技能 移动到生物的comp上面去。
             /*if (AbilityDef.abilityType == AbilityType.Summon)
             {
@@ -147,21 +124,30 @@ namespace AK_DLL
             }
             else
             {*/
-            if (this.CDandCharges.charge == 0)
+            if (this.AbilityDef.targetMode == TargetMode.AutoEnemy)
+            {
+
+            }
+            else if (this.CDandCharges.charge == 0)
             {
                 ability_Command.Disable("AK_ChargeIsZero".Translate());
             }
-            if (!this.Props.enabled) {
+            else if (!this.enabled)
+            {
                 ability_Command.Disable("AK_GroupedAbilityNotSelected".Translate());
+            }
+            else
+            {
+                ability_Command.disabled = false;
             }
             return new List<Gizmo>() { this.ability_Command };
         }
         public Verb GetVerb(VerbProperties verbProp, int num, bool isntReclaim)
         {
             Verb_Ability verb_var = (Verb_Ability)Activator.CreateInstance(verbProp.verbClass);
-            verb_var.caster = ((Apparel)parent).Wearer;
+            verb_var.caster = this.Document.pawn;
             verb_var.verbProps = verbProp;
-            verb_var.verbTracker = new VerbTracker(this);
+            verb_var.verbTracker = new VerbTracker(this.Document.pawn);
             verb_var.ability = this.AbilityDef;
             verb_var.i = num;
             verb_var.CDs = this.CDandCharges;
@@ -179,21 +165,17 @@ namespace AK_DLL
             }*/
         }
 
-        public override string CompInspectStringExtra()
+
+        public void ExposeData()
         {
-            return null;
+            Scribe_Deep.Look(ref this.CDandCharges, "CD");
+            Scribe_Values.Look(ref this.autoCast, "auto", true);
+            //Scribe_Values.Look(ref summoned, "summoned");
+            Scribe_Defs.Look(ref this.AbilityDef, "ability");
         }
 
-        public override void PostExposeData()
-        {
-            base.PostExposeData(); 
-            //Scribe_References.Look(ref this.doc, "doc");
-            Scribe_Deep.Look(ref this.CDandCharges, UniqueID + "CD");
-            Scribe_Values.Look(ref this.autoCast, UniqueID + "auto");
-            Scribe_Values.Look(ref summoned, UniqueID + "summoned");
-        }
-
-        //public OperatorDocument doc;
+        public bool enabled = true;
+        public OperatorAbilityDef AbilityDef;
         public CDandCharge CDandCharges;
         public int summoned = 0;
         public bool autoCast = false;

@@ -13,7 +13,7 @@ namespace AK_DLL
         {
             Pawn casterPawn = this.CasterPawn;
             ThingWithComps apparel = base.EquipmentSource;
-            CompAbility compAbility = apparel.TryGetComp<CompAbility>();
+            //CompAbility compAbility = apparel.TryGetComp<CompAbility>();
             Pawn target = this.currentTarget.Pawn as Pawn;
             if (casterPawn == null || casterPawn.Dead || apparel == null || target == null|| target.Dead||target.kindDef != pawn||((Summoned)target).summoner_Pawm != casterPawn)
             {
@@ -23,7 +23,7 @@ namespace AK_DLL
             else 
             {
                 target.Destroy();
-                compAbility.SummonedDead();
+                //compAbility.SummonedDead();
                 return true;
             }
         }

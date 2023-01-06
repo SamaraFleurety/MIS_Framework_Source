@@ -8,7 +8,7 @@ namespace AK_DLL
 {
     public class AbilityEffect_ReclaimSummoned : AbilityEffectBase
     {
-        public void Reclaim(Pawn target,CompAbility comp) 
+        public void Reclaim(Pawn target,HC_Ability comp) 
         {
             if (!target.Dead&&!target.Destroyed) 
             {

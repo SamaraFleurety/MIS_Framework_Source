@@ -21,13 +21,13 @@ namespace AK_DLL
         public override void Kill(DamageInfo? dinfo = null, Hediff exactCulprit = null)
         {
             base.Kill(dinfo, exactCulprit);
-            summoner.TryGetComp<CompAbility>().SummonedDead();
+            //summoner.TryGetComp<CompAbility>().SummonedDead();
         }
 
         public override void Destroy(DestroyMode mode = DestroyMode.Vanish)
         {
             base.Destroy(mode);
-            summoner.TryGetComp<CompAbility>().SummonedDead();
+            //summoner.TryGetComp<CompAbility>().SummonedDead();
         }
 
         public override void ExposeData()

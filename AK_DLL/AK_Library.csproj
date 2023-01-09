@@ -258,6 +258,7 @@
     <Compile Include="Def\OperatorClassDef.cs" />
     <Compile Include="Def\OperatorDef\ItemOnSpawn.cs" />
     <Compile Include="HarmonyPatch\PatchHairOffset.cs" />
+    <Compile Include="HarmonyPatch\PatchInfoCardPortrait.cs" />
     <Compile Include="HarmonyPatch\PatchWindowsOnGui%28Bottom Portrait%29.cs" />
     <Compile Include="OpAbility\AbilityEffect\AE_ShootProjectile.cs" />
     <Compile Include="OpAbility\AbilityEffect\Effect\AbilityEffect_DisableAttack.cs" />
@@ -291,8 +292,8 @@
     <Compile Include="Hediff\Properties\HediffCompProperties_Heal.cs" />
     <Compile Include="Hediff\Comps\HediffComp_IncreaseAttackPower.cs" />
     <Compile Include="Hediff\Properties\HediffCompProperties_IncreaseAttackPower.cs" />
-    <Compile Include="Recruit\Job\JobDefOf.cs" />
-    <Compile Include="Recruit\Job\JobDriver_UseRecruitTable.cs" />
+    <Compile Include="RecruitConsole\Job\JobDefOf.cs" />
+    <Compile Include="RecruitConsole\Job\JobDriver_UseRecruitTable.cs" />
     <Compile Include="AK_ModSettings.cs" />
     <Compile Include="Def\OperatorAbilityDef.cs" />
     <Compile Include="Def\OperatorDef\OperatorDef.cs" />
@@ -324,15 +325,15 @@
     <Compile Include="Thing\Comp\CompTipRecruitedOperator.cs" />
     <Compile Include="Thing\ThingWithComps\Summoned.cs" />
     <Compile Include="Thing\ThingWithComps\OperatorWeapon.cs" />
-    <Compile Include="Recruit\RecruitConsole.cs" />
+    <Compile Include="RecruitConsole\RecruitConsole.cs" />
     <Compile Include="Thing\ThingWithComps\Trap.cs" />
     <Compile Include="Def\OperatorDef\TraitAndDegree.cs" />
     <Compile Include="TypeDef.cs" />
     <Compile Include="OpAbility\Verb\Verb_Ability.cs" />
     <Compile Include="OpAbility\Verb\Verb_Reclaim.cs" />
     <Compile Include="Def\VoicePackDef.cs" />
-    <Compile Include="Recruit\Window\Window_Operator.cs" />
-    <Compile Include="Recruit\Window\Window_OperatorList.cs" />
+    <Compile Include="RecruitConsole\Window\Window_Operator.cs" />
+    <Compile Include="RecruitConsole\Window\Window_OperatorList.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DeathWorker\" />

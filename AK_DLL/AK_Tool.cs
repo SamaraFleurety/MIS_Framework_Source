@@ -140,7 +140,7 @@ namespace AK_DLL
 			lastVoiceLength = 0;
         }
 
-		public static OperatorDocument GetDoc(Pawn p)
+		public static OperatorDocument GetDoc(this Pawn p)
         {
 			if (p.health.hediffSet.GetFirstHediff<Hediff_Operator>() == null) return null;
 			return p.health.hediffSet.GetFirstHediff<Hediff_Operator>().document;

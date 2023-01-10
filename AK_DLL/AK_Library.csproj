@@ -327,6 +327,7 @@
     <Compile Include="Recruit\RecruitConsole.cs" />
     <Compile Include="Thing\ThingWithComps\Trap.cs" />
     <Compile Include="Def\OperatorDef\TraitAndDegree.cs" />
+    <Compile Include="Traits\Interaction\BasicInteraction.cs" />
     <Compile Include="TypeDef.cs" />
     <Compile Include="OpAbility\Verb\Verb_Ability.cs" />
     <Compile Include="OpAbility\Verb\Verb_Reclaim.cs" />

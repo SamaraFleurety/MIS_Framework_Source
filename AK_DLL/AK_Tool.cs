@@ -156,5 +156,15 @@ namespace AK_DLL
 			if (doc == null) return;
 			Widgets.DrawTextureFitted(new Rect(AK_ModSettings.xOffset * 5, AK_ModSettings.yOffset * 5, 408, 408), ContentFinder<Texture2D>.Get(AK_Tool.GetDoc(p).operatorDef.stand), (float)AK_ModSettings.ratio * 0.05f);
 		}
+
+		public static Hediff_Operator GetArkNightsHeDiffByPawn(Pawn pawn)
+		{
+			var hediffCandidate = pawn.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("AK_Operator"));
+			if (hediffCandidate is null)
+			{
+				return null;
+			}
+			return hediffCandidate as Hediff_Operator;
+		}
 	}
 }

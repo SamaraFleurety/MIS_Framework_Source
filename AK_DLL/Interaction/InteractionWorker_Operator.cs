@@ -21,9 +21,6 @@ namespace AK_DLL
             }
             else if (this.interaction is OperatorInteractionDef)
             {
-                Log.Message("ISGROUPED");
-                foreach (string i in InvolvedPawns) Log.Message(i);
-                Log.Message(initiatorDoc.defName + recipientDoc.defName);
                 if (!this.InvolvedPawns.Contains(initiatorDoc.defName) || !this.InvolvedPawns.Contains(recipientDoc.defName))
                 {
                     return 0f;

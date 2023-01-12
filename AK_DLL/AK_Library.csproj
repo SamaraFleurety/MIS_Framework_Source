@@ -257,7 +257,7 @@
   <ItemGroup>
     <Compile Include="Def\OperatorClassDef.cs" />
     <Compile Include="Def\OperatorDef\ItemOnSpawn.cs" />
-    <Compile Include="Def\SpecialInteractionDef.cs" />
+    <Compile Include="Def\OperatorInteractionDef.cs" />
     <Compile Include="HarmonyPatch\PatchHairOffset.cs" />
     <Compile Include="HarmonyPatch\PatchInfoCardPortrait.cs" />
     <Compile Include="HarmonyPatch\PatchWindowsOnGui%28Bottom Portrait%29.cs" />
@@ -329,8 +329,7 @@
     <Compile Include="RecruitConsole\RecruitConsole.cs" />
     <Compile Include="Thing\ThingWithComps\Trap.cs" />
     <Compile Include="Def\OperatorDef\TraitAndDegree.cs" />
-    <Compile Include="Traits\Interaction\BasicInteraction.cs" />
-    <Compile Include="Traits\Interaction\SpecialInteraction.cs" />
+    <Compile Include="Interaction\InteractionWorker_Operator.cs" />
     <Compile Include="TypeDef.cs" />
     <Compile Include="OpAbility\Verb\Verb_Ability.cs" />
     <Compile Include="OpAbility\Verb\Verb_Reclaim.cs" />

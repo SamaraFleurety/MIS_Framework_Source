@@ -23,9 +23,6 @@ namespace AK_DLL
         //public Dictionary<string, Pawn>;
 
 
-        /// <summary>
-        /// The part that writes our settings to file. Note that saving is by ref.
-        /// </summary>
         public override void ExposeData()
         {
             //自动填充

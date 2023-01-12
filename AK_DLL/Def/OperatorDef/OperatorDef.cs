@@ -391,47 +391,6 @@ namespace AK_DLL
             {
                 //添加干员同名衣服
                 if (this.apparels.Contains(tempThing) == false) this.apparels.Add(tempThing);
-
-                /*
-                if (tempThing.comps == null) tempThing.comps = new List<CompProperties>();
-                CompProperties_Ability comp;
-                //保存有的技能
-                HashSet<OperatorAbilityDef> abilityHash = new HashSet<OperatorAbilityDef>();
-                //检测衣服上每个组件 把已绑技能加入哈希
-                foreach (CompProperties k in tempThing.comps)
-                {
-                    if (k is CompProperties_Ability)
-                    {
-                        if (abilityHash.Contains((k as CompProperties_Ability).abilityDef) == false) abilityHash.Add((k as CompProperties_Ability).abilityDef);
-                        else Log.Error($"detected duplicate operator ability {(k as CompProperties_Ability).abilityDef.defName}");
-                    }
-                }
-                //读取干员Def里面的技能并绑定进衣服
-                if (this.abilities != null)
-                {
-                    foreach (OperatorAbilityDef i in this.abilities)
-                    {
-                        comp = new CompProperties_Ability(i);
-                        if (abilityHash.Contains(i) == false) tempThing.comps.Add(comp);
-                    }
-                }
-                //自动绑定合规范的技能
-                /*OperatorAbilityDef j = DefDatabase<OperatorAbilityDef>.GetNamedSilentFail(tempString = AK_Tool.GetThingsDefName(this.defName, "Ability"));
-                if (j != null && abilityHash.Contains(j) == false)
-                {
-                    comp = new CompProperties_Ability(j);
-                    tempThing.comps.Add(comp);
-                }
-                for (int i = 0; i < 4; ++i)
-                {
-
-                    if ((j = DefDatabase<OperatorAbilityDef>.GetNamedSilentFail(tempString + AK_Tool.romanNumber[i])) != null && abilityHash.Contains(j) == false)
-                    {
-                        comp = new CompProperties_Ability(j);
-                        tempThing.comps.Add(comp);
-                    }
-                }
-                abilityHash.Clear();*/
             }
 
             foreach (string thingType in AK_Tool.apparelType)

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -257,6 +257,7 @@
   <ItemGroup>
     <Compile Include="Def\OperatorClassDef.cs" />
     <Compile Include="Def\OperatorDef\ItemOnSpawn.cs" />
+    <Compile Include="Def\SpecialInteractionDef.cs" />
     <Compile Include="HarmonyPatch\PatchHairOffset.cs" />
     <Compile Include="HarmonyPatch\PatchInfoCardPortrait.cs" />
     <Compile Include="HarmonyPatch\PatchWindowsOnGui%28Bottom Portrait%29.cs" />
@@ -329,6 +330,7 @@
     <Compile Include="Thing\ThingWithComps\Trap.cs" />
     <Compile Include="Def\OperatorDef\TraitAndDegree.cs" />
     <Compile Include="Traits\Interaction\BasicInteraction.cs" />
+    <Compile Include="Traits\Interaction\SpecialInteraction.cs" />
     <Compile Include="TypeDef.cs" />
     <Compile Include="OpAbility\Verb\Verb_Ability.cs" />
     <Compile Include="OpAbility\Verb\Verb_Reclaim.cs" />

@@ -130,8 +130,7 @@ namespace AK_DLL
 		public static void PlaySound(this Pawn pawn, SFXType type)
         {
 			abilitySFX[(int)type].PlayOneShot(null);
-			//Log.Message((pawn.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("AK_Operator")) as Hediff_Operator).document.voicePack.abilitySounds.RandomElement().defName);
-			(pawn.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("AK_Operator")) as Hediff_Operator).document.voicePack.abilitySounds.RandomElement().PlaySound();
+			pawn.GetDoc().voicePack.abilitySounds.RandomElement().PlaySound();
         }
 
 		public static void LoadedGame()

@@ -14,12 +14,13 @@ namespace AK_DLL
         [HarmonyPostfix]
         public static void postfix(bool value, Pawn_DraftController __instance) 
         {
-            if (__instance.pawn.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("AK_Operator")) is Hediff_Operator hediff)
+            OperatorDocument doc = __instance.pawn.GetDoc();
+            if (doc != null)
             {
                 if (__instance.Drafted)
-                    hediff.document.voicePack.draftSounds.RandomElement().PlaySound();
+                    doc.voicePack.draftSounds.RandomElement().PlaySound();
                 else
-                    hediff.document.voicePack.undraftSound.PlaySound();
+                    doc.voicePack.undraftSound.PlaySound();
             }
         }
     }

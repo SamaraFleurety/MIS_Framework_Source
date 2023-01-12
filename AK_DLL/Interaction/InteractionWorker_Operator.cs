@@ -21,7 +21,7 @@ namespace AK_DLL
             }
             else if (this.interaction is OperatorInteractionDef)
             {
-                if (!this.InvolvedPawns.Contains(initiatorDoc.defName) || !this.InvolvedPawns.Contains(recipientDoc.defName))
+                if (!this.InvolvedPawns.Contains(initiatorDoc.operatorID) || !this.InvolvedPawns.Contains(recipientDoc.operatorID))
                 {
                     return 0f;
                 }

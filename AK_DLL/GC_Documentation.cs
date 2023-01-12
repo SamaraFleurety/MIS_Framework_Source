@@ -17,7 +17,7 @@ namespace AK_DLL
     //下面这个GameComponent使用了和原版不一样的存读档流程。除非真的知道你在干什么，不然别改。
     public class OperatorDocument : IExposable , ILoadReferenceable
     {
-        internal string defName;
+        internal string operatorID;
         public bool currentExist;
         public Pawn pawn;
         public Thing weapon;
@@ -32,7 +32,7 @@ namespace AK_DLL
         public OperatorDocument(string defName, Pawn p, Thing weapon, OperatorDef operatorDef) : this()
         {
             this.operatorDef = operatorDef;
-            this.defName = defName;
+            this.operatorID = defName;
             this.currentExist = true;
             this.pawn = p;
             this.weapon = weapon;
@@ -46,7 +46,7 @@ namespace AK_DLL
 
         public string GetUniqueLoadID()
         {
-            return (this.defName + "Doc");
+            return (this.operatorID + "Doc");
         }
 
         public void ExposeData()
@@ -56,7 +56,7 @@ namespace AK_DLL
                 this.RecordSkills();
             }
             Scribe_Defs.Look(ref this.voicePack, "voicePackDef");
-            Scribe_Values.Look(ref this.defName, "defName");
+            Scribe_Values.Look(ref this.operatorID, "defName");
             Scribe_Values.Look(ref this.currentExist, "alive");
             Scribe_References.Look<Pawn>(ref this.pawn, "operator", true);
             Scribe_References.Look(ref this.weapon, "weapon", true);
@@ -150,7 +150,7 @@ namespace AK_DLL
             foreach (KeyValuePair<string, OperatorDocument> node in operatorDocument)
             {
                 node.Value.RecordSkills();
-                Log.Message($"当前已招募 {node.Value.defName}");
+                Log.Message($"当前已招募 {node.Value.operatorID}");
             }
         }
 

@@ -12,11 +12,13 @@ namespace AK_DLL
     public class PatchSelectSound
     {
         [HarmonyPostfix]
-        public static void postfix(Object obj) 
+        public static void postfix(Object obj)
         {
-            if (obj is Pawn pawn && pawn.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("AK_Operator")) is Hediff_Operator hediff) 
+            if (obj is Pawn pawn)
             {
-                hediff.document.voicePack.selectSounds.RandomElement().PlaySound();
+                OperatorDocument doc = pawn.GetDoc();
+                if (doc != null)
+                { doc.voicePack.selectSounds.RandomElement().PlaySound(); }
             }
         }
     }

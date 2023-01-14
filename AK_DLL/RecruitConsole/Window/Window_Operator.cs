@@ -117,9 +117,9 @@ namespace AK_DLL
             foreach (SkillAndFire skillAndFire in operator_Def.Skills)
             {
                 int skillLv;
-                if (GameComp_OperatorDocumentation.operatorDocument.ContainsKey(operator_Def.getOperatorName()))
+                if (GameComp_OperatorDocumentation.operatorDocument.ContainsKey(operator_Def.OperatorID))
                 {
-                    skillLv = GameComp_OperatorDocumentation.operatorDocument[operator_Def.getOperatorName()].skillLevel[skillAndFire.skill];
+                    skillLv = GameComp_OperatorDocumentation.operatorDocument[operator_Def.OperatorID].skillLevel[skillAndFire.skill];
                 }
                 else
                 {
@@ -143,9 +143,9 @@ namespace AK_DLL
 
             rect_Back.x -= 145f;
             OperatorDocument doc = null;
-            if (GameComp_OperatorDocumentation.operatorDocument.ContainsKey(operator_Def.getOperatorName()))
+            if (GameComp_OperatorDocumentation.operatorDocument.ContainsKey(operator_Def.OperatorID))
             {
-                doc = GameComp_OperatorDocumentation.operatorDocument[operator_Def.getOperatorName()];
+                doc = GameComp_OperatorDocumentation.operatorDocument[operator_Def.OperatorID];
             }
 
             if (Widgets.ButtonText(rect_Back, recruitText))

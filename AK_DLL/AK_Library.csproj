@@ -256,6 +256,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Def\OperatorClassDef.cs" />
+    <Compile Include="Def\OperatorDef\HediffInate.cs" />
     <Compile Include="Def\OperatorDef\ItemOnSpawn.cs" />
     <Compile Include="Def\OperatorInteractionDef.cs" />
     <Compile Include="HarmonyPatch\PatchHairOffset.cs" />
@@ -299,9 +300,9 @@
     <Compile Include="Def\OperatorAbilityDef.cs" />
     <Compile Include="Def\OperatorDef\OperatorDef.cs" />
     <Compile Include="GC_Documentation.cs" />
-    <Compile Include="HarmonyPatch\PatchDraftSound.cs" />
-    <Compile Include="HarmonyPatch\PatchDoExpansionIcons.cs" />
-    <Compile Include="HarmonyPatch\PatchSelectSound.cs" />
+    <Compile Include="VoicePlayer\HarmonyPatch\PatchDraftSound.cs" />
+    <Compile Include="HarmonyPatch\Initiator.cs" />
+    <Compile Include="VoicePlayer\HarmonyPatch\PatchSelectSound.cs" />
     <Compile Include="Originium\Thing\Gas.cs" />
     <Compile Include="Originium\Thing\GasDef.cs" />
     <Compile Include="Originium\Thing\Comp\TC_GasEmitter.cs" />
@@ -336,6 +337,7 @@
     <Compile Include="Def\VoicePackDef.cs" />
     <Compile Include="RecruitConsole\Window\Window_Operator.cs" />
     <Compile Include="RecruitConsole\Window\Window_OperatorList.cs" />
+    <Compile Include="VoicePlayer\VoicePlayer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DeathWorker\" />

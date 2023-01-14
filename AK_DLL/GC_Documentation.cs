@@ -28,6 +28,7 @@ namespace AK_DLL
         public List<HC_Ability> groupedAbilities;
         public int preferedAbility = 0;
         public OperatorDef operatorDef;
+        public int oripathySeverity = 0;
 
         public OperatorDocument(string defName, Pawn p, Thing weapon, OperatorDef operatorDef) : this()
         {
@@ -63,6 +64,7 @@ namespace AK_DLL
             Scribe_Collections.Look(ref this.skillLevel, "skill", LookMode.Def, LookMode.Value);
             Scribe_Defs.Look(ref this.operatorDef, "def");
             Scribe_Values.Look<int>(ref this.preferedAbility, "preferedAbility", 0, true);
+            Scribe_Values.Look<int>(ref this.oripathySeverity, "oriSev", 0, true);
             //if (this.pawn == null) { return; }
         }
 
@@ -112,7 +114,7 @@ namespace AK_DLL
         public override void LoadedGame()
         {
             base.LoadedGame();
-            AK_Tool.LoadedGame();
+            VoicePlayer.LoadedGame();
             if (operatorDocument == null) operatorDocument = new Dictionary<string, OperatorDocument>();
         }
 

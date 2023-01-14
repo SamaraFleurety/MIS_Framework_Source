@@ -27,6 +27,7 @@ namespace AK_DLL
 
         public int age = 16;//年龄
         public bool isMale = false;//性别
+        public List<HediffStat> hediffInate;
 
         public VoicePackDef voicePackDef;
 
@@ -50,6 +51,10 @@ namespace AK_DLL
         public string headPortrait;//头像
         public Vector2 headPortraitOffset;
 
+        public string OperatorID
+        {
+            get { return AK_Tool.GetOperatorIDFrom(this.defName); }
+        }
         public List<SkillAndFire> Skills
         {
             get
@@ -93,8 +98,8 @@ namespace AK_DLL
                     this.voicePackDef.recruitSound.PlaySound();
 
                     //档案系统
-                    GameComp_OperatorDocumentation.AddPawn(this.getOperatorName(), this, operator_Pawn, weapon);
-                    hediff.document = GameComp_OperatorDocumentation.operatorDocument[this.getOperatorName()];
+                    GameComp_OperatorDocumentation.AddPawn(this.OperatorID, this, operator_Pawn, weapon);
+                    hediff.document = GameComp_OperatorDocumentation.operatorDocument[this.OperatorID];
                     hediff.document.voicePack = this.voicePackDef;
                     //hediff.document.operatorDef = this;
 
@@ -103,7 +108,33 @@ namespace AK_DLL
             }
         }
 
-        
+        public void AutoFill()
+        {
+            //默认名字
+            AutoFill_Name();
+
+            //默认体型
+            //if (this.bodyTypeDef == null) this.bodyTypeDef = BodyTypeDefOf.Thin;
+
+            //默认武器
+            AutoFill_Weapon();
+
+            //默认衣服
+            AutoFill_Apparel();
+
+            //默认发型，没有也无所谓，生成时有另一个默认值
+            if (this.hair == null)
+            {
+                this.hair = DefDatabase<HairDef>.GetNamedSilentFail(AK_Tool.GetThingdefNameFrom(this.defName, "Hair"));
+            }
+
+            //默认头像和立绘
+            AutoFill_StandPortrait();
+
+            //默认语音
+            AutoFill_VoicePack();
+
+        }
 
         #region RecruitSubMethods
         private static Pawn operator_Pawn;
@@ -126,7 +157,7 @@ namespace AK_DLL
             {
                 hediff.document.groupedAbilities[i].enabled = false;
             }
-        } 
+        }
         private void Recruit_AddRelations()
         {
             operator_Pawn.relations.ClearAllRelations();
@@ -139,6 +170,7 @@ namespace AK_DLL
                 }
             }
         }
+
         private Hediff_Operator Recruit_Hediff()
         {
             operator_Pawn.health.hediffSet.Clear();
@@ -151,6 +183,24 @@ namespace AK_DLL
             }
 
             HediffDef hediffDef = HediffDef.Named("AK_Operator");
+            fixAlienHairColor(hediffDef);
+
+            Hediff_Operator hediff = HediffMaker.MakeHediff(hediffDef, operator_Pawn, operator_Pawn.health.hediffSet.GetBrain()) as Hediff_Operator;
+
+            //增加多功能hediff
+            operator_Pawn.health.AddHediff(hediff, null, null, null);
+
+            if (this.hediffInate != null && this.hediffInate.Count > 0)
+            {
+                foreach (HediffStat i in this.hediffInate)
+                {
+                    AbilityEffect_AddHediff.AddHediff(operator_Pawn, i.hediff, i.part, i.serverity);
+                }
+            }
+            return hediff;
+        }
+        private void fixAlienHairColor(HediffDef hediffDef)
+        {
             //修复外星人会改发色的问题
             if (ModLister.GetActiveModWithIdentifier("erdelf.HumanoidAlienRaces") != null)
             {
@@ -159,15 +209,11 @@ namespace AK_DLL
                     skinColor = this.skinColor,
                     hairColor = this.hairColor
                 };
-                hediffDef.comps = new List<HediffCompProperties>();
-                hediffDef.comps.Add(comp);
+                if (hediffDef.comps == null) hediffDef.comps = new List<HediffCompProperties>();
+                if (!hediffDef.comps.Contains(comp)) hediffDef.comps.Add(comp);
             }
-            Hediff_Operator hediff = HediffMaker.MakeHediff(hediffDef, operator_Pawn, operator_Pawn.health.hediffSet.GetBrain()) as Hediff_Operator;
-
-            //增加多功能hediff
-            operator_Pawn.health.AddHediff(hediff, null, null, null);
-            return hediff;
         }
+
         private void Recruit_PersonalStat()
         {
             //避免Bug更改
@@ -212,9 +258,9 @@ namespace AK_DLL
                 operator_Pawn.skills.skills.Add(skill);
             }
             //技能属性更改
-            if (GameComp_OperatorDocumentation.operatorDocument.ContainsKey(AK_Tool.GetOperatorNameFromDefName(this.defName)))
+            if (GameComp_OperatorDocumentation.operatorDocument.ContainsKey(AK_Tool.GetOperatorIDFrom(this.defName)))
             {
-                Dictionary<SkillDef, int> skills = GameComp_OperatorDocumentation.operatorDocument[AK_Tool.GetOperatorNameFromDefName(this.defName)].skillLevel;
+                Dictionary<SkillDef, int> skills = GameComp_OperatorDocumentation.operatorDocument[AK_Tool.GetOperatorIDFrom(this.defName)].skillLevel;
                 foreach (SkillRecord i in operator_Pawn.skills.skills)
                 {
                     i.Level = skills[i.def];
@@ -247,65 +293,10 @@ namespace AK_DLL
                 Apparel apparel = (Apparel)ThingMaker.MakeThing(apparelDef);
                 apparel.GetComp<CompBiocodable>().CodeFor(operator_Pawn);
                 operator_Pawn.apparel.Wear(apparel, true, false);
-                //找身上穿的那件衣服
-                /*if (!foundCloth)
-                {
-                    foreach (ThingComp i in apparel.AllComps)
-                    {
-                        //找技能组件 如果找到了就记录进技能组，和文档里的衣服
-                        if (i is CompAbility)
-                        {
-                            if (!foundCloth)
-                            {
-                                foundCloth = true;
-                                hediff.document.apparel = apparel;
-                            }
-                            //(i as CompAbility).doc = hediff.document;
-                            if ((i.props as CompProperties_Ability).abilityDef.grouped)
-                            {
-                                hediff.document.groupedAbilities.Add(i.props as CompProperties_Ability);
-                            }
-
-                        }
-                    }
-                }*/
             }
             return weapon;
         }
         #endregion
-        public string getOperatorName()
-        {
-            return AK_Tool.GetOperatorNameFromDefName(this.defName);
-        }
-
-
-        public void AutoFill()
-        {
-            //默认名字
-            AutoFill_Name();
-
-            //默认体型
-            //if (this.bodyTypeDef == null) this.bodyTypeDef = BodyTypeDefOf.Thin;
-
-            //默认武器
-            AutoFill_Weapon();
-
-            //默认衣服
-            AutoFill_Apparel();
-
-            //默认发型，没有也无所谓，生成时有另一个默认值
-            if (this.hair == null)
-            {
-                this.hair = DefDatabase<HairDef>.GetNamedSilentFail(AK_Tool.GetThingsDefName(this.defName, "Hair"));
-            }
-
-            //默认头像和立绘
-            AutoFill_StandPortrait();
-
-            //默认语音
-            AutoFill_VoicePack();
-
-        }
 
         #region AutoFillSubMethods
         private void AutoFill_Name()
@@ -313,7 +304,7 @@ namespace AK_DLL
             if (this.name == null && this.nickname == null)
             {
                 Log.Error($"{this.defName}缺乏任何形式的名字。");
-                this.nickname = this.name = AK_Tool.GetOperatorNameFromDefName(this.defName);
+                this.nickname = this.name = AK_Tool.GetOperatorIDFrom(this.defName);
             }
             else if (this.name == null && this.nickname != null) this.name = this.nickname;
             else if (this.name != null && this.nickname == null) this.nickname = this.name;
@@ -328,7 +319,7 @@ namespace AK_DLL
         {
             if (this.weapon == null)
             {
-                this.weapon = DefDatabase<ThingDef>.GetNamedSilentFail(AK_Tool.GetThingsDefName(this.defName, "Weapon"));
+                this.weapon = DefDatabase<ThingDef>.GetNamedSilentFail(AK_Tool.GetThingdefNameFrom(this.defName, "Weapon"));
                 if (this.weapon == null)
                 {
                     this.weapon = DefDatabase<ThingDef>.GetNamed("AK_Weapon_Dusk");
@@ -340,20 +331,20 @@ namespace AK_DLL
         {
             if (this.voicePackDef == null)
             {
-                this.voicePackDef = DefDatabase<VoicePackDef>.GetNamedSilentFail($"AK_VoicePack_" + this.getOperatorName());
+                this.voicePackDef = DefDatabase<VoicePackDef>.GetNamedSilentFail(AK_Tool.GetThingdefNameFrom(this.defName, "VoicePack"));
                 if (this.voicePackDef == null)
                 {
-                    this.voicePackDef = new VoicePackDef(AK_Tool.GetOperatorNameFromDefName(this.defName));
+                    this.voicePackDef = new VoicePackDef(AK_Tool.GetOperatorIDFrom(this.defName));
                     return;
                 }
             }
-            this.voicePackDef.AutoFillVoicePack(this.getOperatorName());
+            this.voicePackDef.AutoFillVoicePack(this.OperatorID);
         }
         private void AutoFill_StandPortrait()
         {
             if (this.headPortrait == null)
             {
-                string portraitPath = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorNameFromDefName(this.defName) + "Portrait";
+                string portraitPath = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorIDFrom(this.defName) + "Portrait";
                 this.headPortrait = portraitPath;
                 try
                 {
@@ -368,7 +359,7 @@ namespace AK_DLL
 
             if (this.stand == null)
             {
-                string standPath = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorNameFromDefName(this.defName) + "Stand";
+                string standPath = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorIDFrom(this.defName) + "Stand";
                 this.stand = standPath;
                 try
                 {
@@ -383,7 +374,7 @@ namespace AK_DLL
         }
         private void AutoFill_Apparel()
         {
-            string tempString = AK_Tool.GetThingsDefName(this.defName, "Apparel");
+            string tempString = AK_Tool.GetThingdefNameFrom(this.defName, "Apparel");
             ThingDef tempThing = DefDatabase<ThingDef>.GetNamedSilentFail(tempString);
             if (this.apparels == null) this.apparels = new List<ThingDef>();
             //从干员def绑定技能
@@ -395,7 +386,7 @@ namespace AK_DLL
 
             foreach (string thingType in AK_Tool.apparelType)
             {
-                tempThing = DefDatabase<ThingDef>.GetNamedSilentFail(AK_Tool.GetThingsDefName(this.defName, thingType));
+                tempThing = DefDatabase<ThingDef>.GetNamedSilentFail(AK_Tool.GetThingdefNameFrom(this.defName, thingType));
                 if (tempThing != null && !this.apparels.Contains(tempThing)) this.apparels.Add(tempThing);
             }
 

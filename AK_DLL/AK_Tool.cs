@@ -1,31 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using RimWorld;
 using UnityEngine;
 using Verse;
-using Verse.Sound;
 
 namespace AK_DLL
 {
     public static class AK_Tool
 	{
 		static bool doneInitialization = false;
-		static float lastVoiceTime = 0;
 		public static string[] operatorTypeStiring = new string[] { "Caster", "Defender", "Guard", "Vanguard", "Specialist", "Supporter", "Medic", "Sniper" };
 		public static string[] romanNumber = new string[] { "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X" , "XI"};
 		//如果增加了要自动绑定的服装种类，只需要往这个字符串数组增加。
 		public static string[] apparelType = new string[] { "Hat" };
-		public static float lastVoiceLength = 0;
-		public static SoundDef[] abilitySFX = new SoundDef[4] {DefDatabase<SoundDef>.GetNamed("AK_SFX_Atkboost"), DefDatabase<SoundDef>.GetNamed("AK_SFX_Defboost"), DefDatabase<SoundDef>.GetNamed("AK_SFX_Healboost"), DefDatabase<SoundDef>.GetNamed("AK_SFX_Tactboost") };
+		
 
 		public static Dictionary<int, Dictionary<string, OperatorDef>> operatorDefs = new Dictionary<int, Dictionary<string, OperatorDef>>();
 		//public static Dictionary<string, OperatorDef>[] operatorDefs = new Dictionary<string, OperatorDef>[(int)OperatorType.Count];
 
 		public static Dictionary<int, string> operatorClasses = new Dictionary<int, string>();
 
-		public static void PrintfHairColor(this Pawn p)
+		/*public static void PrintfHairColor(this Pawn p)
         {
 			Log.Message($"pawnHC: {p.story.HairColor.r}, {p.story.HairColor.g}, {p.story.HairColor.b},{p.story.HairColor.a}");
 		}
@@ -33,7 +29,7 @@ namespace AK_DLL
 		public static void PrinftSkinColor(this Pawn p)
         {
 			Log.Message($"pawnSC: {p.story.SkinColor.r}, {p.story.SkinColor.g}, {p.story.SkinColor.b},{p.story.SkinColor.a}");
-		}
+		}*/
 
 		public static void Initialization()
         {
@@ -101,43 +97,22 @@ namespace AK_DLL
 			}
 			return result;
 		}
-		public static string GetOperatorNameFromDefName(string defName)
+		public static string GetOperatorIDFrom(string XMLdefName)
         {
-			string[] temp = defName.Split('_');
+			string[] temp = XMLdefName.Split('_');
 			if (temp.Length <= 1) return null;
 			return temp[temp.Length - 1];
         }
 
-		//要求defName格式：前缀_随便啥_人物名；物品格式：前缀_{string thingType}_人物名
-		public static string GetThingsDefName(string defName, string thingType)
+		//要求defName格式：前缀_随便啥_人物名；返回物品defName格式：前缀_{string thingType}_人物名
+		public static string GetThingdefNameFrom(string XMLdefName, string thingType)
         {
-			string[] temp = defName.Split('_');
+			string[] temp = XMLdefName.Split('_');
 			if (temp.Length <= 1) return null;
 
 			return temp[0] + "_" + thingType + "_" + temp[temp.Length - 1];
 		}
-		public static void PlaySound(this SoundDef sound)
-		{
-			//Log.Message($"尝试播放{sound.defName}.{Time.realtimeSinceStartup} : {lastVoiceTime}");
-			if (Time.realtimeSinceStartup - lastVoiceTime <= AK_ModSettings.voiceIntervalTime / 2.0 || Time.realtimeSinceStartup - lastVoiceTime <= lastVoiceLength || !AK_ModSettings.playOperatorVoice) return;
-			lastVoiceLength = sound.Duration.max;
-			sound.PlayOneShotOnCamera(null);
-			lastVoiceTime = Time.realtimeSinceStartup;
-			return;
-		}
 
-		//播放技能语音
-		public static void PlaySound(this Pawn pawn, SFXType type)
-        {
-			abilitySFX[(int)type].PlayOneShot(null);
-			pawn.GetDoc().voicePack.abilitySounds.RandomElement().PlaySound();
-        }
-
-		public static void LoadedGame()
-        {
-			lastVoiceTime = 0;
-			lastVoiceLength = 0;
-        }
 
 		public static OperatorDocument GetDoc(this Pawn p)
         {
@@ -165,5 +140,50 @@ namespace AK_DLL
 			}
 			return hediffCandidate as Hediff_Operator;
 		}
+
+		//模式1是精确搜索，2是找第一个更大值，3是找第一个更小值
+		public static int quickSearch(int[] arr, int leftPtr, int rightPtr, int target, int mode)
+        {
+			int middle;
+			middle = 0;
+			if (rightPtr - leftPtr < 0) return -1;
+			if (target > arr[rightPtr])
+			{
+				if (mode == 3) return rightPtr;
+				else return -1;
+			}
+			else if (target < arr[leftPtr])
+			{
+				if (mode == 2) return leftPtr;
+				else return -1;
+			}
+			while (rightPtr >= leftPtr)
+			{
+				middle = (leftPtr + rightPtr) / 2;
+				if (arr[middle] == target)
+				{
+					return middle;
+				}
+				else if (leftPtr == rightPtr) break;
+				else if (arr[middle] < target)
+				{
+					leftPtr = middle + 1;
+				}
+				else
+				{
+					rightPtr = middle;
+				}
+			}
+			if (mode == 2) return rightPtr;
+			else if (mode == 3) return rightPtr - 1;
+			else return -1;
+		}
+
+		public static int weightArrayRand(int[] arr)
+        {
+			int rd = UnityEngine.Random.Range(1, arr.Last());
+
+			return quickSearch(arr, 0, arr.Length - 1, rd, 2);
+        }
 	}
 }

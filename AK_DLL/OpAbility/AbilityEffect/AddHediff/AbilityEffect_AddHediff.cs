@@ -21,25 +21,8 @@ namespace AK_DLL
             Pawn target_Pawn = target as Pawn;
             if (target_Pawn != null && !target_Pawn.Dead)
             {
-                Hediff hediff;
-                if (this.bodyPart == null)
-                {
-                    HealthUtility.AdjustSeverity(target_Pawn, this.hediffDef, this.severity);
-                    hediff = target_Pawn.health.hediffSet.GetFirstHediffOfDef(this.hediffDef, false);
-                }
-                else
-                {
-                    BodyPartRecord part = null;
-                    foreach (BodyPartRecord bodyPart in target_Pawn.RaceProps.body.AllParts) 
-                    {
-                        if (bodyPart.Label == this.bodyPart)
-                        {
-                            part = bodyPart;
-                        }
-                    }
-                    hediff = target_Pawn.health.AddHediff(this.hediffDef,part,null,null);
-                    hediff.Severity = this.severity;
-                }
+                Hediff hediff = AddHediff(target_Pawn, this.hediffDef, this.bodyPart, this.severity);
+                
                 if (hediff != null) postAddHediff(hediff);
             }
             else
@@ -52,9 +35,34 @@ namespace AK_DLL
         {
         }
 
+        public static Hediff AddHediff (Pawn target, HediffDef hediffDef, BodyPartDef part, float severity)
+        {
+            if (target == null) return null;
+            Hediff hediff;
+            if (part == null)
+            {
+                HealthUtility.AdjustSeverity(target, hediffDef, severity);
+                hediff = target.health.hediffSet.GetFirstHediffOfDef(hediffDef, false);
+            }
+            else
+            {
+                BodyPartRecord partRecord = null;
+                foreach (BodyPartRecord bodyPart in target.RaceProps.body.AllParts)
+                {
+                    if (bodyPart.def == part)
+                    {
+                        partRecord = bodyPart;
+                    }
+                }
+                hediff = target.health.AddHediff(hediffDef, partRecord, null, null);
+                hediff.Severity = severity;
+            }
+            return hediff;
+        }
+
         public bool onSelf = false;
         public HediffDef hediffDef;
         public float severity = 1f;
-        public string bodyPart;
+        public BodyPartDef bodyPart;
     }
 }

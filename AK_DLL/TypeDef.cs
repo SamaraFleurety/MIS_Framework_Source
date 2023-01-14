@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AK_DLL
 {
-    public class TypeDef
+    public static class TypeDef
     {
         public static Dictionary<string, int> statType = new Dictionary<string, int>() {
             { "Shooting", 0 },

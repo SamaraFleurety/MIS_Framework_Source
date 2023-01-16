@@ -149,7 +149,7 @@ namespace AK_DLL
                     HC_Ability HC = new HC_Ability(i);
                     hediff.comps.Add(HC);
                     HC.parent = hediff;
-                    hediff.document.groupedAbilities.Add(HC);
+                    if(i.grouped) hediff.document.groupedAbilities.Add(HC);
                 }
             }
             //禁用非第一个的可选技能

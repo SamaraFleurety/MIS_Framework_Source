@@ -48,7 +48,9 @@ namespace AK_DLL
             if (tick >= Interval)
             {
                 tick = 0;
-                HediffStat hediff =  
+                HediffStat hediff = HediffStats[AK_Tool.weightArrayRand(weight)];
+                Log.Message("Add " + hediff.hediff.defName + " to " + this.Pawn.Name.ToString());
+                AbilityEffect_AddHediff.AddHediff(this.Pawn, hediff.hediff, hediff.part, UnityEngine.Random.Range(hediff.randWorseMin, hediff.randWorseMax));
             }
         }
 

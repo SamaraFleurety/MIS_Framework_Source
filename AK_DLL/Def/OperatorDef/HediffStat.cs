@@ -12,6 +12,8 @@ namespace AK_DLL
         public HediffDef hediff;
         public BodyPartDef part = null;
         public float serverity = 1f;
-        public float randWeight = 1f;
+        public int randWeight = 1;
+        public int randWorseMin = 0;
+        public int randWorseMax = 1;
     }
 }

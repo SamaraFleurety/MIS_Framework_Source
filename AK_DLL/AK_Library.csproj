@@ -256,12 +256,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Def\OperatorClassDef.cs" />
-    <Compile Include="Def\OperatorDef\HediffInate.cs" />
+    <Compile Include="Def\OperatorDef\HediffStat.cs" />
     <Compile Include="Def\OperatorDef\ItemOnSpawn.cs" />
     <Compile Include="Def\OperatorInteractionDef.cs" />
     <Compile Include="HarmonyPatch\PatchHairOffset.cs" />
     <Compile Include="HarmonyPatch\PatchInfoCardPortrait.cs" />
     <Compile Include="HarmonyPatch\PatchWindowsOnGui%28Bottom Portrait%29.cs" />
+    <Compile Include="Hediff\Comps\HC_RandAddHediff.cs" />
+    <Compile Include="Hediff\Properties\HCP_RandAddHediff.cs" />
     <Compile Include="OpAbility\AbilityEffect\AE_ShootProjectile.cs" />
     <Compile Include="OpAbility\AbilityEffect\Effect\AbilityEffect_DisableAttack.cs" />
     <Compile Include="OpAbility\AbilityEffect\AddHediff\DelayedBloodLoss\AE_DelayedBloodLoss.cs" />
@@ -303,10 +305,6 @@
     <Compile Include="VoicePlayer\HarmonyPatch\PatchDraftSound.cs" />
     <Compile Include="HarmonyPatch\Initiator.cs" />
     <Compile Include="VoicePlayer\HarmonyPatch\PatchSelectSound.cs" />
-    <Compile Include="Originium\Thing\Gas.cs" />
-    <Compile Include="Originium\Thing\GasDef.cs" />
-    <Compile Include="Originium\Thing\Comp\TC_GasEmitter.cs" />
-    <Compile Include="Originium\Thing\Comp\TCP_GasEmitter.cs" />
     <Compile Include="HarmonyPatch\Patch\PatchMain.cs" />
     <Compile Include="HarmonyPatch\Patch\Patch_IncreasePower.cs" />
     <Compile Include="HarmonyPatch\Patch\Patch_KillCorpse.cs" />

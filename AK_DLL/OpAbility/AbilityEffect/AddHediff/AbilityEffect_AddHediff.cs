@@ -46,12 +46,19 @@ namespace AK_DLL
             }
             else
             {
+                hediff = target.health.hediffSet.GetFirstHediffOfDef(hediffDef);
+                if (hediff != null)
+                {
+                    hediff.Severity += severity;
+                    return hediff;
+                }
                 BodyPartRecord partRecord = null;
                 foreach (BodyPartRecord bodyPart in target.RaceProps.body.AllParts)
                 {
                     if (bodyPart.def == part)
                     {
                         partRecord = bodyPart;
+                        break;
                     }
                 }
                 hediff = target.health.AddHediff(hediffDef, partRecord, null, null);

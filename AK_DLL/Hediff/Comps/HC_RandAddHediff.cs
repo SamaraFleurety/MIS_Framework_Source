@@ -53,7 +53,5 @@ namespace AK_DLL
                 AbilityEffect_AddHediff.AddHediff(this.Pawn, hediff.hediff, hediff.part, UnityEngine.Random.Range(hediff.randWorseMin, hediff.randWorseMax));
             }
         }
-
-
     }
 }

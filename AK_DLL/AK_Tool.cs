@@ -13,7 +13,7 @@ namespace AK_DLL
 		public static string[] operatorTypeStiring = new string[] { "Caster", "Defender", "Guard", "Vanguard", "Specialist", "Supporter", "Medic", "Sniper" };
 		public static string[] romanNumber = new string[] { "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X" , "XI"};
 		//如果增加了要自动绑定的服装种类，只需要往这个字符串数组增加。
-		public static string[] apparelType = new string[] { "Hat" };
+		public static string[] apparelType = new string[] { "Apparel", "Hat" };
 		
 
 		public static Dictionary<int, Dictionary<string, OperatorDef>> operatorDefs = new Dictionary<int, Dictionary<string, OperatorDef>>();
@@ -97,6 +97,13 @@ namespace AK_DLL
 			}
 			return result;
 		}
+
+		public static string GetPrefixFrom(string XMLdefName)
+        {
+			string[] temp = XMLdefName.Split('_');
+			if (temp.Length <= 1) return null;
+			return temp[0];
+		}
 		public static string GetOperatorIDFrom(string XMLdefName)
         {
 			string[] temp = XMLdefName.Split('_');
@@ -113,6 +120,10 @@ namespace AK_DLL
 			return temp[0] + "_" + thingType + "_" + temp[temp.Length - 1];
 		}
 
+		public static string GetThingdefNameFrom(string operatorID, string prefix, string thingType)
+        {
+			return prefix + "_" + thingType + "_" + operatorID;
+        }
 
 		public static OperatorDocument GetDoc(this Pawn p)
         {

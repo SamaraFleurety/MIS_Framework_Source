@@ -51,6 +51,10 @@ namespace AK_DLL
         public string headPortrait;//头像
         public Vector2 headPortraitOffset;
 
+        public string Prefix
+        {
+            get { return AK_Tool.GetPrefixFrom(this.defName); }
+        }
         public string OperatorID
         {
             get { return AK_Tool.GetOperatorIDFrom(this.defName); }
@@ -134,9 +138,10 @@ namespace AK_DLL
             //默认语音
             AutoFill_VoicePack();
 
+            AutoFill_BackStory();
         }
 
-        #region RecruitSubMethods
+#region RecruitSubMethods
         private static Pawn operator_Pawn;
         private void Recruit_Ability(Hediff_Operator hediff)
         {
@@ -281,11 +286,6 @@ namespace AK_DLL
                     operator_Pawn.inventory.TryAddAndUnforbid(newThing);
                 }
             }
-            //装备武器
-            ThingWithComps weapon = (ThingWithComps)ThingMaker.MakeThing(this.weapon);
-            weapon.GetComp<CompBiocodable>().CodeFor(operator_Pawn);
-            operator_Pawn.equipment.AddEquipment(weapon);
-
             //装备衣物
             operator_Pawn.apparel.DestroyAll();
             foreach (ThingDef apparelDef in this.apparels)
@@ -294,11 +294,19 @@ namespace AK_DLL
                 apparel.GetComp<CompBiocodable>().CodeFor(operator_Pawn);
                 operator_Pawn.apparel.Wear(apparel, true, false);
             }
+            //装备武器
+            ThingWithComps weapon = null;
+            if (this.weapon != null)
+            {
+                weapon = (ThingWithComps)ThingMaker.MakeThing(this.weapon);
+                weapon.GetComp<CompBiocodable>().CodeFor(operator_Pawn);
+                operator_Pawn.equipment.AddEquipment(weapon);
+            }
             return weapon;
         }
-        #endregion
+#endregion
 
-        #region AutoFillSubMethods
+#region AutoFillSubMethods
         private void AutoFill_Name()
         {
             if (this.name == null && this.nickname == null)
@@ -320,11 +328,6 @@ namespace AK_DLL
             if (this.weapon == null)
             {
                 this.weapon = DefDatabase<ThingDef>.GetNamedSilentFail(AK_Tool.GetThingdefNameFrom(this.defName, "Weapon"));
-                if (this.weapon == null)
-                {
-                    this.weapon = DefDatabase<ThingDef>.GetNamed("AK_Weapon_Dusk");
-                    Log.Error($"缺乏{this.nickname}的武器，随便发一把。");
-                }
             }
         }
         private void AutoFill_VoicePack()
@@ -334,11 +337,11 @@ namespace AK_DLL
                 this.voicePackDef = DefDatabase<VoicePackDef>.GetNamedSilentFail(AK_Tool.GetThingdefNameFrom(this.defName, "VoicePack"));
                 if (this.voicePackDef == null)
                 {
-                    this.voicePackDef = new VoicePackDef(AK_Tool.GetOperatorIDFrom(this.defName));
+                    this.voicePackDef = new VoicePackDef(this.Prefix, this.OperatorID);
                     return;
                 }
             }
-            this.voicePackDef.AutoFillVoicePack(this.OperatorID);
+            this.voicePackDef.AutoFillVoicePack(this.Prefix, this.OperatorID);
         }
         private void AutoFill_StandPortrait()
         {
@@ -374,23 +377,29 @@ namespace AK_DLL
         }
         private void AutoFill_Apparel()
         {
-            string tempString = AK_Tool.GetThingdefNameFrom(this.defName, "Apparel");
-            ThingDef tempThing = DefDatabase<ThingDef>.GetNamedSilentFail(tempString);
             if (this.apparels == null) this.apparels = new List<ThingDef>();
-            //从干员def绑定技能
-            if (tempThing != null)
-            {
-                //添加干员同名衣服
-                if (this.apparels.Contains(tempThing) == false) this.apparels.Add(tempThing);
-            }
+
+            ThingDef tempThing;
 
             foreach (string thingType in AK_Tool.apparelType)
             {
                 tempThing = DefDatabase<ThingDef>.GetNamedSilentFail(AK_Tool.GetThingdefNameFrom(this.defName, thingType));
                 if (tempThing != null && !this.apparels.Contains(tempThing)) this.apparels.Add(tempThing);
             }
+        }
 
-
+        private void AutoFill_BackStory()
+        {
+            string basement = AK_Tool.GetThingdefNameFrom(this.defName, "BackStory") + "_";
+            if (this.childHood.defName == "AK_BackStory_Unknown_Child")
+            {
+                this.childHood = DefDatabase<BackstoryDef>.GetNamedSilentFail(basement + "Child");
+            }
+            if (this.adultHood == null && this.age > 19)
+            {
+                this.childHood = DefDatabase<BackstoryDef>.GetNamedSilentFail(basement + "Adult");
+                if (this.childHood == null) this.childHood = DefDatabase<BackstoryDef>.GetNamedSilentFail("AK_BackStory_Unknown_Adult");
+            }
         }
         #endregion
 

@@ -157,4 +157,3 @@ C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\UnityEngine.XRModule.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\NAudio.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\NVorbis.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\com.rlabrecque.steamworks.net.dll
-C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\obj\Debug\AK_Library.csproj.AssemblyReference.cache

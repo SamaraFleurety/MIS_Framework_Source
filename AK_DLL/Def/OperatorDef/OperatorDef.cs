@@ -291,7 +291,11 @@ namespace AK_DLL
             foreach (ThingDef apparelDef in this.apparels)
             {
                 Apparel apparel = (Apparel)ThingMaker.MakeThing(apparelDef);
-                apparel.GetComp<CompBiocodable>().CodeFor(operator_Pawn);
+                CompBiocodable comp = apparel.GetComp<CompBiocodable>();
+                if (comp != null)
+                {
+                    comp.CodeFor(operator_Pawn);
+                }
                 operator_Pawn.apparel.Wear(apparel, true, false);
             }
             //装备武器

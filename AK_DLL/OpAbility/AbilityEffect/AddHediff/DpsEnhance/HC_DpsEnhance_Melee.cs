@@ -67,7 +67,7 @@ namespace AK_DLL
         {
             base.CompPostTick(ref severityAdjustment);
             this.tick++; 
-            if (this.tick >= (int)timeToTick.rSecond * this.Interval)  //默认每 1秒(60tick) 渐进1次
+            if (this.tick >= (int)TimeToTick.rSecond * this.Interval)  //默认每 1秒(60tick) 渐进1次
             {
                 pastRSec++;
                 this.tick = 0;

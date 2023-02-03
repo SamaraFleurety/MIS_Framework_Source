@@ -50,6 +50,7 @@ namespace AK_DLL
             } 
         }
 
+
         public OperatorDocument document;
         public List<HC_Ability> compAbilities = new List<HC_Ability>();
     }

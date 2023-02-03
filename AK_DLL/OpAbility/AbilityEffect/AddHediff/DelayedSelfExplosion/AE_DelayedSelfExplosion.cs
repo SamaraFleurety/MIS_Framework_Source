@@ -34,7 +34,7 @@ namespace AK_DLL
             this.severity = 1f;
         }
         public int afterCount = 1;  //多少单位后爆炸
-        public timeToTick unit = timeToTick.hour; //单位
+        public TimeToTick unit = TimeToTick.hour; //单位
         public float radius = 2.2f;  //爆炸半径
         public int damage = 10;      //爆炸伤害
     }

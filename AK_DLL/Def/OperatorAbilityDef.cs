@@ -11,7 +11,7 @@ namespace AK_DLL
     {
         public string icon;
         public int CD = 1;
-        public timeToTick CDUnit = timeToTick.day;
+        public TimeToTick CDUnit = TimeToTick.day;
         public AbilityType abilityType;
         public int? range;
         public VerbProperties verb;

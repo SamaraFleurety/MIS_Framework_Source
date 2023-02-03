@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RimWorld;
+using Verse;
 
 namespace AK_DLL
 {
@@ -22,6 +24,8 @@ namespace AK_DLL
             { "Social", 10 },
             { "Intellectual", 11 }
         };
+
+        public static TraitDef[] operatorTrait = new TraitDef[] { DefDatabase<TraitDef>.GetNamed("AK_Trait_Harmonie") };
     }
     public enum AbilityType : Byte
     {
@@ -38,7 +42,7 @@ namespace AK_DLL
         AutoEnemy, //没做
         Multi //没做，别用
     }
-    public enum timeToTick
+    public enum TimeToTick
     {
         tick = 1,          //游戏中
         hour = 2500,

@@ -25,7 +25,7 @@ namespace AK_DLL
             }
             else
             {
-                if (compRefuelable.Fuel >= 1)
+                if (compRefuelable.Fuel >= 0.1)
                 {
                     yield return new FloatMenuOption("AK_CanReach".Translate(),
                     delegate

@@ -155,11 +155,11 @@ namespace AK_DLL
                 {
                 }
                 //如果干员未招募过，或已死亡
-                if (RecruitConsole.TryGetComp<CompRefuelable>().Fuel >= 0.99)
+                if (RecruitConsole.TryGetComp<CompRefuelable>().Fuel >= operator_Def.ticketCost - 0.01)
                 {
                     if (doc == null || !doc.currentExist)
                     {
-                        RecruitConsole.TryGetComp<CompRefuelable>().ConsumeFuel(1);
+                        RecruitConsole.TryGetComp<CompRefuelable>().ConsumeFuel(operator_Def.ticketCost);
                         operator_Def.Recruit(RecruitConsole.Map);
                         this.Close();
 

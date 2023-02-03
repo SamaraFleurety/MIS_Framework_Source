@@ -10,7 +10,7 @@ namespace AK_DLL
     public class HCP_RandAddHediff : HediffCompProperties
     {
         public int interval = 1;
-        public timeToTick intervalUnit = timeToTick.hour;
+        public TimeToTick intervalUnit = TimeToTick.hour;
         public List<HediffStat> hediffStatsSet = new List<HediffStat>();
 
         public HCP_RandAddHediff ()

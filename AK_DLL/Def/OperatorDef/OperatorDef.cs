@@ -26,6 +26,7 @@ namespace AK_DLL
         public List<OperatorAbilityDef> abilities;//技能
 
         public int age = 16;//年龄
+        public int realAge = -1; //实际年龄
         public bool isMale = false;//性别
         public List<HediffStat> hediffInate;
 
@@ -51,6 +52,7 @@ namespace AK_DLL
         public string headPortrait;//头像
         public Vector2 headPortraitOffset;
 
+        public float ticketCost = 1f;
         public string Prefix
         {
             get { return AK_Tool.GetPrefixFrom(this.defName); }
@@ -70,7 +72,7 @@ namespace AK_DLL
             }
         }
 
-        public void Recruit(Map map)
+        public virtual void Recruit(Map map)
         {
             IntVec3 intVec;
             if (map != null)
@@ -112,7 +114,7 @@ namespace AK_DLL
             }
         }
 
-        public void AutoFill()
+        public virtual void AutoFill()
         {
             //默认名字
             AutoFill_Name();
@@ -139,11 +141,13 @@ namespace AK_DLL
             AutoFill_VoicePack();
 
             AutoFill_BackStory();
+
+            AutoFill_Age();
         }
 
 #region RecruitSubMethods
-        private static Pawn operator_Pawn;
-        private void Recruit_Ability(Hediff_Operator hediff)
+        protected static Pawn operator_Pawn;
+        protected void Recruit_Ability(Hediff_Operator hediff)
         {
             //技能
             if (this.abilities != null && this.abilities.Count > 0)
@@ -163,7 +167,7 @@ namespace AK_DLL
                 hediff.document.groupedAbilities[i].enabled = false;
             }
         }
-        private void Recruit_AddRelations()
+        protected void Recruit_AddRelations()
         {
             operator_Pawn.relations.ClearAllRelations();
             if (this.relations == null || this.relations.Count == 0) return;
@@ -176,7 +180,7 @@ namespace AK_DLL
             }
         }
 
-        private Hediff_Operator Recruit_Hediff()
+        protected Hediff_Operator Recruit_Hediff()
         {
             operator_Pawn.health.hediffSet.Clear();
             foreach (Hediff hediff_Pawn in operator_Pawn.health.hediffSet.hediffs)
@@ -204,7 +208,7 @@ namespace AK_DLL
             }
             return hediff;
         }
-        private void fixAlienHairColor(HediffDef hediffDef)
+        protected void fixAlienHairColor(HediffDef hediffDef)
         {
             //修复外星人会改发色的问题
             if (ModLister.GetActiveModWithIdentifier("erdelf.HumanoidAlienRaces") != null)
@@ -219,7 +223,7 @@ namespace AK_DLL
             }
         }
 
-        private void Recruit_PersonalStat()
+        protected void Recruit_PersonalStat()
         {
             //避免Bug更改
             operator_Pawn.needs.food.CurLevel = operator_Pawn.needs.food.MaxLevel;
@@ -228,12 +232,12 @@ namespace AK_DLL
 
             //性别更改
             operator_Pawn.gender = (this.isMale) ? Gender.Male : Gender.Female;
-            operator_Pawn.ageTracker.AgeBiologicalTicks = this.age * (long)timeToTick.year;
-            operator_Pawn.ageTracker.AgeChronologicalTicks = this.age * (long)timeToTick.year;
+            operator_Pawn.ageTracker.AgeBiologicalTicks = this.age * (long)TimeToTick.year;
+            operator_Pawn.ageTracker.AgeChronologicalTicks = this.realAge * (long)TimeToTick.year;
 
             //发型与体型设置
             operator_Pawn.story.bodyType = this.bodyTypeDef;
-            operator_Pawn.story.headType = DefDatabase<HeadTypeDef>.GetNamed("Female_AverageNormal");
+            operator_Pawn.story.headType = DefDatabase<HeadTypeDef>.GetNamed("Female_NarrowPointy");
             operator_Pawn.story.hairDef = this.hair == null ? HairDefOf.Bald : this.hair;
             operator_Pawn.style.beardDef = this.beard == null ? BeardDefOf.NoBeard : this.beard;
             operator_Pawn.story.skinColorOverride = this.skinColor;
@@ -273,7 +277,7 @@ namespace AK_DLL
             }
             //从干员文档更新属性
         }
-        private Thing Recruit_Inventory()
+        protected Thing Recruit_Inventory()
         {
             operator_Pawn.inventoryStock.stockEntries.Clear();
             //增加物品
@@ -395,18 +399,25 @@ namespace AK_DLL
         private void AutoFill_BackStory()
         {
             string basement = AK_Tool.GetThingdefNameFrom(this.defName, "BackStory") + "_";
+            BackstoryDef bs;
             if (this.childHood.defName == "AK_BackStory_Unknown_Child")
             {
-                this.childHood = DefDatabase<BackstoryDef>.GetNamedSilentFail(basement + "Child");
+                bs = DefDatabase<BackstoryDef>.GetNamedSilentFail(basement + "Child");
+                if (bs != null) this.childHood = bs;
             }
             if (this.adultHood == null && this.age > 19)
             {
-                this.childHood = DefDatabase<BackstoryDef>.GetNamedSilentFail(basement + "Adult");
-                if (this.childHood == null) this.childHood = DefDatabase<BackstoryDef>.GetNamedSilentFail("AK_BackStory_Unknown_Adult");
+                bs = DefDatabase<BackstoryDef>.GetNamedSilentFail(basement + "Adult");
+                this.adultHood = bs ?? DefDatabase<BackstoryDef>.GetNamedSilentFail("AK_BackStory_Unknown_Adult");
             }
         }
-        #endregion
 
+        private void AutoFill_Age()
+        {
+            if (this.age <= 0) this.age = 16;
+            if (this.realAge <= 0) this.realAge = this.age;
+        }
+#endregion
     }
 }
 

@@ -24,7 +24,7 @@ namespace AK_DLL
         }
 
         public int delay = 0;
-        public timeToTick unit = timeToTick.hour; //unit
+        public TimeToTick unit = TimeToTick.hour; //unit
         public int duration = 10;
         public float lossAmount = 0.05f;
     }

@@ -164,7 +164,7 @@ namespace AK_DLL
             }
             else
             {
-                destroyHeritage(operatorDocument[defName]);
+                DestroyHeritage(operatorDocument[defName]);
                 ReRecruit(operatorDocument[defName] , defName, pawn, weapon);
             }
         }
@@ -178,7 +178,7 @@ namespace AK_DLL
             }*/
         }
 
-        public static void destroyHeritage (OperatorDocument doc)
+        public static void DestroyHeritage (OperatorDocument doc)
         {
             doc.currentExist = false;
             doc.groupedAbilities.Clear();

@@ -52,6 +52,9 @@ namespace AK_DLL
         public string headPortrait;//头像
         public Vector2 headPortraitOffset;
 
+        public ThoughtDef thoughtReceived = null;
+        public int TRStage = -1;
+
         public float ticketCost = 1f;
         public string Prefix
         {

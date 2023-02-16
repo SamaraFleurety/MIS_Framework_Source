@@ -8,14 +8,14 @@ using Verse;
 
 namespace AK_DLL
 {
-    public class ThoughtWorker_AlwaysActiveOpinion : ThoughtWorker
+    public class ThoughtWorker_OpinionToOperator : ThoughtWorker
     {
-
         protected override ThoughtState CurrentSocialStateInternal(Pawn p, Pawn otherPawn)
         {
-            if (otherPawn.story.traits.HasTrait(TypeDef.operatorTrait[0]))
+            OperatorDocument doc = otherPawn.GetDoc();
+            if (true && doc != null && doc.operatorDef.thoughtReceived == this.def)
             {
-                return ThoughtState.ActiveAtStage(0);
+                return ThoughtState.ActiveAtStage(doc.operatorDef.TRStage);
             }
             return false;
         }

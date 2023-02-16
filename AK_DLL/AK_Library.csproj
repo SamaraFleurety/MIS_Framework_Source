@@ -303,7 +303,7 @@
     <Compile Include="Def\OperatorAbilityDef.cs" />
     <Compile Include="Def\OperatorDef\OperatorDef.cs" />
     <Compile Include="GC_Documentation.cs" />
-    <Compile Include="ThoughtWorker_AlwaysActiveOpinion.cs" />
+    <Compile Include="Opinion\ThoughtWorker_OpinionToTrait.cs" />
     <Compile Include="VoicePlayer\HarmonyPatch\PatchDraftSound.cs" />
     <Compile Include="HarmonyPatch\Initiator.cs" />
     <Compile Include="VoicePlayer\HarmonyPatch\PatchSelectSound.cs" />

@@ -25,7 +25,6 @@ namespace AK_DLL
             { "Intellectual", 11 }
         };
 
-        public static TraitDef[] operatorTrait = new TraitDef[] { DefDatabase<TraitDef>.GetNamed("AK_Trait_Harmonie") };
     }
     public enum AbilityType : Byte
     {

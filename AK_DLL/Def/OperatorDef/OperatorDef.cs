@@ -56,6 +56,8 @@ namespace AK_DLL
         public int TRStage = -1;
 
         public float ticketCost = 1f;
+
+        public static bool currentlyGenerating = false;
         public string Prefix
         {
             get { return AK_Tool.GetPrefixFrom(this.defName); }
@@ -77,6 +79,7 @@ namespace AK_DLL
 
         public virtual void Recruit(Map map)
         {
+            currentlyGenerating = true;
             IntVec3 intVec;
             if (map != null)
             {
@@ -115,6 +118,7 @@ namespace AK_DLL
                     Recruit_Ability(hediff);
                 }
             }
+            currentlyGenerating = false;
         }
 
         public virtual void AutoFill()

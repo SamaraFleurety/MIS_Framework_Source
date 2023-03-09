@@ -10,6 +10,7 @@ namespace AK_DLL
 {
     public class Window_Operator : Dialog_NodeTree
     {
+        public static readonly Color StackElementBackground = new Color(1f, 1f, 1f, 0.1f);
         public Window_Operator(DiaNode startNode, bool radioMode) : base(startNode, radioMode, false, null)
         {
         }
@@ -64,12 +65,30 @@ namespace AK_DLL
             rect.height -= 35f;
             rect.y += 100f;
             Widgets.Label(rect, "AK_Terait".Translate());
+            rect.y += 25f;
             foreach (TraitAndDegree TraitAndDegree in operator_Def.traits)
             {
-                rect.y += 25f;
-                string label = "寄";
+                TraitDegreeData traitDef = TraitAndDegree.def.DataAtDegree(TraitAndDegree.degree);
+                if (traitDef == null)
+                {
+                    Log.ErrorOnce($"MIS. {this.operator_Def}'s {TraitAndDegree.def.defName} do not have {TraitAndDegree.degree} degree", 1);
+                }
+                else
+                {
+                    Rect traitRect = new Rect(rect.x, rect.y, Text.CalcSize(traitDef.label).x + 10f, 25);
+                    Color color4 = GUI.color;
+                    GUI.color = StackElementBackground;
+                    GUI.DrawTexture(traitRect, BaseContent.WhiteTex);
+                    GUI.color = color4;
+                    Text.Anchor = TextAnchor.MiddleCenter;
+                    Widgets.Label(traitRect, traitDef.label.Truncate(traitRect.width));
+                    Text.Anchor = TextAnchor.UpperLeft;
+                    if (Mouse.IsOver(traitRect)) { Widgets.DrawHighlight(traitRect); }
+                    rect.y += 28f;
+                }
+                /*string label = "寄";
                 label = TraitAndDegree.def.DataAtDegree(TraitAndDegree.degree)?.label;
-                Widgets.Label(rect, label ?? "寄");
+                Widgets.Label(rect, label ?? "寄");*/
             }
             //特性显示绘制
             Rect rect_AbilityImage = new Rect(rect.x, rect.y + 65f, 60f, 60f);

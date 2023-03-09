@@ -5,15 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using HarmonyLib;
 using Verse;
+using Verse.AI;
 
 namespace AK_DLL
 {
 
-    [HarmonyPatch(typeof(Dialog_InfoCard), "FillCard")]
-    public class PatchAutoChangeHair
+    [HarmonyPatch(typeof(JobGiver_UseStylingStationAutomatic), "TryGiveJob")]
+    public static class PatchAutoChangeHair
     {
         [HarmonyPrefix]
-        public bool prefix(Pawn pawn, ref string __result)
+        public static bool prefix(Pawn pawn, ref Job __result)
         {
             if (pawn.GetDoc() != null)
             {

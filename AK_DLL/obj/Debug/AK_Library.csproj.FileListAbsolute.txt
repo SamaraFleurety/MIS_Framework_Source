@@ -157,3 +157,13 @@ C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\UnityEngine.XRModule.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\NAudio.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\NVorbis.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\com.rlabrecque.steamworks.net.dll
+C:\Users\fucon\source\repos\AK_DLL_\AK_DLL\bin\Debug\AK_DLL.dll
+C:\Users\fucon\source\repos\AK_DLL_\AK_DLL\bin\Debug\AK_DLL.pdb
+C:\Users\fucon\source\repos\AK_DLL_\AK_DLL\bin\Debug\NAudio.dll
+C:\Users\fucon\source\repos\AK_DLL_\AK_DLL\bin\Debug\NVorbis.dll
+C:\Users\fucon\source\repos\AK_DLL_\AK_DLL\bin\Debug\com.rlabrecque.steamworks.net.dll
+C:\Users\fucon\source\repos\AK_DLL_\AK_DLL\obj\Debug\AK_Library.csproj.AssemblyReference.cache
+C:\Users\fucon\source\repos\AK_DLL_\AK_DLL\obj\Debug\AK_Library.csproj.CoreCompileInputs.cache
+C:\Users\fucon\source\repos\AK_DLL_\AK_DLL\obj\Debug\AK_Library.csproj.CopyComplete
+C:\Users\fucon\source\repos\AK_DLL_\AK_DLL\obj\Debug\AK_DLL.dll
+C:\Users\fucon\source\repos\AK_DLL_\AK_DLL\obj\Debug\AK_DLL.pdb

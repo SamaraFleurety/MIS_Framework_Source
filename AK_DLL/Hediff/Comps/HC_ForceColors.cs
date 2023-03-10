@@ -36,6 +36,8 @@ namespace AK_DLL
             else
             {
                 this.parent.comps.Remove(this);
+                //Log.Message((this.Def.comps.Contains(this.props)).ToString());
+                this.Def.comps.Remove(this.props);
             }
         }
     }

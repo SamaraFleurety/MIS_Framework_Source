@@ -39,6 +39,7 @@ namespace AK_DLL
         public List<ThingDef> apparels;//干员衣服
         public List<ItemOnSpawn> items;
         public BodyTypeDef bodyTypeDef;//干员的体型
+        public HeadTypeDef headTypeDef;
         private List<SkillAndFire> skills;//技能列表
         public Color skinColor = new Color(1, 1, 1, 1); /*= PawnSkinColors.GetSkinColor(0.5f)*///皮肤颜色
         public Color hairColor = new Color(1, 1, 1, 1); /*= PawnSkinColors.GetSkinColor(1f)*///头发颜色
@@ -86,10 +87,10 @@ namespace AK_DLL
                 RCellFinder.TryFindRandomPawnEntryCell(out intVec, map, 0.2f, false, null);
                 if (intVec != null)
                 {
-                    operator_Pawn = PawnGenerator.GeneratePawn(PawnKindDefOf.Colonist, Faction.OfPlayer); 
+                    operator_Pawn = PawnGenerator.GeneratePawn(PawnKindDefOf.Colonist, Faction.OfPlayer);
                     Hediff_Operator hediff = Recruit_Hediff();
 
-                    Recruit_PersonalStat();                 
+                    Recruit_PersonalStat();
 
                     Recruit_AddRelations();
 
@@ -152,7 +153,7 @@ namespace AK_DLL
             AutoFill_Age();
         }
 
-#region RecruitSubMethods
+        #region RecruitSubMethods
         protected static Pawn operator_Pawn;
         protected void Recruit_Ability(Hediff_Operator hediff)
         {
@@ -165,7 +166,7 @@ namespace AK_DLL
                     HC_Ability HC = new HC_Ability(i);
                     hediff.comps.Add(HC);
                     HC.parent = hediff;
-                    if(i.grouped) hediff.document.groupedAbilities.Add(HC);
+                    if (i.grouped) hediff.document.groupedAbilities.Add(HC);
                 }
             }
             //禁用非第一个的可选技能
@@ -244,7 +245,7 @@ namespace AK_DLL
 
             //发型与体型设置
             operator_Pawn.story.bodyType = this.bodyTypeDef;
-            operator_Pawn.story.headType = DefDatabase<HeadTypeDef>.GetNamed("Female_NarrowPointy");
+            operator_Pawn.story.headType = this.headTypeDef ?? DefDatabase<HeadTypeDef>.GetNamed("Female_NarrowPointy");
             operator_Pawn.story.hairDef = this.hair == null ? HairDefOf.Bald : this.hair;
             operator_Pawn.style.beardDef = this.beard == null ? BeardDefOf.NoBeard : this.beard;
             operator_Pawn.story.skinColorOverride = this.skinColor;
@@ -319,9 +320,9 @@ namespace AK_DLL
             }
             return weapon;
         }
-#endregion
+        #endregion
 
-#region AutoFillSubMethods
+        #region AutoFillSubMethods
         private void AutoFill_Name()
         {
             if (this.name == null && this.nickname == null)
@@ -424,7 +425,7 @@ namespace AK_DLL
             if (this.age <= 0) this.age = 16;
             if (this.realAge <= 0) this.realAge = this.age;
         }
-#endregion
+        #endregion
     }
 }
 

@@ -167,3 +167,5 @@ C:\Users\fucon\source\repos\AK_DLL_\AK_DLL\obj\Debug\AK_Library.csproj.CoreCompi
 C:\Users\fucon\source\repos\AK_DLL_\AK_DLL\obj\Debug\AK_Library.csproj.CopyComplete
 C:\Users\fucon\source\repos\AK_DLL_\AK_DLL\obj\Debug\AK_DLL.dll
 C:\Users\fucon\source\repos\AK_DLL_\AK_DLL\obj\Debug\AK_DLL.pdb
+D:\RW_BA\Mods\AK_DLL\Assemblies\AK_DLL.dll
+D:\RW_BA\Mods\AK_DLL\Assemblies\AK_DLL.pdb

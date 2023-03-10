@@ -7,6 +7,7 @@ using Verse;
 
 namespace AK_DLL
 {
+	[StaticConstructorOnStartup]
     public static class AK_Tool
 	{
 		static bool doneInitialization = false;
@@ -14,7 +15,10 @@ namespace AK_DLL
 		public static string[] romanNumber = new string[] { "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X" , "XI"};
 		//如果增加了要自动绑定的服装种类，只需要往这个字符串数组增加。
 		public static string[] apparelType = new string[] { "Apparel", "Hat" };
-		
+		/// <summary>
+		/// For caching loaded mod name. Used in loading log only at the moment
+		/// </summary>
+		public static readonly HashSet<string> modNames= new HashSet<string>();
 
 		public static Dictionary<int, Dictionary<string, OperatorDef>> operatorDefs = new Dictionary<int, Dictionary<string, OperatorDef>>();
 		//public static Dictionary<string, OperatorDef>[] operatorDefs = new Dictionary<string, OperatorDef>[(int)OperatorType.Count];
@@ -30,59 +34,62 @@ namespace AK_DLL
         {
 			Log.Message($"pawnSC: {p.story.SkinColor.r}, {p.story.SkinColor.g}, {p.story.SkinColor.b},{p.story.SkinColor.a}");
 		}*/
-
-		public static void Initialization()
+		/// <summary>
+		/// All OperatorClassDef' defName should follow this rule:
+		/// ModAbbr_WhatEverYouLike_ActualName
+		/// Example:
+		/// RA_OperatorClass_SRT, AK_OperatorClass_Caster
+		/// And its label should be the same as the last segment of the defName (SRT, Caster)
+		/// </summary>
+		/// <exception cref="NullReferenceException"></exception>
+		static AK_Tool()
         {
-			if (doneInitialization) return;
-			LoadOperatorClasses();
-			AutoFillOperators();
-			Log.Message("MIS.初始化完成");
-			doneInitialization = true;
-		}
-		public static void AutoFillOperators()
-        {
-			foreach (int i in operatorClasses.Keys)
+            int loadorder = 0;
+            try
             {
-				operatorDefs[i] = new Dictionary<string, OperatorDef>();
+                foreach (OperatorClassDef def in DefDatabase<OperatorClassDef>.AllDefsListForReading)
+                {
+                    modNames.Add(def.defName.Split('_')[0]);
+                    operatorClasses[loadorder] = def.label.Translate();
+					operatorDefs.Add(loadorder, new Dictionary<string, OperatorDef>((from x in DefDatabase<OperatorDef>.AllDefs
+                                                                                     where x.operatorType == def
+                                                                                     select x).ToDictionary(x => x.nickname, x => x)));
+                    loadorder++;
+                }
             }
-			foreach (OperatorDef i in DefDatabase<OperatorDef>.AllDefs)
-			{
-				i.AutoFill();
-				try
-				{
-					operatorDefs[i.operatorType.sortingOrder].Add(i.nickname, i);
-				}
-				catch (Exception)
-				{
-					Log.Error("没加起" + i.nickname);
-				}
-			}
-		}
-		public static void LoadOperatorClasses()
-        {
-			foreach(OperatorClassDef i in DefDatabase<OperatorClassDef>.AllDefs)
+            catch (Exception e)
             {
-				int tempOrder = 10000001;
-				if (i.sortingOrder >= 10000000)
+                Log.Error($"Error During Loading OperatorClassDef: {e}\n Last loading mod name:{modNames.Last()}\n {loadorder}th iteration");
+            }
+            finally
+            {
+                if (!operatorDefs.NullOrEmpty())
                 {
-					Log.Error(i.label.Translate() + "'s sorting order must lower than 10000000");
+                    foreach (Dictionary<string,OperatorDef> deflist in operatorDefs.Values)
+                    {
+                        foreach (OperatorDef def in deflist.Values)
+                            def.AutoFill();
+                    }
+
                 }
-				else if (operatorClasses.ContainsKey(i.sortingOrder))
+                else
                 {
-					Log.Error(i.label.Translate() + "has duplicate loading order with" + operatorClasses[i.sortingOrder]);
-					operatorClasses.Add(tempOrder, i.label.Translate());
-					tempOrder++;
+                    throw new NullReferenceException("operatorDefs loaded, but is null or empty");
                 }
-				else
-                {
-					operatorClasses.Add(i.sortingOrder, i.label.Translate());
-                }
-				if (operatorClasses.Count >= 1)
-                {
-					Window_Recruit.operatorType = operatorClasses.First().Key;
-				}
-			}
+            }
+            //LoadOperatorClasses();
+            //AutoFillOperators();
+            Log.Message($"MIS.初始化完成\n Loaded mods:\n{string.Join("\n",modNames.ToArray())}");
+            try
+            {
+                Window_Recruit.operatorType = operatorClasses.FirstOrDefault().Key;
+            }
+            catch when (operatorClasses.NullOrEmpty())
+            {
+                Log.Error($"operatorClasses NullOrEmpty");
+            }
         }
+		
 		public static List<IntVec3> GetSector(OperatorAbilityDef ability,Pawn caster)
         {
 			List<IntVec3> result = new List<IntVec3>();

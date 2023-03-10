@@ -28,7 +28,7 @@ namespace AK_DLL
             GUI.DrawTexture(new Rect(inRect.x, inRect.y + 37f, 1240f, 2f), BaseContent.WhiteTex);
 
             Rect rect_Back = new Rect(1125f, -1f, 100f, 30f);
-            if (Widgets.ButtonText(rect_Back, "AK_Back".Translate()))
+            if (Widgets.ButtonText(rect_Back, "AK_Back".Translate()) || KeyBindingDefOf.Cancel.KeyDownEvent)
             {
                 this.Close();
             }

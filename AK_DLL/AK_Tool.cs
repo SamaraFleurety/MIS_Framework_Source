@@ -7,6 +7,7 @@ using Verse;
 
 namespace AK_DLL
 {
+	//这个属性已经保证静态构造在DefDatabase加载后以及交叉引用之后执行了
 	[StaticConstructorOnStartup]
     public static class AK_Tool
 	{
@@ -35,7 +36,7 @@ namespace AK_DLL
 			Log.Message($"pawnSC: {p.story.SkinColor.r}, {p.story.SkinColor.g}, {p.story.SkinColor.b},{p.story.SkinColor.a}");
 		}*/
 		/// <summary>
-		/// All OperatorClassDef' defName should follow this rule:
+		/// All OperatorClassDef's defName should follow this rule:
 		/// ModAbbr_WhatEverYouLike_ActualName
 		/// Example:
 		/// RA_OperatorClass_SRT, AK_OperatorClass_Caster
@@ -49,11 +50,12 @@ namespace AK_DLL
             {
                 foreach (OperatorClassDef def in DefDatabase<OperatorClassDef>.AllDefsListForReading)
                 {
-                    modNames.Add(def.defName.Split('_')[0]);
+                    modNames.Add(def.defName.Split('_').First());
                     operatorClasses[loadorder] = def.label.Translate();
 					operatorDefs.Add(loadorder, new Dictionary<string, OperatorDef>((from x in DefDatabase<OperatorDef>.AllDefs
                                                                                      where x.operatorType == def
-                                                                                     select x).ToDictionary(x => x.nickname, x => x)));
+																					 orderby x.modContentPack.Name
+                                                                                     select x).ToDictionary(x => GetOperatorIDFrom(x.defName), x => x)));
                     loadorder++;
                 }
             }

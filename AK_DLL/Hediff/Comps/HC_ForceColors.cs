@@ -22,18 +22,19 @@ namespace AK_DLL
         }
         public override void CompPostTick(ref float severityAdjustment)
         {
+            Log.Message($"Pawn: {this.Pawn.Name}\n hairColor: {this.Props.hairColor}\n skincolor: {this.Props.skinColor}\n Props == props ? : {Props == props}");
             if (this.Pawn.story.HairColor != this.Props.hairColor)
             {
                 this.Pawn.style.nextHairColor = this.Props.hairColor;
                 this.Pawn.style.FinalizeHairColor();
             }
-            else if (this.Pawn.story.SkinColor != this.Props.skinColor)
+            if (this.Pawn.story.SkinColor != this.Props.skinColor)
             {
                 AlienRace.AlienPartGenerator.AlienComp alienComp = this.Pawn.TryGetComp<AlienRace.AlienPartGenerator.AlienComp>();
                 alienComp.OverwriteColorChannel(channel: "skin", this.Props.skinColor, this.Props.skinColor);
                 this.Pawn.story.SkinColorBase = this.Props.skinColor;
             }
-            else
+            if(this.Pawn.story.HairColor == this.Props.hairColor && this.Pawn.story.SkinColor == this.Props.skinColor)
             {
                 this.parent.comps.Remove(this);
                 this.Def.comps.Remove(this.props);

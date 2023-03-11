@@ -11,10 +11,14 @@ namespace AK_DLL
 {
     public class Window_Recruit : Dialog_NodeTree
     {
+        private static readonly int listWH = 100;
         private static readonly int btnHeight = 20;
         private static readonly int btnWidth = 80;
         private static readonly int xMargin = 10;
         private static readonly int yMargin = 10;
+        private static readonly Vector2 labelSize = new Vector2(100f, 50f);
+        private static readonly Vector2 btnSize = new Vector2(80f, 20f);
+        private static readonly Vector2 frameSize = new Vector2(100f, 100f);
         public Window_Recruit(DiaNode startNode, bool radioMode) : base(startNode, radioMode, false, null)
         {
 
@@ -28,8 +32,15 @@ namespace AK_DLL
         }
         public override void DoWindowContents(Rect inRect)
         {
+            Rect rect_Back = new Rect(inRect.xMax - xMargin - btnWidth, inRect.y + yMargin, btnWidth, btnHeight);
+            //退出按钮
+            if (/*Widgets.ButtonText(rect_Back, "AK_Back".Translate()) || */KeyBindingDefOf.Cancel.KeyDownEvent)
+            {
+                this.Close();
+            }
             try
             {
+                
                 if (operatorType == -1)
                 {
                     Log.WarningOnce("MIS.No operator classes found.", 1);
@@ -37,40 +48,27 @@ namespace AK_DLL
                 }
                 float crntY = inRect.y + yMargin;
                 float crntX = inRect.x + xMargin;
-                Rect rect_Back = new Rect(inRect.xMax - xMargin - btnWidth, inRect.y + yMargin , btnWidth, btnHeight);
-                //退出按钮
-                if (Widgets.ButtonText(rect_Back, "AK_Back".Translate()) || KeyBindingDefOf.Cancel.KeyDownEvent)
-                {
-                    this.Close();
-                }
-                //绘制选干员的tab
-                Rect btnRect = new Rect(crntX, crntY, btnWidth, btnHeight);
-                foreach (KeyValuePair<int, string> i in AK_Tool.operatorClasses)
-                {
-                    /*if (Widgets.ButtonText(new Rect(inRect.x + xOffset, inRect.y + 15f, 80f, 20f), i.Value, true, true, operatorType != i.Key)) operatorType = i.Key;
-                    xOffset += 100;*/
-                    if (Widgets.ButtonText(btnRect, i.Value.Translate(), true, true, operatorType != i.Key)) operatorType = i.Key;
-                    btnRect.x += btnWidth + xMargin;
-                    if (btnRect.x + btnWidth + xMargin > rect_Back.x) //为了不和返回按钮重合
-                    {
-                        btnRect.y += btnHeight + yMargin;
-                        btnRect.x = crntX;
-                    }
-                }
-                btnRect.x = crntX;
-                btnRect.y += btnHeight + yMargin;
-                btnRect.size = inRect.size;
-                GUI.DrawTexture(new Rect(btnRect.position, new Vector2(inRect.width - 2 * xMargin, 2f)), BaseContent.WhiteTex);
-                btnRect.y += yMargin;
-                if (AK_Tool.operatorDefs == null)
+
+                Rect ruleRect = new Rect(inRect.position, new Vector2(inRect.width - listWH, listWH));
+                GUI.DrawTexture(ruleRect, BaseContent.BlackTex);
+                Rect listRect = new Rect(ruleRect.xMax, inRect.y, listWH, inRect.height);
+                //在listRect内绘制按钮，可以控制垂直或水平绘制，分别使用yMax和xMax控制换行
+                DrawListBtn(listRect, new Vector2(btnWidth, btnHeight), vertical: true);
+                //出参ruleRect的x,y应当瞄准它的左下角以方便接下来DrawOperators的定位
+                DrawruleRect(inRect, ref ruleRect);
+                ruleRect.y += yMargin;
+                GUI.DrawTexture(new Rect(ruleRect.position, new Vector2(ruleRect.width - 2 * xMargin, 2f)), BaseContent.WhiteTex);
+                //GUI.DrawTexture(listRect, BaseContent.WhiteTex);
+                ruleRect.y += yMargin;
+                if (operatorDefs == null)
                 {
                     throw new NullReferenceException("MIS. 干员库字典是空的.");
                 }
-                if (AK_Tool.operatorDefs[(int)operatorType] == null)
+                if (operatorDefs[(int)operatorType] == null)
                 {
                     throw new NullReferenceException($"MIS.{operatorType}号干员库是null.");
                 }
-                DrawOperator(btnRect, AK_Tool.operatorDefs[operatorType]);
+                DrawOperator(ruleRect, operatorDefs[operatorType]);
                 //统一绘制干员            
             }
             catch (Exception)
@@ -92,20 +90,75 @@ namespace AK_DLL
                 Log.Error($"{sb}");
                 operatorType = operatorClasses.FirstOrDefault().Key;
             }
+
+            //在给定的baseRect内绘制大小为size的按钮，这些按钮应当在一个内层的viewRect之内
+            //Widgets.BeginScrollView(baseRect, scrollPosition, viewRect)
+            //baseRect: 实际显示大小
+            //viewRect: 把所有要显示的铺平后显示的大小，大于baseRect时出现滚动条
+            //并且似乎之后的坐标均应变为相对(baseRect.x, baseRect.y)的偏移量
+            static void DrawListBtn(Rect baseRect, Vector2 size, bool vertical = false)
+            {
+                Rect viewRect = new Rect(baseRect);
+                viewRect.width = baseRect.width - 2 * xMargin;
+                viewRect.height = (btnHeight + yMargin) * operatorClasses.Count;
+                Rect btnRect = new Rect(viewRect.position + new Vector2(xMargin, yMargin), size);
+                //测试Widgets.BeginScrollView
+                Vector2 scrollPosition = Vector2.zero;
+                baseRect.height -= 400f;
+                //GUI.DrawTexture(baseRect, BaseContent.WhiteTex);
+                Widgets.BeginScrollView(baseRect, ref scrollPosition, viewRect.AtZero());
+                if (vertical)
+                {
+                    foreach (KeyValuePair<int, string> i in operatorClasses)
+                    {
+                        /*if (Widgets.ButtonText(new Rect(inRect.x + xOffset, inRect.y + 15f, 80f, 20f), i.Value, true, true, operatorType != i.Key)) operatorType = i.Key;
+                        xOffset += 100;*/
+                        Widgets.Label(btnRect, i.Value.Translate());
+                        Text.WordWrap = true;
+                        Text.Anchor = TextAnchor.UpperLeft;
+                        if (Widgets.ButtonInvisible(btnRect)) operatorType = i.Key;
+                        btnRect.y += btnHeight + yMargin;
+                        /*if (btnRect.y + btnHeight + yMargin > baseRect.yMax)
+                        {
+                            btnRect.x += btnWidth + xMargin;
+                            btnRect.y = baseRect.y + yMargin;
+                        }*/
+                    }
+                }
+                else
+                {
+                    foreach (KeyValuePair<int, string> i in operatorClasses)
+                    {
+                        /*if (Widgets.ButtonText(new Rect(inRect.x + xOffset, inRect.y + 15f, 80f, 20f), i.Value, true, true, operatorType != i.Key)) operatorType = i.Key;
+                        xOffset += 100;*/
+                        if (Widgets.ButtonText(btnRect, i.Value.Translate(), true, true, operatorType != i.Key)) operatorType = i.Key;
+                        btnRect.x += btnWidth + xMargin;
+                        /*if (btnRect.x + btnWidth + xMargin > baseRect.xMax)
+                        {
+                            btnRect.y += btnHeight + yMargin;
+                            btnRect.x = baseRect.x + xMargin;
+                        }*/
+                    }
+                }
+                //if (AK_ModSettings.debugOverride)
+                
+                Widgets.EndScrollView();
+            }
+
+            static void DrawruleRect(Rect baseRect, ref Rect ruleRect)
+            {
+                ruleRect.y = ruleRect.yMax;
+            }
             //干员列表已经改放在ModSettings
-
-
-
-
         }
 
-        public void DrawOperator(Rect inRect, Dictionary<string, OperatorDef> operators)
+        public void DrawOperator(Rect baseRect, Dictionary<string, OperatorDef> operators)
         {
-            Rect rect_operatorFrame = new Rect(inRect.position, new Vector2(100f, 100f));
+            Rect rect_operatorFrame = new Rect(baseRect.position, frameSize);
             foreach (OperatorDef operator_Def in operators.Values)
             {
                 Texture2D operatorTex = ContentFinder<Texture2D>.Get(operator_Def.headPortrait);
-                Widgets.LabelFit(new Rect(rect_operatorFrame.x + 20f, rect_operatorFrame.y + 110f, 100f, 50f), operator_Def.nickname);
+                Widgets.LabelFit(new Rect(rect_operatorFrame.position + new Vector2(20f, frameSize.y), labelSize), operator_Def.nickname);
                 Widgets.DrawTextureFitted(new Rect(rect_operatorFrame.x, rect_operatorFrame.y, rect_operatorFrame.width + 2f, rect_operatorFrame.height + 2f), ContentFinder<Texture2D>.Get("UI/Frame/Frame_HeadPortrait"), 1f);
                 if (Widgets.ButtonImage(new Rect(rect_operatorFrame.x + 3f, rect_operatorFrame.y + 5f, 97f, 95f), operatorTex))
                 {
@@ -115,11 +168,11 @@ namespace AK_DLL
                     window_Operator.RecruitConsole = Recruit;
                     Find.WindowStack.Add(window_Operator);
                 }
-                rect_operatorFrame.x += 140f;
-                if (rect_operatorFrame.x > 1200f)
+                rect_operatorFrame.x += frameSize.x + xMargin;
+                if (rect_operatorFrame.x + frameSize.x + xMargin > baseRect.xMax)
                 {
-                    rect_operatorFrame.x = inRect.x;
-                    rect_operatorFrame.y += 150f;
+                    rect_operatorFrame.x = baseRect.x;
+                    rect_operatorFrame.y += frameSize.y + labelSize.y + yMargin;
                 }
             }
             //干员绘制

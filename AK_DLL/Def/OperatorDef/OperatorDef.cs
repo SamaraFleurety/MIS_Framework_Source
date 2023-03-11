@@ -152,7 +152,7 @@ namespace AK_DLL
             AutoFill_Age();
         }
 
-#region RecruitSubMethods
+        #region RecruitSubMethods
         protected static Pawn operator_Pawn;
         protected void Recruit_Ability(Hediff_Operator hediff)
         {
@@ -319,9 +319,9 @@ namespace AK_DLL
             }
             return weapon;
         }
-#endregion
+        #endregion
 
-#region AutoFillSubMethods
+        #region AutoFillSubMethods
         private void AutoFill_Name()
         {
             if (this.name == null && this.nickname == null)
@@ -424,7 +424,7 @@ namespace AK_DLL
             if (this.age <= 0) this.age = 16;
             if (this.realAge <= 0) this.realAge = this.age;
         }
-#endregion
+        #endregion
     }
 }
 

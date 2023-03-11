@@ -17,6 +17,9 @@ namespace AK_DLL
     {
         [Obsolete]
         public int sortingOrder = 0;
+        /// <summary>
+        /// Just texPath
+        /// </summary>
         public string textureFolder;
     }
 }

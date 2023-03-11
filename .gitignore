@@ -2,5 +2,4 @@
 .vs
 *.cache
 */packages/*
-AK_DLL/obj
-AK_DLL/bin
+AK_DLL/AK_Library.csproj

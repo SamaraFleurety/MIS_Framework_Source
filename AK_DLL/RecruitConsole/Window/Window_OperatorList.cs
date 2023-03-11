@@ -44,7 +44,6 @@ namespace AK_DLL
                     this.Close();
                 }
                 //绘制选干员的tab
-                int iteation = 0;
                 Rect btnRect = new Rect(crntX, crntY, btnWidth, btnHeight);
                 foreach (KeyValuePair<int, string> i in AK_Tool.operatorClasses)
                 {
@@ -63,49 +62,13 @@ namespace AK_DLL
                 btnRect.size = inRect.size;
                 GUI.DrawTexture(new Rect(btnRect.position, new Vector2(inRect.width - 2 * xMargin, 2f)), BaseContent.WhiteTex);
                 btnRect.y += yMargin;
-                //GUI.DrawTexture(inRect, BaseContent.BadTex);
-                /*if (Widgets.ButtonText(new Rect(inRect.x, inRect.y + 15f, 60f, 20f), "Type_Caster".Translate(), true, true, operatorType != OperatorType.Caster))
-                {
-                    operatorType = OperatorType.Caster;
-                }
-                else if (Widgets.ButtonText(new Rect(inRect.x + 100f, inRect.y + 15f, 60f, 20f), "Type_Defender".Translate(), true, true, operatorType != OperatorType.Defender))
-                {
-                    operatorType = OperatorType.Defender;
-                }
-                else if (Widgets.ButtonText(new Rect(inRect.x + 200f, inRect.y + 15f, 60f, 20f), "Type_Guard".Translate(), true, true, operatorType != OperatorType.Guard))
-                {
-                    operatorType = OperatorType.Guard;
-                }
-                else if (Widgets.ButtonText(new Rect(inRect.x + 300f, inRect.y + 15f, 60f, 20f), "Type_Vanguard".Translate(), true, true, operatorType != OperatorType.Vanguard))
-                {
-                    operatorType = OperatorType.Vanguard;
-                }
-                else if (Widgets.ButtonText(new Rect(inRect.x + 400f, inRect.y + 15f, 60f, 20f), "Type_Specialist".Translate(), true, true, operatorType != OperatorType.Specialist))
-                {
-                    operatorType = OperatorType.Specialist;
-                }
-                else if (Widgets.ButtonText(new Rect(inRect.x + 500f, inRect.y + 15f, 60f, 20f), "Type_Supporter".Translate(), true, true, operatorType != OperatorType.Supporter))
-                {
-                    operatorType = OperatorType.Supporter;
-                }
-                else if (Widgets.ButtonText(new Rect(inRect.x + 600f, inRect.y + 15f, 60f, 20f), "Type_Medic".Translate(), true, true, operatorType != OperatorType.Medic))
-                {
-                    operatorType = OperatorType.Medic;
-                }
-                else if (Widgets.ButtonText(new Rect(inRect.x + 700f, inRect.y + 15f, 60f, 20f), "Type_Sinoer".Translate(), true, true, operatorType != OperatorType.Sniper))
-                {
-                    operatorType = OperatorType.Sniper;
-                }*/
-
                 if (AK_Tool.operatorDefs == null)
                 {
-                    Log.Error("MIS. 干员库字典是空的.");
-                    return;
+                    throw new NullReferenceException("MIS. 干员库字典是空的.");
                 }
                 if (AK_Tool.operatorDefs[(int)operatorType] == null)
                 {
-                    Log.Error($"MIS.{operatorType}号干员库是null.");
-                    return;
+                    throw new NullReferenceException($"MIS.{operatorType}号干员库是null.");
                 }
                 DrawOperator(btnRect, AK_Tool.operatorDefs[operatorType]);
                 //统一绘制干员            

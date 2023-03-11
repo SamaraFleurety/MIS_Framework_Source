@@ -2,4 +2,5 @@
 .vs
 *.cache
 */packages/*
-/AK_DLL/obj/Debug
+AK_DLL/obj
+AK_DLL/bin

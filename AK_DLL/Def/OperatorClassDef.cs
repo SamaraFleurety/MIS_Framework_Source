@@ -7,9 +7,19 @@ using Verse;
 
 namespace AK_DLL
 {
+    /// <summary>
+    /// string defName<br/>
+    /// string label<br/>
+    /// Int32 sortingOrder<br/>
+    /// string textureFolder
+    /// </summary>
     public class OperatorClassDef : Def
     {
+        [Obsolete]
         public int sortingOrder = 0;
+        /// <summary>
+        /// Just texPath
+        /// </summary>
         public string textureFolder;
     }
 }

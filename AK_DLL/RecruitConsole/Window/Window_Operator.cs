@@ -45,7 +45,7 @@ namespace AK_DLL
             //背景绘制
             Rect rect = new Rect(1000f, 20f, 150f, 70f);
             Rect rect_Back = new Rect(1130f, 620f, 100f, 60f);
-            if (Widgets.ButtonText(rect_Back, "AK_Back".Translate()))
+            if (Widgets.ButtonText(rect_Back, "AK_Back".Translate()) || KeyBindingDefOf.Cancel.KeyDownEvent)
             {
                 this.Close();
                 Window_Recruit window = new Window_Recruit(new DiaNode(new TaggedString()), true);
@@ -182,6 +182,7 @@ namespace AK_DLL
                         operator_Def.Recruit(RecruitConsole.Map);
                         this.Close();
 
+                        //既然相机强制跳转到生成的干员的位置了，为何还要“跳回”上一级菜单呢
                         Window_Recruit window = new Window_Recruit(new DiaNode(new TaggedString()), true);
                         window.soundAmbient = SoundDefOf.RadioComms_Ambience;
                         window.Recruit = RecruitConsole;

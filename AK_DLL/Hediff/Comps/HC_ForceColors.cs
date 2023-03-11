@@ -38,7 +38,11 @@ namespace AK_DLL
             {
                 this.parent.comps.Remove(this);
                 //Log.Message((this.Def.comps.Contains(this.props)).ToString());
+<<<<<<< HEAD
                 this.Def.comps.Remove(this.Props);
+=======
+                this.Def.comps.Remove(this.props);
+>>>>>>> 7a6147574ee212e7e105793675433159a940eba5
             }
         }
     }

@@ -183,10 +183,10 @@ namespace AK_DLL
                         this.Close();
 
                         //既然相机强制跳转到生成的干员的位置了，为何还要“跳回”上一级菜单呢
-                        /*Window_Recruit window = new Window_Recruit(new DiaNode(new TaggedString()), true);
+                        Window_Recruit window = new Window_Recruit(new DiaNode(new TaggedString()), true);
                         window.soundAmbient = SoundDefOf.RadioComms_Ambience;
                         window.Recruit = RecruitConsole;
-                        Find.WindowStack.Add(window);*/
+                        Find.WindowStack.Add(window);
                     }
                     else
                     {

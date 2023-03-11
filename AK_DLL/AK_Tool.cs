@@ -79,9 +79,8 @@ namespace AK_DLL
                     throw new NullReferenceException("operatorDefs loaded, but is null or empty");
                 }
             }
-            //LoadOperatorClasses();
-            //AutoFillOperators();
             Log.Message($"MIS.初始化完成\n Loaded mods:\n{string.Join("\n",modNames.ToArray())}");
+			Log.Message($"Loaded {operatorClasses.Count} operatorClasses:\n{string.Join("\n", operatorClasses.Values.ToArray())}");
             try
             {
                 Window_Recruit.operatorType = operatorClasses.FirstOrDefault().Key;

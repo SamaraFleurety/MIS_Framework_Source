@@ -19,6 +19,8 @@ namespace AK_DLL
         private static readonly Vector2 labelSize = new Vector2(100f, 50f);
         private static readonly Vector2 btnSize = new Vector2(80f, 20f);
         private static readonly Vector2 frameSize = new Vector2(100f, 100f);
+        private static Vector2 _scrollPosition = Vector2.zero;
+
         public Window_Recruit(DiaNode startNode, bool radioMode) : base(startNode, radioMode, false, null)
         {
 
@@ -40,7 +42,7 @@ namespace AK_DLL
             }
             try
             {
-                
+
                 if (operatorType == -1)
                 {
                     Log.WarningOnce("MIS.No operator classes found.", 1);
@@ -53,7 +55,7 @@ namespace AK_DLL
                 GUI.DrawTexture(ruleRect, BaseContent.BlackTex);
                 Rect listRect = new Rect(ruleRect.xMax, inRect.y, listWH, inRect.height);
                 //在listRect内绘制按钮，可以控制垂直或水平绘制，分别使用yMax和xMax控制换行
-                DrawListBtn(listRect, new Vector2(btnWidth, btnHeight), vertical: true);
+                DrawListBtn(listRect, new Vector2(btnWidth, btnHeight));
                 //出参ruleRect的x,y应当瞄准它的左下角以方便接下来DrawOperators的定位
                 DrawruleRect(inRect, ref ruleRect);
                 ruleRect.y += yMargin;
@@ -96,61 +98,38 @@ namespace AK_DLL
             //baseRect: 实际显示大小
             //viewRect: 把所有要显示的铺平后显示的大小，大于baseRect时出现滚动条
             //并且似乎之后的坐标均应变为相对(baseRect.x, baseRect.y)的偏移量
-            static void DrawListBtn(Rect baseRect, Vector2 size, bool vertical = false)
+            static void DrawListBtn(Rect baseRect, Vector2 size)
             {
                 Rect viewRect = new Rect(baseRect);
                 viewRect.width = baseRect.width - 2 * xMargin;
                 viewRect.height = (btnHeight + yMargin) * operatorClasses.Count;
                 Rect btnRect = new Rect(viewRect.position + new Vector2(xMargin, yMargin), size);
                 //测试Widgets.BeginScrollView
-                Vector2 scrollPosition = Vector2.zero;
-                baseRect.height -= 400f;
+                baseRect.height -= 500f;
                 //GUI.DrawTexture(baseRect, BaseContent.WhiteTex);
-                Widgets.BeginScrollView(baseRect, ref scrollPosition, viewRect.AtZero());
-                if (vertical)
+                Widgets.BeginScrollView(baseRect, ref _scrollPosition, viewRect);
+                int startRow = (int)Math.Floor((decimal)_scrollPosition.y / btnHeight);
+                startRow = (startRow < 0) ? 0 : startRow;
+                int endRow = startRow + (int)(Math.Ceiling((decimal)baseRect.height / btnHeight));
+                endRow = (endRow > operatorClasses.Count) ? operatorClasses.Count : endRow;
+                for (int i = startRow; i < endRow; i++)
                 {
-                    foreach (KeyValuePair<int, string> i in operatorClasses)
-                    {
-                        /*if (Widgets.ButtonText(new Rect(inRect.x + xOffset, inRect.y + 15f, 80f, 20f), i.Value, true, true, operatorType != i.Key)) operatorType = i.Key;
-                        xOffset += 100;*/
-                        Widgets.Label(btnRect, i.Value.Translate());
-                        Text.WordWrap = true;
-                        Text.Anchor = TextAnchor.UpperLeft;
-                        if (Widgets.ButtonInvisible(btnRect)) operatorType = i.Key;
-                        btnRect.y += btnHeight + yMargin;
-                        /*if (btnRect.y + btnHeight + yMargin > baseRect.yMax)
-                        {
-                            btnRect.x += btnWidth + xMargin;
-                            btnRect.y = baseRect.y + yMargin;
-                        }*/
-                    }
+                    Rect row = new Rect(viewRect.x, viewRect.y + i * btnHeight, btnWidth, btnHeight);
+                    Widgets.Label(row, operatorClasses[i].Translate());
+                    Text.WordWrap = true;
+                    Text.Anchor = TextAnchor.UpperLeft;
+                    Widgets.DrawHighlightIfMouseover(row);
+                    if (Widgets.ButtonInvisible(row)) operatorType = i;
                 }
-                else
-                {
-                    foreach (KeyValuePair<int, string> i in operatorClasses)
-                    {
-                        /*if (Widgets.ButtonText(new Rect(inRect.x + xOffset, inRect.y + 15f, 80f, 20f), i.Value, true, true, operatorType != i.Key)) operatorType = i.Key;
-                        xOffset += 100;*/
-                        if (Widgets.ButtonText(btnRect, i.Value.Translate(), true, true, operatorType != i.Key)) operatorType = i.Key;
-                        btnRect.x += btnWidth + xMargin;
-                        /*if (btnRect.x + btnWidth + xMargin > baseRect.xMax)
-                        {
-                            btnRect.y += btnHeight + yMargin;
-                            btnRect.x = baseRect.x + xMargin;
-                        }*/
-                    }
-                }
-                //if (AK_ModSettings.debugOverride)
-                
                 Widgets.EndScrollView();
             }
-
-            static void DrawruleRect(Rect baseRect, ref Rect ruleRect)
-            {
-                ruleRect.y = ruleRect.yMax;
-            }
-            //干员列表已经改放在ModSettings
         }
+
+        static void DrawruleRect(Rect baseRect, ref Rect ruleRect)
+        {
+            ruleRect.y = ruleRect.yMax;
+        }
+        //干员列表已经改放在ModSettings
 
         public void DrawOperator(Rect baseRect, Dictionary<string, OperatorDef> operators)
         {

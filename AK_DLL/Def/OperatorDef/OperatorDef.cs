@@ -84,8 +84,7 @@ namespace AK_DLL
             IntVec3 intVec;
             if (map != null)
             {
-                RCellFinder.TryFindRandomPawnEntryCell(out intVec, map, 0.2f, false, null);
-                if (intVec != null)
+                if (RCellFinder.TryFindRandomPawnEntryCell(out intVec, map, 0.2f, false, null))
                 {
                     operator_Pawn = PawnGenerator.GeneratePawn(PawnKindDefOf.Colonist, Faction.OfPlayer);
                     Hediff_Operator hediff = Recruit_Hediff();
@@ -201,7 +200,7 @@ namespace AK_DLL
 
             HediffDef hediffDef = HediffDef.Named("AK_Operator");
             fixAlienHairColor(hediffDef);
-
+            
             Hediff_Operator hediff = HediffMaker.MakeHediff(hediffDef, operator_Pawn, operator_Pawn.health.hediffSet.GetBrain()) as Hediff_Operator;
 
             //增加多功能hediff

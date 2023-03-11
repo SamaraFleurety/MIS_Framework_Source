@@ -22,6 +22,7 @@ namespace AK_DLL
         }
         public override void CompPostTick(ref float severityAdjustment)
         {
+            //Log.Message($"Pawn: {this.Pawn.Name}\n hairColor: {this.Props.hairColor}\n skincolor: {this.Props.skinColor}\n Props == props ? : {Props == props}");
             if (this.Pawn.story.HairColor != this.Props.hairColor)
             {
                 this.Pawn.style.nextHairColor = this.Props.hairColor;
@@ -37,7 +38,11 @@ namespace AK_DLL
             {
                 this.parent.comps.Remove(this);
                 //Log.Message((this.Def.comps.Contains(this.props)).ToString());
+<<<<<<< HEAD
+                this.Def.comps.Remove(this.Props);
+=======
                 this.Def.comps.Remove(this.props);
+>>>>>>> 7a6147574ee212e7e105793675433159a940eba5
             }
         }
     }

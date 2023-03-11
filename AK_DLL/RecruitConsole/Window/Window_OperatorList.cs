@@ -94,10 +94,11 @@ namespace AK_DLL
             }
 
             //在给定的baseRect内绘制大小为size的按钮，这些按钮应当在一个内层的viewRect之内
-            //Widgets.BeginScrollView(baseRect, scrollPosition, viewRect)
+            //Widgets.BeginScrollView(baseRect, ref scrollPosition, viewRect)
             //baseRect: 实际显示大小
             //viewRect: 把所有要显示的铺平后显示的大小，大于baseRect时出现滚动条
             //并且似乎之后的坐标均应变为相对(baseRect.x, baseRect.y)的偏移量
+            //scrollPosition 必须在函数外声明（
             static void DrawListBtn(Rect baseRect, Vector2 size)
             {
                 Rect viewRect = new Rect(baseRect);

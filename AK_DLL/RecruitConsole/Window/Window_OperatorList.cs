@@ -20,6 +20,7 @@ namespace AK_DLL
         private static readonly Vector2 labelSize = new Vector2(100f, 50f);
         private static readonly Vector2 btnSize = new Vector2(80f, 20f);
         private static readonly Vector2 frameSize = new Vector2(100f, 100f);
+<<<<<<< Updated upstream
         private static readonly Vector2 iconSize = new Vector2(50f, 50f);
         private static Vector2 _scrollPosition = Vector2.zero;
 
@@ -31,6 +32,8 @@ namespace AK_DLL
             _cachedViewRectHeight = iconSize.y * operatorClasses.Count;
             return _cachedViewRectHeight != default ? true : false;
         }
+=======
+>>>>>>> Stashed changes
         public Window_Recruit(DiaNode startNode, bool radioMode) : base(startNode, radioMode, false, null)
         {
         }
@@ -45,7 +48,11 @@ namespace AK_DLL
         {
             Rect rect_Back = new Rect(inRect.xMax - xMargin - btnWidth, inRect.y + yMargin, btnWidth, btnHeight);
             //退出按钮
+<<<<<<< Updated upstream
             if (Widgets.ButtonText(rect_Back, "AK_Back".Translate()) || KeyBindingDefOf.Cancel.KeyDownEvent)
+=======
+            if (/*Widgets.ButtonText(rect_Back, "AK_Back".Translate()) || */KeyBindingDefOf.Cancel.KeyDownEvent)
+>>>>>>> Stashed changes
             {
                 this.Close();
             }
@@ -57,6 +64,7 @@ namespace AK_DLL
                     Log.WarningOnce("MIS.No operator classes found.", 1);
                     return;
                 }
+<<<<<<< Updated upstream
                 Rect ruleRect = new Rect(inRect.position, new Vector2(inRect.width - listWH, listWH));
                 GUI.DrawTexture(ruleRect, BaseContent.BlackTex);
                 //在返回按钮下绘制列表
@@ -70,6 +78,21 @@ namespace AK_DLL
                 //考虑使用Verse::Widgets.DrawLineHorizontal(float x, float y, float length)代替
                 GUI.DrawTexture(new Rect(ruleRect.position, new Vector2(ruleRect.width - 2 * xMargin, 2f)), BaseContent.WhiteTex);
                 
+=======
+                float crntY = inRect.y + yMargin;
+                float crntX = inRect.x + xMargin;
+
+                Rect ruleRect = new Rect(inRect.position, new Vector2(inRect.width - listWH, listWH));
+                GUI.DrawTexture(ruleRect, BaseContent.BlackTex);
+                Rect listRect = new Rect(ruleRect.xMax, inRect.y, listWH, inRect.height - 500f);
+                //在listRect内绘制按钮，可以控制垂直或水平绘制，分别使用yMax和xMax控制换行
+                DrawListBtn(listRect, new Vector2(btnWidth, btnHeight), vertical: true);
+                //出参ruleRect的x,y应当瞄准它的左下角以方便接下来DrawOperators的定位
+                DrawruleRect(inRect, ref ruleRect);
+                ruleRect.y += yMargin;
+                GUI.DrawTexture(new Rect(ruleRect.position, new Vector2(ruleRect.width - 2 * xMargin, 2f)), BaseContent.WhiteTex);
+                //GUI.DrawTexture(listRect, BaseContent.WhiteTex);
+>>>>>>> Stashed changes
                 ruleRect.y += yMargin;
                 if (operatorDefs == null)
                 {
@@ -104,6 +127,7 @@ namespace AK_DLL
             }
 
             //在给定的baseRect内绘制大小为size的按钮，这些按钮应当在一个内层的viewRect之内
+<<<<<<< Updated upstream
             //Widgets.BeginScrollView(outRect, ref scrollPosition, viewRect)
             //outRect: 实际显示大小
             //viewRect: 把所有要显示的铺平后显示的大小，大于baseRect时出现滚动条(x,y轴均如此)
@@ -147,10 +171,62 @@ namespace AK_DLL
                 }
                 Widgets.EndScrollView();
             }
+=======
+            static void DrawListBtn(Rect baseRect, Vector2 size, bool vertical = false)
+            {
+                Rect viewRect = new Rect(baseRect.position + new Vector2(xMargin, yMargin), baseRect.size - 2 * new Vector2(xMargin,yMargin));
+                Rect btnRect = new Rect(viewRect.position + new Vector2(xMargin, yMargin), size);
+                //测试Widgets.BeginScrollView
+                Vector2 scrollPosition = new Vector2(baseRect.xMax - 10f, baseRect.y + 10f);
+                Widgets.BeginScrollView(baseRect, ref scrollPosition, viewRect);
+                if (vertical)
+                {
+                    foreach (KeyValuePair<int, string> i in operatorClasses)
+                    {
+                        /*if (Widgets.ButtonText(new Rect(inRect.x + xOffset, inRect.y + 15f, 80f, 20f), i.Value, true, true, operatorType != i.Key)) operatorType = i.Key;
+                        xOffset += 100;*/
+                        if (Widgets.ButtonText(btnRect, i.Value.Translate(), true, true, operatorType != i.Key)) operatorType = i.Key;
+                        btnRect.y += btnHeight + yMargin;
+                        if (btnRect.y + btnHeight + yMargin > baseRect.yMax)
+                        {
+                            btnRect.x += btnWidth + xMargin;
+                            btnRect.y = baseRect.y + yMargin;
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (KeyValuePair<int, string> i in operatorClasses)
+                    {
+                        /*if (Widgets.ButtonText(new Rect(inRect.x + xOffset, inRect.y + 15f, 80f, 20f), i.Value, true, true, operatorType != i.Key)) operatorType = i.Key;
+                        xOffset += 100;*/
+                        if (Widgets.ButtonText(btnRect, i.Value.Translate(), true, true, operatorType != i.Key)) operatorType = i.Key;
+                        btnRect.x += btnWidth + xMargin;
+                        if (btnRect.x + btnWidth + xMargin > baseRect.xMax)
+                        {
+                            btnRect.y += btnHeight + yMargin;
+                            btnRect.x = baseRect.x + xMargin;
+                        }
+                    }
+                }/*
+                if(AK_ModSettings.debugOverride)
+                {
+                    do
+                    {
+                        Widgets.ButtonText(btnRect, "Test Only", true, true);
+
+                    }while(btnRect.y < )
+                }*/
+
+                Widgets.EndScrollView();
+            }
+
+>>>>>>> Stashed changes
             static void DrawruleRect(Rect baseRect, ref Rect ruleRect)
             {
                 ruleRect.y = ruleRect.yMax;
             }
+<<<<<<< Updated upstream
         }
 
         
@@ -166,6 +242,20 @@ namespace AK_DLL
                 Widgets.LabelFit(new Rect(rect_operatorFrame.position + new Vector2(0f, frameSize.y), labelSize), operator_Def.nickname);
                 Widgets.DrawTextureFitted(new Rect(rect_operatorFrame.x, rect_operatorFrame.y, rect_operatorFrame.width + 2f, rect_operatorFrame.height + 2f), Frame_HeadPortrait, 1f);
                 if (Widgets.ButtonImage(new Rect(rect_operatorFrame.x + 3f, rect_operatorFrame.y + 5f, 97f, 95f), operator_Def._headPortrait))
+=======
+            //干员列表已经改放在ModSettings
+        }
+
+        public void DrawOperator(Rect baseRect, Dictionary<string, OperatorDef> operators)
+        {
+            Rect rect_operatorFrame = new Rect(baseRect.position, frameSize);
+            foreach (OperatorDef operator_Def in operators.Values)
+            {
+                Texture2D operatorTex = ContentFinder<Texture2D>.Get(operator_Def.headPortrait);
+                Widgets.LabelFit(new Rect(rect_operatorFrame.position + new Vector2(20f, frameSize.y), labelSize), operator_Def.nickname);
+                Widgets.DrawTextureFitted(new Rect(rect_operatorFrame.x, rect_operatorFrame.y, rect_operatorFrame.width + 2f, rect_operatorFrame.height + 2f), ContentFinder<Texture2D>.Get("UI/Frame/Frame_HeadPortrait"), 1f);
+                if (Widgets.ButtonImage(new Rect(rect_operatorFrame.x + 3f, rect_operatorFrame.y + 5f, 97f, 95f), operatorTex))
+>>>>>>> Stashed changes
                 {
                     this.Close();
                     Window_Operator window_Operator = new Window_Operator(new DiaNode(new TaggedString(operator_Def.name)), true);

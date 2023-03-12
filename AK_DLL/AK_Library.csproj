@@ -12,7 +12,7 @@
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-	  <LangVersion>preview</LangVersion>
+    <LangVersion>preview</LangVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -44,6 +44,7 @@
     <Compile Include="HarmonyPatch\PatchWindowsOnGui%28Bottom Portrait%29.cs" />
     <Compile Include="Hediff\Comps\HC_RandAddHediff.cs" />
     <Compile Include="Hediff\Properties\HCP_RandAddHediff.cs" />
+    <Compile Include="HotSwap.cs" />
     <Compile Include="OpAbility\AbilityEffect\AE_ShootProjectile.cs" />
     <Compile Include="OpAbility\AbilityEffect\Effect\AbilityEffect_DisableAttack.cs" />
     <Compile Include="OpAbility\AbilityEffect\AddHediff\DelayedBloodLoss\AE_DelayedBloodLoss.cs" />

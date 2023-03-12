@@ -3,4 +3,4 @@
 *.cache
 */packages/*
 /AK_DLL/AK_Library.csproj
-/AK_DLL/**/obj/Debug/*.*
+/AK_DLL/**/obj/

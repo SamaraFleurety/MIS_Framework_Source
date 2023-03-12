@@ -53,6 +53,7 @@ namespace AK_DLL
         private string headPortrait;//头像
         public Vector2 headPortraitOffset;
 
+        //虽然命名规则冲突了，但是改路径变量的话得再写一个CustomLoaderFromXml
         public Texture2D _headPortrait => ContentFinder<Texture2D>.Get(headPortrait);
         public Texture2D _stand => ContentFinder<Texture2D>.Get(stand);
 

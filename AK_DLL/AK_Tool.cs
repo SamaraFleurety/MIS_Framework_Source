@@ -12,7 +12,11 @@ namespace AK_DLL
 	[StaticConstructorOnStartup]
     public static class AK_Tool
 	{
-		static bool doneInitialization = false;
+		public static readonly Texture2D Frame_HeadPortrait = ContentFinder<Texture2D>.Get("UI/Frame/Frame_HeadPortrait");
+		public static readonly Texture2D Frame_Skills = ContentFinder<Texture2D>.Get("UI/Frame/Frame_Skills");
+		public static readonly Texture2D Frame_Null = ContentFinder<Texture2D>.Get("UI/Frame/Null");
+        public static readonly Texture2D Ability_White = ContentFinder<Texture2D>.Get("UI/Abilities/White");
+
 		public static string[] operatorTypeStiring = new string[] { "Caster", "Defender", "Guard", "Vanguard", "Specialist", "Supporter", "Medic", "Sniper" };
 		public static string[] romanNumber = new string[] { "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X" , "XI"};
 		//如果增加了要自动绑定的服装种类，只需要往这个字符串数组增加。

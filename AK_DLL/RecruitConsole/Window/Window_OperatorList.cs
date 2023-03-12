@@ -174,7 +174,7 @@ namespace AK_DLL
             foreach (OperatorDef operator_Def in operators.Values)
             {
                 Widgets.LabelFit(new Rect(rect_operatorFrame.position + new Vector2(0f, frameSize.y), labelSize), operator_Def.nickname);
-                Widgets.DrawTextureFitted(new Rect(rect_operatorFrame.x, rect_operatorFrame.y, rect_operatorFrame.width + 2f, rect_operatorFrame.height + 2f), ContentFinder<Texture2D>.Get("UI/Frame/Frame_HeadPortrait"), 1f);
+                Widgets.DrawTextureFitted(new Rect(rect_operatorFrame.x, rect_operatorFrame.y, rect_operatorFrame.width + 2f, rect_operatorFrame.height + 2f), Frame_HeadPortrait, 1f);
                 if (Widgets.ButtonImage(new Rect(rect_operatorFrame.x + 3f, rect_operatorFrame.y + 5f, 97f, 95f), operator_Def._headPortrait))
                 {
                     this.Close();

@@ -196,6 +196,69 @@ namespace AK_DLL
             }
             //干员绘制
         }
+
+        private void Merge(List<OperatorDef> operators, int i, int j, int k)
+        {
+            int mergedSize = k - i + 1;
+            List<OperatorDef> mergedOps = new List<OperatorDef>(mergedSize);
+
+            int mergePos = 0, leftPos = i, rightPos = j + 1;
+
+            while (leftPos <= j && rightPos <= k)
+            {
+                if (true)
+                {
+                    mergedOps[mergePos] = operators[leftPos];
+                    ++leftPos;
+                }
+                else
+                {
+                    mergedOps[mergePos] = operators[rightPos];
+                    ++rightPos;
+
+                }
+                ++mergePos;
+            }
+
+            while (leftPos <= j)
+            {
+                mergedOps[mergePos] = operators[leftPos];
+                ++leftPos;
+                ++mergePos;
+            }
+
+            while (rightPos <= k)
+            {
+                mergedOps[mergePos] = operators[rightPos];
+                ++rightPos;
+                ++mergePos;
+            }
+
+            for (mergePos = 0; mergePos < mergedSize; ++mergePos)
+            {
+                operators[i + mergePos] = mergedOps[mergePos];
+            }
+        }
+
+        private void MergeSort(List<OperatorDef> ops, int lp, int rp)
+        {
+            int middle;
+            if (lp < rp)
+            {
+                middle = (lp + rp) / 2;
+
+                MergeSort(ops, lp, middle);
+                MergeSort(ops, middle + 1, rp);
+
+                Merge(ops, lp, middle, rp);
+            }
+        }
+        private List<OperatorDef> SortOperator<T> (List<OperatorDef> ops, Func<OperatorDef, OperatorDef, bool> comparer, Func<OperatorDef, T> compraree)
+        {
+            MergeSort(ops, 0, ops.Count() - 1);
+            
+            return ops;
+        }
         public Thing Recruit;
         //private static OperatorType operatorType = OperatorType.Caster;
         public static int operatorType = -1;

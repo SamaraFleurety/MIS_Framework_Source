@@ -3,7 +3,7 @@ using RimWorld;
 using System.Linq;
 using UnityEngine;
 using Verse;
-using Unity;
+using static AK_DLL.AK_Tool;
 
 namespace AK_DLL
 {
@@ -54,7 +54,7 @@ namespace AK_DLL
             }
             Widgets.DrawTextureFitted(rect, badTex, this.iconDrawScale * 0.85f, this.iconProportions, this.iconTexCoords, this.iconAngle, null);
             Widgets.Label(rect, this.CDs.charge + "/" + this.CDs.maxCharge);
-            GUI.DrawTexture(new Rect(rect.x, rect.y, width(rect.width), rect.height), ContentFinder<Texture2D>.Get("UI/Abilities/White"));
+            GUI.DrawTexture(new Rect(rect.x, rect.y, width(rect.width), rect.height), Ability_White);
             GUI.color = Color.white;
             if (this.targetMode == TargetMode.AutoEnemy)
             {

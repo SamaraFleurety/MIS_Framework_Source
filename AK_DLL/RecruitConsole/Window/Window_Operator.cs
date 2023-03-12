@@ -4,7 +4,7 @@ using RimWorld.Planet;
 using System.Text;
 using RimWorld;
 using UnityEngine;
-using HarmonyLib;
+using static AK_DLL.AK_Tool;
 
 namespace AK_DLL
 {
@@ -26,7 +26,7 @@ namespace AK_DLL
         {
             get
             {
-                return ContentFinder<Texture2D>.Get("UI/Frame/Frame_Skills");
+                return Frame_Skills;
             }
         }
 
@@ -34,7 +34,7 @@ namespace AK_DLL
         {
             try
             {
-                Widgets.DrawTextureFitted(new Rect(inRect.x += 350f + operator_Def.standOffset.x, inRect.y + 40f + operator_Def.standOffset.y, inRect.width - 870f, inRect.height), ContentFinder<Texture2D>.Get(operator_Def.stand), operator_Def.standRatio);
+                Widgets.DrawTextureFitted(new Rect(inRect.x += 350f + operator_Def.standOffset.x, inRect.y + 40f + operator_Def.standOffset.y, inRect.width - 870f, inRect.height), operator_Def._stand, operator_Def.standRatio);
             }
             catch
             {
@@ -114,8 +114,9 @@ namespace AK_DLL
             rect1.y = 350f;
             rect1.width -= 60f;
             rect1.height -= 30f;
-            Texture2D smallFire = ContentFinder<Texture2D>.Get("UI/Icons/PassionMinor");
-            Texture2D bigFire = ContentFinder<Texture2D>.Get("UI/Icons/PassionMajor");
+            //应当使用SkillUI.PassionMinorIcon与SkillUI.PassionMajorIcon
+            //Texture2D smallFire = ContentFinder<Texture2D>.Get("UI/Icons/PassionMinor");
+            //Texture2D bigFire = ContentFinder<Texture2D>.Get("UI/Icons/PassionMajor");
             //获取兴趣贴图
 
             Rect rect2 = new Rect(rect1);
@@ -125,8 +126,8 @@ namespace AK_DLL
             rect3.height = 152f;
             rect3.width = 152f;
             rect3.y -= 250f;
-            Widgets.DrawTextureFitted(new Rect(rect3.x + operator_Def.headPortraitOffset.x, rect3.y + operator_Def.headPortraitOffset.y, rect3.width, rect3.height), ContentFinder<Texture2D>.Get("UI/Frame/Frame_HeadPortrait"), 1f);
-            Widgets.DrawTextureFitted(new Rect(rect3.x + 3f + operator_Def.headPortraitOffset.x, rect3.y + 2f + operator_Def.headPortraitOffset.y, 145f, 148f), ContentFinder<Texture2D>.Get(operator_Def.headPortrait), 1f);
+            Widgets.DrawTextureFitted(new Rect(rect3.x + operator_Def.headPortraitOffset.x, rect3.y + operator_Def.headPortraitOffset.y, rect3.width, rect3.height), Frame_HeadPortrait, 1f);
+            Widgets.DrawTextureFitted(new Rect(rect3.x + 3f + operator_Def.headPortraitOffset.x, rect3.y + 2f + operator_Def.headPortraitOffset.y, 145f, 148f), operator_Def._headPortrait, 1f);
             //绘制头像框与头像
             rect3.height = 150f;
             rect3.width = 150f;
@@ -145,17 +146,17 @@ namespace AK_DLL
                     skillLv = skillAndFire.level;
                 }
                 float verticalOffset = 25f * TypeDef.statType[skillAndFire.skill.defName];
-                Widgets.FillableBar(new Rect(rect2.x, rect2.y + verticalOffset, 170f, 20f), skillLv / 20f, SolidColorMaterials.NewSolidColorTexture(new Color(1f, 1f, 1f, 0.3f)), ContentFinder<Texture2D>.Get("UI/Frame/Null"), false);
+                Widgets.FillableBar(new Rect(rect2.x, rect2.y + verticalOffset, 170f, 20f), skillLv / 20f, SolidColorMaterials.NewSolidColorTexture(new Color(1f, 1f, 1f, 0.3f)), Frame_Null, false);
                 Widgets.Label(new Rect(rect1.x - 35f, rect1.y + verticalOffset, 150f, rect1.height), skillAndFire.skill.label);
                 Widgets.Label(new Rect(rect1.x + 50f, rect1.y + verticalOffset, 100f, rect1.height), skillLv.ToString());
                 Rect rect4 = new Rect(rect1.x + 25f, rect1.y + 4f + verticalOffset, 10f, 10f);
                 if (skillAndFire.fireLevel == Passion.Minor)
                 {
-                    Widgets.DrawTextureFitted(rect4, smallFire, 2.5f);
+                    Widgets.DrawTextureFitted(rect4, SkillUI.PassionMinorIcon, 2.5f);
                 }
                 if (skillAndFire.fireLevel == Passion.Major)
                 {
-                    Widgets.DrawTextureFitted(rect4, bigFire, 2.5f);
+                    Widgets.DrawTextureFitted(rect4, SkillUI.PassionMajorIcon, 2.5f);
                 }
             }
             //技能绘制

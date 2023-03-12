@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using Verse;
 
 namespace AK_DLL
@@ -21,5 +22,7 @@ namespace AK_DLL
         /// Just texPath
         /// </summary>
         public string textureFolder;
+        public Texture2D tex;
+
     }
 }

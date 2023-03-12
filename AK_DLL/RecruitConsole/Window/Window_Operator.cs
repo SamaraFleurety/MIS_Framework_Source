@@ -34,7 +34,7 @@ namespace AK_DLL
         {
             try
             {
-                Widgets.DrawTextureFitted(new Rect(inRect.x += 350f + operator_Def.standOffset.x, inRect.y + 40f + operator_Def.standOffset.y, inRect.width - 870f, inRect.height), ContentFinder<Texture2D>.Get(operator_Def.stand), operator_Def.standRatio);
+                Widgets.DrawTextureFitted(new Rect(inRect.x += 350f + operator_Def.standOffset.x, inRect.y + 40f + operator_Def.standOffset.y, inRect.width - 870f, inRect.height), operator_Def._stand, operator_Def.standRatio);
             }
             catch
             {
@@ -126,7 +126,7 @@ namespace AK_DLL
             rect3.width = 152f;
             rect3.y -= 250f;
             Widgets.DrawTextureFitted(new Rect(rect3.x + operator_Def.headPortraitOffset.x, rect3.y + operator_Def.headPortraitOffset.y, rect3.width, rect3.height), ContentFinder<Texture2D>.Get("UI/Frame/Frame_HeadPortrait"), 1f);
-            Widgets.DrawTextureFitted(new Rect(rect3.x + 3f + operator_Def.headPortraitOffset.x, rect3.y + 2f + operator_Def.headPortraitOffset.y, 145f, 148f), ContentFinder<Texture2D>.Get(operator_Def.headPortrait), 1f);
+            Widgets.DrawTextureFitted(new Rect(rect3.x + 3f + operator_Def.headPortraitOffset.x, rect3.y + 2f + operator_Def.headPortraitOffset.y, 145f, 148f), operator_Def._headPortrait, 1f);
             //绘制头像框与头像
             rect3.height = 150f;
             rect3.width = 150f;

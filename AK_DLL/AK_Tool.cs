@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using RimWorld;
 using UnityEngine;
@@ -24,7 +25,7 @@ namespace AK_DLL
 		public static Dictionary<int, Dictionary<string, OperatorDef>> operatorDefs = new Dictionary<int, Dictionary<string, OperatorDef>>();
 		//public static Dictionary<string, OperatorDef>[] operatorDefs = new Dictionary<string, OperatorDef>[(int)OperatorType.Count];
 
-		public static Dictionary<int, string> operatorClasses = new Dictionary<int, string>();
+		public static Dictionary<int, OperatorClassDef> operatorClasses = new Dictionary<int, OperatorClassDef>();
 
 		/*public static void PrintfHairColor(this Pawn p)
         {
@@ -51,13 +52,14 @@ namespace AK_DLL
                 foreach (OperatorClassDef def in DefDatabase<OperatorClassDef>.AllDefsListForReading)
                 {
                     modNames.Add(def.defName.Split('_').First());
-                    operatorClasses[loadorder] = def.label.Translate();
+                    operatorClasses[loadorder] = def;
 					operatorDefs.Add(loadorder, new Dictionary<string, OperatorDef>((from x in DefDatabase<OperatorDef>.AllDefs
                                                                                      where x.operatorType == def
 																					 orderby x.modContentPack.Name
                                                                                      select x).ToDictionary(x => GetOperatorIDFrom(x.defName), x => x)));
                     loadorder++;
                 }
+                ResolveOperatorClassIcons();
             }
             catch (Exception e)
             {
@@ -80,7 +82,7 @@ namespace AK_DLL
                 }
             }
             Log.Message($"MIS.初始化完成\n Loaded mods:\n{string.Join("\n",modNames.ToArray())}");
-			Log.Message($"Loaded {operatorClasses.Count} operatorClasses:\n{string.Join("\n", operatorClasses.Values.ToArray())}");
+			Log.Message($"Loaded {operatorClasses.Count} operatorClasses:\n{string.Join("\n", operatorClasses.Values.Select(x=>x.defName).ToArray())}");
             try
             {
                 Window_Recruit.operatorType = operatorClasses.FirstOrDefault().Key;
@@ -89,6 +91,26 @@ namespace AK_DLL
             {
                 Log.Error($"operatorClasses NullOrEmpty");
             }
+
+			static void ResolveOperatorClassIcons()
+			{
+                foreach (var def in operatorClasses.Values)
+				{
+					if (def.textureFolder == "" || def.textureFolder == null)
+						continue;
+					string itemPath = def.textureFolder + "/" + def.defName.Split('_').Last();
+					//Log.Message($"Trying to load texture from: {itemPath}");
+                    if (def.textureFolder != null)
+					{
+						def.tex = ContentFinder<Texture2D>.Get(itemPath, false);
+					}
+
+					if(def.tex == null)
+					{
+						Log.Error($"Error when loading {def.defName}'s Icon. Wrong xml format. If no icon is present, do not add node \"textureFolder\"");
+					}
+				}
+			}
         }
 		
 		public static List<IntVec3> GetSector(OperatorAbilityDef ability,Pawn caster)
@@ -147,7 +169,7 @@ namespace AK_DLL
 			if (p == null) return;
 			OperatorDocument doc = AK_Tool.GetDoc(p);
 			if (doc == null) return;
-			Widgets.DrawTextureFitted(new Rect(AK_ModSettings.xOffset * 5, AK_ModSettings.yOffset * 5, 408, 408), ContentFinder<Texture2D>.Get(AK_Tool.GetDoc(p).operatorDef.stand), (float)AK_ModSettings.ratio * 0.05f);
+			Widgets.DrawTextureFitted(new Rect(AK_ModSettings.xOffset * 5, AK_ModSettings.yOffset * 5, 408, 408), AK_Tool.GetDoc(p).operatorDef._stand, (float)AK_ModSettings.ratio * 0.05f);
 		}
 
 		public static Hediff_Operator GetArkNightsHeDiffByPawn(Pawn pawn)

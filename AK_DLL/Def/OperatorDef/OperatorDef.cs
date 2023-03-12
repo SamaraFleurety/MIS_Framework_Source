@@ -47,11 +47,14 @@ namespace AK_DLL
         public BeardDef beard;//胡须
 
         public OperatorClassDef operatorType;//干员类型
-        public string stand;//立绘
+        private string stand;//立绘
         public Vector2 standOffset;
         public float standRatio = 3f;
-        public string headPortrait;//头像
+        private string headPortrait;//头像
         public Vector2 headPortraitOffset;
+
+        public Texture2D _headPortrait => ContentFinder<Texture2D>.Get(headPortrait);
+        public Texture2D _stand => ContentFinder<Texture2D>.Get(stand);
 
         public ThoughtDef thoughtReceived = null;
         public int TRStage = -1;

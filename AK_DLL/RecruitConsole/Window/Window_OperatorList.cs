@@ -134,7 +134,7 @@ namespace AK_DLL
                 Widgets.BeginScrollView(baseRect, ref _scrollPosition, viewRect);
                 int startRow = (int)Math.Floor((decimal)(_scrollPosition.y / iconSize.y));
                 startRow = (startRow < 0) ? 0 : startRow;
-                int endRow = startRow + (int)(Math.Ceiling((decimal)(baseRect.height / iconSize.y)));
+                int endRow = startRow + (int)(Math.Ceiling((decimal)((baseRect.height + iconSize.y) / iconSize.y)));
                 endRow = (endRow > operatorClasses.Count) ? operatorClasses.Count : endRow;
                 for (int i = startRow; i < endRow; i++)
                 {

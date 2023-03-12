@@ -96,7 +96,10 @@ namespace AK_DLL
                 Log.Error($"operatorClasses NullOrEmpty");
             }
 
-			static void ResolveOperatorClassIcons()
+			if (!Window_Recruit.ResolveVariables())
+				Log.Error("Couldn't cache viewRect's height.");
+
+            static void ResolveOperatorClassIcons()
 			{
                 foreach (var def in operatorClasses.Values)
 				{

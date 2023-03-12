@@ -22,21 +22,17 @@ namespace AK_DLL
         private static readonly Vector2 frameSize = new Vector2(100f, 100f);
         private static readonly Vector2 iconSize = new Vector2(50f, 50f);
         private static Vector2 _scrollPosition = Vector2.zero;
-        private static float? _cachedViewRectHeight;
-        public static float ViewRectHeight
+
+        //最终整个ViewRect的高度应当在初始化完毕后就
+        private static float _cachedViewRectHeight;
+
+        public static bool ResolveVariables()
         {
-            get
-            {
-                return _cachedViewRectHeight ?? -1;
-            }
-            set
-            {
-                _cachedViewRectHeight = value;
-            }
+            _cachedViewRectHeight = iconSize.y * operatorClasses.Count;
+            return _cachedViewRectHeight != default ? true : false;
         }
         public Window_Recruit(DiaNode startNode, bool radioMode) : base(startNode, radioMode, false, null)
         {
-
         }
         public override Vector2 InitialSize
         {
@@ -116,20 +112,10 @@ namespace AK_DLL
             {
                 Rect viewRect = new Rect(outRect);
                 viewRect.width = size.x;
-                //viewRect.width = outRect.width - 4 * xMargin;
-                /*if (ViewRectHeight == -1)
-                {
-                    ViewRectHeight = 0;
-                    foreach (var cls in operatorClasses.Values)
-                    {
-                        ViewRectHeight += cls.tex != null ? 50f : btnHeight;
-                    }
-                }*/
-                //Log.ErrorOnce($"ViewRectHeight:{ViewRectHeight}", 114514);
-                viewRect.height = size.y * operatorClasses.Count;
-                //Rect btnRect = new Rect(viewRect.position + new Vector2(xMargin, yMargin), size);
+                viewRect.height = _cachedViewRectHeight;
                 //测试Widgets.BeginScrollView
                 outRect.height -= 400f;
+                //调窄一点防止出现水平滚动条
                 outRect.width -= 20f;
                 //GUI.DrawTexture(outRect, BaseContent.WhiteTex);
                 //GUI.DrawTexture(viewRect, BaseContent.BlackTex);

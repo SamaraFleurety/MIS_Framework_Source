@@ -10,7 +10,6 @@ namespace AK_DLL
 	[StaticConstructorOnStartup]
     public static class AK_Tool
 	{
-		static bool doneInitialization = false;
 		public static string[] operatorTypeStiring = new string[] { "Caster", "Defender", "Guard", "Vanguard", "Specialist", "Supporter", "Medic", "Sniper" };
 		public static string[] romanNumber = new string[] { "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X" , "XI"};
 		//如果增加了要自动绑定的服装种类，只需要往这个字符串数组增加。
@@ -44,53 +43,63 @@ namespace AK_DLL
 		/// <exception cref="NullReferenceException"></exception>
 		static AK_Tool()
         {
-            int loadorder = 0;
-            try
-            {
-                foreach (OperatorClassDef def in DefDatabase<OperatorClassDef>.AllDefsListForReading)
-                {
-                    modNames.Add(def.defName.Split('_')[0]);
-                    operatorClasses[loadorder] = def.label.Translate();
-					operatorDefs.Add(loadorder, new Dictionary<string, OperatorDef>((from x in DefDatabase<OperatorDef>.AllDefs
-                                                                                     where x.operatorType == def
-                                                                                     select x).ToDictionary(x => x.nickname, x => x)));
-                    loadorder++;
-                }
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Error During Loading OperatorClassDef: {e}\n Last loading mod name:{modNames.Last()}\n {loadorder}th iteration");
-            }
-            finally
-            {
-                if (!operatorDefs.NullOrEmpty())
-                {
-                    foreach (Dictionary<string,OperatorDef> deflist in operatorDefs.Values)
-                    {
-                        foreach (OperatorDef def in deflist.Values)
-                            def.AutoFill();
-                    }
-
-                }
-                else
-                {
-                    throw new NullReferenceException("operatorDefs loaded, but is null or empty");
-                }
-            }
-            //LoadOperatorClasses();
-            //AutoFillOperators();
-            Log.Message($"MIS.初始化完成\n Loaded mods:\n{string.Join("\n",modNames.ToArray())}");
+            LoadOperatorClasses();
+            AutoFillOperators();
+            Log.Message($"MIS.初始化完成\n");
             try
             {
                 Window_Recruit.operatorType = operatorClasses.FirstOrDefault().Key;
             }
             catch when (operatorClasses.NullOrEmpty())
             {
-                Log.Error($"operatorClasses NullOrEmpty");
+                Log.Error($"MIS. operatorClasses NullOrEmpty");
             }
         }
-		
-		public static List<IntVec3> GetSector(OperatorAbilityDef ability,Pawn caster)
+		public static void AutoFillOperators()
+		{
+			foreach (int i in operatorClasses.Keys)
+			{
+				operatorDefs[i] = new Dictionary<string, OperatorDef>();
+			}
+			foreach (OperatorDef i in DefDatabase<OperatorDef>.AllDefs)
+			{
+				i.AutoFill();
+				try
+				{
+					operatorDefs[i.operatorType.sortingOrder].Add(i.nickname, i);
+				}
+				catch (Exception)
+				{
+					Log.Error("MIS. 没加起" + i.nickname);
+				}
+			}
+		}
+		public static void LoadOperatorClasses()
+		{
+			foreach (OperatorClassDef i in DefDatabase<OperatorClassDef>.AllDefs)
+			{
+				int tempOrder = 10000001;
+				if (i.sortingOrder >= 10000000)
+				{
+					Log.Error(i.label.Translate() + "'s sorting order must lower than 10000000");
+				}
+				else if (operatorClasses.ContainsKey(i.sortingOrder))
+				{
+					Log.Error(i.label.Translate() + "has duplicate loading order with" + operatorClasses[i.sortingOrder]);
+					operatorClasses.Add(tempOrder, i.label.Translate());
+					tempOrder++;
+				}
+				else
+				{
+					operatorClasses.Add(i.sortingOrder, i.label.Translate());
+				}
+				if (operatorClasses.Count >= 1)
+				{
+					Window_Recruit.operatorType = operatorClasses.First().Key;
+				}
+			}
+		}
+			public static List<IntVec3> GetSector(OperatorAbilityDef ability,Pawn caster)
         {
 			List<IntVec3> result = new List<IntVec3>();
 			foreach (IntVec3 intVec3 in GenRadial.RadialCellsAround(caster.Position, ability.sectorRadius, false))

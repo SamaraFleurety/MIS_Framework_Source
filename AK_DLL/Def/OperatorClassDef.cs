@@ -15,11 +15,8 @@ namespace AK_DLL
     /// </summary>
     public class OperatorClassDef : Def
     {
-        [Obsolete]
         public int sortingOrder = 0;
-        /// <summary>
-        /// Just texPath
-        /// </summary>
+        public string series;
         public string textureFolder;
     }
 }

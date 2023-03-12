@@ -28,20 +28,20 @@ namespace AK_DLL
         }
         public override void DoWindowContents(Rect inRect)
         {
+            float crntY = inRect.y + yMargin;
+            float crntX = inRect.x + xMargin;
+            Rect rect_Back = new Rect(inRect.xMax - xMargin - btnWidth, inRect.y + yMargin, btnWidth, btnHeight);
+            //退出按钮
+            if (Widgets.ButtonText(rect_Back, "AK_Back".Translate()) || KeyBindingDefOf.Cancel.KeyDownEvent)
+            {
+                this.Close();
+            }
             try
             {
                 if (operatorType == -1)
                 {
                     Log.WarningOnce("MIS.No operator classes found.", 1);
                     return;
-                }
-                float crntY = inRect.y + yMargin;
-                float crntX = inRect.x + xMargin;
-                Rect rect_Back = new Rect(inRect.xMax - xMargin - btnWidth, inRect.y + yMargin , btnWidth, btnHeight);
-                //退出按钮
-                if (Widgets.ButtonText(rect_Back, "AK_Back".Translate()) || KeyBindingDefOf.Cancel.KeyDownEvent)
-                {
-                    this.Close();
                 }
                 //绘制选干员的tab
                 Rect btnRect = new Rect(crntX, crntY, btnWidth, btnHeight);
@@ -125,7 +125,7 @@ namespace AK_DLL
             //干员绘制
         }
 
-        private void Merge(List<OperatorDef> operators, int i, int j, int k)
+        private void Merge<T>(List<OperatorDef> operators, int i, int j, int k, Func<T, T, bool> comparer, Func<OperatorDef, T> compraree)
         {
             int mergedSize = k - i + 1;
             List<OperatorDef> mergedOps = new List<OperatorDef>(mergedSize);
@@ -134,7 +134,7 @@ namespace AK_DLL
 
             while (leftPos <= j && rightPos <= k)
             {
-                if (true)
+                if ( comparer(compraree(operators[leftPos]), compraree(operators[rightPos])) )
                 {
                     mergedOps[mergePos] = operators[leftPos];
                     ++leftPos;
@@ -168,25 +168,27 @@ namespace AK_DLL
             }
         }
 
-        private void MergeSort(List<OperatorDef> ops, int lp, int rp)
+        private void MergeSort<T>(List<OperatorDef> ops, int lp, int rp, Func<T, T, bool> comparer, Func<OperatorDef, T> compraree)
         {
             int middle;
             if (lp < rp)
             {
                 middle = (lp + rp) / 2;
 
-                MergeSort(ops, lp, middle);
-                MergeSort(ops, middle + 1, rp);
+                MergeSort(ops, lp, middle, comparer, compraree);
+                MergeSort(ops, middle + 1, rp, comparer, compraree);
 
-                Merge(ops, lp, middle, rp);
+                Merge(ops, lp, middle, rp, comparer, compraree);
             }
         }
-        private List<OperatorDef> SortOperator<T> (List<OperatorDef> ops, Func<OperatorDef, OperatorDef, bool> comparer, Func<OperatorDef, T> compraree)
+        private List<OperatorDef> SortOperator<T> (List<OperatorDef> ops, Func<T, T, bool> comparer, Func<OperatorDef, T> compraree)
         {
-            MergeSort(ops, 0, ops.Count() - 1);
+            MergeSort(ops, 0, ops.Count() - 1, comparer, compraree);
             
             return ops;
         }
+
+        List<OperatorDef> cachedOperatorList = new List<OperatorDef>();
         public Thing Recruit;
         //private static OperatorType operatorType = OperatorType.Caster;
         public static int operatorType = -1;

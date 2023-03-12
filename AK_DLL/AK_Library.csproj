@@ -308,7 +308,6 @@
     <Compile Include="Thing\CompProperties\TCP_RemoveMe.cs" />
     <Compile Include="Thing\Comp\TC_RemoveMe.cs" />
     <Compile Include="VoicePlayer\HarmonyPatch\PatchDraftSound.cs" />
-    <Compile Include="HarmonyPatch\Initiator.cs" />
     <Compile Include="VoicePlayer\HarmonyPatch\PatchSelectSound.cs" />
     <Compile Include="HarmonyPatch\Patch\PatchMain.cs" />
     <Compile Include="HarmonyPatch\Patch\Patch_IncreasePower.cs" />

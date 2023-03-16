@@ -156,10 +156,10 @@ namespace AK_DLL
                     {
                         SortOperator<int>(delegate (int a, int b)
                         {
-                            return a <= b;
+                            return !(a <= b);
                         }, delegate (OperatorDef def)
                         {
-                            return TypeDef.statType[def.SortedSkills[i].skill.defName];
+                            return def.SortedSkills[i].level;
                         });
                     }
                 }
@@ -172,7 +172,7 @@ namespace AK_DLL
                 {
                     SortOperator<double>(delegate (double a, double b)
                     {
-                        return a <= b;
+                        return !(a <= b);
                     }, delegate (OperatorDef def)
                     {
                         return DPSCalculator(def);
@@ -187,11 +187,10 @@ namespace AK_DLL
                 {
                     SortOperator<string>(delegate (string a, string b)
                     {
-                        Log.Message($"{a}, {b}, {string.Compare(a, b)}");
                         return string.Compare(a, b) <= 0;
                     }, delegate (OperatorDef def)
                     {
-                        return GetOperatorIDFrom(def.defName);
+                        return def.label.Translate();
                     });
                 }
             }
@@ -228,16 +227,19 @@ namespace AK_DLL
                     if (weight == 0) meleeDPS = 0;
                     else meleeDPS /= weight;
                 }
+                Log.Message($"p3 : {w.defName}");
                 //命中率100%远程dps
-                if (w.Verbs != null)
+                if (w.Verbs != null && w.Verbs.Count > 0)
                 {
-
+                    Log.Message(w.Verbs[0].ToString());
+                    Log.Message(w.Verbs[0].verbClass.ToString());
                     VerbProperties verb = w.Verbs[0];
                     ProjectileProperties bullet = verb.defaultProjectile.projectile;
+                    if (bullet == null) goto LABEL_NoRanged;
                     System.Reflection.FieldInfo damage = bullet.GetType().GetField("damageAmountBase", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
                     //单发伤害
                     rangedDPS = (int)damage.GetValue(bullet);
-                    foreach (ExtraDamage l in bullet.extraDamages) rangedDPS += (l.amount * Math.Min(l.chance, 1.0));
+                    if (bullet.extraDamages != null) foreach (ExtraDamage l in bullet.extraDamages) rangedDPS += (l.amount * Math.Min(l.chance, 1.0));
 
                     double realCD = verb.warmupTime;
                     foreach (StatModifier k in w.statBases)
@@ -253,10 +255,13 @@ namespace AK_DLL
                         rangedDPS *= verb.burstShotCount;
                         realCD += verb.ticksBetweenBurstShots / 60 * (verb.burstShotCount - 1);
                     }
+                    if (realCD <= 0) goto LABEL_NoRanged;
                     rangedDPS /= realCD;
                 }
             }
             return Math.Max(meleeDPS, rangedDPS); ;
+        LABEL_NoRanged:
+            return meleeDPS;
         }
         private bool NeedSortTo(int newSortType)
         {
@@ -278,26 +283,17 @@ namespace AK_DLL
             int mergedSize = k - i + 1;
             List<OperatorDef> mergedOps = new List<OperatorDef>(new OperatorDef[mergedSize]);
 
-            //Log.Message($"{i}, {j}, {k}");
-            //Log.Message(mergedOps.Count.ToString());
             int mergePos = 0, leftPos = i, rightPos = j + 1;
 
             while (leftPos <= j && rightPos <= k)
             {
-                //Log.Message($"{compraree(cachedOperatorList[leftPos])}, {compraree(cachedOperatorList[rightPos])}");
-                //Log.Message(mergedOps.ToString());
-                //Log.Message(mergedOps[mergePos].ToString());
                 if (comparer(compraree(cachedOperatorList[leftPos]), compraree(cachedOperatorList[rightPos])))
                 {
-                   // Log.Message("true");
                     mergedOps[mergePos] = cachedOperatorList[leftPos];
-                    //Log.Message($"{cachedOperatorList[leftPos].defName}");
-                    //Log.Message($"{mergedOps[mergePos].defName}");
                     ++leftPos;
                 }
                 else
                 {
-                    //Log.Message("false");
                     mergedOps[mergePos] = cachedOperatorList[rightPos];
                     ++rightPos;
 
@@ -305,7 +301,6 @@ namespace AK_DLL
                 ++mergePos;
             }
 
-            //Log.Message("phase 1");
             while (leftPos <= j)
             {
                 mergedOps[mergePos] = cachedOperatorList[leftPos];
@@ -313,7 +308,6 @@ namespace AK_DLL
                 ++mergePos;
             }
 
-            //Log.Message("phase 2");
             while (rightPos <= k)
             {
                 mergedOps[mergePos] = cachedOperatorList[rightPos];
@@ -321,13 +315,10 @@ namespace AK_DLL
                 ++mergePos;
             }
 
-            //Log.Message("phase 3");
             for (mergePos = 0; mergePos < mergedSize; ++mergePos)
             {
-                Log.Message(mergedOps[mergePos].defName);
                 cachedOperatorList[i + mergePos] = mergedOps[mergePos];
             }
-            Log.Message("phase end");
         }
 
         private void MergeSort<T>(int lp, int rp, Func<T, T, bool> comparer, Func<OperatorDef, T> compraree)
@@ -343,9 +334,10 @@ namespace AK_DLL
                 Merge(lp, middle, rp, comparer, compraree);
             }
         }
+
+        //比较器是左边小于右边ret true是从小到大，反过来是从大到小
         private void SortOperator<T>(Func<T, T, bool> comparer, Func<OperatorDef, T> compraree)
         {
-            Log.Message($"SORT START: {cachedOperatorList.Count()}");
             MergeSort(0, cachedOperatorList.Count() - 1, comparer, compraree);
 
         }

@@ -52,7 +52,7 @@ namespace AK_DLL
             string defNameBase = AK_Tool.GetThingdefNameFrom(operatorName, prefix, "Voice_Select");
             SoundDef temp = DefDatabase<SoundDef>.GetNamedSilentFail(defNameBase);
             if (temp != null && this.selectSounds.Contains(temp) == false) this.selectSounds.Add(temp);
-            for (int i = 0; i <= 10 && (temp = DefDatabase<SoundDef>.GetNamedSilentFail(defNameBase + AK_Tool.romanNumber[i])) != null; ++i)
+            for (int i = 0; i <= 10 && (temp = DefDatabase<SoundDef>.GetNamedSilentFail(defNameBase + TypeDef.romanNumber[i])) != null; ++i)
             {
                 if (this.selectSounds.Contains(temp) == false)
                     this.selectSounds.Add(temp);
@@ -65,7 +65,7 @@ namespace AK_DLL
             string defNameBase = AK_Tool.GetThingdefNameFrom(operatorName, prefix, "Voice_Draft");
             SoundDef temp = DefDatabase<SoundDef>.GetNamedSilentFail(defNameBase);
             if (temp != null && this.draftSounds.Contains(temp) == false) this.draftSounds.Add(temp);
-            for (int i = 0; i < 10 && (temp = DefDatabase<SoundDef>.GetNamedSilentFail(defNameBase + AK_Tool.romanNumber[i])) != null; ++i)
+            for (int i = 0; i < 10 && (temp = DefDatabase<SoundDef>.GetNamedSilentFail(defNameBase + TypeDef.romanNumber[i])) != null; ++i)
             {
                 if (this.draftSounds.Contains(temp) == false)
                     this.draftSounds.Add(temp);
@@ -78,7 +78,7 @@ namespace AK_DLL
             string defNameBase = AK_Tool.GetThingdefNameFrom(operatorName, prefix, "Voice_Ability");
             SoundDef temp = DefDatabase<SoundDef>.GetNamedSilentFail(defNameBase);
             if (temp != null && this.abilitySounds.Contains(temp) == false) this.abilitySounds.Add(temp);
-            for (int i = 0; i <= 10 && (temp = DefDatabase<SoundDef>.GetNamedSilentFail(defNameBase + AK_Tool.romanNumber[i])) != null; ++i)
+            for (int i = 0; i <= 10 && (temp = DefDatabase<SoundDef>.GetNamedSilentFail(defNameBase + TypeDef.romanNumber[i])) != null; ++i)
             {
                 if (this.abilitySounds.Contains(temp) == false)
                     this.abilitySounds.Add(temp);

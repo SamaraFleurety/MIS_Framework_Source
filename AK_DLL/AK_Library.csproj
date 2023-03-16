@@ -266,6 +266,7 @@
     <Compile Include="HarmonyPatch\PatchWindowsOnGui%28Bottom Portrait%29.cs" />
     <Compile Include="Hediff\Comps\HC_RandAddHediff.cs" />
     <Compile Include="Hediff\Properties\HCP_RandAddHediff.cs" />
+    <Compile Include="HotSwap.cs" />
     <Compile Include="OpAbility\AbilityEffect\AE_ShootProjectile.cs" />
     <Compile Include="OpAbility\AbilityEffect\Effect\AbilityEffect_DisableAttack.cs" />
     <Compile Include="OpAbility\AbilityEffect\AddHediff\DelayedBloodLoss\AE_DelayedBloodLoss.cs" />
@@ -305,6 +306,7 @@
     <Compile Include="Def\OperatorDef\OperatorDef.cs" />
     <Compile Include="GC_Documentation.cs" />
     <Compile Include="Opinion\ThoughtWorker_OpinionToTrait.cs" />
+    <Compile Include="RecruitConsole\Window\_RIWindowHandler.cs" />
     <Compile Include="Thing\CompProperties\TCP_RemoveMe.cs" />
     <Compile Include="Thing\Comp\TC_RemoveMe.cs" />
     <Compile Include="VoicePlayer\HarmonyPatch\PatchDraftSound.cs" />
@@ -337,8 +339,8 @@
     <Compile Include="OpAbility\Verb\Verb_Ability.cs" />
     <Compile Include="OpAbility\Verb\Verb_Reclaim.cs" />
     <Compile Include="Def\VoicePackDef.cs" />
-    <Compile Include="RecruitConsole\Window\Window_Operator.cs" />
-    <Compile Include="RecruitConsole\Window\Window_OperatorList.cs" />
+    <Compile Include="RecruitConsole\Window\RIWindow_OperatorDetail.cs" />
+    <Compile Include="RecruitConsole\Window\RIWindow_OperatorList.cs" />
     <Compile Include="VoicePlayer\VoicePlayer.cs" />
   </ItemGroup>
   <ItemGroup>

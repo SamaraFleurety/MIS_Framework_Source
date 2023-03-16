@@ -7,16 +7,11 @@ using Verse;
 
 namespace AK_DLL
 {
-    /// <summary>
-    /// string defName<br/>
-    /// string label<br/>
-    /// Int32 sortingOrder<br/>
-    /// string textureFolder
-    /// </summary>
     public class OperatorClassDef : Def
     {
         public int sortingOrder = 0;
         public string series;
+        public string icon = null;
         public string textureFolder;
     }
 }

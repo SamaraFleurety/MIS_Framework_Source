@@ -10,6 +10,11 @@ namespace AK_DLL
 {
     public static class TypeDef
     {
+        public static string[] operatorTypeStiring = new string[] { "Caster", "Defender", "Guard", "Vanguard", "Specialist", "Supporter", "Medic", "Sniper" };
+        public static string[] romanNumber = new string[] { "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI" };
+        //如果增加了要自动绑定的服装种类，只需要往这个字符串数组增加。
+        public static string[] apparelType = new string[] { "Apparel", "Hat" };
+
         public static Dictionary<string, int> statType = new Dictionary<string, int>() {
             { "Shooting", 0 },
             { "Melee", 1},
@@ -25,6 +30,23 @@ namespace AK_DLL
             { "Intellectual", 11 }
         };
 
+        public static List<SkillDef> SortOrderSkill = new List<SkillDef>() { SkillDefOf.Shooting, SkillDefOf.Melee, SkillDefOf.Construction, SkillDefOf.Mining, SkillDefOf.Cooking, SkillDefOf.Plants, SkillDefOf.Animals, SkillDefOf.Plants, SkillDefOf.Crafting, SkillDefOf.Artistic, SkillDefOf.Medicine, SkillDefOf.Social, SkillDefOf.Intellectual, };
+    }
+
+    public enum RIWindow : Byte
+    {
+        MainMenu = 0,
+        Series,
+        Gacha,
+        OpList,
+        OpDetail
+    }
+    public enum OperatorSortType : Byte
+    {
+        Head = 19,
+        Dps,
+        Alphabet,
+        Tail,
     }
     public enum AbilityType : Byte
     {

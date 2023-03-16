@@ -19,10 +19,7 @@ namespace AK_DLL
             t.initAction = delegate
             {
                 Find.TickManager.Pause();
-                Window_Recruit window = new Window_Recruit(new DiaNode(new TaggedString()),true);
-                window.soundAmbient = SoundDefOf.RadioComms_Ambience;
-                window.Recruit = TargetThingA;
-                Find.WindowStack.Add(window);
+                RIWindowHandler.OpenRIWindow(RIWindow.MainMenu,TargetThingA);
             };
             yield return t;
             yield break;

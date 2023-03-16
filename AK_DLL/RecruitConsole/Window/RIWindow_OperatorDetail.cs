@@ -8,17 +8,17 @@ using HarmonyLib;
 
 namespace AK_DLL
 {
-    public class Window_Operator : Dialog_NodeTree
+    public class RIWindow_OperatorDetail : Dialog_NodeTree
     {
         public static readonly Color StackElementBackground = new Color(1f, 1f, 1f, 0.1f);
-        public Window_Operator(DiaNode startNode, bool radioMode) : base(startNode, radioMode, false, null)
+        public RIWindow_OperatorDetail(DiaNode startNode, bool radioMode) : base(startNode, radioMode, false, null)
         {
         }
         public override Vector2 InitialSize
         {
             get
             {
-                return new Vector2(1280f, 720f);
+                return new Vector2(1920f, 1080f);
             }
         }
 
@@ -29,57 +29,64 @@ namespace AK_DLL
                 return ContentFinder<Texture2D>.Get("UI/Frame/Frame_Skills");
             }
         }
+        public OperatorDef Operator_Def
+        {
+            get { return RIWindowHandler.def; }
+        }
+        public Thing RecruitConsole
+        {
+            get { return RIWindowHandler.recruitConsole; }
+        }
 
         public override void DoWindowContents(Rect inRect)
         {
+            Color temp = GUI.color;       
             try
             {
-                Widgets.DrawTextureFitted(new Rect(inRect.x += 350f + operator_Def.standOffset.x, inRect.y + 40f + operator_Def.standOffset.y, inRect.width - 870f, inRect.height), ContentFinder<Texture2D>.Get(operator_Def.stand), operator_Def.standRatio);
+                Widgets.DrawTextureFitted(new Rect(inRect.x += 350f + Operator_Def.standOffset.x, inRect.y + 40f + Operator_Def.standOffset.y, inRect.width - 870f, inRect.height), ContentFinder<Texture2D>.Get(Operator_Def.stand), Operator_Def.standRatio);
             }
             catch
             {
-                Log.Error("立绘错误");
+                Log.Error("MIS. 立绘错误");
             }
             //立绘绘制
             GUI.DrawTexture(new Rect(970f, 0f, 550f, 720f), blackBack);
             //背景绘制
             Rect rect = new Rect(1000f, 20f, 150f, 70f);
+
+            //返回按钮的绘制
             Rect rect_Back = new Rect(1130f, 620f, 100f, 60f);
             if (Widgets.ButtonText(rect_Back, "AK_Back".Translate()) || KeyBindingDefOf.Cancel.KeyDownEvent)
             {
                 this.Close();
-                Window_Recruit window = new Window_Recruit(new DiaNode(new TaggedString()), true);
-                window.soundAmbient = SoundDefOf.RadioComms_Ambience;
-                window.Recruit = RecruitConsole;
-                Find.WindowStack.Add(window);
+                RIWindowHandler.OpenRIWindow(RIWindow.OpList);
             }
-            //返回按钮的绘制
 
-            Widgets.Label(rect, operator_Def.nickname + "：" + operator_Def.name);
+            Widgets.Label(rect, Operator_Def.nickname + "：" + Operator_Def.name);
             //人名绘制
             Rect rect1 = new Rect(rect);
             rect.y += 20f;
             rect.height += 35f;
-            Widgets.Label(rect, operator_Def.description);
+            Widgets.Label(rect, Operator_Def.description);
             //描述绘制
             rect.height -= 35f;
             rect.y += 100f;
             Widgets.Label(rect, "AK_Terait".Translate());
             rect.y += 25f;
-            foreach (TraitAndDegree TraitAndDegree in operator_Def.traits)
+            foreach (TraitAndDegree TraitAndDegree in Operator_Def.traits)
             {
                 TraitDegreeData traitDef = TraitAndDegree.def.DataAtDegree(TraitAndDegree.degree);
                 if (traitDef == null)
                 {
-                    Log.ErrorOnce($"MIS. {this.operator_Def}'s {TraitAndDegree.def.defName} do not have {TraitAndDegree.degree} degree", 1);
+                    Log.ErrorOnce($"MIS. {this.Operator_Def}'s {TraitAndDegree.def.defName} do not have {TraitAndDegree.degree} degree", 1);
                 }
                 else
                 {
                     Rect traitRect = new Rect(rect.x, rect.y, Text.CalcSize(traitDef.label).x + 10f, 25);
-                    Color color4 = GUI.color;
+                    temp = GUI.color;
                     GUI.color = StackElementBackground;
                     GUI.DrawTexture(traitRect, BaseContent.WhiteTex);
-                    GUI.color = color4;
+                    GUI.color = temp;
                     Text.Anchor = TextAnchor.MiddleCenter;
                     Widgets.Label(traitRect, traitDef.label.Truncate(traitRect.width));
                     Text.Anchor = TextAnchor.UpperLeft;
@@ -94,9 +101,9 @@ namespace AK_DLL
             Rect rect_AbilityImage = new Rect(rect.x, rect.y + 65f, 60f, 60f);
             Rect rect_AbilityText = new Rect(rect.x + 70f, rect.y + 50f, 100f, 60f);
 
-            if (operator_Def.abilities != null && operator_Def.abilities.Count > 0)
+            if (Operator_Def.abilities != null && Operator_Def.abilities.Count > 0)
             {
-                foreach (OperatorAbilityDef ability in operator_Def.abilities)
+                foreach (OperatorAbilityDef ability in Operator_Def.abilities)
                 {
                     Texture2D abilityImage = ContentFinder<Texture2D>.Get(ability.icon);
                     Widgets.DrawTextureFitted(rect_AbilityImage, abilityImage, 1f);
@@ -108,7 +115,7 @@ namespace AK_DLL
                     rect_AbilityText.y += 65f;
                 }
             }
-            //绘制技能(放的那种)
+            //^绘制技能(放的那种)
 
             rect1.x = 80f;
             rect1.y = 350f;
@@ -125,20 +132,20 @@ namespace AK_DLL
             rect3.height = 152f;
             rect3.width = 152f;
             rect3.y -= 250f;
-            Widgets.DrawTextureFitted(new Rect(rect3.x + operator_Def.headPortraitOffset.x, rect3.y + operator_Def.headPortraitOffset.y, rect3.width, rect3.height), ContentFinder<Texture2D>.Get("UI/Frame/Frame_HeadPortrait"), 1f);
-            Widgets.DrawTextureFitted(new Rect(rect3.x + 3f + operator_Def.headPortraitOffset.x, rect3.y + 2f + operator_Def.headPortraitOffset.y, 145f, 148f), ContentFinder<Texture2D>.Get(operator_Def.headPortrait), 1f);
+            Widgets.DrawTextureFitted(new Rect(rect3.x + Operator_Def.headPortraitOffset.x, rect3.y + Operator_Def.headPortraitOffset.y, rect3.width, rect3.height), ContentFinder<Texture2D>.Get("UI/Frame/Frame_HeadPortrait"), 1f);
+            Widgets.DrawTextureFitted(new Rect(rect3.x + 3f + Operator_Def.headPortraitOffset.x, rect3.y + 2f + Operator_Def.headPortraitOffset.y, 145f, 148f), ContentFinder<Texture2D>.Get(Operator_Def.headPortrait), 1f);
             //绘制头像框与头像
             rect3.height = 150f;
             rect3.width = 150f;
             rect3.x += 5f;
             Widgets.DrawTextureFitted(new Rect(rect2.x - 45f, rect2.y + 95f, 180f, 105f), blackBack, 3f);
 
-            foreach (SkillAndFire skillAndFire in operator_Def.Skills)
+            foreach (SkillAndFire skillAndFire in Operator_Def.Skills)
             {
                 int skillLv;
-                if (GameComp_OperatorDocumentation.operatorDocument.ContainsKey(operator_Def.OperatorID))
+                if (GameComp_OperatorDocumentation.operatorDocument.ContainsKey(Operator_Def.OperatorID))
                 {
-                    skillLv = GameComp_OperatorDocumentation.operatorDocument[operator_Def.OperatorID].skillLevel[skillAndFire.skill];
+                    skillLv = GameComp_OperatorDocumentation.operatorDocument[Operator_Def.OperatorID].skillLevel[skillAndFire.skill];
                 }
                 else
                 {
@@ -160,11 +167,12 @@ namespace AK_DLL
             }
             //技能绘制
 
+
             rect_Back.x -= 145f;
             OperatorDocument doc = null;
-            if (GameComp_OperatorDocumentation.operatorDocument.ContainsKey(operator_Def.OperatorID))
+            if (GameComp_OperatorDocumentation.operatorDocument.ContainsKey(Operator_Def.OperatorID))
             {
-                doc = GameComp_OperatorDocumentation.operatorDocument[operator_Def.OperatorID];
+                doc = GameComp_OperatorDocumentation.operatorDocument[Operator_Def.OperatorID];
             }
 
             if (Widgets.ButtonText(rect_Back, recruitText))
@@ -174,18 +182,16 @@ namespace AK_DLL
                 {
                 }
                 //如果干员未招募过，或已死亡
-                if (RecruitConsole.TryGetComp<CompRefuelable>().Fuel >= operator_Def.ticketCost - 0.01)
+                if (RecruitConsole.TryGetComp<CompRefuelable>().Fuel >= Operator_Def.ticketCost - 0.01)
                 {
                     if (doc == null || !doc.currentExist)
                     {
-                        RecruitConsole.TryGetComp<CompRefuelable>().ConsumeFuel(operator_Def.ticketCost);
-                        operator_Def.Recruit(RecruitConsole.Map);
+                        RecruitConsole.TryGetComp<CompRefuelable>().ConsumeFuel(Operator_Def.ticketCost);
+                        Operator_Def.Recruit(RecruitConsole.Map);
                         this.Close();
 
-                        //既然相机强制跳转到生成的干员的位置了，为何还要“跳回”上一级菜单呢
-                        Window_Recruit window = new Window_Recruit(new DiaNode(new TaggedString()), true);
+                        RIWindow_OperatorList window = new RIWindow_OperatorList(new DiaNode(new TaggedString()), true);
                         window.soundAmbient = SoundDefOf.RadioComms_Ambience;
-                        window.Recruit = RecruitConsole;
                         Find.WindowStack.Add(window);
                     }
                     else
@@ -216,7 +222,5 @@ namespace AK_DLL
 
         private string switchSkillText = "AK_SwitchSkill".Translate();
         public string recruitText = "AK_RecruitOperator".Translate();
-        public OperatorDef operator_Def;
-        public Thing RecruitConsole;
     }
 }

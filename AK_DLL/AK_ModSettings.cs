@@ -20,6 +20,7 @@ namespace AK_DLL
         public static int yOffset = 0;
         public static int ratio = 20;
         public static bool debugOverride = false;
+        public static bool smartUI = true;
         //public List<Pawn> exampleListOfPawns = new List<Pawn>();
         //public Dictionary<string, Pawn>;
 
@@ -34,6 +35,7 @@ namespace AK_DLL
             Scribe_Values.Look(ref yOffset, "yOff");
             Scribe_Values.Look(ref ratio, "ratio");
             Scribe_Values.Look(ref debugOverride, "dOverride", false, true);
+            Scribe_Values.Look(ref smartUI, "smartUI", true, true);
             //Scribe_Collections.Look(ref exampleListOfPawns, "exampleListOfPawns", LookMode.Reference);
             base.ExposeData();
         }
@@ -54,6 +56,7 @@ namespace AK_DLL
             listingStandard.Begin(inRect);
             if (Prefs.DevMode) listingStandard.CheckboxLabeled("测试模式", ref AK_ModSettings.debugOverride, "开启明日方舟MOD的测试模式。如果您不是测试人员请勿勾选此选项。");
             listingStandard.CheckboxLabeled("AK_Option_Play".Translate(), ref AK_ModSettings.playOperatorVoice, "AK_Option_PlayD".Translate());
+            listingStandard.CheckboxLabeled("AK_Option_SmartUI".Translate(), ref AK_ModSettings.smartUI, "AK_Option_SmartUIDesc".Translate());
             AK_ModSettings.voiceIntervalTime = (int)listingStandard.SliderLabeled("AK_Option_Interval".Translate() + $"{(float)AK_ModSettings.voiceIntervalTime / 2.0}", AK_ModSettings.voiceIntervalTime, 0, 60f);
 
             listingStandard.CheckboxLabeled("AK_Option_DisP".Translate(), ref AK_ModSettings.displayBottomLeftPortrait);
@@ -65,11 +68,6 @@ namespace AK_DLL
             base.DoSettingsWindowContents(inRect);
         }
 
-        /// <summary>
-        /// Override SettingsCategory to show up in the list of settings.
-        /// Using .Translate() is optional, but does allow for localisation.
-        /// </summary>
-        /// <returns>The (translated) mod name.</returns>
         public override string SettingsCategory()
         {
             return "MIS.Arknights";

@@ -40,7 +40,8 @@ namespace AK_DLL
         public List<ItemOnSpawn> items;
         public BodyTypeDef bodyTypeDef;//干员的体型
         public HeadTypeDef headTypeDef;
-        private List<SkillAndFire> skills;//技能列表
+        private List<SkillAndFire> skills;//技能列表；要是哪天排序卡得不行就给改成树
+        private bool skillSorted = false;
         public Color skinColor = new Color(1, 1, 1, 1); /*= PawnSkinColors.GetSkinColor(0.5f)*///皮肤颜色
         public Color hairColor = new Color(1, 1, 1, 1); /*= PawnSkinColors.GetSkinColor(1f)*///头发颜色
         public HairDef hair;//头发类型
@@ -74,6 +75,27 @@ namespace AK_DLL
                 /*string operatorName = AK_Tool.GetOperatorNameFromDefName(this.defName);
                 if (GameComp_OperatorDocumentation.operatorDocument.ContainsKey(operatorName)) return GameComp_OperatorDocumentation.operatorDocument[operatorName].skillAndFires;
                 else*/
+                return skills;
+            }
+        }
+        public List<SkillAndFire> SortedSkills
+        {
+            get
+            {
+                if (skillSorted) return skills;
+                for(int i = 0; i < skills.Count; ++i)
+                {
+                    int loc = TypeDef.statType[skills[i].skill.defName];
+                    SkillAndFire temp;
+                    while (i != loc)
+                    {
+                        temp = skills[i];
+                        skills[i] = skills[loc];
+                        skills[loc] = temp; 
+                        loc = TypeDef.statType[skills[i].skill.defName];
+                    }
+                }
+                skillSorted = true;
                 return skills;
             }
         }
@@ -396,7 +418,7 @@ namespace AK_DLL
 
             ThingDef tempThing;
 
-            foreach (string thingType in AK_Tool.apparelType)
+            foreach (string thingType in TypeDef.apparelType)
             {
                 tempThing = DefDatabase<ThingDef>.GetNamedSilentFail(AK_Tool.GetThingdefNameFrom(this.defName, thingType));
                 if (tempThing != null && !this.apparels.Contains(tempThing)) this.apparels.Add(tempThing);

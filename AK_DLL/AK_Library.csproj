@@ -260,6 +260,7 @@
     <Compile Include="Def\OperatorDef\ItemOnSpawn.cs" />
     <Compile Include="Def\OperatorDef\OperatorDef_Reserve.cs" />
     <Compile Include="Def\OperatorInteractionDef.cs" />
+    <Compile Include="Def\OperatorSeriesDef.cs" />
     <Compile Include="HarmonyPatch\PatchAutoChangeHair.cs" />
     <Compile Include="HarmonyPatch\PatchHairOffset.cs" />
     <Compile Include="HarmonyPatch\PatchInfoCardPortrait.cs" />
@@ -306,6 +307,7 @@
     <Compile Include="Def\OperatorDef\OperatorDef.cs" />
     <Compile Include="GC_Documentation.cs" />
     <Compile Include="Opinion\ThoughtWorker_OpinionToTrait.cs" />
+    <Compile Include="RecruitConsole\Window\RIWindow_MainMenu.cs" />
     <Compile Include="RecruitConsole\Window\_RIWindowHandler.cs" />
     <Compile Include="Thing\CompProperties\TCP_RemoveMe.cs" />
     <Compile Include="Thing\Comp\TC_RemoveMe.cs" />

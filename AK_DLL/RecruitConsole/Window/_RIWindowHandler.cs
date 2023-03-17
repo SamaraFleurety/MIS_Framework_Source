@@ -28,7 +28,9 @@ namespace AK_DLL
             switch (window)
             {
                 case RIWindow.MainMenu:
-                    //break;
+                    RIWindow_MainMenu window_MainMenu = new RIWindow_MainMenu(new DiaNode(new TaggedString()), true);
+                    Find.WindowStack.Add(window_MainMenu);
+                    break;
                 case RIWindow.Series:
                     //break;
                 case RIWindow.Gacha:
@@ -49,9 +51,10 @@ namespace AK_DLL
             }
         }
 
-        public static void OpenRIWindow(RIWindow windowType)
+        public static void OpenRIWindow(RIWindow windowType, bool isRecruit = true)
         {
             window = windowType;
+            RIWindow_OperatorDetail.isRecruit = isRecruit;
             OpenRIWindow();
         }
 

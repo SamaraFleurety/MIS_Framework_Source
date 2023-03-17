@@ -61,20 +61,21 @@ namespace AK_DLL
             if (Widgets.ButtonText(rect_Back, "AK_Back".Translate()) || KeyBindingDefOf.Cancel.KeyDownEvent)
             {
                 this.Close();
-                //RIWindowHandler.OpenRIWindow(RIWindow.Series);
+                RIWindowHandler.OpenRIWindow(RIWindow.MainMenu);
             }
+
             //返回主界面按钮
             rect_Back.y += classSideLength / 2 + yMargin;
-            if (Widgets.ButtonText(rect_Back, "AK_MainMenu".Translate()))
+            if (Widgets.ButtonText(rect_Back, "AK_Escape".Translate()))
             {
                 this.Close();
-                RIWindowHandler.OpenRIWindow(RIWindow.MainMenu);
             }
             if (operatorType == -1)
             {
                 Log.WarningOnce("MIS.No operator classes found.", 1);
                 return;
             }
+
             //绘制选干员的tab
             Rect btnRect = new Rect(crntX, crntY, btnWidth, btnHeight);
             Rect classBtn = new Rect(inRect.xMax - xMargin - classSideLength, yMargin * 2 + 100, classSideLength, classSideLength);

@@ -10,6 +10,7 @@ namespace AK_DLL
 {
     public class RIWindow_OperatorDetail : Dialog_NodeTree
     {
+        public static bool isRecruit = true;
         public static readonly Color StackElementBackground = new Color(1f, 1f, 1f, 0.1f);
         public RIWindow_OperatorDetail(DiaNode startNode, bool radioMode) : base(startNode, radioMode, false, null)
         {
@@ -177,6 +178,15 @@ namespace AK_DLL
 
             if (Widgets.ButtonText(rect_Back, recruitText))
             {
+                if (isRecruit == false)
+                {
+                    isRecruit = true;
+                    AK_ModSettings.secretary = AK_Tool.GetOperatorIDFrom(Operator_Def.defName);
+                    this.Close();
+                    RIWindowHandler.OpenRIWindow(RIWindow.MainMenu);
+                    return;
+                }
+
                 //如果招募曾经招过的干员
                 if (doc != null && !doc.currentExist)
                 {

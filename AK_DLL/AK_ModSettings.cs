@@ -16,11 +16,14 @@ namespace AK_DLL
         public static int voiceIntervalTime = 2;
         //立绘
         public static bool displayBottomLeftPortrait = true;
-        public static int xOffset = 0;
+
+        public static int xOffset = 0; //这仨是主窗口左下角 个人信息上面的显示立绘的偏移参数
         public static int yOffset = 0;
         public static int ratio = 20;
+
         public static bool debugOverride = false;
         public static bool smartUI = true;
+        public static string secretary = "Amiya";
         //public List<Pawn> exampleListOfPawns = new List<Pawn>();
         //public Dictionary<string, Pawn>;
 
@@ -34,8 +37,9 @@ namespace AK_DLL
             Scribe_Values.Look(ref xOffset, "xOff");
             Scribe_Values.Look(ref yOffset, "yOff");
             Scribe_Values.Look(ref ratio, "ratio");
-            Scribe_Values.Look(ref debugOverride, "dOverride", false, true);
+            Scribe_Values.Look(ref debugOverride, "dOverride", false);
             Scribe_Values.Look(ref smartUI, "smartUI", true, true);
+            Scribe_Values.Look(ref secretary, "secretary", "Amiya", true);
             //Scribe_Collections.Look(ref exampleListOfPawns, "exampleListOfPawns", LookMode.Reference);
             base.ExposeData();
         }

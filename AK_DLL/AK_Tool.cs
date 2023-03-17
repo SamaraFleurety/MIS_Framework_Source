@@ -70,6 +70,22 @@ namespace AK_DLL
             return prefix + "_" + thingType + "_" + operatorID;
         }
 
+        public static OperatorDef GetDef(OperatorClassDef classDef, string operatorID)
+        {
+            return RIWindowHandler.operatorDefs[classDef.sortingOrder][operatorID];
+        }
+        public static OperatorDef GetDef(int operatorClass, string operatorID)
+        {
+            return RIWindowHandler.operatorDefs[operatorClass][operatorID];
+        }
+        public static OperatorDef GetDef(string operatorID)
+        {
+            foreach (Dictionary<string, OperatorDef> i in RIWindowHandler.operatorDefs.Values)
+            {
+                return i[operatorID];
+            }
+            return null;
+        }
         public static OperatorDocument GetDoc(this Pawn p)
         {
             if (p.health.hediffSet.GetFirstHediff<Hediff_Operator>() == null) return null;

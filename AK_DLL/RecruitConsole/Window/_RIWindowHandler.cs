@@ -28,6 +28,7 @@ namespace AK_DLL
             switch (window)
             {
                 case RIWindow.MainMenu:
+                    RIWindow_OperatorDetail.isRecruit = true;
                     RIWindow_MainMenu window_MainMenu = new RIWindow_MainMenu(new DiaNode(new TaggedString()), true);
                     Find.WindowStack.Add(window_MainMenu);
                     break;
@@ -51,10 +52,9 @@ namespace AK_DLL
             }
         }
 
-        public static void OpenRIWindow(RIWindow windowType, bool isRecruit = true)
+        public static void OpenRIWindow(RIWindow windowType)
         {
             window = windowType;
-            RIWindow_OperatorDetail.isRecruit = isRecruit;
             OpenRIWindow();
         }
 

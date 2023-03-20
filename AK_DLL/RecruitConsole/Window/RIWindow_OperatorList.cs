@@ -68,6 +68,7 @@ namespace AK_DLL
             rect_Back.y += classSideLength / 2 + yMargin;
             if (Widgets.ButtonText(rect_Back, "AK_Escape".Translate()))
             {
+                RIWindow_OperatorDetail.isRecruit = true;
                 this.Close();
             }
             if (operatorType == -1)

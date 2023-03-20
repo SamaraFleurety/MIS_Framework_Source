@@ -102,6 +102,13 @@ namespace AK_DLL
             if (doc == null) return;
             Widgets.DrawTextureFitted(new Rect(AK_ModSettings.xOffset * 5, AK_ModSettings.yOffset * 5, 408, 408), ContentFinder<Texture2D>.Get(AK_Tool.GetDoc(p).operatorDef.stand), (float)AK_ModSettings.ratio * 0.05f);
         }
+        public static void DrawHighlightMouseOver(this Rect rect, Texture2D highlight)
+        {
+            if (Mouse.IsOver(rect))
+            {
+                GUI.DrawTexture(rect, highlight);
+            }
+        }
 
         /*public static Hediff_Operator GetArkNightsHeDiffByPawn(Pawn pawn)
 		{

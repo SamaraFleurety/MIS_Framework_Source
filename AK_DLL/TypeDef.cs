@@ -36,10 +36,14 @@ namespace AK_DLL
     public enum RIWindow : Byte
     {
         MainMenu = 0,
-        Series,
-        Gacha,
-        OpList,
-        OpDetail
+        Op_Series,
+        Op_Gacha,
+        Op_List,
+        Op_Detail,
+        Store,
+        Option,
+        Support,
+        Quest
     }
     public enum OperatorSortType : Byte
     {

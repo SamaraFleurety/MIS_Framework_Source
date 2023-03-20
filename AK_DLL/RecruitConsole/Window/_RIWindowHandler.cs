@@ -32,16 +32,16 @@ namespace AK_DLL
                     RIWindow_MainMenu window_MainMenu = new RIWindow_MainMenu(new DiaNode(new TaggedString()), true);
                     Find.WindowStack.Add(window_MainMenu);
                     break;
-                case RIWindow.Series:
+                case RIWindow.Op_Series:
                     //break;
-                case RIWindow.Gacha:
+                case RIWindow.Op_Gacha:
                     //break;
-                case RIWindow.OpList:
+                case RIWindow.Op_List:
                     RIWindow_OperatorList windowOpList = new RIWindow_OperatorList(new DiaNode(new TaggedString()), true);
                     windowOpList.soundAmbient = SoundDefOf.RadioComms_Ambience; //记得换好听的bgm
                     Find.WindowStack.Add(windowOpList);
                     break;
-                case RIWindow.OpDetail:
+                case RIWindow.Op_Detail:
                     RIWindow_OperatorDetail windowOpDetail = new RIWindow_OperatorDetail(new DiaNode(new TaggedString(def.nickname)), true);
                     windowOpDetail.soundAmbient = SoundDefOf.RadioComms_Ambience;
                     Find.WindowStack.Add(windowOpDetail);
@@ -66,7 +66,7 @@ namespace AK_DLL
 
         public static void OpenRIWindow_OpDetail(OperatorDef operatorDef)
         {
-            window = RIWindow.OpDetail;
+            window = RIWindow.Op_Detail;
             def = operatorDef;
             OpenRIWindow();
         }

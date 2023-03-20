@@ -308,7 +308,10 @@
     <Compile Include="GC_Documentation.cs" />
     <Compile Include="Opinion\ThoughtWorker_OpinionToTrait.cs" />
     <Compile Include="RecruitConsole\Window\RIWindow_MainMenu.cs" />
+    <Compile Include="RecruitConsole\Window\RIWindow_Option.cs" />
     <Compile Include="RecruitConsole\Window\RIWindow_Quest.cs" />
+    <Compile Include="RecruitConsole\Window\RIWindow_Store.cs" />
+    <Compile Include="RecruitConsole\Window\RIWindow_Support.cs" />
     <Compile Include="RecruitConsole\Window\_RIWindowHandler.cs" />
     <Compile Include="Thing\CompProperties\TCP_RemoveMe.cs" />
     <Compile Include="Thing\Comp\TC_RemoveMe.cs" />

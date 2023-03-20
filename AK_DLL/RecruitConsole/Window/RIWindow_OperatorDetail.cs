@@ -60,7 +60,7 @@ namespace AK_DLL
             if (Widgets.ButtonText(rect_Back, "AK_Back".Translate()) || KeyBindingDefOf.Cancel.KeyDownEvent)
             {
                 this.Close();
-                RIWindowHandler.OpenRIWindow(RIWindow.OpList);
+                RIWindowHandler.OpenRIWindow(RIWindow.Op_List);
             }
 
             Widgets.Label(rect, Operator_Def.nickname + "：" + Operator_Def.name);

@@ -12,10 +12,6 @@ namespace AK_DLL
     [HotSwappable]
     public class RIWindow_MainMenu : Dialog_NodeTree
     {
-        private static readonly int xMargin = 10;
-        private static readonly int yMargin = 10;
-        private static readonly int classSideLength = 70;
-        private static readonly int classMargin;
 
         #region 没啥用的常量
         //左边6个主要功能按钮
@@ -33,7 +29,7 @@ namespace AK_DLL
         //界面功能按钮
         public Texture2D Btn_Escape => ContentFinder<Texture2D>.Get("UI/Frame/Btn_Escape");
         public Texture2D Btn_Highlight => ContentFinder<Texture2D>.Get("UI/Frame/Btn_Highlight");
-        private int btnLength = 100;
+        public static int btnLength = 100;
 
         //货币显示
         private Texture2D Currency_Bg => ContentFinder<Texture2D>.Get("UI/Frame/CurrencyBg");
@@ -42,11 +38,8 @@ namespace AK_DLL
 
         //次要功能按钮
         private Texture2D SBtn_ChangeSecretary => ContentFinder<Texture2D>.Get("UI/Frame/Sub_Change");
-        #endregion
-        public OperatorDef secretaryDef
-        {
-            get { return AK_Tool.GetDef(AK_ModSettings.secretary); }
-        }
+
+        //
         public RIWindow_MainMenu(DiaNode startNode, bool radioMode) : base(startNode, radioMode, false, null)
         {
         }
@@ -57,21 +50,22 @@ namespace AK_DLL
                 return new Vector2(1920f, 1080f);
             }
         }
+        #endregion
+
+        public OperatorDef secretaryDef
+        {
+            get { return AK_Tool.GetDef(AK_ModSettings.secretary); }
+        }
 
         public override void DoWindowContents(Rect inRect)
         {
             GUI.DrawTexture(new Rect(0, 0, 1920, 1080), this.Bg);
 
-            float crntX = inRect.x + xMargin;
-            float crntY = inRect.y + yMargin;
             //右边的助理
             Rect secretaryRect = new Rect(inRect.xMax - 700, inRect.y, 700, inRect.yMax - inRect.yMin);
             Widgets.DrawTextureFitted(secretaryRect, ContentFinder<Texture2D>.Get(secretaryDef.stand), secretaryDef.standRatio);
-            if (Widgets.ButtonText(new Rect(inRect.xMax - 300, inRect.yMax - 300, 50, 50), "更换秘书".Translate()))
-            {
-            }
 
-            Rect rect_Back = new Rect(inRect.xMax - 100, inRect.y, btnLength, btnLength);
+            Rect rect_Back = new Rect(inRect.xMax - btnLength, inRect.y, btnLength, btnLength);
             //退出按钮
             if (Widgets.ButtonImageFitted(rect_Back, this.Btn_Escape, Color.white, Color.white) || KeyBindingDefOf.Cancel.KeyDownEvent)
             {
@@ -86,7 +80,7 @@ namespace AK_DLL
             if (Widgets.ButtonImage(FeatureBtn, FBtn_Recruit, Color.white, Color.white, false))
             {
                 this.Close();
-                RIWindowHandler.OpenRIWindow(RIWindow.Series);
+                RIWindowHandler.OpenRIWindow(RIWindow.Op_Series);
             }
             FeatureBtn.DrawHighlightMouseOver(this.FBtn_Highlight);
             FeatureBtn.x += mainBtnWidth + mainBtnMargin;
@@ -160,9 +154,9 @@ namespace AK_DLL
             {
                 this.Close();
                 RIWindow_OperatorDetail.isRecruit = false;
-                RIWindowHandler.OpenRIWindow(RIWindow.OpList);
+                RIWindowHandler.OpenRIWindow(RIWindow.Op_List);
             }
-#endregion
+            #endregion
         }
     }
 }

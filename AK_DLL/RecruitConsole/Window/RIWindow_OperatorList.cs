@@ -5,7 +5,6 @@ using System.Text;
 using RimWorld;
 using UnityEngine;
 using System.Collections.Generic;
-using static AK_DLL.AK_Tool;
 
 //记得给skillandfire写排序，在调用之前
 namespace AK_DLL
@@ -13,15 +12,18 @@ namespace AK_DLL
     [HotSwappable]
     public class RIWindow_OperatorList : Dialog_NodeTree
     {
+        #region
         private static readonly int maxX = 1920, maxY = 1080;
         private static readonly int btnHeight = 20;
         private static readonly int btnWidth = 80;
-        private static readonly int xMargin = 10;
+        private static readonly int xMargin = 10, escapeBtnMargin = 10;
         private static readonly int yMargin = 10;
         private static readonly int classSideLength = 70;
         private static readonly int classMargin;
         private static int sortType;
         private static bool sortReverseOrder = false;
+        private int partitionWidth = 2, partitionVerticalX, partitionHorizontalY;
+        private int btnLength => RIWindow_MainMenu.btnLength;
         public RIWindow_OperatorList(DiaNode startNode, bool radioMode) : base(startNode, radioMode, false, null)
         {
 
@@ -33,6 +35,7 @@ namespace AK_DLL
                 return new Vector2(maxX, maxY);
             }
         }
+        #endregion
         public static Dictionary<int, Dictionary<string, OperatorDef>> operatorDefs => RIWindowHandler.operatorDefs;
         public static Dictionary<int, OperatorClassDef> operatorClasses => RIWindowHandler.operatorClasses;
 
@@ -56,17 +59,16 @@ namespace AK_DLL
         {
             float crntX = inRect.x + xMargin;
             float crntY = inRect.y + yMargin;
-            Rect rect_Back = new Rect(inRect.xMax - xMargin - classSideLength, inRect.y + yMargin, classSideLength, classSideLength / 2);
+            Rect rect_Back = new Rect(inRect.xMax - btnLength - escapeBtnMargin, inRect.y, btnLength / 2, btnLength / 2);
             //返回上一级按钮
             if (Widgets.ButtonText(rect_Back, "AK_Back".Translate()) || KeyBindingDefOf.Cancel.KeyDownEvent)
             {
                 this.Close();
                 RIWindowHandler.OpenRIWindow(RIWindow.MainMenu);
             }
-
             //返回主界面按钮
-            rect_Back.y += classSideLength / 2 + yMargin;
-            if (Widgets.ButtonText(rect_Back, "AK_Escape".Translate()))
+            rect_Back.x += btnLength / 2 + escapeBtnMargin;
+            if (Widgets.ButtonText(rect_Back, "退出按钮"))
             {
                 RIWindow_OperatorDetail.isRecruit = true;
                 this.Close();
@@ -77,7 +79,7 @@ namespace AK_DLL
                 return;
             }
 
-            //绘制选干员的tab
+            //干员职业按钮
             Rect btnRect = new Rect(crntX, crntY, btnWidth, btnHeight);
             Rect classBtn = new Rect(inRect.xMax - xMargin - classSideLength, yMargin * 2 + 100, classSideLength, classSideLength);
             foreach (KeyValuePair<int, OperatorClassDef> i in operatorClasses)
@@ -92,41 +94,51 @@ namespace AK_DLL
                 }
                 classBtn.y += btnWidth + 25;
             }
-            btnRect.x = crntX;
+
+            //隔断
+            partitionHorizontalY = (int)inRect.y + btnLength / 2;
+            partitionVerticalX = (int)inRect.xMax - btnLength - escapeBtnMargin;
+            Rect partition = new Rect(inRect.x, partitionHorizontalY, inRect.xMax, partitionWidth);
+            GUI.DrawTexture(partition, BaseContent.WhiteTex);
+
+            partition = new Rect(partitionVerticalX, inRect.y, partitionWidth, inRect.yMax);
+            GUI.DrawTexture(partition, BaseContent.WhiteTex);
+            /*btnRect.x = crntX;
             btnRect.y += btnHeight + yMargin * 2 + classSideLength / 2;
             btnRect.size = inRect.size;
-            GUI.DrawTexture(new Rect(btnRect.position, new Vector2(inRect.width - 2 * xMargin, 2f)), BaseContent.WhiteTex);
+            GUI.DrawTexture(new Rect(btnRect.position, new Vector2(inRect.width - 2 * xMargin, 2f)), BaseContent.WhiteTex);*/
             btnRect.y += yMargin;
+
+            //统一绘制干员            
             DrawSortBtns(inRect);
             DrawOperatorList(btnRect);
-            //统一绘制干员            
-            //干员列表已经改放在ModSettings
 
         }
         
         public void DrawOperatorList(Rect inRect)
         {
             Rect rect_operatorFrame = new Rect(inRect.position, new Vector2(100f, 100f));
+            rect_operatorFrame.y += 100;
             Text.Anchor = TextAnchor.UpperCenter;
             if (!sortReverseOrder)
             {
                 foreach (OperatorDef operator_Def in cachedOperatorList)
                 {
-                    DrawOperator(ref rect_operatorFrame, inRect, operator_Def);
+                    DrawOperatorPortrait(ref rect_operatorFrame, inRect, operator_Def);
                 }
             }
             else
             {
                 for (int i = cachedOperatorList.Count - 1; i >= 0; --i)
                 {
-                    DrawOperator(ref rect_operatorFrame, inRect, cachedOperatorList[i]);
+                    DrawOperatorPortrait(ref rect_operatorFrame, inRect, cachedOperatorList[i]);
                 }
             }
             Text.Anchor = TextAnchor.UpperLeft;
             //干员绘制
         }
 
-        private void DrawOperator(ref Rect rect_operatorFrame, Rect inRect, OperatorDef operator_Def)
+        private void DrawOperatorPortrait(ref Rect rect_operatorFrame, Rect inRect, OperatorDef operator_Def)
         {
             Texture2D operatorTex = ContentFinder<Texture2D>.Get(operator_Def.headPortrait);
             Widgets.LabelFit(new Rect(rect_operatorFrame.x + 20f, rect_operatorFrame.y + 110f, 100f, 50f), operator_Def.nickname);
@@ -137,7 +149,7 @@ namespace AK_DLL
                 RIWindowHandler.OpenRIWindow_OpDetail(operator_Def);
             }
             rect_operatorFrame.x += 140f;
-            if (rect_operatorFrame.x > 1700f)
+            if (rect_operatorFrame.x > 1600f)
             {
                 rect_operatorFrame.x = inRect.x;
                 rect_operatorFrame.y += 150f;

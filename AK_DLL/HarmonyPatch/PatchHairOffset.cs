@@ -22,7 +22,7 @@ namespace AK_DLL
         }
     }
 
-    /*[HarmonyPatch(typeof(PawnRenderer), "DrawHeadHair")]
+    [HarmonyPatch(typeof(PawnRenderer), "DrawHeadHair")]
     public class testp
     {
         [HarmonyPrefix]
@@ -157,11 +157,13 @@ namespace AK_DLL
                 Material material2 = __instance.graphics.HairMatAt(headFacing, flags.FlagSet(PawnRenderFlags.Portrait), flags.FlagSet(PawnRenderFlags.Cache));
                 if (material2 != null)
                 {
+                    LocalBuilder a;
+                    a.LocalType
                     onHeadLoc.x += 0.2f;
                     onHeadLoc.y += 0.2f;
                     GenDraw.DrawMeshNowOrLater(mesh2, onHeadLoc, quat, material2, flags.FlagSet(PawnRenderFlags.DrawNow));
-                    //onHeadLoc.x -= xOfst;
-                    //onHeadLoc.y -= yOfst;
+                    onHeadLoc.x -= 0.2f;
+                    onHeadLoc.y -= 0.2f;
                 }
             }
             TryDrawGenes(GeneDrawLayer.PostHair);
@@ -287,9 +289,9 @@ namespace AK_DLL
     }
 
 
-
+    */
     //转译器实验
-    /*[HarmonyPatch(typeof(PawnRenderer), "DrawHeadHair")]
+    [HarmonyPatch(typeof(PawnRenderer), "DrawHeadHair")]
 
     public static class PatchHairOffset
     {
@@ -302,7 +304,20 @@ namespace AK_DLL
 
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
 
-            Log.Message("start");
+            //var materialIndex = codes.FindIndex(code => code.opcode == OpCodes.Ldloc_S && code.operand is LocalBuilder localBuilder && localBuilder.LocalIndex == 27); 
+            var materialIndex = codes.FindIndex(code => code.opcode == OpCodes.Ldloc_S && ((LocalBuilder)code.operand).LocalIndex == 18);
+            if (materialIndex == -1)
+            {
+                Log.Error("Cannot find local variable material2 in PawnRenderer.DrawHeadHair transpiler.");
+            }
+            else
+            {
+                LocalBuilder lb = codes[materialIndex].operand as LocalBuilder;
+                Log.Warning($"TARGET: {lb == null}");
+                Log.Warning($"TARGET2: {(lb.LocalType == typeof(Material))}");
+            }
+            return codes.AsEnumerable();
+            /*Log.Message("start");
             for (int i = 0; i < codes.Count; ++i)
             {
                 if (codes[i].opcode == OpCodes.Ldc_R4 && codes[i].operand is float f && f == 0.0289575271f)
@@ -343,10 +358,10 @@ namespace AK_DLL
                         Log.Error("FOUND MESH2 USE AT: " + i);
                         drawLocAfterBranchs = bPtr;
                     }
+            }
                 }*/
-    /* }
-     Log.Message("END");
-     return codes;
- }
-}*/
+            Log.Message("END");
+            return codes;
+        }
+    }
 }

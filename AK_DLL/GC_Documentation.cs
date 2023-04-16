@@ -30,6 +30,8 @@ namespace AK_DLL
         public OperatorDef operatorDef;
         public int oripathySeverity = 0;
 
+        public int preferedSkin = 1;
+
         public OperatorDocument(string defName, Pawn p, Thing weapon, OperatorDef operatorDef) : this()
         {
             this.operatorDef = operatorDef;
@@ -65,6 +67,7 @@ namespace AK_DLL
             Scribe_Defs.Look(ref this.operatorDef, "def");
             Scribe_Values.Look<int>(ref this.preferedAbility, "preferedAbility", 0, true);
             Scribe_Values.Look<int>(ref this.oripathySeverity, "oriSev", 0, true);
+            Scribe_Values.Look<int>(ref this.preferedSkin, "skin");
             //if (this.pawn == null) { return; }
         }
 

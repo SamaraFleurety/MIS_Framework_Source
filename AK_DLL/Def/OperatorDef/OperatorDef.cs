@@ -10,9 +10,7 @@ namespace AK_DLL
 {
     public class OperatorDef : Def
     {
-        //string defName
-        //string label
-        //string description
+        #region 干员属性 xml里面的
         [MustTranslate]
         public string name;//名字
         [MustTranslate]
@@ -54,11 +52,14 @@ namespace AK_DLL
         public string headPortrait;//头像
         public Vector2 headPortraitOffset;
 
-        public ThoughtDef thoughtReceived = null;
-        public int TRStage = -1;
+        public ThoughtDef thoughtReceived = null;  //其他所有人都会给这个干员一个想法 当前是和弦独有
+        public int TRStage = -1;  //全部丢进同一个想法 节省性能
 
         public float ticketCost = 1f;
 
+        #endregion
+
+        #region
         public static bool currentlyGenerating = false;
         public string Prefix
         {
@@ -99,6 +100,21 @@ namespace AK_DLL
                 return skills;
             }
         }
+        public Texture2D PreferredStand
+        {
+            get
+            {
+                if (GameComp_OperatorDocumentation.operatorDocument.ContainsKey(this.OperatorID) == false)
+                {
+                    return ContentFinder<Texture2D>.Get(this.stand);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+        #endregion
 
         public virtual void Recruit(Map map)
         {

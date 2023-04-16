@@ -33,6 +33,17 @@ namespace AK_DLL
         public static List<SkillDef> SortOrderSkill = new List<SkillDef>() { SkillDefOf.Shooting, SkillDefOf.Melee, SkillDefOf.Construction, SkillDefOf.Mining, SkillDefOf.Cooking, SkillDefOf.Plants, SkillDefOf.Animals, SkillDefOf.Crafting, SkillDefOf.Artistic, SkillDefOf.Medicine, SkillDefOf.Social, SkillDefOf.Intellectual};
     }
 
+    public enum SkinType : Byte
+    {
+        Vanilla = 0,
+        EliteII,
+        SkinI,  //也可能是Elite I
+        SkinII,
+        SkinIII,
+        SkinIV,
+        SkinV
+    }
+
     public enum RIWindow : Byte
     {
         MainMenu = 0,

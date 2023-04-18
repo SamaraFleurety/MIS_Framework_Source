@@ -5,14 +5,16 @@ using System.Text;
 using RimWorld;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Reflection;
+using TMPro;
+using UnityEngine.UI;
 
 //记得给skillandfire写排序，在调用之前
 namespace AK_DLL
 {
-    [HotSwappable]
-    public class RIWindow_OperatorList : Dialog_NodeTree
+    #region legacy
+    /*public class RIWindow_OperatorList : Dialog_NodeTree
     {
-        #region
         private static readonly int maxX = 1920, maxY = 1080;
         private static readonly int btnHeight = 20;
         private static readonly int btnWidth = 80;
@@ -55,6 +57,7 @@ namespace AK_DLL
                 cachedOperatorList = operatorDefs[operatorType].Values.ToList();
             }
         }
+
         public override void DoWindowContents(Rect inRect)
         {
             float crntX = inRect.x + xMargin;
@@ -85,7 +88,7 @@ namespace AK_DLL
             foreach (KeyValuePair<int, OperatorClassDef> i in operatorClasses)
             {
                 /*if (Widgets.ButtonText(new Rect(inRect.x + xOffset, inRect.y + 15f, 80f, 20f), i.Value, true, true, operatorType != i.Key)) operatorType = i.Key;
-                xOffset += 100;*/
+                xOffset += 100;
                 if (Widgets.ButtonText(classBtn, i.Value.label.Translate(), true, true, operatorType != i.Key))
                 {
                     sortType = -1;
@@ -106,20 +109,31 @@ namespace AK_DLL
             /*btnRect.x = crntX;
             btnRect.y += btnHeight + yMargin * 2 + classSideLength / 2;
             btnRect.size = inRect.size;
-            GUI.DrawTexture(new Rect(btnRect.position, new Vector2(inRect.width - 2 * xMargin, 2f)), BaseContent.WhiteTex);*/
+            GUI.DrawTexture(new Rect(btnRect.position, new Vector2(inRect.width - 2 * xMargin, 2f)), BaseContent.WhiteTex);
             btnRect.y += yMargin;
 
             //统一绘制干员            
             DrawSortBtns(inRect);
             DrawOperatorList(btnRect);
+            
+        }*/
+    #endregion
 
+    [HotSwappable]
+    public class RIWindow_OperatorList : RIWindow {
+
+        private static int sortType;
+        private static bool sortReverseOrder = false;
+
+        public override void DoContent()
+        {
+            this.DrawSortBtns();
         }
-        
         public void DrawOperatorList(Rect inRect)
         {
             Rect rect_operatorFrame = new Rect(inRect.position, new Vector2(100f, 100f));
             rect_operatorFrame.y += 100;
-            Text.Anchor = TextAnchor.UpperCenter;
+            Verse.Text.Anchor = TextAnchor.UpperCenter;
             if (!sortReverseOrder)
             {
                 foreach (OperatorDef operator_Def in cachedOperatorList)
@@ -134,7 +148,7 @@ namespace AK_DLL
                     DrawOperatorPortrait(ref rect_operatorFrame, inRect, cachedOperatorList[i]);
                 }
             }
-            Text.Anchor = TextAnchor.UpperLeft;
+            Verse.Text.Anchor = TextAnchor.UpperLeft;
             //干员绘制
         }
 
@@ -158,13 +172,43 @@ namespace AK_DLL
 
 
 #region 排序相关
-        private void DrawSortBtns(Rect inRect)
+        private void DrawSortBtns()
         {
-            Rect sortBtn = new Rect(inRect.xMin, inRect.y + yMargin, classSideLength, classSideLength / 2);
+            GameObject sortBtnPrefab = bundle.LoadAsset<GameObject>("btnSortTemplate");
+            GameObject sortBtnInstance;
+            TextMeshProUGUI textTMP;
+            //Rect sortBtn = new Rect(inRect.xMin, inRect.y + yMargin, classSideLength, classSideLength / 2);
             //按某种技能的等级排序
-            for (int i = 0; i < TypeDef.SortOrderSkill.Count(); ++i)
+            for (int i = 0; i < 1 /*TypeDef.SortOrderSkill.Count()*/; ++i)
             {
-                if (Widgets.ButtonText(sortBtn, TypeDef.SortOrderSkill[i].label.Translate()))
+                Log.Message("actulDrawBtn");
+                sortBtnInstance = GameObject.Instantiate(sortBtnPrefab, UIInstance.transform);
+                textTMP = sortBtnInstance.transform.Find("Text (TMP)").GetComponent<TextMeshProUGUI>();
+                //按钮的显示文字
+                textTMP.text = TypeDef.SortOrderSkill[i].label.Translate();
+                sortBtnInstance.GetComponent<Button>().onClick.AddListener(delegate ()
+                {
+                    Log.Message($"clicked {i}");
+                    if (NeedSortTo(i))
+                    {
+                        SortOperator<int>(delegate (int a, int b)
+                        {
+                            return !(a <= b);
+                        }, delegate (OperatorDef def)
+                        {
+                            return def.SortedSkills[i].level;
+                        });
+                    }
+                });
+                sortBtnInstance.SetActive(true);
+
+                GameObject c = GameObject.Find("ButtonTemplate");
+                Log.Message($"{c.transform.position.x} {c.transform.position.y} {c.transform.position.z}");
+                c.transform.position = new Vector3(2000, 2000);
+                sortBtnInstance.transform.parent = c.transform.parent;
+                sortBtnInstance.transform.position = new Vector3(1558, 2160);
+            }
+                /*if (Widgets.ButtonText(sortBtn, TypeDef.SortOrderSkill[i].label.Translate()))
                 {
                     if (NeedSortTo(i))
                     {
@@ -177,7 +221,6 @@ namespace AK_DLL
                         });
                     }
                 }
-                sortBtn.x += classSideLength + xMargin;
             }
             //FIXME 按面板DPS排序
             if (Widgets.ButtonText(sortBtn, "AK_SortDPS".Translate()))
@@ -207,7 +250,7 @@ namespace AK_DLL
                         return def.label.Translate();
                     });
                 }
-            }
+            }*/
         }
 
         private double DPSCalculator(OperatorDef def)

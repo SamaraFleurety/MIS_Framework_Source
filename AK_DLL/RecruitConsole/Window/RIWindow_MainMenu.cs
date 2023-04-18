@@ -80,7 +80,7 @@ namespace AK_DLL
             if (Widgets.ButtonImage(FeatureBtn, FBtn_Recruit, Color.white, Color.white, false))
             {
                 this.Close();
-                RIWindowHandler.OpenRIWindow(RIWindow.Op_Series);
+                RIWindowHandler.OpenRIWindow(RIWindowType.Op_Series);
             }
             FeatureBtn.DrawHighlightMouseOver(this.FBtn_Highlight);
             FeatureBtn.x += mainBtnWidth + mainBtnMargin;
@@ -154,7 +154,7 @@ namespace AK_DLL
             {
                 this.Close();
                 RIWindow_OperatorDetail.isRecruit = false;
-                RIWindowHandler.OpenRIWindow(RIWindow.Op_List);
+                RIWindowHandler.OpenRIWindow(RIWindowType.Op_List);
             }
             #endregion
         }

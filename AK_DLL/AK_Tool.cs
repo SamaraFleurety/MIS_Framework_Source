@@ -10,7 +10,11 @@ namespace AK_DLL
     [StaticConstructorOnStartup]
     public static class AK_Tool
     {
+        public static bool disableIMGUI = false;
 
+        public static AssetBundle FSAsset;
+        private static GameObject EVSystem;
+        public static GameObject EVSystemInstance;
         /*public static void PrintfHairColor(this Pawn p)
         {
 			Log.Message($"pawnHC: {p.story.HairColor.r}, {p.story.HairColor.g}, {p.story.HairColor.b},{p.story.HairColor.a}");
@@ -25,6 +29,8 @@ namespace AK_DLL
         {
             RIWindowHandler.LoadOperatorClasses();
             RIWindowHandler.AutoFillOperators();
+
+            InitializeUI();
             Log.Message($"MIS.初始化完成");
         }
         //技能残留 早晚给删咯
@@ -41,6 +47,33 @@ namespace AK_DLL
                 }
             }
             return result;
+        }
+
+        private static void InitializeUI()
+        {
+            //fixme：改成相对路径
+            FSAsset = AssetBundle.LoadFromFile(@"S:/Program Files (x86)/Steam/steamapps/common/RimWorld/Mods/Main/Asset/fsassets");
+            if (FSAsset == null)
+            {
+                Log.Error("MIS. Critical Error: Missing Assets");
+            }
+            else if (Prefs.DevMode)
+            {
+                Log.Message("MIS. Assets Initialized");
+            }
+
+            EVSystem = FSAsset.LoadAsset<GameObject>("EventSystem");
+        }
+
+        public static void setEV(bool value)
+        {
+            if (value)
+            {
+                if (EVSystemInstance == null) EVSystemInstance = GameObject.Instantiate(EVSystem);
+                EVSystemInstance.SetActive(true);
+            }
+            else EVSystemInstance.SetActive(false);
+            Log.Message($"GE:{EVSystemInstance == null}");
         }
 
         public static string GetPrefixFrom(string XMLdefName)

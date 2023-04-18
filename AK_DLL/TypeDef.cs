@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RimWorld;
+using UnityEngine;
 using Verse;
 
 namespace AK_DLL
@@ -31,6 +32,11 @@ namespace AK_DLL
         };
 
         public static List<SkillDef> SortOrderSkill = new List<SkillDef>() { SkillDefOf.Shooting, SkillDefOf.Melee, SkillDefOf.Construction, SkillDefOf.Mining, SkillDefOf.Cooking, SkillDefOf.Plants, SkillDefOf.Animals, SkillDefOf.Crafting, SkillDefOf.Artistic, SkillDefOf.Medicine, SkillDefOf.Social, SkillDefOf.Intellectual};
+    
+     
+        static TypeDef()
+        {
+        }
     }
 
     public enum SkinType : Byte
@@ -44,7 +50,7 @@ namespace AK_DLL
         SkinV
     }
 
-    public enum RIWindow : Byte
+    public enum RIWindowType : Byte
     {
         MainMenu = 0,
         Op_Series,

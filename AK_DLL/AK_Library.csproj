@@ -67,6 +67,14 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Unity.Addressables, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Unity.Addressables.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ResourceManager, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Unity.ResourceManager.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>./packages/Unity.TextMeshPro.dll</HintPath>
     </Reference>
@@ -262,9 +270,11 @@
     <Compile Include="Def\OperatorInteractionDef.cs" />
     <Compile Include="Def\OperatorSeriesDef.cs" />
     <Compile Include="HarmonyPatch\PatchAutoChangeHair.cs" />
+    <Compile Include="HarmonyPatch\PatchDisableRootUI.cs" />
     <Compile Include="HarmonyPatch\PatchHairOffset.cs" />
     <Compile Include="HarmonyPatch\PatchInfoCardPortrait.cs" />
     <Compile Include="HarmonyPatch\PatchWindowsOnGui%28Bottom Portrait%29.cs" />
+    <Compile Include="HarmonyPatch\temppatch.cs" />
     <Compile Include="Hediff\Comps\HC_RandAddHediff.cs" />
     <Compile Include="Hediff\Properties\HCP_RandAddHediff.cs" />
     <Compile Include="HotSwap.cs" />
@@ -307,6 +317,7 @@
     <Compile Include="Def\OperatorDef\OperatorDef.cs" />
     <Compile Include="GC_Documentation.cs" />
     <Compile Include="Opinion\ThoughtWorker_OpinionToTrait.cs" />
+    <Compile Include="RecruitConsole\Window\RIWindow.cs" />
     <Compile Include="RecruitConsole\Window\RIWindow_MainMenu.cs" />
     <Compile Include="RecruitConsole\Window\RIWindow_Option.cs" />
     <Compile Include="RecruitConsole\Window\RIWindow_Quest.cs" />

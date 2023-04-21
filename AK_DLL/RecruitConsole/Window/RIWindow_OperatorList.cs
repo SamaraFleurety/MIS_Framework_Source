@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 //记得给skillandfire写排序，在调用之前
 namespace AK_DLL
@@ -120,58 +121,132 @@ namespace AK_DLL
     #endregion
 
     [HotSwappable]
-    public class RIWindow_OperatorList : RIWindow {
+    public class RIWindow_OperatorList : RIWindow
+    {
 
-        private static int sortType;
+        private static int sortType = -1;
         private static bool sortReverseOrder = false;
-
+        //排序按钮的面板（通用父类）
+        private static Transform sorterColumnLoc = null;
+        //干员面板
+        private static Transform opListLoc = null;
+        private static List<GameObject> opList = new List<GameObject>();
+        private static GameObject opRectPrefab = null;
+        //相当投机取巧地在名字里面存储数据 字符串内可以随便填。现在的值是12。
+        private static int orderInName = "FSUI_whatev_".Length;
         public override void DoContent()
         {
-            this.DrawSortBtns();
+            DrawSortBtns();
+            DrawNavBtn();
+            DrawOperatorList();
         }
-        public void DrawOperatorList(Rect inRect)
+
+        private GameObject ClickedBtn
         {
-            Rect rect_operatorFrame = new Rect(inRect.position, new Vector2(100f, 100f));
-            rect_operatorFrame.y += 100;
-            Verse.Text.Anchor = TextAnchor.UpperCenter;
+            get
+            {
+                return EventSystem.current.currentSelectedGameObject;
+            }
+        }
+
+        private void DrawNavBtn()
+        {
+            GameObject navBtn;
+            //左上角返回按钮 虽然现在返回就是主界面，但就是有这个按钮
+            navBtn = GameObject.Find("btnBack").transform.GetChild(0).gameObject;
+            navBtn.GetComponent<Button>().onClick.AddListener(delegate ()
+            {
+                this.Close();
+                RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
+            });
+            //主界面按钮
+            navBtn = GameObject.Find("btnHome").transform.GetChild(0).gameObject;
+            navBtn.GetComponent<Button>().onClick.AddListener(delegate ()
+            {
+                this.Close();
+                RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
+            });
+            //退出按钮
+            navBtn = GameObject.Find("btnEscape").transform.GetChild(0).gameObject;
+            navBtn.GetComponent<Button>().onClick.AddListener(delegate ()
+            {
+                this.Close();
+            });
+        }
+
+        public void DrawOperatorList()
+        {
+            if (sortType == -1)
+            {
+                sortType = RIWindowHandler.operatorClasses.First().Key;
+                cachedOperatorList = RIWindowHandler.operatorDefs[sortType].Values.ToList();
+            }
+            if (opListLoc == null) opListLoc = GameObject.Find("OpRegister").transform;
+            if (opRectPrefab == null)
+            {
+                opRectPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("OperatorTemplate");
+                opRectPrefab.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+                {
+                    this.Close();
+                    RIWindowHandler.OpenRIWindow_OpDetail(cachedOperatorList[int.Parse(ClickedBtn.name.Substring(orderInName))]);
+                });
+            }
+            Log.Message($"{opRectPrefab.transform.localPosition.x}, {opRectPrefab.transform.localPosition.y}");
+            //fixme：tmd写重了 
             if (!sortReverseOrder)
             {
-                foreach (OperatorDef operator_Def in cachedOperatorList)
+                for (int i = 0; i < Math.Max(cachedOperatorList.Count, opList.Count); ++i)
                 {
-                    DrawOperatorPortrait(ref rect_operatorFrame, inRect, operator_Def);
+                    DrawOperatorPortrait(i, cachedOperatorList[i]);
                 }
             }
             else
             {
-                for (int i = cachedOperatorList.Count - 1; i >= 0; --i)
+                for (int i = 0; i < Math.Max(cachedOperatorList.Count, opList.Count); ++i)
                 {
-                    DrawOperatorPortrait(ref rect_operatorFrame, inRect, cachedOperatorList[i]);
+                    DrawOperatorPortrait(i, cachedOperatorList[i]);
                 }
             }
-            Verse.Text.Anchor = TextAnchor.UpperLeft;
             //干员绘制
         }
 
-        private void DrawOperatorPortrait(ref Rect rect_operatorFrame, Rect inRect, OperatorDef operator_Def)
+        private void DrawOperatorPortrait(int i, OperatorDef def)
         {
-            Texture2D operatorTex = ContentFinder<Texture2D>.Get(operator_Def.headPortrait);
-            Widgets.LabelFit(new Rect(rect_operatorFrame.x + 20f, rect_operatorFrame.y + 110f, 100f, 50f), operator_Def.nickname);
-            Widgets.DrawTextureFitted(new Rect(rect_operatorFrame.x, rect_operatorFrame.y, rect_operatorFrame.width + 2f, rect_operatorFrame.height + 2f), ContentFinder<Texture2D>.Get("UI/Frame/Frame_HeadPortrait"), 1f);
-            if (Widgets.ButtonImage(new Rect(rect_operatorFrame.x + 3f, rect_operatorFrame.y + 5f, 97f, 95f), operatorTex))
+            Log.Message($"drawing {def.name}");
+            Log.Message($"{i}, {cachedOperatorList.Count}");
+            Texture2D operatorTex = ContentFinder<Texture2D>.Get(def.headPortrait);
+            GameObject opRectInstance;
+            if (i >= cachedOperatorList.Count)
             {
-                this.Close();
-                RIWindowHandler.OpenRIWindow_OpDetail(operator_Def);
+                Log.Message("a");
+                opList[i].SetActive(false);
+                return;
             }
-            rect_operatorFrame.x += 140f;
-            if (rect_operatorFrame.x > 1600f)
+            if (i >= opList.Count || opList[i] == null)
             {
-                rect_operatorFrame.x = inRect.x;
-                rect_operatorFrame.y += 150f;
+                opRectInstance = GameObject.Instantiate(opRectPrefab, opListLoc);
+                opRectInstance.transform.parent = opListLoc;
+                opList.Add(opRectInstance);
+                opRectInstance.SetActive(true);
             }
+            else
+            {
+                opRectInstance = opList[i];
+            }
+            //设定名字中 以后检索干员def时用的数字序
+            opRectInstance.name = "FSUI_Opertr_" + i;
+            //设定头像 决定干员头像的子物体是第一个子物体。
+            opRectInstance.transform.GetChild(0).GetComponent<Image>().sprite = Sprite.Create(operatorTex, new Rect(0, 0, operatorTex.width, operatorTex.height), new Vector2(0, 0));
+            //决定头像框的位置。目前一行9个，共3行。
+            Log.Message($"{opRectPrefab.transform.localPosition.x}, {opRectPrefab.transform.localPosition.y}");
+            Log.Message($"{opRectInstance.transform.localPosition.x}, {opRectInstance.transform.localPosition.y}");
+            opRectInstance.transform.localPosition = new Vector3((i / 9 * -9 + i) * opRectInstance.transform.localPosition.x, (i / 9) * opRectInstance.transform.localPosition.y);
+            Log.Message($"{opRectInstance.transform.localPosition.x}, {opRectInstance.transform.localPosition.y}");
+            
         }
 
 
-#region 排序相关
+        #region 排序相关
         private void DrawSortBtns()
         {
             GameObject sortBtnPrefab = bundle.LoadAsset<GameObject>("btnSortTemplate");
@@ -179,17 +254,23 @@ namespace AK_DLL
             TextMeshProUGUI textTMP;
             //Rect sortBtn = new Rect(inRect.xMin, inRect.y + yMargin, classSideLength, classSideLength / 2);
             //按某种技能的等级排序
-            for (int i = 0; i < 1 /*TypeDef.SortOrderSkill.Count()*/; ++i)
+            if (sorterColumnLoc == null)
             {
-                Log.Message("actulDrawBtn");
-                sortBtnInstance = GameObject.Instantiate(sortBtnPrefab, UIInstance.transform);
-                textTMP = sortBtnInstance.transform.Find("Text (TMP)").GetComponent<TextMeshProUGUI>();
+                sorterColumnLoc = GameObject.Find("sorterBg").transform;
+            }
+            for (int i = 0; i < TypeDef.SortOrderSkill.Count(); ++i)
+            {
+                sortBtnInstance = GameObject.Instantiate(sortBtnPrefab, sorterColumnLoc);
+                textTMP = sortBtnInstance.GetComponentInChildren<TextMeshProUGUI>();
                 //按钮的显示文字
                 textTMP.text = TypeDef.SortOrderSkill[i].label.Translate();
+                //使用了投机取巧而不是正常的方式存储数据。
+                sortBtnInstance.name = "FSUI_Sorter_" + i;
                 sortBtnInstance.GetComponent<Button>().onClick.AddListener(delegate ()
                 {
-                    Log.Message($"clicked {i}");
-                    if (NeedSortTo(i))
+                    sortBtnInstance = ClickedBtn;
+                    Log.Message($"clicked {sortBtnInstance.name.Substring(orderInName)}");
+                    if (NeedSortTo(int.Parse(sortBtnInstance.name.Substring(orderInName))))
                     {
                         SortOperator<int>(delegate (int a, int b)
                         {
@@ -202,55 +283,52 @@ namespace AK_DLL
                 });
                 sortBtnInstance.SetActive(true);
 
-                GameObject c = GameObject.Find("ButtonTemplate");
-                Log.Message($"{c.transform.position.x} {c.transform.position.y} {c.transform.position.z}");
-                c.transform.position = new Vector3(2000, 2000);
-                sortBtnInstance.transform.parent = c.transform.parent;
-                sortBtnInstance.transform.position = new Vector3(1558, 2160);
+                sortBtnInstance.transform.localPosition = new Vector3(sortBtnInstance.transform.localPosition.x * (i - (i / 7 * 7)), sortBtnInstance.transform.localPosition.y * (i / 7), i);
+                Log.Message($"{i}: {sortBtnInstance.transform.localPosition.x}, {sortBtnInstance.transform.localPosition.y}, {sortBtnInstance.transform.localPosition.z}");
             }
-                /*if (Widgets.ButtonText(sortBtn, TypeDef.SortOrderSkill[i].label.Translate()))
-                {
-                    if (NeedSortTo(i))
-                    {
-                        SortOperator<int>(delegate (int a, int b)
-                        {
-                            return !(a <= b);
-                        }, delegate (OperatorDef def)
-                        {
-                            return def.SortedSkills[i].level;
-                        });
-                    }
-                }
-            }
-            //FIXME 按面板DPS排序
-            if (Widgets.ButtonText(sortBtn, "AK_SortDPS".Translate()))
+            /*if (Widgets.ButtonText(sortBtn, TypeDef.SortOrderSkill[i].label.Translate()))
             {
-                if (NeedSortTo((int)OperatorSortType.Dps))
+                if (NeedSortTo(i))
                 {
-                    SortOperator<double>(delegate (double a, double b)
+                    SortOperator<int>(delegate (int a, int b)
                     {
                         return !(a <= b);
                     }, delegate (OperatorDef def)
                     {
-                        return DPSCalculator(def);
+                        return def.SortedSkills[i].level;
                     });
                 }
             }
-            sortBtn.x += classSideLength + xMargin;
-            //按字母表排序
-            if (Widgets.ButtonText(sortBtn, "AK_SortAlphabet".Translate()))
+        }
+        //FIXME 按面板DPS排序
+        if (Widgets.ButtonText(sortBtn, "AK_SortDPS".Translate()))
+        {
+            if (NeedSortTo((int)OperatorSortType.Dps))
             {
-                if (NeedSortTo((int)OperatorSortType.Alphabet))
+                SortOperator<double>(delegate (double a, double b)
                 {
-                    SortOperator<string>(delegate (string a, string b)
-                    {
-                        return string.Compare(a, b) <= 0;
-                    }, delegate (OperatorDef def)
-                    {
-                        return def.label.Translate();
-                    });
-                }
-            }*/
+                    return !(a <= b);
+                }, delegate (OperatorDef def)
+                {
+                    return DPSCalculator(def);
+                });
+            }
+        }
+        sortBtn.x += classSideLength + xMargin;
+        //按字母表排序
+        if (Widgets.ButtonText(sortBtn, "AK_SortAlphabet".Translate()))
+        {
+            if (NeedSortTo((int)OperatorSortType.Alphabet))
+            {
+                SortOperator<string>(delegate (string a, string b)
+                {
+                    return string.Compare(a, b) <= 0;
+                }, delegate (OperatorDef def)
+                {
+                    return def.label.Translate();
+                });
+            }
+        }*/
         }
 
         private double DPSCalculator(OperatorDef def)
@@ -398,7 +476,7 @@ namespace AK_DLL
             MergeSort(0, cachedOperatorList.Count() - 1, comparer, compraree);
 
         }
-#endregion
+        #endregion
 
         static List<OperatorDef> cachedOperatorList = new List<OperatorDef>();
         public Thing RecruitConsole

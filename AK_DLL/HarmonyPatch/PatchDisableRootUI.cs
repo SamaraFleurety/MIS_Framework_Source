@@ -9,6 +9,8 @@ using Verse;
 
 namespace AK_DLL
 {
+    //要么用这种低级的办法禁止IMGUI，要么自己去写个shader改掉unityengine.GUI里面的4个material
+
     [HarmonyPatch(typeof(UIRoot), "UIRootOnGUI")]
     public static class PatchDisableUIRootOnGUI
     {

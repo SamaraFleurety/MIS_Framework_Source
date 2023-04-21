@@ -29,7 +29,8 @@ namespace AK_DLL
 
         public virtual void Close()
         {
-            UIInstance.SetActive(false);
+            this.UIInstance.SetActive(false);
+            GameObject.Destroy(UIInstance);
             AK_Tool.setEV(false);
             AK_Tool.disableIMGUI = false;
         }

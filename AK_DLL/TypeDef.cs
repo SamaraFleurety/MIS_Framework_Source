@@ -64,7 +64,7 @@ namespace AK_DLL
     }
     public enum OperatorSortType : Byte
     {
-        Head = 19,
+        Head = 11,
         Dps,
         Alphabet,
         Tail,

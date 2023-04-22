@@ -38,7 +38,7 @@ namespace AK_DLL
         {
             get { return RIWindowHandler.recruitConsole; }
         }
-        /*
+        
         public override void DoWindowContents(Rect inRect)
         {
             Color temp = GUI.color;       
@@ -96,7 +96,7 @@ namespace AK_DLL
                 }
                 /*string label = "寄";
                 label = TraitAndDegree.def.DataAtDegree(TraitAndDegree.degree)?.label;
-                Widgets.Label(rect, label ?? "寄");*//*
+                Widgets.Label(rect, label ?? "寄");*/
             }
             //特性显示绘制
             Rect rect_AbilityImage = new Rect(rect.x, rect.y + 65f, 60f, 60f);
@@ -200,9 +200,9 @@ namespace AK_DLL
                         Operator_Def.Recruit(RecruitConsole.Map);
                         this.Close();
 
-                        RIWindow_OperatorList window = new RIWindow_OperatorList(new DiaNode(new TaggedString()), true);
+                        /*RIWindow_OperatorList window = new RIWindow_OperatorList(new DiaNode(new TaggedString()), true);
                         window.soundAmbient = SoundDefOf.RadioComms_Ambience;
-                        Find.WindowStack.Add(window);
+                        Find.WindowStack.Add(window);*/
                     }
                     else
                     {
@@ -231,6 +231,6 @@ namespace AK_DLL
         }
 
         private string switchSkillText = "AK_SwitchSkill".Translate();
-        public string recruitText = "AK_RecruitOperator".Translate();*/
+        public string recruitText = "AK_RecruitOperator".Translate();
     }
 }

@@ -74,7 +74,6 @@ namespace AK_DLL
                 EVSystemInstance.SetActive(true);
             }
             else EVSystemInstance.SetActive(false);
-            Log.Message($"GE:{EVSystemInstance == null}");
         }
 
         public static string GetPrefixFrom(string XMLdefName)

@@ -59,13 +59,9 @@ namespace AK_DLL
                     // 将UI实例设置为可见状态
                     uiInstance.SetActive(true);
                     AK_Tool.EVSystemInstance.SetActive(true);*/
-
-
-
-                    break;
-                    RIWindow_OperatorList windowOpList = new RIWindow_OperatorList();
                     break;
                 case RIWindowType.Op_Detail:
+                    Log.Message($"open detail at {def.defName}");
                     RIWindow_OperatorDetail windowOpDetail = new RIWindow_OperatorDetail(new DiaNode(new TaggedString(def.nickname)), true);
                     windowOpDetail.soundAmbient = SoundDefOf.RadioComms_Ambience;
                     Find.WindowStack.Add(windowOpDetail);
@@ -138,7 +134,7 @@ namespace AK_DLL
             }
             if (operatorClasses.Count >= 1)
             {
-                RIWindow_OperatorList.operatorType = operatorClasses.First().Key;
+                RIWindow_OperatorList.operatorClass = operatorClasses.First().Key;
             }
         }
     }

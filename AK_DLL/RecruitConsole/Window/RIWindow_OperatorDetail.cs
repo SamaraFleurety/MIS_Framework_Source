@@ -5,9 +5,12 @@ using System.Text;
 using RimWorld;
 using UnityEngine;
 using HarmonyLib;
+using UnityEngine.UI;
 
 namespace AK_DLL
 {
+    #region legacy 
+    /*
     public class RIWindow_OperatorDetail : Dialog_NodeTree
     {
         public static bool isRecruit = true;
@@ -96,7 +99,7 @@ namespace AK_DLL
                 }
                 /*string label = "寄";
                 label = TraitAndDegree.def.DataAtDegree(TraitAndDegree.degree)?.label;
-                Widgets.Label(rect, label ?? "寄");*/
+                Widgets.Label(rect, label ?? "寄");*//*
             }
             //特性显示绘制
             Rect rect_AbilityImage = new Rect(rect.x, rect.y + 65f, 60f, 60f);
@@ -202,7 +205,7 @@ namespace AK_DLL
 
                         /*RIWindow_OperatorList window = new RIWindow_OperatorList(new DiaNode(new TaggedString()), true);
                         window.soundAmbient = SoundDefOf.RadioComms_Ambience;
-                        Find.WindowStack.Add(window);*/
+                        Find.WindowStack.Add(window);*//*
                     }
                     else
                     {
@@ -232,5 +235,159 @@ namespace AK_DLL
 
         private string switchSkillText = "AK_SwitchSkill".Translate();
         public string recruitText = "AK_RecruitOperator".Translate();
+    }*/
+    #endregion
+
+    public class RIWindow_OperatorDetail : RIWindow
+    {
+        public static bool isRecruit = true;
+
+        OperatorDocument doc = null;
+
+        static string recruitText;
+
+        private bool canRecruit;
+        private OperatorDef Def
+        {
+            get { return RIWindowHandler.def; }
+        }
+        public Thing RecruitConsole
+        {
+            get { return RIWindowHandler.recruitConsole; }
+        }
+
+        public override void DoContent()
+        {
+            Initialization();
+            DrawNavBtn();
+            DrawFashionBtn();
+            DrawOperatorSkills();
+            DrawVanillaSkills();
+            DrawDescription();
+        }
+
+        private void Initialization()
+        {
+            if (GameComp_OperatorDocumentation.operatorDocument.ContainsKey(Def.OperatorID))
+            {
+                doc = GameComp_OperatorDocumentation.operatorDocument[Def.OperatorID];
+            }
+            canRecruit = false;
+            if (RecruitConsole.TryGetComp<CompRefuelable>().Fuel >= Def.ticketCost - 0.01)
+            {
+                if (doc == null || !doc.currentExist)
+                {
+                    canRecruit = true;
+                    recruitText = "可以招募";
+                }
+                else
+                {
+                    recruitText = "AK_CanntRecruitOperator".Translate();
+                }
+            }
+            else
+            {
+                recruitText = "AK_NoTicket".Translate();
+            }
+        }
+
+        //确认招募和取消也是导航键
+        private void DrawNavBtn()
+        {
+            GameObject navBtn;
+            //Home
+            navBtn = GameObject.Find("");
+            navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate()
+            {
+                RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
+                this.Close();
+            });
+            //取消
+            navBtn = GameObject.Find("");
+            navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate()
+            {
+                RIWindowHandler.OpenRIWindow(RIWindowType.Op_List);
+                this.Close();
+            });
+            //确认招募/更换助理
+            if (isRecruit)
+            {
+                //FIXME: 更换贴图
+                navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+                {
+                    //如果招募曾经招过的干员
+                    if (doc != null && !doc.currentExist)
+                    {
+                    }
+                    //如果干员未招募过，或已死亡
+                    if (canRecruit)
+                    {
+                        RecruitConsole.TryGetComp<CompRefuelable>().ConsumeFuel(Def.ticketCost);
+                        Def.Recruit(RecruitConsole.Map);
+                        if (false)
+                        {
+                            RIWindowHandler.OpenRIWindow(RIWindowType.Op_List);
+                        }
+                        this.Close();
+                        /*RIWindow_OperatorList window = new RIWindow_OperatorList(new DiaNode(new TaggedString()), true);
+                        window.soundAmbient = SoundDefOf.RadioComms_Ambience;
+                        Find.WindowStack.Add(window);*/
+                    }
+                });
+            }
+            else
+            {
+                //fixme
+                navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+                {
+                    isRecruit = true;
+                    AK_ModSettings.secretary = AK_Tool.GetOperatorIDFrom(Def.defName);
+                    RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
+                    this.Close();
+                });
+            }
+        }
+
+        private void DrawFashionBtn()
+        {
+            GameObject fashionIconPrefab;
+            GameObject fashionIcon;
+        }
+
+        //可能要做2种
+        private void DrawVanillaSkills()
+        {
+            if (true)
+            {
+                GameObject skillBarPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("");
+                GameObject skillBar;
+                Vector3 location = skillBarPrefab.transform.localPosition;
+                for (int i = 0; i < Def.Skills.Count; ++i)
+                {
+                    skillBar = GameObject.Instantiate(skillBarPrefab);
+                    skillBar.transform.localPosition = new Vector3(location.x, location.y * i);
+                }
+            }
+        }
+
+        private void DrawDescription()
+        {
+
+        }
+
+        private void DrawWeapon()
+        {
+
+        }
+
+        private void DrawOperatorSkills()
+        {
+            GameObject opSkillPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("");
+            GameObject opSkill;
+            for (int i = 0; i < Def.abilities.Count; ++i)
+            {
+                opSkill = GameObject.Instantiate(opSkillPrefab);
+            }
+        }
     }
 }

@@ -12,6 +12,7 @@ using UnityEngine.EventSystems;
 
 //记得给干员页面写下拉 series
 //sortOperator可能封装一下更好 特别是按字母排序
+//有没有可能按钮效果不用委托而是封装好一点呢
 namespace AK_DLL
 {
     #region legacy
@@ -618,6 +619,17 @@ namespace AK_DLL
         {
             MergeSort(0, cachedOperatorList.Count() - 1, comparer, compraree);
 
+        }
+
+        private void SortOperator(int sortType)
+        {
+            switch(sortType)
+            {
+                case 1:
+                    break;
+                default:
+                    break;
+            }
         }
         #endregion
 

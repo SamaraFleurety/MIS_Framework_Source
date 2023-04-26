@@ -42,23 +42,12 @@ namespace AK_DLL
                     Find.WindowStack.Add(window_MainMenu);
                     break;
                 case RIWindowType.Op_Series:
-                    //break;
+                    //break;  //可能不再会做，而是整合进opList
                 case RIWindowType.Op_Gacha:
                     //break;
                 case RIWindowType.Op_List:
                     actualRIWindow = new RIWindow_OperatorList();
                     actualRIWindow.DrawUI("Operator List");
-                    /*GameObject EVSystem = AK_Tool.FSAsset.LoadAsset<GameObject>("EventSystem");
-                    GameObject EVSystemInstance = GameObject.Instantiate(EVSystem);
-                    EVSystemInstance.SetActive(true);*/
-
-                    /*uiInstance.transform.position = new Vector3(0, 0, 0);
-                    uiInstance.transform.rotation = Quaternion.identity;
-                    uiInstance.transform.localScale = Vector3.one;
-
-                    // 将UI实例设置为可见状态
-                    uiInstance.SetActive(true);
-                    AK_Tool.EVSystemInstance.SetActive(true);*/
                     break;
                 case RIWindowType.Op_Detail:
                     Log.Message($"open detail at {def.defName}");

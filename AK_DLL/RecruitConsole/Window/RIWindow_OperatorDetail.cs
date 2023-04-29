@@ -4,8 +4,11 @@ using RimWorld.Planet;
 using System.Text;
 using RimWorld;
 using UnityEngine;
-using HarmonyLib;
 using UnityEngine.UI;
+using System.Collections.Generic;
+using UnityEngine.EventSystems;
+using TMPro;
+using FSUI;
 
 namespace AK_DLL
 {
@@ -247,6 +250,17 @@ namespace AK_DLL
         static string recruitText;
 
         private bool canRecruit;
+
+        int preferredSkin = 1;
+
+        static int preferredVanillaSkillChart = 0;
+
+        Dictionary<int, GameObject> fashionBtns;
+
+        List<GameObject> vanillaSkillBtns;  //0,1: 条形图; 2,3: 雷达图
+
+        List<GameObject> opSkills;  //只有可选技能被加进来。
+
         private OperatorDef Def
         {
             get { return RIWindowHandler.def; }
@@ -255,15 +269,48 @@ namespace AK_DLL
         {
             get { return RIWindowHandler.recruitConsole; }
         }
+        private GameObject ClickedBtn
+        {
+            get
+            {
+                return EventSystem.current.currentSelectedGameObject;
+            }
+        }
+
+        private GameObject ClickedBtnParent
+        {
+            get
+            {
+                return ClickedBtn.transform.parent.gameObject;
+            }
+        }
+
+        private int btnOrder(GameObject clickedBtn)
+        {
+            return int.Parse(clickedBtn.name.Substring(RIWindow_OperatorList.orderInName));
+        }
+
+        private int PreferredAbility
+        {
+            get { return doc.preferedAbility; }
+            set { doc.preferedAbility = value; }
+        }
 
         public override void DoContent()
         {
-            Initialization();
             DrawNavBtn();
+            Initialization();
             DrawFashionBtn();
-            DrawOperatorSkills();
+            ChangeStandTo(preferredSkin, true);
+            DrawOperatorAbility();
+            DrawWeapon();
+            DrawTrait();
+
             DrawVanillaSkills();
+            ChangeVanillaSkillChartTo(preferredVanillaSkillChart);
+
             DrawDescription();
+            Log.Message("fin draw op");
         }
 
         private void Initialization()
@@ -271,6 +318,7 @@ namespace AK_DLL
             if (GameComp_OperatorDocumentation.operatorDocument.ContainsKey(Def.OperatorID))
             {
                 doc = GameComp_OperatorDocumentation.operatorDocument[Def.OperatorID];
+                preferredSkin = doc.preferedSkin;
             }
             canRecruit = false;
             if (RecruitConsole.TryGetComp<CompRefuelable>().Fuel >= Def.ticketCost - 0.01)
@@ -278,7 +326,7 @@ namespace AK_DLL
                 if (doc == null || !doc.currentExist)
                 {
                     canRecruit = true;
-                    recruitText = "可以招募";
+                    recruitText = "可以招募"; //残留
                 }
                 else
                 {
@@ -296,24 +344,26 @@ namespace AK_DLL
         {
             GameObject navBtn;
             //Home
-            navBtn = GameObject.Find("");
+            navBtn = GameObject.Find("BtnHome");
             navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate()
             {
                 RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
                 this.Close();
             });
             //取消
-            navBtn = GameObject.Find("");
+            navBtn = GameObject.Find("BtnCancel");
             navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate()
             {
                 RIWindowHandler.OpenRIWindow(RIWindowType.Op_List);
-                this.Close();
+                this.Close(false);
             });
             //确认招募/更换助理
+            navBtn = GameObject.Find("BtnConfirm");
+            Button button = navBtn.GetComponentInChildren<Button>();
             if (isRecruit)
             {
                 //FIXME: 更换贴图
-                navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+                button.onClick.AddListener(delegate ()
                 {
                     //如果招募曾经招过的干员
                     if (doc != null && !doc.currentExist)
@@ -328,7 +378,7 @@ namespace AK_DLL
                         {
                             RIWindowHandler.OpenRIWindow(RIWindowType.Op_List);
                         }
-                        this.Close();
+                        this.Close(false);
                         /*RIWindow_OperatorList window = new RIWindow_OperatorList(new DiaNode(new TaggedString()), true);
                         window.soundAmbient = SoundDefOf.RadioComms_Ambience;
                         Find.WindowStack.Add(window);*/
@@ -337,8 +387,9 @@ namespace AK_DLL
             }
             else
             {
+                button.GetComponent<Image>().sprite = AK_Tool.FSAsset.LoadAsset<Sprite>("ChangeSec");
                 //fixme
-                navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+                button.onClick.AddListener(delegate ()
                 {
                     isRecruit = true;
                     AK_ModSettings.secretary = AK_Tool.GetOperatorIDFrom(Def.defName);
@@ -348,46 +399,236 @@ namespace AK_DLL
             }
         }
 
+        //换装按钮会被记录于 this.fashionbtns
         private void DrawFashionBtn()
         {
-            GameObject fashionIconPrefab;
+            Transform FashionPanel = GameObject.Find("FashionPanel").transform;
+            GameObject fashionIconPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("FashionIcon");
             GameObject fashionIcon;
+            Vector3 v3;
+
+            fashionBtns = new Dictionary<int, GameObject>();
+
+            fashionIcon = GameObject.Find("Elite0");
+            fashionBtns.Add(0, fashionIcon);
+            if (Def.commonStand != null)
+            {
+                fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+                {
+                    ChangeStandTo(0);
+                });
+            }
+            else fashionIcon.SetActive(false);
+
+            fashionIcon = GameObject.Find("Elite2");
+            fashionBtns.Add(1, fashionIcon);
+            fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            {
+                ChangeStandTo(1);
+            });
+
+            if (Def.fashion != null)
+            {
+                v3 = fashionIconPrefab.transform.localPosition;
+                for (int i = 0; i < Def.fashion.Count; ++i)
+                {
+                    //逻辑顺序 代表这按钮在面板上实际的位置（即精2按钮之后）
+                    int logicOrder = i + 2;
+                    fashionIcon = GameObject.Instantiate(fashionIconPrefab);
+                    fashionIcon.transform.localPosition = new Vector3(v3.x * logicOrder, v3.y);
+                    fashionIcon.SetActive(true);
+                    fashionIcon.name = "FSUI_FashIc_" + logicOrder;
+                    fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+                    {
+                        ChangeStandTo(btnOrder(ClickedBtn));
+                    });
+                    fashionBtns.Add(logicOrder, fashionIcon);
+                }
+            }
         }
 
         //可能要做2种
         private void DrawVanillaSkills()
         {
-            if (true)
+            //柱状图按钮
+            GameObject skillTypeBtn = GameObject.Find("BtnBarChart");
+            vanillaSkillBtns = new List<GameObject>();
+            vanillaSkillBtns.Add(skillTypeBtn);
+            skillTypeBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate()
             {
-                GameObject skillBarPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("");
-                GameObject skillBar;
-                Vector3 location = skillBarPrefab.transform.localPosition;
-                for (int i = 0; i < Def.Skills.Count; ++i)
-                {
-                    skillBar = GameObject.Instantiate(skillBarPrefab);
-                    skillBar.transform.localPosition = new Vector3(location.x, location.y * i);
-                }
+                preferredVanillaSkillChart = 0;
+                ChangeVanillaSkillChartTo(0);
+            });
+
+            //柱状图
+            //GameObject skillBarPanelPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("SkillBarPanel");
+            GameObject skillBarPanel = GameObject.Find("SkillBarPanel");
+            GameObject skillBar;
+            for (int i = 0; i < TypeDef.SortOrderSkill.Count; ++i)
+            {
+                skillBar = skillBarPanel.transform.GetChild(i).gameObject;
+                //技能名字
+                skillBar.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = Def.SortedSkills[i].skill.label.Translate();
+                //技能等级 显示与滑动条
+                skillBar.transform.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text =  Def.SortedSkills[i].level.ToString();
+                skillBar.GetComponentInChildren<Slider>().value = Def.SortedSkills[i].level;
+            }
+            vanillaSkillBtns.Add(skillBarPanel);
+
+            //雷达图按钮
+            skillTypeBtn = GameObject.Find("BtnRadarChart");
+            vanillaSkillBtns.Add(skillTypeBtn);
+
+            skillTypeBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            {
+                preferredVanillaSkillChart = 2;
+                ChangeVanillaSkillChartTo(2);
+            });
+
+            //
+            Log.Message("ad");
+            GameObject radarPanel = GameObject.Find("SkillRadarPanel");
+            vanillaSkillBtns.Add(radarPanel);
+            RadarChart radarChart = radarPanel.GetComponentInChildren<RadarChart>();
+            radarChart.data.Add(new GraphData());
+            radarChart.data[0].values = new List<float>();
+            radarChart.data[0].color = new Color(0.9686275f, 0.5882353f, 0.03137255f);
+            for (int i = 0; i < TypeDef.SortOrderSkill.Count; ++i)
+            {
+                radarChart.vertexLabelValues[i] = Def.SortedSkills[i].skill.label.Translate() + Def.SortedSkills[i].level.ToString();
+                radarChart.data[0].values.Add((float)Def.SortedSkills[i].level / 20.0f);
+            }
+            Log.Message($"ae, {radarChart.data[0].values.Count}");
+        }
+
+        //0和2是按钮，1和3是图表本身
+        private void ChangeVanillaSkillChartTo(int val)
+        {
+            if (val == 0)
+            {
+                vanillaSkillBtns[0].transform.GetChild(0).gameObject.SetActive(true);
+                vanillaSkillBtns[1].SetActive(true);
+                vanillaSkillBtns[2].transform.GetChild(0).gameObject.SetActive(false);
+                vanillaSkillBtns[3].SetActive(false);
+            }
+            else
+            {
+                vanillaSkillBtns[0].transform.GetChild(0).gameObject.SetActive(false);
+                vanillaSkillBtns[1].SetActive(false);
+                vanillaSkillBtns[2].transform.GetChild(0).gameObject.SetActive(true);
+                vanillaSkillBtns[3].SetActive(true);
             }
         }
 
         private void DrawDescription()
         {
+            GameObject OpDescPanel = GameObject.Find("OpDescPanel");
+            OpDescPanel.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = Def.nickname.Translate();
+            OpDescPanel.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = Def.description.Translate();
 
         }
 
         private void DrawWeapon()
         {
-
+            GameObject WeaponPanel = GameObject.Find("Weapon");
         }
 
-        private void DrawOperatorSkills()
+        private void DrawOperatorAbility()
         {
-            GameObject opSkillPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("");
-            GameObject opSkill;
-            for (int i = 0; i < Def.abilities.Count; ++i)
+            Log.Message("ska");
+            int skillCnt = Def.abilities.Count;
+            if (skillCnt == 0) return;
+            Transform opAbilityPanel = GameObject.Find("OpAbilityPanel").transform;
+            GameObject opAbilityPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("OpAbilityIcon");
+            GameObject opAbilityInstance;
+            opSkills = new List<GameObject>();
+            Log.Message("skb");
+            int logicOrder = 0; //在技能组内，实际的顺序
+            for (int i = 0; i < skillCnt; ++i)
             {
-                opSkill = GameObject.Instantiate(opSkillPrefab);
+                Log.Message("skc");
+                OperatorAbilityDef opAbilty = Def.abilities[i];
+                opAbilityInstance = GameObject.Instantiate(opAbilityPrefab, opAbilityPanel);
+                Texture2D icon = opAbilty.Icon;
+                opAbilityInstance.GetComponent<Image>().sprite = Sprite.Create(icon, new Rect(0, 0, icon.width, icon.height), Vector3.zero);
+                opAbilityInstance.name = "FSUI_OpAbil_" + logicOrder;
+                logicOrder++;
+                opAbilityInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+                {
+                    SwitchGroupedSkillTo(btnOrder(ClickedBtn));
+                });
+                
+                //右下角的勾 常驻技能橙色。
+                if (!opAbilty.grouped)
+                {
+                    opAbilityInstance.transform.GetChild(1).GetComponent<Image>().sprite = AK_Tool.FSAsset.LoadAsset<Sprite>("InnateAb");
+                }
+                else
+                {
+                    opSkills.Add(opAbilityInstance);
+                    opAbilityInstance.transform.GetChild(1).gameObject.SetActive(false);
+                }
+
+                Log.Message("skd");
+                opAbilityInstance.SetActive(true);
+                Log.Message("ske");
             }
+            Log.Message("skf");
+        }
+
+        private void SwitchGroupedSkillTo(int val)
+        {
+            Log.Message($"try s skills to {val}");
+            if (doc == null || doc.currentExist == false) return;
+            opSkills[PreferredAbility].transform.GetChild(1).gameObject.SetActive(false);
+            PreferredAbility = val;
+            opSkills[PreferredAbility].transform.GetChild(1).gameObject.SetActive(true);
+        }
+
+        private void DrawStand()
+        {
+            Image opStand = GameObject.Find("OpStand").GetComponent<Image>();
+            Texture2D tex;
+            if (preferredSkin == 0) tex = ContentFinder<Texture2D>.Get(Def.commonStand);
+            else if (preferredSkin == 1) tex = ContentFinder<Texture2D>.Get(Def.stand);
+            else tex = ContentFinder<Texture2D>.Get(Def.fashion[preferredSkin - 2]);
+            opStand.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
+        }
+
+        private void DrawTrait()
+        {
+            if (Def.traits == null || Def.traits.Count == 0) return;
+            GameObject traitPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("TraitTemplate");
+            GameObject traitInstance;
+            Transform traitPanel = GameObject.Find("ActualTraitsPanel").transform;
+
+            for (int i = 0; i < Def.traits.Count; ++i)
+            {
+                traitInstance = GameObject.Instantiate(traitPrefab, traitPanel); 
+                TraitDegreeData traitDef = Def.traits[i].def.DataAtDegree(Def.traits[i].degree);
+                traitInstance.GetComponentInChildren<TextMeshProUGUI>().text = traitDef.label.Translate();
+            }
+        }
+
+        private void ChangeStandTo(int val, bool forceChange = false)
+        {
+            GameObject fBtn;
+            if (!forceChange && val == preferredSkin) return;
+
+            if (doc != null)
+            {
+                doc.preferedSkin = val;
+            }
+            //禁用之前的换装按钮
+            fBtn = fashionBtns[preferredSkin];
+            fBtn.transform.GetChild(0).gameObject.SetActive(true);
+            fBtn.transform.GetChild(1).gameObject.SetActive(false);
+
+            preferredSkin = val;
+            fBtn = fashionBtns[preferredSkin];
+            fBtn.transform.GetChild(0).gameObject.SetActive(false);
+            fBtn.transform.GetChild(1).gameObject.SetActive(true);
+            DrawStand();
         }
     }
 }

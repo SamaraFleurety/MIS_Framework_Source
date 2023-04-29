@@ -134,7 +134,7 @@ namespace AK_DLL
         private static Transform opListLoc = null;
         private static List<GameObject> opList = new List<GameObject>();
         //相当投机取巧地在名字里面存储数据 字符串内可以随便填。现在的值是12。
-        private static int orderInName = "FSUI_whatev_".Length;
+        public static int orderInName = "FSUI_whatev_".Length;
 
         private GameObject ClickedBtn
         {
@@ -318,7 +318,7 @@ namespace AK_DLL
                 opPortraitInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
                 {
                     RIWindowHandler.OpenRIWindow_OpDetail(cachedOperatorList[btnOrder(ClickedBtnParent)]);
-                    this.Close();
+                    this.Close(false);
                 });
                 //决定头像框的位置。目前一行8个，共3行。
                 opPortraitInstance.transform.localPosition = new Vector3((j / 8 * -8 + j) * opPortraitInstance.transform.localPosition.x, (j / 8) * opPortraitInstance.transform.localPosition.y);

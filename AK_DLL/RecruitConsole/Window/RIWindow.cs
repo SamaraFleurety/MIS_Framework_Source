@@ -27,12 +27,16 @@ namespace AK_DLL
         }
         public abstract void DoContent();
 
-        public virtual void Close()
+        //要是从UGUI转UGUI就不要关ev。UGUI转IMGUI或者全关可以关掉ev。
+        public virtual void Close(bool closeEV = true)
         {
             this.UIInstance.SetActive(false);
             GameObject.Destroy(UIInstance);
-            AK_Tool.setEV(false);
-            AK_Tool.disableIMGUI = false;
+            if (closeEV)
+            {
+                AK_Tool.setEV(false);
+                AK_Tool.disableIMGUI = false;
+            }
         }
     }
 }

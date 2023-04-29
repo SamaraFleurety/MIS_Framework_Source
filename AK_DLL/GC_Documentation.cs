@@ -30,7 +30,7 @@ namespace AK_DLL
         public OperatorDef operatorDef;
         public int oripathySeverity = 0;
 
-        public int preferedSkin = 1;
+        public int preferedSkin = 1;  //0是精0, 1是精2, 后面是换装
 
         public OperatorDocument(string defName, Pawn p, Thing weapon, OperatorDef operatorDef) : this()
         {

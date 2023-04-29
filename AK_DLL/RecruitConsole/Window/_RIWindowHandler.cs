@@ -51,9 +51,8 @@ namespace AK_DLL
                     break;
                 case RIWindowType.Op_Detail:
                     Log.Message($"open detail at {def.defName}");
-                    RIWindow_OperatorDetail windowOpDetail = new RIWindow_OperatorDetail(new DiaNode(new TaggedString(def.nickname)), true);
-                    windowOpDetail.soundAmbient = SoundDefOf.RadioComms_Ambience;
-                    Find.WindowStack.Add(windowOpDetail);
+                    actualRIWindow = new RIWindow_OperatorDetail();
+                    actualRIWindow.DrawUI("Operator Detail");
                     break;
                 default:
                     Log.ErrorOnce("MIS. Invaild RIWindow Type", 1);

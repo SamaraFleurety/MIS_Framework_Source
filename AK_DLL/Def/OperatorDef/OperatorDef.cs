@@ -21,7 +21,7 @@ namespace AK_DLL
         public BackstoryDef childHood;//童年背景故事
         public BackstoryDef adultHood;//成年背景故事
 
-        public List<OperatorAbilityDef> abilities;//技能
+        public List<OperatorAbilityDef> abilities = new List<OperatorAbilityDef>();//技能
 
         public int age = 16;//年龄
         public int realAge = -1; //实际年龄
@@ -46,7 +46,11 @@ namespace AK_DLL
         public BeardDef beard;//胡须
 
         public OperatorClassDef operatorType;//干员类型
-        public string stand;//立绘
+
+        public string stand;//精2立绘
+        public string commonStand;  //精0立绘
+        public List<string> fashion;
+
         public Vector2 standOffset;
         public float standRatio = 3f;
         public string headPortrait;//头像
@@ -398,6 +402,9 @@ namespace AK_DLL
         }
         private void AutoFill_StandPortrait()
         {
+            string standPath;
+            string temp;
+            //FIXME 这写的啥玩意儿？记得把try去掉
             if (this.headPortrait == null)
             {
                 string portraitPath = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorIDFrom(this.defName) + "Portrait";
@@ -415,7 +422,7 @@ namespace AK_DLL
 
             if (this.stand == null)
             {
-                string standPath = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorIDFrom(this.defName) + "Stand";
+                standPath = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorIDFrom(this.defName) + "Stand";
                 this.stand = standPath;
                 try
                 {
@@ -426,6 +433,21 @@ namespace AK_DLL
                     Log.Error($"{this.nickname}缺乏立绘。");
                     this.stand = "UI/Image/Caster/DuskStand";
                 }
+            }
+
+            if (this.commonStand == null)
+            {
+                standPath = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorIDFrom(this.defName) + "Common";
+                if (ContentFinder<Texture2D>.Get(standPath, false) != null) this.commonStand = standPath;
+                else this.commonStand = null;
+            }
+            if (fashion == null) fashion = new List<string>();
+            standPath = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorIDFrom(this.defName) + "Fashion";
+            if (ContentFinder<Texture2D>.Get(standPath, false) != null) this.fashion.Add(standPath);
+            for (int i = 0; i < 10; ++i)
+            {
+                temp = standPath + TypeDef.romanNumber[i];
+                if (ContentFinder<Texture2D>.Get(temp, false) != null) this.fashion.Add(temp);
             }
         }
         private void AutoFill_Apparel()

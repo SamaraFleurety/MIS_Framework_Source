@@ -15,6 +15,8 @@ namespace AK_DLL
         public static AssetBundle FSAsset;
         private static GameObject EVSystem;
         public static GameObject EVSystemInstance;
+
+        private static List<ModContentPack> Mods => LoadedModManager.RunningMods.ToList();
         /*public static void PrintfHairColor(this Pawn p)
         {
 			Log.Message($"pawnHC: {p.story.HairColor.r}, {p.story.HairColor.g}, {p.story.HairColor.b},{p.story.HairColor.a}");
@@ -51,8 +53,15 @@ namespace AK_DLL
 
         private static void InitializeUI()
         {
-            //fixme：改成相对路径
-            FSAsset = AssetBundle.LoadFromFile(@"S:/Program Files (x86)/Steam/steamapps/common/RimWorld/Mods/Main/Asset/fsassets");
+            for (int i = 0; i < Mods.Count; ++i)
+            {
+                if (Mods[i].Name == "M.I.S. - Framework")
+                {
+                    Log.Message(Mods[i].RootDir);
+                    FSAsset = AssetBundle.LoadFromFile(Mods[i].RootDir + "/Asset/fsassets");
+                }
+            }
+            //FSAsset = AssetBundle.LoadFromFile(@"S:/Program Files (x86)/Steam/steamapps/common/RimWorld/Mods/Framework/Asset/fsassets");
             if (FSAsset == null)
             {
                 Log.Error("MIS. Critical Error: Missing Assets");

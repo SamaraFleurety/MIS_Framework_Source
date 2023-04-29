@@ -46,6 +46,10 @@
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>./packages/Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
+    <Reference Include="FSUI, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>S:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\Framework\Assemblies\FSUI.dll</HintPath>
+    </Reference>
     <Reference Include="HarmonyMod">
       <HintPath>./packages/HarmonyMod.dll</HintPath>
     </Reference>

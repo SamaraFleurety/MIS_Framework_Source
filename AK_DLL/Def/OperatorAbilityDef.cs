@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Verse;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace AK_DLL
 {
@@ -39,5 +40,7 @@ namespace AK_DLL
         public int maxCharge = 1;
         public bool displayOnUndraft = false;
         public bool grouped = false;
+
+        public Texture2D Icon => ContentFinder<Texture2D>.Get(icon);
     }
 }

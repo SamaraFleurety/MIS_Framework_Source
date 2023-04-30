@@ -19,7 +19,7 @@ namespace AK_DLL
         {
             UIPrefab = bundle.LoadAsset<GameObject>(path);
 
-            AK_Tool.disableIMGUI = false;
+            AK_Tool.disableIMGUI = true;
             UIInstance = GameObject.Instantiate(UIPrefab);
             UIInstance.SetActive(true);
             this.DoContent();

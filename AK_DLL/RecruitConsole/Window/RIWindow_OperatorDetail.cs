@@ -376,11 +376,11 @@ namespace AK_DLL
                     {
                         RecruitConsole.TryGetComp<CompRefuelable>().ConsumeFuel(Def.ticketCost);
                         Def.Recruit(RecruitConsole.Map);
+                        this.Close(true);
                         if (false)
                         {
                             RIWindowHandler.OpenRIWindow(RIWindowType.Op_List);
                         }
-                        this.Close(false);
                         /*RIWindow_OperatorList window = new RIWindow_OperatorList(new DiaNode(new TaggedString()), true);
                         window.soundAmbient = SoundDefOf.RadioComms_Ambience;
                         Find.WindowStack.Add(window);*/

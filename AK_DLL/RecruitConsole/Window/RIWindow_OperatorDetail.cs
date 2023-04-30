@@ -302,7 +302,10 @@ namespace AK_DLL
             Initialization();
             DrawFashionBtn();
             ChangeStandTo(preferredSkin, true);
+
             DrawOperatorAbility();
+            if (doc != null) SwitchGroupedSkillTo(doc.preferedAbility);
+
             DrawWeapon();
             DrawTrait();
 
@@ -310,7 +313,6 @@ namespace AK_DLL
             ChangeVanillaSkillChartTo(preferredVanillaSkillChart);
 
             DrawDescription();
-            Log.Message("fin draw op");
         }
 
         private void Initialization()
@@ -486,7 +488,6 @@ namespace AK_DLL
             });
 
             //
-            Log.Message("ad");
             GameObject radarPanel = GameObject.Find("SkillRadarPanel");
             vanillaSkillBtns.Add(radarPanel);
             RadarChart radarChart = radarPanel.GetComponentInChildren<RadarChart>();
@@ -498,7 +499,6 @@ namespace AK_DLL
                 radarChart.vertexLabelValues[i] = Def.SortedSkills[i].skill.label.Translate() + Def.SortedSkills[i].level.ToString();
                 radarChart.data[0].values.Add((float)Def.SortedSkills[i].level / 20.0f);
             }
-            Log.Message($"ae, {radarChart.data[0].values.Count}");
         }
 
         //0和2是按钮，1和3是图表本身
@@ -535,18 +535,15 @@ namespace AK_DLL
 
         private void DrawOperatorAbility()
         {
-            Log.Message("ska");
             int skillCnt = Def.abilities.Count;
             if (skillCnt == 0) return;
             Transform opAbilityPanel = GameObject.Find("OpAbilityPanel").transform;
             GameObject opAbilityPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("OpAbilityIcon");
             GameObject opAbilityInstance;
             opSkills = new List<GameObject>();
-            Log.Message("skb");
             int logicOrder = 0; //在技能组内，实际的顺序
             for (int i = 0; i < skillCnt; ++i)
             {
-                Log.Message("skc");
                 OperatorAbilityDef opAbilty = Def.abilities[i];
                 opAbilityInstance = GameObject.Instantiate(opAbilityPrefab, opAbilityPanel);
                 Texture2D icon = opAbilty.Icon;
@@ -569,11 +566,8 @@ namespace AK_DLL
                     opAbilityInstance.transform.GetChild(1).gameObject.SetActive(false);
                 }
 
-                Log.Message("skd");
                 opAbilityInstance.SetActive(true);
-                Log.Message("ske");
             }
-            Log.Message("skf");
         }
 
         private void SwitchGroupedSkillTo(int val)

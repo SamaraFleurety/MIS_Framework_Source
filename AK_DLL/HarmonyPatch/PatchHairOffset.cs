@@ -291,6 +291,7 @@ namespace AK_DLL
 
     */
     //转译器实验
+    /*
     [HarmonyPatch(typeof(PawnRenderer), "DrawHeadHair")]
 
     public static class PatchHairOffset
@@ -359,9 +360,9 @@ namespace AK_DLL
                         drawLocAfterBranchs = bPtr;
                     }
             }
-                }*/
+                }
             Log.Message("END");
             return codes;
         }
-    }
+    }*/
 }

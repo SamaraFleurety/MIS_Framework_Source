@@ -253,7 +253,6 @@ namespace AK_DLL
             {
                 Log.Message("MIS. Critical error: No class loaded");
             }
-            Log.Message("st");
             cachedOperatorList = RIWindowHandler.operatorDefs[operatorClass].Values.ToList();
             NeedSortTo((int)OperatorSortType.Alphabet, true);
             SortOperator<string>(delegate (string a, string b)
@@ -265,7 +264,6 @@ namespace AK_DLL
             });
             if (opListLoc == null) opListLoc = GameObject.Find("OpRegister").transform;
             DrawOperatorListContent();
-            Log.Message("fin");
         }
         //实际绘制所有干员列表 会在排序等情况被重复调用
         private void DrawOperatorListContent()
@@ -291,7 +289,6 @@ namespace AK_DLL
                 else break;
                 ++cnt;
             }
-            Log.Message("fin draw ops");
             //干员绘制
         }
 

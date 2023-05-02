@@ -261,6 +261,7 @@ namespace AK_DLL
 
         List<GameObject> opSkills;  //只有可选技能被加进来。
 
+        static Transform opStandLoc;
         private OperatorDef Def
         {
             get { return RIWindowHandler.def; }
@@ -313,6 +314,8 @@ namespace AK_DLL
             ChangeVanillaSkillChartTo(preferredVanillaSkillChart);
 
             DrawDescription();
+
+            DrawDebugPanel();
         }
 
         private void Initialization()
@@ -349,6 +352,7 @@ namespace AK_DLL
             navBtn = GameObject.Find("BtnHome");
             navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate()
             {
+                RIWindow_OperatorDetail.isRecruit = true;
                 RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
                 this.Close();
             });
@@ -364,6 +368,7 @@ namespace AK_DLL
             Button button = navBtn.GetComponentInChildren<Button>();
             if (isRecruit)
             {
+                GameObject.Find("TexChangeSec").SetActive(false);
                 //FIXME: 更换贴图
                 button.onClick.AddListener(delegate ()
                 {
@@ -389,7 +394,6 @@ namespace AK_DLL
             }
             else
             {
-                button.GetComponent<Image>().sprite = AK_Tool.FSAsset.LoadAsset<Sprite>("ChangeSec");
                 //fixme
                 button.onClick.AddListener(delegate ()
                 {
@@ -573,7 +577,7 @@ namespace AK_DLL
         private void SwitchGroupedSkillTo(int val)
         {
             Log.Message($"try s skills to {val}");
-            if (doc == null || doc.currentExist == false) return;
+            if (doc == null || doc.currentExist == false || Def.abilities.Count == 0) return;
             opSkills[PreferredAbility].transform.GetChild(1).gameObject.SetActive(false);
             PreferredAbility = val;
             opSkills[PreferredAbility].transform.GetChild(1).gameObject.SetActive(true);
@@ -581,12 +585,25 @@ namespace AK_DLL
 
         private void DrawStand()
         {
-            Image opStand = GameObject.Find("OpStand").GetComponent<Image>();
+            GameObject opStandObj = GameObject.Find("OpStand");
+            opStandLoc = opStandObj.transform;
+            opStandLoc.localPosition = Vector3.zero;
+            Image opStand = opStandObj.GetComponent<Image>();
             Texture2D tex;
+
             if (preferredSkin == 0) tex = ContentFinder<Texture2D>.Get(Def.commonStand);
             else if (preferredSkin == 1) tex = ContentFinder<Texture2D>.Get(Def.stand);
             else tex = ContentFinder<Texture2D>.Get(Def.fashion[preferredSkin - 2]);
+
             opStand.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
+
+            if (Def.standOffsets != null && Def.standOffsets.ContainsKey(preferredSkin))
+            {
+                Vector3 V3 = Def.standOffsets[preferredSkin];
+                Transform opStandLoc = opStandObj.transform;
+                opStandLoc.localPosition = new Vector3(V3.x, V3.y);
+                opStandLoc.localScale = new Vector3(V3.z, V3.z, V3.z);
+            }
         }
 
         private void DrawTrait()
@@ -623,6 +640,59 @@ namespace AK_DLL
             fBtn.transform.GetChild(0).gameObject.SetActive(false);
             fBtn.transform.GetChild(1).gameObject.SetActive(true);
             DrawStand();
+        }
+
+        void DrawDebugPanel()
+        {
+            if (Prefs.DevMode == false)
+            {
+                GameObject.Find("DebugToolPanel").SetActive(false);
+            }
+            else
+            {
+                GameObject.Find("_DPlus").GetComponent<Button>().onClick.AddListener(delegate()
+                {
+                    Transform loc = GameObject.Find("OpStand").transform;
+                    Vector3 v3 = loc.localScale;
+                    loc.localScale = new Vector3(v3.z + 0.1f, v3.z + 0.1f, v3.z + 0.1f);
+                    Log.Message($"MIS. {Def.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
+                }); 
+                GameObject.Find("_DMinus").GetComponent<Button>().onClick.AddListener(delegate ()
+                {
+                    Transform loc = GameObject.Find("OpStand").transform;
+                    Vector3 v3 = loc.localScale;
+                    loc.localScale = new Vector3(v3.z - 0.1f, v3.z - 0.1f, v3.z - 0.1f);
+                    Log.Message($"MIS. {Def.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
+                });
+                GameObject.Find("_DUP").GetComponent<Button>().onClick.AddListener(delegate ()
+                {
+                    Transform loc = GameObject.Find("OpStand").transform;
+                    Vector3 v3 = loc.localPosition;
+                    loc.localPosition = new Vector3(v3.x, v3.y + 10f, v3.z);
+                    Log.Message($"MIS. {Def.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
+                });
+                GameObject.Find("_DDown").GetComponent<Button>().onClick.AddListener(delegate ()
+                {
+                    Transform loc = GameObject.Find("OpStand").transform;
+                    Vector3 v3 = loc.localPosition;
+                    loc.localPosition = new Vector3(v3.x, v3.y - 10f, v3.z);
+                    Log.Message($"MIS. {Def.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
+                });
+                GameObject.Find("_DLeft").GetComponent<Button>().onClick.AddListener(delegate ()
+                {
+                    Transform loc = GameObject.Find("OpStand").transform;
+                    Vector3 v3 = loc.localPosition;
+                    loc.localPosition = new Vector3(v3.x - 10f, v3.y, v3.z);
+                    Log.Message($"MIS. {Def.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
+                });
+                GameObject.Find("_DRight").GetComponent<Button>().onClick.AddListener(delegate ()
+                {
+                    Transform loc = GameObject.Find("OpStand").transform;
+                    Vector3 v3 = loc.localPosition;
+                    loc.localPosition = new Vector3(v3.x + 10f, v3.y, v3.z);
+                    Log.Message($"MIS. {Def.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
+                });
+            }
         }
     }
 }

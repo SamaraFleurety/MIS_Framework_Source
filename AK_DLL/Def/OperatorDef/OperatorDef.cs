@@ -51,6 +51,9 @@ namespace AK_DLL
         public string commonStand;  //精0立绘
         public List<string> fashion;
 
+        //因为并不知道是否有某种立绘，所以用字典存。约定-1为头像，0是精0立绘，1是精2立绘，2-后面是换装
+        //这里的V3，x和y是x轴和y轴的偏移，z其实是缩放
+        public Dictionary<int, Vector3> standOffsets = new Dictionary<int, Vector3>();
         public Vector2 standOffset;
         public float standRatio = 3f;
         public string headPortrait;//头像

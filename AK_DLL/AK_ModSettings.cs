@@ -21,6 +21,7 @@ namespace AK_DLL
         public static int yOffset = 0;
         public static int ratio = 20;
 
+        //开启一些正常游戏不会使用的测试功能
         public static bool debugOverride = false;
         public static bool smartUI = true;
         public static string secretary = "Amiya";

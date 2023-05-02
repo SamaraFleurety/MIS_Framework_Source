@@ -19,6 +19,7 @@ namespace AK_DLL
             t.initAction = delegate
             {
                 Find.TickManager.Pause();
+                RIWindow_OperatorDetail.isRecruit = true;
                 RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu,TargetThingA);
             };
             yield return t;

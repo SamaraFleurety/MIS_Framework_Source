@@ -174,6 +174,7 @@ namespace AK_DLL
             navBtn = GameObject.Find("btnBack").transform.GetChild(0).gameObject;
             navBtn.GetComponent<Button>().onClick.AddListener(delegate ()
             {
+                RIWindow_OperatorDetail.isRecruit = true;
                 this.Close();
                 RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
             });
@@ -181,6 +182,7 @@ namespace AK_DLL
             navBtn = GameObject.Find("btnHome").transform.GetChild(0).gameObject;
             navBtn.GetComponent<Button>().onClick.AddListener(delegate ()
             {
+                RIWindow_OperatorDetail.isRecruit = true;
                 this.Close();
                 RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
             });
@@ -188,6 +190,7 @@ namespace AK_DLL
             navBtn = GameObject.Find("btnEscape").transform.GetChild(0).gameObject;
             navBtn.GetComponent<Button>().onClick.AddListener(delegate ()
             {
+                RIWindow_OperatorDetail.isRecruit = true;
                 this.Close();
             });
         }

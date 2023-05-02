@@ -124,9 +124,9 @@ namespace AK_DLL
         {
             foreach (Dictionary<string, OperatorDef> i in RIWindowHandler.operatorDefs.Values)
             {
-                return i[operatorID];
+                if(i.ContainsKey(operatorID)) return i[operatorID];
             }
-            return null;
+            return GetDef("Amiya");
         }
         public static OperatorDocument GetDoc(this Pawn p)
         {

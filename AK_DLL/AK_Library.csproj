@@ -273,6 +273,7 @@
     <Compile Include="Def\OperatorDef\OperatorDef_Reserve.cs" />
     <Compile Include="Def\OperatorInteractionDef.cs" />
     <Compile Include="Def\OperatorSeriesDef.cs" />
+    <Compile Include="GC_MiscData.cs" />
     <Compile Include="HarmonyPatch\PatchAutoChangeHair.cs" />
     <Compile Include="HarmonyPatch\PatchDisableRootUI.cs" />
     <Compile Include="HarmonyPatch\PatchHairOffset.cs" />

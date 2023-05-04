@@ -4,6 +4,7 @@ C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\0Harmony.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\AlienRace.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\Assembly-CSharp-firstpass.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\Assembly-CSharp.dll
+C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\FSUI.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\HarmonyMod.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\ISharpZipLib.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\Mono.Posix.dll
@@ -77,5 +78,3 @@ C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\obj\Debug\AK_Library.csproj.CoreCompi
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\obj\Debug\AK_Library.csproj.CopyComplete
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\obj\Debug\AK_DLL.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\obj\Debug\AK_DLL.pdb
-C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\FSUI.dll
-C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\obj\Debug\AK_Library.csproj.AssemblyReference.cache

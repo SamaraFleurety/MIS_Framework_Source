@@ -175,7 +175,7 @@ namespace AK_DLL
             navBtn.GetComponent<Button>().onClick.AddListener(delegate ()
             {
                 RIWindow_OperatorDetail.isRecruit = true;
-                this.Close();
+                this.Close(false);
                 RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
             });
             //主界面按钮
@@ -183,7 +183,7 @@ namespace AK_DLL
             navBtn.GetComponent<Button>().onClick.AddListener(delegate ()
             {
                 RIWindow_OperatorDetail.isRecruit = true;
-                this.Close();
+                this.Close(false);
                 RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
             });
             //退出按钮

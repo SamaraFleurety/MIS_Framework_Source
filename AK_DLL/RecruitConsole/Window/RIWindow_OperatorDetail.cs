@@ -251,7 +251,7 @@ namespace AK_DLL
 
         private bool canRecruit;
 
-        int preferredSkin = 1;
+        int preferredSkin = 1;  //当前选中皮肤
 
         static int preferredVanillaSkillChart = 0;
 
@@ -354,7 +354,7 @@ namespace AK_DLL
             {
                 RIWindow_OperatorDetail.isRecruit = true;
                 RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
-                this.Close();
+                this.Close(false);
             });
             //取消
             navBtn = GameObject.Find("BtnCancel");
@@ -399,8 +399,10 @@ namespace AK_DLL
                 {
                     isRecruit = true;
                     AK_ModSettings.secretary = AK_Tool.GetOperatorIDFrom(Def.defName);
+                    AK_ModSettings.secretaryLoc = TypeDef.defaultSecLoc;
+                    AK_ModSettings.secretarySkin = preferredSkin;
+                    this.Close(false);
                     RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
-                    this.Close();
                 });
             }
         }

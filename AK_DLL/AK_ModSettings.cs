@@ -25,6 +25,8 @@ namespace AK_DLL
         public static bool debugOverride = false;
         public static bool smartUI = true;
         public static string secretary = "Amiya";
+        public static int secretarySkin = 1;
+        public static Vector3 secretaryLoc = new Vector3(400, 0, 1); //(x坐标, y坐标, 缩放倍率)。坐标使用unity体系，即左下角是(0,0)，上右为正。
         //public List<Pawn> exampleListOfPawns = new List<Pawn>();
         //public Dictionary<string, Pawn>;
 
@@ -41,6 +43,7 @@ namespace AK_DLL
             Scribe_Values.Look(ref debugOverride, "dOverride", false);
             Scribe_Values.Look(ref smartUI, "smartUI", true, true);
             Scribe_Values.Look(ref secretary, "secretary", "Amiya", true);
+            Scribe_Values.Look(ref secretaryLoc, "secLoc", new Vector3(400, 0, 1), true);
             //Scribe_Collections.Look(ref exampleListOfPawns, "exampleListOfPawns", LookMode.Reference);
             base.ExposeData();
         }

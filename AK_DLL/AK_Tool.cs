@@ -72,6 +72,7 @@ namespace AK_DLL
             }
 
             EVSystem = FSAsset.LoadAsset<GameObject>("EventSystem");
+
         }
 
         //我真的不知道为什么这个ev system过一会自己就会变null。

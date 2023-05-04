@@ -38,8 +38,11 @@ namespace AK_DLL
             {
                 case RIWindowType.MainMenu:
                     RIWindow_OperatorDetail.isRecruit = true;
-                    RIWindow_MainMenu window_MainMenu = new RIWindow_MainMenu(new DiaNode(new TaggedString()), true);
-                    Find.WindowStack.Add(window_MainMenu);
+                    actualRIWindow = new RIWindow_MainMenu();
+                    actualRIWindow.DrawUI("MainMenu");
+
+                    /*RIWindow_MainMenu window_MainMenu = new RIWindow_MainMenu(new DiaNode(new TaggedString()), true);
+                    Find.WindowStack.Add(window_MainMenu);*/
                     break;
                 case RIWindowType.Op_Series:
                     //break;  //可能不再会做，而是整合进opList
@@ -50,7 +53,6 @@ namespace AK_DLL
                     actualRIWindow.DrawUI("Operator List");
                     break;
                 case RIWindowType.Op_Detail:
-                    Log.Message($"open detail at {def.defName}");
                     actualRIWindow = new RIWindow_OperatorDetail();
                     actualRIWindow.DrawUI("Operator Detail");
                     break;

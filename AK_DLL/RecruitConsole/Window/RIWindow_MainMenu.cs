@@ -6,14 +6,17 @@ using System.Threading.Tasks;
 using Verse;
 using RimWorld;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace AK_DLL
 {
-    [HotSwappable]
+    /* legacy
+     * [HotSwappable]
     public class RIWindow_MainMenu : Dialog_NodeTree
     {
 
-        #region 没啥用的常量
+        #region 常量，属性
         //左边6个主要功能按钮
         private static readonly int mainBtnWidth = 320, mainBtnHeight = 480, mainBtnMargin = 25;
         private Texture2D FBtn_Option => ContentFinder<Texture2D>.Get("UI/Frame/MM_Option");
@@ -39,6 +42,14 @@ namespace AK_DLL
         //次要功能按钮
         private Texture2D SBtn_ChangeSecretary => ContentFinder<Texture2D>.Get("UI/Frame/Sub_Change");
 
+        private Texture2D SBtn_Locked => ContentFinder<Texture2D>.Get("UI/Frame/Locked");
+        private Texture2D SBtn_Unlocked => ContentFinder<Texture2D>.Get("UI/Frame/Lock - Unlocked");
+        private Texture2D SBtn_ScaleUp => ContentFinder<Texture2D>.Get("UI/Frame/Lens - Plus");
+        private Texture2D SBtn_ScaleDown => ContentFinder<Texture2D>.Get("UI/Frame/Lens - Minus");
+        private Texture2D SBtn_ArrowBase => ContentFinder<Texture2D>.Get("UI/Frame/Arrow-None-Button-White");
+
+        private Texture2D Transp => ContentFinder<Texture2D>.Get("UI/Frame/transp");
+
         //
         public RIWindow_MainMenu(DiaNode startNode, bool radioMode) : base(startNode, radioMode, false, null)
         {
@@ -50,12 +61,18 @@ namespace AK_DLL
                 return new Vector2(1920f, 1080f);
             }
         }
-        #endregion
-
         public OperatorDef secretaryDef
         {
             get { return AK_Tool.GetDef(AK_ModSettings.secretary); }
         }
+        private Vector3 SecLoc
+        {
+            get { return AK_ModSettings.secretaryLoc; }
+            set { AK_ModSettings.secretaryLoc = value; }
+        }
+        #endregion
+
+        static bool lockedSec = true;
 
         public override void DoWindowContents(Rect inRect)
         {
@@ -156,7 +173,211 @@ namespace AK_DLL
                 RIWindow_OperatorDetail.isRecruit = false;
                 RIWindowHandler.OpenRIWindow(RIWindowType.Op_List);
             }
+
+            //调整助理位置
+            subBtn.y += btnLength + mainBtnMargin;
+            if (lockedSec)
+            {
+                if (Widgets.ButtonImage(subBtn, SBtn_Locked))
+                {
+                    lockedSec = false;
+                }
+            }
+            else
+            {
+                Vector3 secLoc = SecLoc;
+                if (Widgets.ButtonImage(subBtn, SBtn_Unlocked))
+                {
+                    lockedSec = true;
+                }
+                subBtn.y += btnLength + mainBtnMargin;
+                if (Widgets.ButtonImage(subBtn, SBtn_ScaleUp))
+                {
+                    secLoc.z += 0.1f;
+                    SecLoc = secLoc;
+                }
+                subBtn.y += btnLength + mainBtnMargin;
+                if (Widgets.ButtonImage(subBtn, SBtn_ScaleDown))
+                {
+                    secLoc.z -= 0.1f;
+                    SecLoc = secLoc;
+                }
+                subBtn.y += btnLength + mainBtnMargin;
+                Widgets.DrawTextureFitted(subBtn, SBtn_ArrowBase, 1);
+                Rect subBtnArrow = new Rect(subBtn);
+                if (Widgets.ButtonImage(subBtnArrow, FBtn_Highlight))
+                {
+
+                }
+            }
+
             #endregion
         }
+    }*/
+
+    public class RIWindow_MainMenu : RIWindow
+    {
+        List<GameObject> adjustSecBtns;
+
+        private GameObject ClickedBtn
+        {
+            get
+            {
+                return EventSystem.current.currentSelectedGameObject;
+            }
+        }
+
+        private OperatorDef SecretaryDef => AK_Tool.GetDef(AK_ModSettings.secretary);
+
+        private Vector3 SecretaryLoc
+        {
+            get { return AK_ModSettings.secretaryLoc; }
+            set { AK_ModSettings.secretaryLoc = value; }
+        }
+
+
+        public override void DoContent()
+        {
+            DrawNavBtn();
+            DrawResoureHeader();
+
+            DrawMainFeature();
+            DrawSubFeature();
+
+            DrawStand();
+        }
+
+        private void DrawNavBtn()
+        {
+            GameObject.Find("BtnBack").GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            {
+                RIWindow_OperatorDetail.isRecruit = true;
+                this.Close();
+            });
+        }
+        private void DrawMainFeature()
+        {
+            GameObject.Find("MBtn_Recruit").GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            {
+                RIWindow_OperatorDetail.isRecruit = true;
+                RIWindowHandler.OpenRIWindow(RIWindowType.Op_List);
+                this.Close(false);
+            });
+
+            //fixme:没做
+            GameObject.Find("MBtn_Config").GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            {
+            });
+        }
+        private void DrawSubFeature()
+        {
+            GameObject temp;
+            GameObject.Find("SBtn_ChangeSecretary").GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            {
+                RIWindow_OperatorDetail.isRecruit = false;
+                RIWindowHandler.OpenRIWindow(RIWindowType.Op_List);
+                this.Close(false);
+            });
+
+            //点击已解锁的按钮变成未解锁。 解锁时，只需要启用锁定图标，不需要禁用未锁定图标。
+            GameObject.Find("SBtn_UnlockedSec").GetComponent<Button>().onClick.AddListener(delegate
+            {
+                GameObject.Find("SBtn_UnlockedSec").transform.GetChild(0).gameObject.SetActive(true);
+                SetSecretaryOffsetBtnsTo(false);
+            });
+
+            GameObject.Find("SBtn_LockedSec").GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            {
+                SetSecretaryOffsetBtnsTo(true);
+                ClickedBtn.SetActive(false);
+            });
+
+            temp = GameObject.Find("SBtn_Sec_ScaleUp");
+            adjustSecBtns = new List<GameObject>();
+            adjustSecBtns.Add(temp);
+            temp.GetComponent<Button>().onClick.AddListener(delegate ()
+            {
+                Vector3 v3 = SecretaryLoc;
+                v3.z += 0.05f;
+                SecretaryLoc = v3;
+                DrawStand();
+            });
+
+            temp = GameObject.Find("SBtn_Sec_ScaleDown");
+            adjustSecBtns.Add(temp);
+            temp.GetComponent<Button>().onClick.AddListener(delegate ()
+            {
+                Vector3 v3 = SecretaryLoc;
+                v3.z -= 0.05f;
+                SecretaryLoc = v3;
+                DrawStand();
+            });
+
+            temp = GameObject.Find("SBtn_Sec_Offset");
+            adjustSecBtns.Add(temp);
+            //对应上下左右
+            temp.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(delegate
+            {
+                Vector3 v3 = SecretaryLoc;
+                v3.y += 10;
+                SecretaryLoc = v3;
+                DrawStand();
+            });
+            temp.transform.GetChild(1).GetComponent<Button>().onClick.AddListener(delegate
+            {
+                Vector3 v3 = SecretaryLoc;
+                v3.y -= 10;
+                SecretaryLoc = v3;
+                DrawStand();
+            });
+            temp.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(delegate
+            {
+                Vector3 v3 = SecretaryLoc;
+                v3.x -= 10;
+                SecretaryLoc = v3;
+                DrawStand();
+            });
+            temp.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(delegate
+            {
+                Vector3 v3 = SecretaryLoc;
+                v3.x += 10;
+                SecretaryLoc = v3;
+                DrawStand();
+            });
+
+            SetSecretaryOffsetBtnsTo(false);
+
+        }
+
+        private void SetSecretaryOffsetBtnsTo(bool val)
+        {
+            foreach (GameObject i in adjustSecBtns)
+            {
+                i.SetActive(val);
+            }
+        }
+
+        private void DrawStand()
+        {
+            GameObject opStandObj = GameObject.Find("OpStand");
+            Image opStand = opStandObj.GetComponent<Image>();
+            Vector3 opStandLoc = SecretaryLoc;
+            Texture2D tex;
+            int preferredSkin = AK_ModSettings.secretarySkin;
+
+            if (preferredSkin == 0) tex = ContentFinder<Texture2D>.Get(SecretaryDef.commonStand);
+            else if (preferredSkin == 1) tex = ContentFinder<Texture2D>.Get(SecretaryDef.stand);
+            else tex = ContentFinder<Texture2D>.Get(SecretaryDef.fashion[preferredSkin - 2]);
+
+            opStand.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
+            opStandObj.transform.localPosition = new Vector3(opStandLoc.x, opStandLoc.y);
+            opStandObj.transform.localScale = new Vector3(opStandLoc.z, opStandLoc.z, opStandLoc.z);
+        }
+        //FIXME 没做
+        private void DrawResoureHeader()
+        {
+
+        }
+
     }
 }

@@ -23,10 +23,11 @@ namespace AK_DLL
 
         //开启一些正常游戏不会使用的测试功能
         public static bool debugOverride = false;
-        public static bool smartUI = true;
+
         public static string secretary = "Amiya";
         public static int secretarySkin = 1;
         public static Vector3 secretaryLoc = new Vector3(400, 0, 1); //(x坐标, y坐标, 缩放倍率)。坐标使用unity体系，即左下角是(0,0)，上右为正。
+
         //public List<Pawn> exampleListOfPawns = new List<Pawn>();
         //public Dictionary<string, Pawn>;
 
@@ -41,7 +42,6 @@ namespace AK_DLL
             Scribe_Values.Look(ref yOffset, "yOff");
             Scribe_Values.Look(ref ratio, "ratio");
             Scribe_Values.Look(ref debugOverride, "dOverride", false);
-            Scribe_Values.Look(ref smartUI, "smartUI", true, true);
             Scribe_Values.Look(ref secretary, "secretary", "Amiya", true);
             Scribe_Values.Look(ref secretaryLoc, "secLoc", new Vector3(400, 0, 1), true);
             //Scribe_Collections.Look(ref exampleListOfPawns, "exampleListOfPawns", LookMode.Reference);
@@ -64,7 +64,6 @@ namespace AK_DLL
             listingStandard.Begin(inRect);
             if (Prefs.DevMode) listingStandard.CheckboxLabeled("测试模式", ref AK_ModSettings.debugOverride, "开启明日方舟MOD的测试模式。如果您不是测试人员请勿勾选此选项。");
             listingStandard.CheckboxLabeled("AK_Option_Play".Translate(), ref AK_ModSettings.playOperatorVoice, "AK_Option_PlayD".Translate());
-            listingStandard.CheckboxLabeled("AK_Option_SmartUI".Translate(), ref AK_ModSettings.smartUI, "AK_Option_SmartUIDesc".Translate());
             AK_ModSettings.voiceIntervalTime = (int)listingStandard.SliderLabeled("AK_Option_Interval".Translate() + $"{(float)AK_ModSettings.voiceIntervalTime / 2.0}", AK_ModSettings.voiceIntervalTime, 0, 60f);
 
             listingStandard.CheckboxLabeled("AK_Option_DisP".Translate(), ref AK_ModSettings.displayBottomLeftPortrait);

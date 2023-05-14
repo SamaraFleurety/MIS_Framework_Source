@@ -261,6 +261,10 @@ namespace AK_DLL
 
         List<GameObject> opSkills;  //只有可选技能被加进来。
 
+        GameObject floatingBubblePrefab; //鼠标指上技能栏之类的地方的悬浮窗
+
+        GameObject floatingBubbleInstance;
+
         static Transform opStandLoc;
         private OperatorDef Def
         {
@@ -342,6 +346,7 @@ namespace AK_DLL
             {
                 recruitText = "AK_NoTicket".Translate();
             }
+            floatingBubblePrefab = GameObject.Find("FloatingInfPanel");
         }
 
         //确认招募和取消也是导航键
@@ -350,7 +355,7 @@ namespace AK_DLL
             GameObject navBtn;
             //Home
             navBtn = GameObject.Find("BtnHome");
-            navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate()
+            navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
                 RIWindow_OperatorDetail.isRecruit = true;
                 RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
@@ -358,7 +363,7 @@ namespace AK_DLL
             });
             //取消
             navBtn = GameObject.Find("BtnCancel");
-            navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate()
+            navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
                 RIWindowHandler.OpenRIWindow(RIWindowType.Op_List);
                 this.Close(false);
@@ -462,7 +467,7 @@ namespace AK_DLL
             GameObject skillTypeBtn = GameObject.Find("BtnBarChart");
             vanillaSkillBtns = new List<GameObject>();
             vanillaSkillBtns.Add(skillTypeBtn);
-            skillTypeBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate()
+            skillTypeBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
                 preferredVanillaSkillChart = 0;
                 ChangeVanillaSkillChartTo(0);
@@ -476,9 +481,10 @@ namespace AK_DLL
             {
                 skillBar = skillBarPanel.transform.GetChild(i).gameObject;
                 //技能名字
-                skillBar.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = Def.SortedSkills[i].skill.label.Translate();
+
+                skillBar.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = $"<color=\"{GetSkillLabelColor(Def.SortedSkills[i])}\">{Def.SortedSkills[i].skill.label.Translate()}</color>";
                 //技能等级 显示与滑动条
-                skillBar.transform.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text =  Def.SortedSkills[i].level.ToString();
+                skillBar.transform.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text = Def.SortedSkills[i].level.ToString();
                 skillBar.GetComponentInChildren<Slider>().value = Def.SortedSkills[i].level;
             }
             vanillaSkillBtns.Add(skillBarPanel);
@@ -493,7 +499,7 @@ namespace AK_DLL
                 ChangeVanillaSkillChartTo(2);
             });
 
-            //
+            //雷达图
             GameObject radarPanel = GameObject.Find("SkillRadarPanel");
             vanillaSkillBtns.Add(radarPanel);
             RadarChart radarChart = radarPanel.GetComponentInChildren<RadarChart>();
@@ -502,9 +508,29 @@ namespace AK_DLL
             radarChart.data[0].color = new Color(0.9686275f, 0.5882353f, 0.03137255f);
             for (int i = 0; i < TypeDef.SortOrderSkill.Count; ++i)
             {
-                radarChart.vertexLabelValues[i] = Def.SortedSkills[i].skill.label.Translate() + Def.SortedSkills[i].level.ToString();
+                radarChart.vertexLabelValues[i] = $"<color=\"{GetSkillLabelColor(Def.SortedSkills[i])}\">{Def.SortedSkills[i].skill.label.Translate()}</color>";
                 radarChart.data[0].values.Add((float)Def.SortedSkills[i].level / 20.0f);
             }
+        }
+
+        private string GetSkillLabelColor(SkillAndFire i)
+        {
+            int j = (int)i.fireLevel;
+
+            switch(j)
+            {
+                case 1:
+                    return "yellow";
+                    break;
+                case 2:
+                    return "red";
+                    break;
+                default:
+                    return "white";
+                    break;
+            }
+
+            return null;
         }
 
         //0和2是按钮，1和3是图表本身
@@ -560,7 +586,7 @@ namespace AK_DLL
                 {
                     SwitchGroupedSkillTo(btnOrder(ClickedBtn));
                 });
-                
+
                 //右下角的勾 常驻技能橙色。
                 if (!opAbilty.grouped)
                 {
@@ -617,7 +643,7 @@ namespace AK_DLL
 
             for (int i = 0; i < Def.traits.Count; ++i)
             {
-                traitInstance = GameObject.Instantiate(traitPrefab, traitPanel); 
+                traitInstance = GameObject.Instantiate(traitPrefab, traitPanel);
                 TraitDegreeData traitDef = Def.traits[i].def.DataAtDegree(Def.traits[i].degree);
                 traitInstance.GetComponentInChildren<TextMeshProUGUI>().text = traitDef.label.Translate();
             }
@@ -652,13 +678,13 @@ namespace AK_DLL
             }
             else
             {
-                GameObject.Find("_DPlus").GetComponent<Button>().onClick.AddListener(delegate()
+                GameObject.Find("_DPlus").GetComponent<Button>().onClick.AddListener(delegate ()
                 {
                     Transform loc = GameObject.Find("OpStand").transform;
                     Vector3 v3 = loc.localScale;
                     loc.localScale = new Vector3(v3.z + 0.1f, v3.z + 0.1f, v3.z + 0.1f);
                     Log.Message($"MIS. {Def.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
-                }); 
+                });
                 GameObject.Find("_DMinus").GetComponent<Button>().onClick.AddListener(delegate ()
                 {
                     Transform loc = GameObject.Find("OpStand").transform;
@@ -695,6 +721,18 @@ namespace AK_DLL
                     Log.Message($"MIS. {Def.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
                 });
             }
+        }
+
+        void DrawFloatingBubble(string text)
+        {
+            if (floatingBubbleInstance != null) GameObject.Destroy(floatingBubbleInstance);
+            floatingBubbleInstance = GameObject.Instantiate(floatingBubbleInstance);
+            floatingBubbleInstance.GetComponentInChildren<TextMeshProUGUI>().text = text;
+        }
+
+        void DestroyFloatingBubble()
+        {
+            if (floatingBubbleInstance != null) GameObject.Destroy(floatingBubbleInstance);
         }
     }
 }

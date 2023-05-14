@@ -123,6 +123,44 @@ namespace AK_DLL
         }
         #endregion
 
+        public virtual void Recruit(IntVec3 intVec, Map map)
+        {
+            currentlyGenerating = true;
+
+            operator_Pawn = PawnGenerator.GeneratePawn(PawnKindDefOf.Colonist, Faction.OfPlayer);
+            Hediff_Operator hediff = Recruit_Hediff();
+
+            Recruit_PersonalStat();
+
+            Recruit_AddRelations();
+
+            //operator_Pawn.story.CrownType = CrownType.Average;
+
+            Thing weapon = Recruit_Inventory();
+
+            GenSpawn.Spawn(operator_Pawn, intVec, map);
+            CameraJumper.TryJump(new GlobalTargetInfo(intVec, map));
+
+            //基因
+            if (ModLister.BiotechInstalled)
+            {
+                operator_Pawn.genes = new Pawn_GeneTracker(operator_Pawn);
+                operator_Pawn.genes.SetXenotype(DefDatabase<XenotypeDef>.GetNamed("AK_BaseType"));
+            }
+            //播放语音
+            this.voicePackDef.recruitSound.PlaySound();
+
+            //档案系统
+            GameComp_OperatorDocumentation.AddPawn(this.OperatorID, this, operator_Pawn, weapon);
+            hediff.document = GameComp_OperatorDocumentation.operatorDocument[this.OperatorID];
+            hediff.document.voicePack = this.voicePackDef;
+            //hediff.document.operatorDef = this;
+
+            Recruit_Ability(hediff);
+
+            currentlyGenerating = false;
+        }
+
         public virtual void Recruit(Map map)
         {
             currentlyGenerating = true;
@@ -131,36 +169,7 @@ namespace AK_DLL
             {
                 if (RCellFinder.TryFindRandomPawnEntryCell(out intVec, map, 0.2f, false, null))
                 {
-                    operator_Pawn = PawnGenerator.GeneratePawn(PawnKindDefOf.Colonist, Faction.OfPlayer);
-                    Hediff_Operator hediff = Recruit_Hediff();
-
-                    Recruit_PersonalStat();
-
-                    Recruit_AddRelations();
-
-                    //operator_Pawn.story.CrownType = CrownType.Average;
-
-                    Thing weapon = Recruit_Inventory();
-
-                    GenSpawn.Spawn(operator_Pawn, intVec, map);
-                    CameraJumper.TryJump(new GlobalTargetInfo(intVec, map));
-
-                    //基因
-                    if (ModLister.BiotechInstalled)
-                    {
-                        operator_Pawn.genes = new Pawn_GeneTracker(operator_Pawn);
-                        operator_Pawn.genes.SetXenotype(DefDatabase<XenotypeDef>.GetNamed("AK_BaseType"));
-                    }
-                    //播放语音
-                    this.voicePackDef.recruitSound.PlaySound();
-
-                    //档案系统
-                    GameComp_OperatorDocumentation.AddPawn(this.OperatorID, this, operator_Pawn, weapon);
-                    hediff.document = GameComp_OperatorDocumentation.operatorDocument[this.OperatorID];
-                    hediff.document.voicePack = this.voicePackDef;
-                    //hediff.document.operatorDef = this;
-
-                    Recruit_Ability(hediff);
+                    Recruit(intVec, map);
                 }
             }
             currentlyGenerating = false;
@@ -358,6 +367,9 @@ namespace AK_DLL
             ThingWithComps weapon = null;
             if (this.weapon != null)
             {
+                if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null && AK_ModSettings.debugOverride) {
+                    return null;
+                }
                 weapon = (ThingWithComps)ThingMaker.MakeThing(this.weapon);
                 weapon.GetComp<CompBiocodable>().CodeFor(operator_Pawn);
                 operator_Pawn.equipment.AddEquipment(weapon);

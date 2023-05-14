@@ -267,6 +267,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DebugTools.cs" />
     <Compile Include="Def\OperatorClassDef.cs" />
     <Compile Include="Def\OperatorDef\HediffStat.cs" />
     <Compile Include="Def\OperatorDef\ItemOnSpawn.cs" />

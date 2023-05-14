@@ -131,7 +131,7 @@ namespace AK_DLL
         //排序按钮的面板（通用父类）
         private static Transform sorterColumnLoc = null;
         //干员面板
-        private static Transform opListLoc = null;
+        private static Transform opListPanel = null;
         private static List<GameObject> opList = new List<GameObject>();
         //相当投机取巧地在名字里面存储数据 字符串内可以随便填。现在的值是12。
         public static int orderInName = "FSUI_whatev_".Length;
@@ -265,7 +265,8 @@ namespace AK_DLL
             {
                 return AK_Tool.GetOperatorIDFrom(def.defName);
             });
-            if (opListLoc == null) opListLoc = GameObject.Find("OpRegister").transform;
+            opListPanel = GameObject.Find("OpListPanel").transform;
+            
             DrawOperatorListContent();
         }
         //实际绘制所有干员列表 会在排序等情况被重复调用
@@ -286,6 +287,12 @@ namespace AK_DLL
                     DrawOperatorPortrait(i, cachedOperatorList[i], j);
                 }
             }
+            //如果小于3*8个干员 就不显示右边的没用滑动条
+            if (cnt <= 24)
+            {
+                GameObject.Find("OpReg_Scrollbar").SetActive(false);
+            }
+
             while (cnt < opList.Count)
             {
                 if (opList[cnt] != null) opList[cnt].SetActive(false);
@@ -310,8 +317,8 @@ namespace AK_DLL
             if (j >= opList.Count || opList[j] == null)
             {
                 GameObject opRectPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("OperatorTemplate");
-                opPortraitInstance = GameObject.Instantiate(opRectPrefab, opListLoc);
-                opPortraitInstance.transform.parent = opListLoc;
+                opPortraitInstance = GameObject.Instantiate(opRectPrefab, opListPanel);
+                //opPortraitInstance.transform.parent = opListLoc;
                 if (j >= opList.Count) opList.Add(opPortraitInstance);
                 else opList[j] = opPortraitInstance;
 
@@ -320,8 +327,8 @@ namespace AK_DLL
                     RIWindowHandler.OpenRIWindow_OpDetail(cachedOperatorList[btnOrder(ClickedBtnParent)]);
                     this.Close(false);
                 });
-                //决定头像框的位置。目前一行8个，共3行。
-                opPortraitInstance.transform.localPosition = new Vector3((j / 8 * -8 + j) * opPortraitInstance.transform.localPosition.x, (j / 8) * opPortraitInstance.transform.localPosition.y);
+                //决定头像框的位置。目前一行8个，共3行。  已经改用unity的grid。
+                //opPortraitInstance.transform.localPosition = new Vector3((j / 8 * -8 + j) * opPortraitInstance.transform.localPosition.x, (j / 8) * opPortraitInstance.transform.localPosition.y);
             }
             else
             {

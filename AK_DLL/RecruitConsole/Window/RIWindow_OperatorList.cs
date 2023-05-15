@@ -151,7 +151,7 @@ namespace AK_DLL
                 return ClickedBtn.transform.parent.gameObject;
             }
         }
-
+        //完了 好像创建临时变量就可以 不需要这么麻烦的方法
         private int btnOrder(GameObject clickedBtn)
         {
             return int.Parse(clickedBtn.name.Substring(orderInName));
@@ -368,8 +368,10 @@ namespace AK_DLL
                 textTMP.text = TypeDef.SortOrderSkill[i].label.Translate();
                 //使用了投机取巧而不是正常的方式存储数据。
                 sortBtnInstance.name = "FSUI_Sorter_" + i;
+                int k = i;
                 sortBtnInstance.GetComponent<Button>().onClick.AddListener(delegate ()
                 {
+                    Log.Message($"{i}:{k}:{btnOrder(ClickedBtn)}");
                     sortBtnInstance = ClickedBtn;
                     if (NeedSortTo(btnOrder(ClickedBtn)))
                     {

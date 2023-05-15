@@ -261,8 +261,6 @@ namespace AK_DLL
 
         List<GameObject> opSkills;  //只有可选技能被加进来。
 
-        GameObject floatingBubblePrefab; //鼠标指上技能栏之类的地方的悬浮窗
-
         GameObject floatingBubbleInstance;
 
         static Transform opStandLoc;
@@ -293,6 +291,12 @@ namespace AK_DLL
         private int btnOrder(GameObject clickedBtn)
         {
             return int.Parse(clickedBtn.name.Substring(RIWindow_OperatorList.orderInName));
+        }
+
+        private int btnOpAbilityAbsOrder(GameObject clickedBtn)
+        {
+            // FSUI_OpAb_{i}_{logicOrder}
+            return int.Parse(clickedBtn.name[10].ToString());
         }
 
         private int PreferredAbility
@@ -346,7 +350,8 @@ namespace AK_DLL
             {
                 recruitText = "AK_NoTicket".Translate();
             }
-            floatingBubblePrefab = GameObject.Find("FloatingInfPanel");
+            floatingBubbleInstance = GameObject.Find("FloatingInfPanel");
+            floatingBubbleInstance.SetActive(false);
         }
 
         //确认招募和取消也是导航键
@@ -357,16 +362,16 @@ namespace AK_DLL
             navBtn = GameObject.Find("BtnHome");
             navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
+                this.Close(false);
                 RIWindow_OperatorDetail.isRecruit = true;
                 RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
-                this.Close(false);
             });
             //取消
             navBtn = GameObject.Find("BtnCancel");
             navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
-                RIWindowHandler.OpenRIWindow(RIWindowType.Op_List);
                 this.Close(false);
+                RIWindowHandler.OpenRIWindow(RIWindowType.Op_List);
             });
             //确认招募/更换助理
             navBtn = GameObject.Find("BtnConfirm");
@@ -384,9 +389,9 @@ namespace AK_DLL
                     //如果干员未招募过，或已死亡
                     if (canRecruit)
                     {
+                        this.Close(true);
                         RecruitConsole.TryGetComp<CompRefuelable>().ConsumeFuel(Def.ticketCost);
                         Def.Recruit(RecruitConsole.Map);
-                        this.Close(true);
                         if (false)
                         {
                             RIWindowHandler.OpenRIWindow(RIWindowType.Op_List);
@@ -517,7 +522,7 @@ namespace AK_DLL
         {
             int j = (int)i.fireLevel;
 
-            switch(j)
+            switch (j)
             {
                 case 1:
                     return "yellow";
@@ -560,15 +565,39 @@ namespace AK_DLL
 
         }
 
+
+        //FIXME：自动给武器打标签
         private void DrawWeapon()
         {
-            GameObject WeaponPanel = GameObject.Find("Weapon");
+            GameObject weaponIconObj = GameObject.Find("WeaponIcon");
+            if (Def.weapon == null)
+            {
+                weaponIconObj.SetActive(false);
+                return;
+            }
+            Log.Message("draw weapon");
+            GameObject WeaponPanel = GameObject.Find("WeaponPanel");
+            Texture2D weaponIcon = ContentFinder<Texture2D>.Get(Def.weapon.graphicData.texPath);
+            weaponIconObj.GetComponent<Image>().sprite = Sprite.Create(weaponIcon, new Rect(0, 0, weaponIcon.width, weaponIcon.height), Vector2.zero);
+
+            EventTrigger.Entry entry = weaponIconObj.GetComponent<EventTrigger>().triggers.Find(e => e.eventID == EventTriggerType.PointerEnter);
+
+            entry.callback.AddListener((data) =>
+            {
+                DrawFloatingBubble(Def.weapon.description.Translate());
+            });
         }
 
+        //FIXME:切换技能逻辑不对 需要大修
         private void DrawOperatorAbility()
         {
             int skillCnt = Def.abilities.Count;
             if (skillCnt == 0) return;
+            else if (skillCnt >= 10)
+            {
+                Log.Error("目前不支持单个干员有十个及以上技能");
+                return;
+            }
             Transform opAbilityPanel = GameObject.Find("OpAbilityPanel").transform;
             GameObject opAbilityPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("OpAbilityIcon");
             GameObject opAbilityInstance;
@@ -580,23 +609,27 @@ namespace AK_DLL
                 opAbilityInstance = GameObject.Instantiate(opAbilityPrefab, opAbilityPanel);
                 Texture2D icon = opAbilty.Icon;
                 opAbilityInstance.GetComponent<Image>().sprite = Sprite.Create(icon, new Rect(0, 0, icon.width, icon.height), Vector3.zero);
-                opAbilityInstance.name = "FSUI_OpAbil_" + logicOrder;
-                logicOrder++;
-                opAbilityInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
-                {
-                    SwitchGroupedSkillTo(btnOrder(ClickedBtn));
-                });
 
-                //右下角的勾 常驻技能橙色。
+                opAbilityInstance.name = $"FSUI_OpAb_{i}_{logicOrder}";
+
                 if (!opAbilty.grouped)
                 {
+                    //右下角的勾 常驻技能橙色。
                     opAbilityInstance.transform.GetChild(1).GetComponent<Image>().sprite = AK_Tool.FSAsset.LoadAsset<Sprite>("InnateAb");
                 }
+                //可选技能
                 else
                 {
                     opSkills.Add(opAbilityInstance);
+                    logicOrder++;
                     opAbilityInstance.transform.GetChild(1).gameObject.SetActive(false);
+                    opAbilityInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+                    {
+                        SwitchGroupedSkillTo(btnOrder(ClickedBtn));
+                    });
                 }
+
+                InitializeEventTrigger(opAbilityInstance.GetComponentInChildren<EventTrigger>(), Def.abilities[i].description.Translate());
 
                 opAbilityInstance.SetActive(true);
             }
@@ -646,6 +679,8 @@ namespace AK_DLL
                 traitInstance = GameObject.Instantiate(traitPrefab, traitPanel);
                 TraitDegreeData traitDef = Def.traits[i].def.DataAtDegree(Def.traits[i].degree);
                 traitInstance.GetComponentInChildren<TextMeshProUGUI>().text = traitDef.label.Translate();
+                traitInstance.name = "FSUI_Traits_" + i;
+                InitializeEventTrigger(traitInstance.GetComponent<EventTrigger>(), Def.traits[i].def.DataAtDegree(Def.traits[i].degree).description);
             }
         }
 
@@ -723,16 +758,38 @@ namespace AK_DLL
             }
         }
 
-        void DrawFloatingBubble(string text)
+        //对于不存在于界面预制体内的obj，不能在unity里面设定关掉悬浮窗。
+        void InitializeEventTrigger(EventTrigger ev, string text)
         {
-            if (floatingBubbleInstance != null) GameObject.Destroy(floatingBubbleInstance);
-            floatingBubbleInstance = GameObject.Instantiate(floatingBubbleInstance);
-            floatingBubbleInstance.GetComponentInChildren<TextMeshProUGUI>().text = text;
+            EventTrigger.Entry entry = ev.triggers.Find(e => e.eventID == EventTriggerType.PointerEnter);
+
+            entry.callback.AddListener((data) =>
+            {
+                DrawFloatingBubble(text);
+                floatingBubbleInstance.SetActive(true);
+            });
+
+            entry = ev.triggers.Find(e => e.eventID == EventTriggerType.PointerExit);
+
+
+            entry.callback.AddListener((data) =>
+            {
+                floatingBubbleInstance.SetActive(false);
+            });
+
         }
 
-        void DestroyFloatingBubble()
+        //鼠标指上去的悬浮窗 
+        void DrawFloatingBubble(string text)
         {
-            if (floatingBubbleInstance != null) GameObject.Destroy(floatingBubbleInstance);
+            floatingBubbleInstance.GetComponentInChildren<TextMeshProUGUI>().text = text;
+            Vector3 mousepos = Input.mousePosition;
+            Vector2 pivot;
+            if (mousepos.x < Screen.currentResolution.width / 2) pivot = new Vector2(0, 1);
+            else pivot = new Vector2(1, 1);
+            ((RectTransform)floatingBubbleInstance.transform).pivot = pivot;
+            floatingBubbleInstance.transform.position = Input.mousePosition;
         }
+
     }
 }

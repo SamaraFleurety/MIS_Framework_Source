@@ -78,4 +78,3 @@ C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\obj\Debug\AK_Library.csproj.CoreCompi
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\obj\Debug\AK_Library.csproj.CopyComplete
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\obj\Debug\AK_DLL.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\obj\Debug\AK_DLL.pdb
-C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\obj\Debug\AK_Library.csproj.AssemblyReference.cache

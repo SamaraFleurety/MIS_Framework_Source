@@ -136,6 +136,9 @@ namespace AK_DLL
         //相当投机取巧地在名字里面存储数据 字符串内可以随便填。现在的值是12。
         public static int orderInName = "FSUI_whatev_".Length;
 
+        private List<OperatorSeriesDef> AllSeries => RIWindowHandler.operatorSeries;
+        private List<int> activeClasses => AllSeries[series].includedClasses;
+
         private GameObject ClickedBtn
         {
             get
@@ -161,10 +164,13 @@ namespace AK_DLL
 
         public override void DoContent()
         {
+            base.DoContent();
+
             DrawSortBtns();
             DrawNavBtn();
+            DrawSeriesBtn();
             DrawOperatorList();
-            DrawClassBtn();
+            DrawAllClassBtn();
         }
 
         private void DrawNavBtn()
@@ -174,17 +180,13 @@ namespace AK_DLL
             navBtn = GameObject.Find("btnBack").transform.GetChild(0).gameObject;
             navBtn.GetComponent<Button>().onClick.AddListener(delegate ()
             {
-                RIWindow_OperatorDetail.isRecruit = true;
-                this.Close(false);
-                RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
+                this.ReturnToParent(false);
             });
             //主界面按钮
             navBtn = GameObject.Find("btnHome").transform.GetChild(0).gameObject;
             navBtn.GetComponent<Button>().onClick.AddListener(delegate ()
             {
-                RIWindow_OperatorDetail.isRecruit = true;
-                this.Close(false);
-                RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
+                this.ReturnToParent(false);
             });
             //退出按钮
             navBtn = GameObject.Find("btnEscape").transform.GetChild(0).gameObject;
@@ -194,30 +196,41 @@ namespace AK_DLL
                 this.Close();
             });
         }
-        
+
+        public override void ReturnToParent(bool closeEV = true)
+        {
+            RIWindow_OperatorDetail.isRecruit = true;
+            RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
+            base.ReturnToParent(closeEV);
+        }
+
+#region 切换系列/职业
         /// <summary>
         /// 致敬经典 - 废话summary
         /// Just Draw classes buttons
         /// </summary>
-        private void DrawClassBtn()
+        private void DrawAllClassBtn()
         {
             GameObject classBtnPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("btnClassTemplate");
             Transform classColumn = GameObject.Find("btnClassColumn").transform;
             GameObject classBtnInstance;
-            int i = 0;
-            foreach(KeyValuePair<int, OperatorClassDef> node in RIWindowHandler.operatorClasses)
+            AK_Tool4Unity.ClearAllChild(classColumn); //直接清空所有老的职业图标 懒得复用了，感觉占不到几个性能
+            int i = 0; //FIXME：晚点给删了
+            foreach(int node in activeClasses)
             {
+                OperatorClassDef opClass = RIWindowHandler.operatorClasses[node];
                 classBtnInstance = GameObject.Instantiate(classBtnPrefab, classColumn);
                 //位置
                 Vector3 pos = classBtnInstance.transform.localPosition;
                 classBtnInstance.transform.localPosition = new Vector3(pos.x, pos.y * i);
                 i++;
                 //名字
-                classBtnInstance.name = "FSUI_classs_" + node.Key;
+                classBtnInstance.name = "FSUI_classs_" + node;
                 //按钮 非实时
+                int j = node;
                 classBtnInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
                 {
-                    operatorClass = btnOrder(ClickedBtnParent);
+                    operatorClass = j;
                     cachedOperatorList = RIWindowHandler.operatorDefs[operatorClass].Values.ToList();
                     //默认使用 首字母排序
                     NeedSortTo((int)OperatorSortType.Alphabet, true);
@@ -232,24 +245,58 @@ namespace AK_DLL
                     });
                     DrawOperatorListContent();
                 });
-                //没有图片 就显示字
-                if (node.Value.Icon == null)
-                {
-                    TextMeshProUGUI TMP = classBtnInstance.GetComponentInChildren<TextMeshProUGUI>();
-                    TMP.gameObject.SetActive(true);
-                    TMP.text = node.Value.label.Translate();
-                }
-                else
-                {
-                    Texture2D classImage = node.Value.Icon;
-                    classBtnInstance.GetComponent<Image>().sprite = Sprite.Create(classImage, new Rect(0, 0, classImage.width, classImage.height), new Vector2(0.5f, 0.5f));
-                }
-                classBtnInstance.SetActive(true);
+                DrawOneClassBtn(classBtnInstance, opClass.Icon, opClass.label.Translate());
             }
         }
 
+        //按下切换系列按钮后，会重新绘制新的职业按钮组（不在本函数内）
+        private void DrawSeriesBtn()
+        {
+            if (series == -1)
+            {
+                Log.Error("MIS. critical error : no series found");
+                return;
+            }
+            if (AllSeries.Count == 0) return;
+            GameObject.Find("btnSeries").GetComponent<Image>().sprite = AK_Tool4Unity.Image2Spirit(AllSeries[series].Icon);
+
+            GameObject classBtnPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("btnClassTemplate");
+            Transform seriesColumn = GameObject.Find("seriesSelectPanel").transform;
+            GameObject seriesBtnInstance;
+            for (int i = 0; i < AllSeries.Count; ++i)
+            {
+                seriesBtnInstance = GameObject.Instantiate(classBtnPrefab, seriesColumn);
+                DrawOneClassBtn(seriesBtnInstance, AllSeries[i].Icon, AllSeries[i].label);
+                seriesBtnInstance.GetComponent<Image>().sprite = AK_Tool4Unity.Image2Spirit(AllSeries[i].Icon);
+
+                int j = i;
+                seriesBtnInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+                {
+                    series = j;
+                    DrawAllClassBtn();
+                });
+            }
+
+        }
+
+        //画单个图标。如果没有图片 就显示字
+        private void DrawOneClassBtn(GameObject ins, Texture2D icon, string label)
+        {
+            if (icon == null)
+            {
+                TextMeshProUGUI TMP = ins.GetComponentInChildren<TextMeshProUGUI>();
+                TMP.text = label;
+            }
+            else
+            {
+                ins.GetComponent<Image>().sprite = Sprite.Create(icon, new Rect(0, 0, icon.width, icon.height), new Vector2(0.5f, 0.5f));
+            }
+            ins.SetActive(true);
+        }
+        #endregion
+
 #region 绘制干员列表(不含排序逻辑)
-        //绘制干员列表的初期准备
+        //绘制干员列表的初期准备, 开1次UI仅运行1次。
         public void DrawOperatorList()
         {
             if (operatorClass == -1)
@@ -290,7 +337,8 @@ namespace AK_DLL
             //如果小于3*8个干员 就不显示右边的没用滑动条
             if (cnt <= 24)
             {
-                GameObject.Find("OpReg_Scrollbar").SetActive(false);
+                GameObject silder = GameObject.Find("OpReg_Scrollbar");
+                if (silder != null) silder.SetActive(false);
             }
 
             while (cnt < opList.Count)
@@ -642,6 +690,8 @@ namespace AK_DLL
         }
         #endregion
 
+        public static int series = -1;
+
         static List<Transform> sorterBtns = new List<Transform>();
 
         static List<OperatorDef> cachedOperatorList = new List<OperatorDef>();
@@ -650,5 +700,6 @@ namespace AK_DLL
             get { return RIWindowHandler.recruitConsole; }
         }
         public static int operatorClass = -1;
+
     }
 }

@@ -264,6 +264,8 @@ namespace AK_DLL
         GameObject floatingBubbleInstance;
 
         static Transform opStandLoc;
+
+        #region 快捷属性
         private OperatorDef Def
         {
             get { return RIWindowHandler.def; }
@@ -305,10 +307,12 @@ namespace AK_DLL
             set { doc.preferedAbility = value; }
         }
 
+        #endregion
+
         public override void DoContent()
         {
             DrawNavBtn();
-            Initialization();
+            Initialize();
             DrawFashionBtn();
             ChangeStandTo(preferredSkin, true);
 
@@ -326,8 +330,9 @@ namespace AK_DLL
             DrawDebugPanel();
         }
 
-        private void Initialization()
+        public override void Initialize()
         {
+            base.Initialize();
             if (GameComp_OperatorDocumentation.operatorDocument.ContainsKey(Def.OperatorID))
             {
                 doc = GameComp_OperatorDocumentation.operatorDocument[Def.OperatorID];
@@ -353,7 +358,7 @@ namespace AK_DLL
             floatingBubbleInstance = GameObject.Find("FloatingInfPanel");
             floatingBubbleInstance.SetActive(false);
         }
-
+        #region 绘制UI
         //确认招募和取消也是导航键
         private void DrawNavBtn()
         {
@@ -370,8 +375,7 @@ namespace AK_DLL
             navBtn = GameObject.Find("BtnCancel");
             navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
-                this.Close(false);
-                RIWindowHandler.OpenRIWindow(RIWindowType.Op_List);
+                this.ReturnToParent(false);
             });
             //确认招募/更换助理
             navBtn = GameObject.Find("BtnConfirm");
@@ -418,6 +422,52 @@ namespace AK_DLL
         }
 
         //换装按钮会被记录于 this.fashionbtns
+
+    #region 左边界面
+        private void DrawDescription()
+        {
+            GameObject OpDescPanel = GameObject.Find("OpDescPanel");
+            OpDescPanel.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = Def.nickname.Translate();
+            OpDescPanel.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = Def.description.Translate();
+
+            //职业图标
+            GameObject opClassIcon = OpDescPanel.transform.GetChild(1).gameObject;
+            if (Def.operatorType.Icon == null)
+            {
+                TextMeshProUGUI TMP = opClassIcon.GetComponentInChildren<TextMeshProUGUI>();
+                TMP.gameObject.SetActive(true);
+                TMP.text = Def.operatorType.label.Translate();
+            }
+            else
+            {
+                Texture2D classImage = Def.operatorType.Icon;
+                opClassIcon.GetComponent<Image>().sprite = Sprite.Create(classImage, new Rect(0, 0, classImage.width, classImage.height), new Vector2(0.5f, 0.5f));
+            }
+        }
+
+        //FIXME：自动给武器打标签
+        private void DrawWeapon()
+        {
+            GameObject weaponIconObj = GameObject.Find("WeaponIcon");
+            if (Def.weapon == null)
+            {
+                weaponIconObj.SetActive(false);
+                return;
+            }
+            Log.Message("draw weapon");
+            GameObject WeaponPanel = GameObject.Find("WeaponPanel");
+            Texture2D weaponIcon = ContentFinder<Texture2D>.Get(Def.weapon.graphicData.texPath);
+            weaponIconObj.GetComponent<Image>().sprite = Sprite.Create(weaponIcon, new Rect(0, 0, weaponIcon.width, weaponIcon.height), Vector2.zero);
+
+            EventTrigger.Entry entry = weaponIconObj.GetComponent<EventTrigger>().triggers.Find(e => e.eventID == EventTriggerType.PointerEnter);
+
+            entry.callback.AddListener((data) =>
+            {
+                Log.Message(Def.weapon.description.Translate());
+                DrawFloatingBubble(Def.weapon.description.Translate());
+            });
+        }
+
         private void DrawFashionBtn()
         {
             Transform FashionPanel = GameObject.Find("FashionPanel").transform;
@@ -465,7 +515,6 @@ namespace AK_DLL
             }
         }
 
-        //可能要做2种
         private void DrawVanillaSkills()
         {
             //柱状图按钮
@@ -557,37 +606,7 @@ namespace AK_DLL
             }
         }
 
-        private void DrawDescription()
-        {
-            GameObject OpDescPanel = GameObject.Find("OpDescPanel");
-            OpDescPanel.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = Def.nickname.Translate();
-            OpDescPanel.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = Def.description.Translate();
-
-        }
-
-
-        //FIXME：自动给武器打标签
-        private void DrawWeapon()
-        {
-            GameObject weaponIconObj = GameObject.Find("WeaponIcon");
-            if (Def.weapon == null)
-            {
-                weaponIconObj.SetActive(false);
-                return;
-            }
-            Log.Message("draw weapon");
-            GameObject WeaponPanel = GameObject.Find("WeaponPanel");
-            Texture2D weaponIcon = ContentFinder<Texture2D>.Get(Def.weapon.graphicData.texPath);
-            weaponIconObj.GetComponent<Image>().sprite = Sprite.Create(weaponIcon, new Rect(0, 0, weaponIcon.width, weaponIcon.height), Vector2.zero);
-
-            EventTrigger.Entry entry = weaponIconObj.GetComponent<EventTrigger>().triggers.Find(e => e.eventID == EventTriggerType.PointerEnter);
-
-            entry.callback.AddListener((data) =>
-            {
-                DrawFloatingBubble(Def.weapon.description.Translate());
-            });
-        }
-
+        #endregion
         //FIXME:切换技能逻辑不对 需要大修
         private void DrawOperatorAbility()
         {
@@ -766,7 +785,6 @@ namespace AK_DLL
             entry.callback.AddListener((data) =>
             {
                 DrawFloatingBubble(text);
-                floatingBubbleInstance.SetActive(true);
             });
 
             entry = ev.triggers.Find(e => e.eventID == EventTriggerType.PointerExit);
@@ -789,7 +807,19 @@ namespace AK_DLL
             else pivot = new Vector2(1, 1);
             ((RectTransform)floatingBubbleInstance.transform).pivot = pivot;
             floatingBubbleInstance.transform.position = Input.mousePosition;
+            Log.Message($"{Input.mousePosition.x} {Input.mousePosition.y}");
+            Log.Message($"{floatingBubbleInstance.transform.position.x} {floatingBubbleInstance.transform.position.y}");
+
+            //自动计算大小
+            floatingBubbleInstance.SetActive(true);
+            LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)floatingBubbleInstance.transform);
         }
 
+        public override void ReturnToParent(bool closeEV = true)
+        {
+            RIWindowHandler.OpenRIWindow(RIWindowType.Op_List);
+            base.ReturnToParent(closeEV);
+        }
+        #endregion
     }
 }

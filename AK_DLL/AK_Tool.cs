@@ -29,6 +29,7 @@ namespace AK_DLL
 
         static AK_Tool()
         {
+            RIWindowHandler.LoadOperatorSeries();
             RIWindowHandler.LoadOperatorClasses();
             RIWindowHandler.AutoFillOperators();
 

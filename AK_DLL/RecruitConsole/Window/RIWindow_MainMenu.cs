@@ -219,6 +219,7 @@ namespace AK_DLL
     {
         List<GameObject> adjustSecBtns;
 
+        #region 快捷函数
         private GameObject ClickedBtn
         {
             get
@@ -235,9 +236,15 @@ namespace AK_DLL
             set { AK_ModSettings.secretaryLoc = value; }
         }
 
-
+        private int SecretaryLocSensetive
+        {
+            get { return AK_ModSettings.secLocSensitive * 10; }
+        }
+        #endregion
         public override void DoContent()
         {
+            base.Initialize();
+
             DrawNavBtn();
             DrawResoureHeader();
 
@@ -251,10 +258,11 @@ namespace AK_DLL
         {
             GameObject.Find("BtnBack").GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
-                RIWindow_OperatorDetail.isRecruit = true;
-                this.Close();
+                this.ReturnToParent();
             });
         }
+
+        //左边6个主要功能
         private void DrawMainFeature()
         {
             GameObject.Find("MBtn_Recruit").GetComponentInChildren<Button>().onClick.AddListener(delegate ()
@@ -283,12 +291,12 @@ namespace AK_DLL
             GameObject.Find("SBtn_UnlockedSec").GetComponent<Button>().onClick.AddListener(delegate
             {
                 GameObject.Find("SBtn_UnlockedSec").transform.GetChild(0).gameObject.SetActive(true);
-                SetSecretaryOffsetBtnsTo(false);
+                SetSecretaryOffsetBtnsActive(false);
             });
 
             GameObject.Find("SBtn_LockedSec").GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
-                SetSecretaryOffsetBtnsTo(true);
+                SetSecretaryOffsetBtnsActive(true);
                 ClickedBtn.SetActive(false);
             });
 
@@ -319,37 +327,38 @@ namespace AK_DLL
             temp.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(delegate
             {
                 Vector3 v3 = SecretaryLoc;
-                v3.y += 10;
+                v3.y += SecretaryLocSensetive;
                 SecretaryLoc = v3;
                 DrawStand();
             });
             temp.transform.GetChild(1).GetComponent<Button>().onClick.AddListener(delegate
-            {
-                Vector3 v3 = SecretaryLoc;
-                v3.y -= 10;
-                SecretaryLoc = v3;
-                DrawStand();
-            });
+           {
+               Vector3 v3 = SecretaryLoc;
+               v3.y -= SecretaryLocSensetive;
+               SecretaryLoc = v3;
+               DrawStand();
+           });
             temp.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(delegate
             {
                 Vector3 v3 = SecretaryLoc;
-                v3.x -= 10;
+                v3.x -= SecretaryLocSensetive;
                 SecretaryLoc = v3;
                 DrawStand();
             });
             temp.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(delegate
             {
                 Vector3 v3 = SecretaryLoc;
-                v3.x += 10;
+                v3.x += SecretaryLocSensetive;
                 SecretaryLoc = v3;
                 DrawStand();
             });
 
-            SetSecretaryOffsetBtnsTo(false);
+            SetSecretaryOffsetBtnsActive(false);
 
         }
 
-        private void SetSecretaryOffsetBtnsTo(bool val)
+        //看锁定秘书立绘与否 启用禁用变更位置的按钮
+        private void SetSecretaryOffsetBtnsActive(bool val)
         {
             foreach (GameObject i in adjustSecBtns)
             {
@@ -379,5 +388,10 @@ namespace AK_DLL
 
         }
 
+        public override void ReturnToParent(bool closeEV = true)
+        {
+            RIWindow_OperatorDetail.isRecruit = true;
+            base.ReturnToParent(closeEV);
+        }
     }
 }

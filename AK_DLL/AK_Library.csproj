@@ -267,6 +267,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AK_Tool4Unity.cs" />
     <Compile Include="DebugTools.cs" />
     <Compile Include="Def\OperatorClassDef.cs" />
     <Compile Include="Def\OperatorDef\HediffStat.cs" />
@@ -282,7 +283,7 @@
     <Compile Include="HarmonyPatch\PatchWindowsOnGui%28Bottom Portrait%29.cs" />
     <Compile Include="HarmonyPatch\temppatch.cs" />
     <Compile Include="Hediff\Comps\HC_RandAddHediff.cs" />
-    <Compile Include="Hediff\Properties\HCP_RandAddHediff.cs" />
+    <Compile Include="Hediff\CompProperties\HCP_RandAddHediff.cs" />
     <Compile Include="HotSwap.cs" />
     <Compile Include="OpAbility\AbilityEffect\AE_ShootProjectile.cs" />
     <Compile Include="OpAbility\AbilityEffect\Effect\AbilityEffect_DisableAttack.cs" />
@@ -311,11 +312,12 @@
     <Compile Include="OpAbility\AbilityEffect\AddHediff\DpsEnhance\HCP_DpsEnhance_Melee.cs" />
     <Compile Include="OpAbility\AbilityEffect\AddHediff\Regrow\HCP_Regrow.cs" />
     <Compile Include="OpAbility\AbilityEffect\AddHediff\DelayedSelfExplosion\HCP_SelfExplosion.cs" />
-    <Compile Include="Hediff\Properties\HCP_ForceColors.cs" />
-    <Compile Include="Hediff\Properties\HediffCompProperties_Bandage.cs" />
-    <Compile Include="Hediff\Properties\HediffCompProperties_Heal.cs" />
+    <Compile Include="Hediff\CompProperties\HCP_ForceColors.cs" />
+    <Compile Include="Hediff\CompProperties\HediffCompProperties_Bandage.cs" />
+    <Compile Include="Hediff\CompProperties\HediffCompProperties_Heal.cs" />
     <Compile Include="Hediff\Comps\HediffComp_IncreaseAttackPower.cs" />
-    <Compile Include="Hediff\Properties\HediffCompProperties_IncreaseAttackPower.cs" />
+    <Compile Include="Hediff\CompProperties\HediffCompProperties_IncreaseAttackPower.cs" />
+    <Compile Include="Project Galleria Stellaria\ScenPart_Designated Op Start.cs" />
     <Compile Include="RecruitConsole\Job\JobDefOf.cs" />
     <Compile Include="RecruitConsole\Job\JobDriver_UseRecruitTable.cs" />
     <Compile Include="AK_ModSettings.cs" />
@@ -330,7 +332,9 @@
     <Compile Include="RecruitConsole\Window\RIWindow_Store.cs" />
     <Compile Include="RecruitConsole\Window\RIWindow_Support.cs" />
     <Compile Include="RecruitConsole\Window\_RIWindowHandler.cs" />
+    <Compile Include="Thing\CompProperties\TCP_OperatorStart.cs" />
     <Compile Include="Thing\CompProperties\TCP_RemoveMe.cs" />
+    <Compile Include="Thing\Comp\TC_OperatorStart.cs" />
     <Compile Include="Thing\Comp\TC_RemoveMe.cs" />
     <Compile Include="VoicePlayer\HarmonyPatch\PatchDraftSound.cs" />
     <Compile Include="VoicePlayer\HarmonyPatch\PatchSelectSound.cs" />

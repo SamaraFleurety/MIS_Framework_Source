@@ -11,22 +11,27 @@ namespace AK_DLL
     //MOD设置 是跨存档全局的 细节没写
     public class AK_ModSettings : ModSettings
     {
-        //语音
-        public static bool playOperatorVoice = true;
-        public static int voiceIntervalTime = 2;
-        //立绘
-        public static bool displayBottomLeftPortrait = true;
-
-        public static int xOffset = 0; //这仨是主窗口左下角 个人信息上面的显示立绘的偏移参数
-        public static int yOffset = 0;
-        public static int ratio = 20;
-
         //开启一些正常游戏不会使用的测试功能
         public static bool debugOverride = false;
 
+        //语音
+        public static bool playOperatorVoice = true;
+        public static int voiceIntervalTime = 2;
+
+        #region 环世界殖民地界面 左下角显示小人立绘
+        public static bool displayBottomLeftPortrait = true;
+        //显示立绘的偏移参数
+        public static int xOffset = 0; //实际效果是值*5
+        public static int yOffset = 0; //同上
+        public static int ratio = 20;  //实际效果是值/20
+        #endregion
+
+        #region 招募UI主菜单
         public static string secretary = "Amiya";
         public static int secretarySkin = 1;
         public static Vector3 secretaryLoc = new Vector3(400, 0, 1); //(x坐标, y坐标, 缩放倍率)。坐标使用unity体系，即左下角是(0,0)，上右为正。
+        public static int secLocSensitive = 1; //调整主界面秘书位置时，每次按钮移动的像素数量；实际效果是值*10
+        #endregion
 
         //public List<Pawn> exampleListOfPawns = new List<Pawn>();
         //public Dictionary<string, Pawn>;
@@ -44,6 +49,7 @@ namespace AK_DLL
             Scribe_Values.Look(ref debugOverride, "dOverride", false);
             Scribe_Values.Look(ref secretary, "secretary", "Amiya", true);
             Scribe_Values.Look(ref secretaryLoc, "secLoc", new Vector3(400, 0, 1), true);
+            Scribe_Values.Look(ref secLocSensitive, "secSense", 1, true);
             //Scribe_Collections.Look(ref exampleListOfPawns, "exampleListOfPawns", LookMode.Reference);
             base.ExposeData();
         }
@@ -70,6 +76,8 @@ namespace AK_DLL
             AK_ModSettings.xOffset = (int)listingStandard.SliderLabeled("AK_Option_xOffset".Translate() + $"{AK_ModSettings.xOffset * 5}", AK_ModSettings.xOffset, 0, 600);
             AK_ModSettings.yOffset = (int)listingStandard.SliderLabeled("AK_Option_yOffset".Translate() + $"{AK_ModSettings.yOffset * 5}", AK_ModSettings.yOffset, 0, 600);
             AK_ModSettings.ratio = (int)listingStandard.SliderLabeled("AK_Option_ratio".Translate() + $"{(float)AK_ModSettings.ratio * 0.05f}", AK_ModSettings.ratio, 1, 40);
+
+            AK_ModSettings.secLocSensitive = (int)listingStandard.SliderLabeled("AK_Option_SecSensetive".Translate() + $"{(float)AK_ModSettings.secLocSensitive * 10}", AK_ModSettings.secLocSensitive, 1, 10);
 
             listingStandard.End();
             base.DoSettingsWindowContents(inRect);

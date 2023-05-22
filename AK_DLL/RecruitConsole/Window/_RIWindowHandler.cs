@@ -25,6 +25,9 @@ namespace AK_DLL
         //<唯一数字序， 干员职业Def>
         public static Dictionary<int, OperatorClassDef> operatorClasses = new Dictionary<int, OperatorClassDef>();
 
+        //包含所有系列 这个想不到有什么离散检索的需求。系列内有写包含职业。
+        public static List<OperatorSeriesDef> operatorSeries = new List<OperatorSeriesDef>();
+
 
 #region 方舟信息窗口
         public static void OpenRIWindow()
@@ -80,8 +83,18 @@ namespace AK_DLL
             def = operatorDef;
             OpenRIWindow();
         }
-#endregion
+        #endregion
 
+#region 初始化数据
+        public static void LoadOperatorSeries()
+        {
+            foreach(OperatorSeriesDef i in DefDatabase<OperatorSeriesDef>.AllDefs)
+            {
+                operatorSeries.Add(i);
+                i.includedClasses = new List<int>();
+            }
+            if (operatorSeries.Count > 0) RIWindow_OperatorList.series = 0;
+        }
         public static void AutoFillOperators()
         {
             foreach (int i in operatorClasses.Keys)
@@ -112,7 +125,7 @@ namespace AK_DLL
                 }
                 else if (operatorClasses.ContainsKey(i.sortingOrder))
                 {
-                    Log.Error(i.label.Translate() + "has duplicate loading order with" + operatorClasses[i.sortingOrder]);
+                    Log.Error(i.label.Translate() + "has duplicate loading order with" + operatorClasses[i.sortingOrder].defName);
                     i.sortingOrder = tempOrder;
                     operatorClasses.Add(tempOrder, i);
                     tempOrder++;
@@ -121,11 +134,13 @@ namespace AK_DLL
                 {
                     operatorClasses.Add(i.sortingOrder, i);
                 }
+                i.series.includedClasses.Add(i.sortingOrder);
             }
             if (operatorClasses.Count >= 1)
             {
                 RIWindow_OperatorList.operatorClass = operatorClasses.First().Key;
             }
         }
+        #endregion
     }
 }

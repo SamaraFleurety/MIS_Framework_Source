@@ -7,6 +7,17 @@ using Verse;
 
 namespace AK_DLL
 {
+    public class HCP_RandAddHediff : HediffCompProperties
+    {
+        public int interval = 1;
+        public TimeToTick intervalUnit = TimeToTick.hour;
+        public List<HediffStat> hediffStatsSet = new List<HediffStat>();
+
+        public HCP_RandAddHediff()
+        {
+            this.compClass = typeof(HC_RandAddHediff);
+        }
+    }
     public class HC_RandAddHediff : HediffComp
     {
         public HCP_RandAddHediff Props => (HCP_RandAddHediff)this.props;

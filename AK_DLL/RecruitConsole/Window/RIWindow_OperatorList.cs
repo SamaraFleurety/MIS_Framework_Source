@@ -258,11 +258,20 @@ namespace AK_DLL
                 return;
             }
             if (AllSeries.Count == 0) return;
-            GameObject.Find("btnSeries").GetComponent<Image>().sprite = AK_Tool4Unity.Image2Spirit(AllSeries[series].Icon);
-
             GameObject classBtnPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("btnClassTemplate");
-            Transform seriesColumn = GameObject.Find("seriesSelectPanel").transform;
+            Transform seriesPanel = GameObject.Find("seriesPanel").transform; //所有系列图标的总面板
+            Transform seriesColumn = GameObject.Find("seriesSelectPanel").transform;  //可隐藏的，显示所有系列的面板
             GameObject seriesBtnInstance;
+
+            GameObject btnCurrentSeries = GameObject.Find("btnSeries");
+            btnCurrentSeries.GetComponent<Image>().sprite = AK_Tool4Unity.Image2Spirit(AllSeries[series].Icon);
+            btnCurrentSeries.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            {
+                bool isActive = seriesPanel.GetChild(0).gameObject.activeInHierarchy;
+                seriesPanel.GetChild(0).gameObject.SetActive(!isActive);
+                seriesPanel.GetChild(1).gameObject.SetActive(!isActive);
+            });
+            //绘制所有的系列图标（可隐藏）
             for (int i = 0; i < AllSeries.Count; ++i)
             {
                 seriesBtnInstance = GameObject.Instantiate(classBtnPrefab, seriesColumn);
@@ -277,6 +286,8 @@ namespace AK_DLL
                 });
             }
 
+            seriesPanel.GetChild(0).gameObject.SetActive(false);
+            seriesPanel.GetChild(1).gameObject.SetActive(false);
         }
 
         //画单个图标。如果没有图片 就显示字

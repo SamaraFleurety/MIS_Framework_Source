@@ -29,12 +29,19 @@ namespace AK_DLL
 
         static AK_Tool()
         {
-            RIWindowHandler.LoadOperatorSeries();
-            RIWindowHandler.LoadOperatorClasses();
-            RIWindowHandler.AutoFillOperators();
+            try
+            {
+                RIWindowHandler.LoadOperatorSeries();
+                RIWindowHandler.LoadOperatorClasses();
+                RIWindowHandler.AutoFillOperators();
 
-            InitializeUI();
-            Log.Message($"MIS.初始化完成");
+                InitializeUI();
+                Log.Message($"MIS.初始化完成");
+            }
+            catch
+            {
+                Log.Error("MIS. Critical Error: Initialization fail");
+            }
         }
         //技能残留 早晚给删咯
         public static List<IntVec3> GetSector(OperatorAbilityDef ability, Pawn caster)

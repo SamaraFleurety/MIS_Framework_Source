@@ -29,7 +29,7 @@ namespace AK_DLL
         public static List<OperatorSeriesDef> operatorSeries = new List<OperatorSeriesDef>();
 
 
-#region 方舟信息窗口
+        #region 方舟信息窗口
         public static void OpenRIWindow()
         {
             if (AK_Tool.FSAsset == null)
@@ -48,9 +48,9 @@ namespace AK_DLL
                     Find.WindowStack.Add(window_MainMenu);*/
                     break;
                 case RIWindowType.Op_Series:
-                    //break;  //可能不再会做，而是整合进opList
+                //break;  //可能不再会做，而是整合进opList
                 case RIWindowType.Op_Gacha:
-                    //break;
+                //break;
                 case RIWindowType.Op_List:
                     actualRIWindow = new RIWindow_OperatorList();
                     actualRIWindow.DrawUI("Operator List");
@@ -85,10 +85,10 @@ namespace AK_DLL
         }
         #endregion
 
-#region 初始化数据
+        #region 初始化数据
         public static void LoadOperatorSeries()
         {
-            foreach(OperatorSeriesDef i in DefDatabase<OperatorSeriesDef>.AllDefs)
+            foreach (OperatorSeriesDef i in DefDatabase<OperatorSeriesDef>.AllDefs)
             {
                 operatorSeries.Add(i);
                 i.includedClasses = new List<int>();
@@ -103,7 +103,15 @@ namespace AK_DLL
             }
             foreach (OperatorDef i in DefDatabase<OperatorDef>.AllDefs)
             {
-                i.AutoFill();
+                try
+                {
+                    i.AutoFill();
+                }
+                catch
+                {
+                    Log.Error("MIS. 自动补全失败:" + i.nickname);
+                }
+
                 try
                 {
                     operatorDefs[i.operatorType.sortingOrder].Add(AK_Tool.GetOperatorIDFrom(i.defName), i);

@@ -4,6 +4,9 @@ using System.Linq;
 using RimWorld;
 using UnityEngine;
 using Verse;
+using Live2D.Cubism.Core;
+using System.Reflection;
+using Live2D.Cubism.Framework.Json;
 
 namespace AK_DLL
 {
@@ -13,6 +16,7 @@ namespace AK_DLL
         public static bool disableIMGUI = false;
 
         public static AssetBundle FSAsset;
+        public static AssetBundle l2dAsset;
         private static GameObject EVSystem;
         public static GameObject EVSystemInstance;
 
@@ -43,6 +47,8 @@ namespace AK_DLL
                 Log.Error("MIS. Critical Error: Initialization fail");
             }
         }
+
+
         //技能残留 早晚给删咯
         public static List<IntVec3> GetSector(OperatorAbilityDef ability, Pawn caster)
         {
@@ -67,6 +73,7 @@ namespace AK_DLL
                 {
                     Log.Message(Mods[i].RootDir);
                     FSAsset = AssetBundle.LoadFromFile(Mods[i].RootDir + "/Asset/fsassets");
+                    break;
                 }
             }
             //FSAsset = AssetBundle.LoadFromFile(@"S:/Program Files (x86)/Steam/steamapps/common/RimWorld/Mods/Framework/Asset/fsassets");

@@ -381,9 +381,10 @@ namespace AK_DLL
                 if (j >= opList.Count) opList.Add(opPortraitInstance);
                 else opList[j] = opPortraitInstance;
 
+                int k = i;
                 opPortraitInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
                 {
-                    RIWindowHandler.OpenRIWindow_OpDetail(cachedOperatorList[btnOrder(ClickedBtnParent)]);
+                    RIWindowHandler.OpenRIWindow_OpDetail(cachedOperatorList[k]);
                     this.Close(false);
                 });
                 //决定头像框的位置。目前一行8个，共3行。  已经改用unity的grid。

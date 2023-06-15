@@ -217,6 +217,7 @@ namespace AK_DLL
 
     public class RIWindow_MainMenu : RIWindow
     {
+        //调整秘书位置的按钮
         List<GameObject> adjustSecBtns;
 
         #region 快捷函数
@@ -243,6 +244,7 @@ namespace AK_DLL
         #endregion
         public override void DoContent()
         {
+            //DrawLive();
             base.Initialize();
 
             DrawNavBtn();
@@ -277,6 +279,9 @@ namespace AK_DLL
             {
             });
         }
+
+
+
         private void DrawSubFeature()
         {
             GameObject temp;

@@ -46,6 +46,9 @@
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>./packages/Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
+    <Reference Include="CubismRim">
+      <HintPath>S:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\Framework\Assemblies\CubismRim.dll</HintPath>
+    </Reference>
     <Reference Include="FSUI, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>S:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\Framework\Assemblies\FSUI.dll</HintPath>
@@ -55,6 +58,9 @@
     </Reference>
     <Reference Include="ISharpZipLib">
       <HintPath>./packages/ISharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="LitJSON, Version=0.18.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\LitJson.0.18.0\lib\net45\LitJSON.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Posix">
       <HintPath>./packages/Mono.Posix.dll</HintPath>
@@ -81,6 +87,9 @@
     </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>./packages/Unity.TextMeshPro.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Timeline">
+      <HintPath>S:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\Framework\Assemblies\Unity.Timeline.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
       <HintPath>./packages/UnityEngine.dll</HintPath>
@@ -371,6 +380,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DeathWorker\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

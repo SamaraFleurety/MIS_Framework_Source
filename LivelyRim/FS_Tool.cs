@@ -13,30 +13,18 @@ using Live2D.Cubism.Framework.Physics;
 using Live2D.Cubism.Framework.Json;
 using System.IO;
 using LitJson;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace FS_LivelyRim
 {
     [StaticConstructorOnStartup]
     public static class FS_Tool
     {
-        //执行所有初始化 FIXME：记得写个IO装载原生库
-        static FS_Tool ()
-        {
-            TypeDef.Initialize();
+        //存所有mod的路径 <packageID, 路径>
+        public static Dictionary<string, string> modPath = new Dictionary<string, string>();
 
-            InitializeCubismDll();
-        }
-
-        static void InitializeCubismDll()
-        {
-            //因为cubism dll是在游戏中途加载，所以有些仅游戏开始时执行一次的初始化方法无法被执行
-            MethodInfo method = typeof(CubismModel).GetMethod("RegisterCallbackFunction", BindingFlags.NonPublic | BindingFlags.Static);
-            method.Invoke(null, new object[0]);
-
-            method = typeof(CubismLogging).GetMethod("Initialize", BindingFlags.NonPublic | BindingFlags.Static);
-            method.Invoke(null, new object[0]);
-        }
-
+#region 离屏渲染相机
         private static Camera camera = null;
         public const int CanvasHeight = 4096;
         internal static RenderTexture empty = new RenderTexture(1, 1, 0, RenderTextureFormat.ARGB32);
@@ -65,6 +53,71 @@ namespace FS_LivelyRim
                 return camera;
             }
         }
+#endregion
+
+        //执行所有初始化 FIXME：记得写个IO装载原生库
+        static FS_Tool ()
+        {
+            InitializeCubismDll();
+
+            //因为广泛需要读取prefab或者json，需要知道路径。泰南的MODContentInfo竟然tm是个list
+            LoadAllModPath();
+
+            TypeDef.Initialize();
+        }
+
+        static void LoadAllModPath()
+        {
+            List<ModContentPack> Mods = LoadedModManager.RunningMods.ToList();
+            for (int i = 0; i < Mods.Count; ++i)
+            {
+                modPath.Add(Mods[i].PackageId, Mods[i].RootDir);
+            }
+        }
+
+        //因为cubism dll是在游戏中途加载，所以有些仅游戏开始时执行一次的初始化方法无法被执行
+        static void InitializeCubismDll()
+        {
+            MethodInfo method = typeof(CubismModel).GetMethod("RegisterCallbackFunction", BindingFlags.NonPublic | BindingFlags.Static);
+            method.Invoke(null, new object[0]);
+
+            method = typeof(CubismLogging).GetMethod("Initialize", BindingFlags.NonPublic | BindingFlags.Static);
+            method.Invoke(null, new object[0]);
+        }
+
+
+        //从mod根目录/Asset/开始索引。假设需要读根目录/Aseet/ab，那就入参mod的packageID 和 "Aseet/ab"
+        public static AssetBundle LoadAssetBundle(string modPackageID, string path)
+        {
+            AssetBundle assetBundle = null;
+            string fullPath = modPath[modPackageID.ToLower()] + "/Asset/" + path;
+            try
+            {
+                assetBundle = AssetBundle.LoadFromFile(fullPath);
+            }
+            catch
+            {
+                Log.Error($"Unable to load assetbundle at {fullPath}");
+            }
+            return assetBundle;
+        }
+
+        //从mod根目录/Json/开始索引
+        public static CubismModel3Json LoadCubismJson(string modPackageID, string path)
+        {
+            CubismModel3Json json = null;
+            string fullPath = modPath[modPackageID.ToLower()] + "/Json/" + path;
+            try
+            {
+                json = CubismModel3Json.LoadAtPath(fullPath, BuiltinLoadAssetAtPath);
+            }
+            catch
+            {
+                Log.Error($"Unable to load Json at {fullPath}");
+            }
+            return json;
+        }
+
         private static void DrawLive()
         {
 

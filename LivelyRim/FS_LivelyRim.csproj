@@ -7,7 +7,7 @@
     <ProjectGuid>{CA2D2594-7051-4FC9-B1E1-EF077F439FCF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LivelyRim</RootNamespace>
+    <RootNamespace>FS_LivelyRim</RootNamespace>
     <AssemblyName>LivelyRim</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

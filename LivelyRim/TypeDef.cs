@@ -13,17 +13,12 @@ namespace FS_LivelyRim
     {
         public static AssetBundle l2dResource => CubismBuiltinMaterials.AB;
 
+        public static string ModID = "FS.LivelyRim";
+
         public static void Initialize()
         {
-            List<ModContentPack> Mods = LoadedModManager.RunningMods.ToList();
-            for (int i = 0; i < Mods.Count; ++i)
-            {
-                if (Mods[i].PackageId == "FS.LivelyRim")
-                {
-                    CubismBuiltinMaterials.AB = AssetBundle.LoadFromFile(Mods[i].RootDir + "/Asset/l2dtest");
-                    break;
-                }
-            }
+            //CubismBuiltinMaterials.AB = AssetBundle.LoadFromFile(FS_Tool.modPath[ModID] + "/Asset/l2dtest");
+            CubismBuiltinMaterials.AB = FS_Tool.LoadAssetBundle(ModID, "l2dtest");
         }
     }
 }

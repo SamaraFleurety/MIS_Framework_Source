@@ -43,6 +43,9 @@
     <Reference Include="LitJSON">
       <HintPath>..\AK_DLL\bin\Debug\LitJSON.dll</HintPath>
     </Reference>
+    <Reference Include="RicePro">
+      <HintPath>S:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\LivelyRim\Assemblies\RicePro.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

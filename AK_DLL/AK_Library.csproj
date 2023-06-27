@@ -384,5 +384,11 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LivelyRim\FS_LivelyRim.csproj">
+      <Project>{CA2D2594-7051-4FC9-B1E1-EF077F439FCF}</Project>
+      <Name>FS_LivelyRim</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

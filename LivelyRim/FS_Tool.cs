@@ -15,6 +15,7 @@ using System.IO;
 using LitJson;
 using System.Collections.Generic;
 using System.Linq;
+using Live2D.Cubism.Framework.LookAt;
 
 namespace FS_LivelyRim
 {
@@ -23,6 +24,8 @@ namespace FS_LivelyRim
     {
         //存所有mod的路径 <packageID, 路径>
         public static Dictionary<string, string> modPath = new Dictionary<string, string>();
+
+        static string ModID => TypeDef.ModID;
 
 #region 离屏渲染相机
         private static Camera camera = null;
@@ -85,12 +88,19 @@ namespace FS_LivelyRim
             method.Invoke(null, new object[0]);
         }
 
+        //从mod的ID读获取要的文件的路径
+        //实际路径为[MOD根目录]\[subfolder]\path
+        private static string ModIDtoPath(string modPackageID, string path, string subfolder = "")
+        {
+            return modPath[modPackageID.ToLower()] + subfolder + path;
+        }
 
         //从mod根目录/Asset/开始索引。假设需要读根目录/Aseet/ab，那就入参mod的packageID 和 "Aseet/ab"
         public static AssetBundle LoadAssetBundle(string modPackageID, string path)
         {
             AssetBundle assetBundle = null;
-            string fullPath = modPath[modPackageID.ToLower()] + "/Asset/" + path;
+            //string fullPath = modPath[modPackageID.ToLower()] + "/Asset/" + path;
+            string fullPath = ModIDtoPath(modPackageID, path, "/Asset/");
             try
             {
                 assetBundle = AssetBundle.LoadFromFile(fullPath);
@@ -102,11 +112,12 @@ namespace FS_LivelyRim
             return assetBundle;
         }
 
-        //从mod根目录/Json/开始索引
+        //从mod根目录/Json/开始索引 这个是手动加载模型Json用的。
         public static CubismModel3Json LoadCubismJson(string modPackageID, string path)
         {
             CubismModel3Json json = null;
-            string fullPath = modPath[modPackageID.ToLower()] + "/Json/" + path;
+            //string fullPath = modPath[modPackageID.ToLower()] + "/Json/" + path;
+            string fullPath = ModIDtoPath(modPackageID, path, "/Json/");
             try
             {
                 json = CubismModel3Json.LoadAtPath(fullPath, BuiltinLoadAssetAtPath);
@@ -114,60 +125,83 @@ namespace FS_LivelyRim
             catch
             {
                 Log.Error($"Unable to load Json at {fullPath}");
+                return null;
             }
             return json;
         }
 
-        private static void DrawLive()
+        //从mod根目录/Json/开始索引 这个是手动加载模型的Rig的Json用的
+        public static string LoadJson(string modPackageID, string path)
+        {
+            string fullPath = ModIDtoPath(modPackageID, path, "/Json/");
+            return File.ReadAllText(fullPath);
+        }
+
+        //从Json手动加载物理rig到模型上。我也不知道为什么原版读ab包时无法处理有嵌套的
+        public static void LoadRigtoModel(GameObject Live2DModel, string modPackageID, string JsonPath)
+        {
+            CubismPhysics3Json physics3Json = LitJson.JsonMapper.ToObject<CubismPhysics3Json>(LoadJson(modPackageID, JsonPath));
+
+            CubismPhysicsController physicsController = Live2DModel.GetComponent<CubismPhysicsController>();
+
+            if (physicsController == null)
+            {
+                Log.Error("[FS.L2D] model do not have component CubismPhysicsController");
+                return;
+            }
+
+            physicsController.Initialize(physics3Json.ToRig());
+
+            physicsController.HasUpdateController = true;
+        }
+
+        public static GameObject LoadModelfromAB(AssetBundle AB, string path)
+        {
+            GameObject l2dPrefab = AB.LoadAsset<GameObject>(path);
+            return GameObject.Instantiate(l2dPrefab);
+        }
+
+        public static void DrawLive()
         {
 
             if (true)
             {
-                GameObject l2dPrefab = TypeDef.l2dResource.LoadAsset<GameObject>("rice_pro_t03");
-                GameObject l2dins = GameObject.Instantiate(l2dPrefab);
-                cubismPhysics = l2dins.GetComponent<CubismPhysicsController>();
-                l2dins.transform.position = new Vector3(10000, 10000, 0);
+                //GameObject l2dPrefab = TypeDef.ricepicotest.LoadAsset<GameObject>("rice_pro_t03Motion");
+                //GameObject l2dins = GameObject.Instantiate(l2dPrefab);
+
+                /*cubismPhysics = l2dins.GetComponent<CubismPhysicsController>();
+                //l2dins.transform.position = new Vector3(10000, 10000, 0);
                 string physics3JsonAsString = File.ReadAllText(@"S:\rice_pro_zh\runtime\rice_pro_t03.physics3.json");
-                Debug.Log(physics3JsonAsString);
-                cubismPhysics.HasUpdateController = true;
-
-                //CubismPhysics3Json physics3Json = CubismPhysics3Json.LoadFrom(physics3JsonAsString);
-                //CubismPhysics3Json physics3Json = JsonConvert.DeserializeObject<CubismPhysics3Json>(physics3JsonAsString);
                 CubismPhysics3Json physics3Json = LitJson.JsonMapper.ToObject<CubismPhysics3Json>(physics3JsonAsString);
-
-                //Log.Message($"json {physics3Json == null};; {physics3Json.Version};; {physics3Json.Meta.PhysicsSettingCount}");
-
+                
                 l2dins.GetComponent<CubismPhysicsController>().Initialize(physics3Json.ToRig());
+                cubismPhysics.HasUpdateController = true;*/
+
+                GameObject l2dins = LoadModelfromAB(TypeDef.ricepicotest, "rice_pro_t03Motion");
+                l2dins.GetComponent<OffScreenCameraRendering>().renderTarget = GameObject.Find("AG");
+
+                LoadRigtoModel(l2dins, ModID, "rice_pro_t03.physics3.json");
+
+
+                GameObject eyeTargetPrefab = TypeDef.ricepicotest.LoadAsset<GameObject>("EyeTarget");
+                GameObject eyeTargetIns = GameObject.Instantiate(eyeTargetPrefab);
+                l2dins.GetComponent<CubismLookController>().Target = eyeTargetIns;
             }
             //l2dins.SetActive(true);
             //Log.Message($"{l2dins.GetComponentInChildren<CubismPart>() == null}");
-            RenderTexture renderTexture = new RenderTexture(1920, 1080, 24);
-            Camera.targetTexture = renderTexture;
-            Camera.transform.position = new Vector3(10000, 10000, -10);
-            Camera.transparencySortAxis = new Vector3(0, 0, 1);
 
             if (false)
             {
-                //string path = @"C:\Users\Fleurety\Downloads\Compressed\rice_pro_zh\runtime\rice_pro_t03.model3.json";
-                string path = "S:/rice_pro_zh/runtime/rice_pro_t03.model3.json";
-                Debug.Log(File.ReadAllText(path));
-                CubismModel3Json cubismModel3Json = CubismModel3Json.LoadAtPath(path, BuiltinLoadAssetAtPath);
-                Debug.Log($"json: {cubismModel3Json == null}");
-                Debug.Log($" {cubismModel3Json.AssetPath}");
-                Debug.Log($" {BuiltinLoadAssetAtPath(typeof(string), cubismModel3Json.AssetPath) as string}");
-                Debug.Log($"{cubismModel3Json.FileReferences.Moc}");
-                Debug.Log($" {cubismModel3Json.FileReferences.Physics} ;; {cubismModel3Json.FileReferences.Pose}");
-                var model = cubismModel3Json.ToModel();
-                model.transform.position = new Vector3(10000, 10000, 0);
-                model.transform.localScale = new Vector3(7, 7, 7);
-                model.GetComponent<Animator>().runtimeAnimatorController = TypeDef.l2dResource.LoadAsset<RuntimeAnimatorController>("rice_pro_t03");
+
+                RenderTexture renderTexture = new RenderTexture(1920, 1080, 24);
+                Camera.targetTexture = renderTexture;
+                Camera.transform.position = new Vector3(10000, 10000, -10);
+                Camera.transparencySortAxis = new Vector3(0, 0, 1);
+
+
+                GameObject.Find("AG").GetComponent<Image>().material = TypeDef.l2dResource.LoadAsset<Material>("OffScreenCameraMaterial");
+                GameObject.Find("AG").GetComponent<Image>().material.mainTexture = renderTexture;
             }
-
-
-
-
-            GameObject.Find("AG").GetComponent<Image>().material = TypeDef.l2dResource.LoadAsset<Material>("newMat");
-            GameObject.Find("AG").GetComponent<Image>().material.mainTexture = renderTexture;
             //GameObject.Find("AG").GetComponent<Image>().material.mainTexture = ContentFinder<Texture2D>.Get(RIWindowHandler.operatorDefs[1].Values.First().stand);
         }
         public static object BuiltinLoadAssetAtPath(Type assetType, string absolutePath)

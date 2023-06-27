@@ -8,6 +8,7 @@ using RimWorld;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using FS_LivelyRim;
 
 namespace AK_DLL
 {
@@ -245,6 +246,10 @@ namespace AK_DLL
         public override void DoContent()
         {
             //DrawLive();
+            Log.Message("st draw l2d");
+            FS_Tool.DrawLive();
+            Log.Message("ed draw l2d");
+            if (AK_ModSettings.debugOverride) return;
             base.Initialize();
 
             DrawNavBtn();

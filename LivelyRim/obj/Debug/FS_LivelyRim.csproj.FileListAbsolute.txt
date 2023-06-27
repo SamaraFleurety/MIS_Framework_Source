@@ -65,8 +65,9 @@ C:\Users\Fleurety\Desktop\rw\AK_DLL\LivelyRim\bin\Debug\UnityEngine.WindModule.d
 C:\Users\Fleurety\Desktop\rw\AK_DLL\LivelyRim\bin\Debug\UnityEngine.ARModule.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\LivelyRim\bin\Debug\UnityEngine.XRModule.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\LivelyRim\bin\Debug\UnityEngine.InputModule.dll
-C:\Users\Fleurety\Desktop\rw\AK_DLL\LivelyRim\obj\Debug\FS_LivelyRim.csproj.AssemblyReference.cache
 C:\Users\Fleurety\Desktop\rw\AK_DLL\LivelyRim\obj\Debug\FS_LivelyRim.csproj.CoreCompileInputs.cache
 C:\Users\Fleurety\Desktop\rw\AK_DLL\LivelyRim\obj\Debug\FS_LivelyRim.csproj.CopyComplete
 C:\Users\Fleurety\Desktop\rw\AK_DLL\LivelyRim\obj\Debug\LivelyRim.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\LivelyRim\obj\Debug\LivelyRim.pdb
+C:\Users\Fleurety\Desktop\rw\AK_DLL\LivelyRim\bin\Debug\RicePro.dll
+C:\Users\Fleurety\Desktop\rw\AK_DLL\LivelyRim\obj\Debug\FS_LivelyRim.csproj.AssemblyReference.cache

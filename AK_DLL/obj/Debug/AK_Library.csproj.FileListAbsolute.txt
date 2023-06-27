@@ -81,5 +81,5 @@ C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\obj\Debug\AK_DLL.pdb
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\obj\Debug\AK_Library.csproj.AssemblyReference.cache
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\LitJSON.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\LivelyRim.dll
-C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\RicePro.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\LivelyRim.pdb
+C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\CubismRimAddon.dll

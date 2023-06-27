@@ -247,7 +247,8 @@ namespace AK_DLL
         {
             //DrawLive();
             Log.Message("st draw l2d");
-            FS_Tool.DrawLive();
+            //FS_Tool.DrawLive();
+            FS_Tool.InstantiateLive2DModel(FS_LivelyRim.TypeDef.ricepicotest, FS_LivelyRim.TypeDef.ModID, "rice_pro_t03Motion", "rice_pro_t03.physics3.json", "L2DBG");
             Log.Message("ed draw l2d");
             if (AK_ModSettings.debugOverride) return;
             base.Initialize();

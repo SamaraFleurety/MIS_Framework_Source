@@ -69,5 +69,5 @@ C:\Users\Fleurety\Desktop\rw\AK_DLL\LivelyRim\obj\Debug\FS_LivelyRim.csproj.Core
 C:\Users\Fleurety\Desktop\rw\AK_DLL\LivelyRim\obj\Debug\FS_LivelyRim.csproj.CopyComplete
 C:\Users\Fleurety\Desktop\rw\AK_DLL\LivelyRim\obj\Debug\LivelyRim.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\LivelyRim\obj\Debug\LivelyRim.pdb
-C:\Users\Fleurety\Desktop\rw\AK_DLL\LivelyRim\bin\Debug\RicePro.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\LivelyRim\obj\Debug\FS_LivelyRim.csproj.AssemblyReference.cache
+C:\Users\Fleurety\Desktop\rw\AK_DLL\LivelyRim\bin\Debug\CubismRimAddon.dll

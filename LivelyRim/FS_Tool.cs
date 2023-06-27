@@ -16,6 +16,7 @@ using LitJson;
 using System.Collections.Generic;
 using System.Linq;
 using Live2D.Cubism.Framework.LookAt;
+using Live2D.Cubism.FSAddon;
 
 namespace FS_LivelyRim
 {
@@ -27,36 +28,7 @@ namespace FS_LivelyRim
 
         static string ModID => TypeDef.ModID;
 
-#region 离屏渲染相机
-        private static Camera camera = null;
-        public const int CanvasHeight = 4096;
-        internal static RenderTexture empty = new RenderTexture(1, 1, 0, RenderTextureFormat.ARGB32);
-        public static CubismModel cubismModel = null;
-        public static CubismPhysicsController cubismPhysics = null;
-        internal static Camera Camera
-        {
-            get
-            {
-                if (camera == null)
-                {
-                    GameObject gameObject = new GameObject("Off_Screen_Rendering_Camera");
-                    camera = gameObject.AddComponent<Camera>();
-                    camera.orthographic = true;
-                    camera.orthographicSize = 10;
-                    camera.transparencySortMode = TransparencySortMode.Orthographic;
-                    camera.nearClipPlane = 0;
-                    camera.farClipPlane = 71.5f;
-                    camera.transform.position = new Vector3(0, CanvasHeight + 65, 0);
-                    camera.transform.rotation = Quaternion.Euler(0, 0, 0);
-                    camera.backgroundColor = Color.clear;
-                    camera.clearFlags = CameraClearFlags.SolidColor;
-                    camera.targetTexture = empty;
-                    camera.enabled = true;
-                }
-                return camera;
-            }
-        }
-#endregion
+        static AssetBundle l2dResource => TypeDef.l2dResource;
 
         //执行所有初始化 FIXME：记得写个IO装载原生库
         static FS_Tool ()
@@ -89,13 +61,18 @@ namespace FS_LivelyRim
         }
 
         //从mod的ID读获取要的文件的路径
-        //实际路径为[MOD根目录]\[subfolder]\path
+        //实际路径为[MOD根目录]/[subfolder]/path
         private static string ModIDtoPath(string modPackageID, string path, string subfolder = "")
         {
             return modPath[modPackageID.ToLower()] + subfolder + path;
         }
 
-        //从mod根目录/Asset/开始索引。假设需要读根目录/Aseet/ab，那就入参mod的packageID 和 "Aseet/ab"
+        /// <summary>
+        /// 从mod根目录/Asset/开始索引。假设需要读根目录/Aseet/ab，那就入参mod的packageID 和 "Aseet/ab"
+        /// </summary>
+        /// <param name="modPackageID">写在About.xml里面的PackageID</param>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static AssetBundle LoadAssetBundle(string modPackageID, string path)
         {
             AssetBundle assetBundle = null;
@@ -137,7 +114,12 @@ namespace FS_LivelyRim
             return File.ReadAllText(fullPath);
         }
 
-        //从Json手动加载物理rig到模型上。我也不知道为什么原版读ab包时无法处理有嵌套的
+        /// <summary>
+        /// 从Json手动加载物理rig到模型上。我也不知道为什么原版读ab包时无法处理有嵌套的
+        /// </summary>
+        /// <param name="Live2DModel"></param>
+        /// <param name="modPackageID"></param>
+        /// <param name="JsonPath"></param>
         public static void LoadRigtoModel(GameObject Live2DModel, string modPackageID, string JsonPath)
         {
             CubismPhysics3Json physics3Json = LitJson.JsonMapper.ToObject<CubismPhysics3Json>(LoadJson(modPackageID, JsonPath));
@@ -155,30 +137,90 @@ namespace FS_LivelyRim
             physicsController.HasUpdateController = true;
         }
 
-        public static GameObject LoadModelfromAB(AssetBundle AB, string path)
+        /// <summary>
+        /// 从AB包读取模型。如果希望自己完成后续处理就用这个。在使用此方法前需要提前实例化离屏渲染目标。
+        /// </summary>
+        /// <param name="AB"></param>
+        /// <param name="path"></param>
+        /// <param name="renderTargetName">模型采用离屏渲染规避泰南的UI。不能为空，需要提前实例化离屏渲染目标，不然别问我为什么看不到模型。</param>
+        /// <returns></returns>
+        public static GameObject LoadModelfromAB(AssetBundle AB, string path, string renderTargetName = null)
         {
             GameObject l2dPrefab = AB.LoadAsset<GameObject>(path);
-            return GameObject.Instantiate(l2dPrefab);
+            GameObject l2dInstance = GameObject.Instantiate(l2dPrefab);
+            if (renderTargetName != null)
+            {
+                l2dInstance.GetComponent<OffscreenRendering>().renderTargetName = renderTargetName;
+            }
+            return l2dInstance;
         }
 
-        public static void DrawLive()
+        /// <summary>
+        /// 给定所有必要参数，返回实例化的L2D模型
+        /// </summary>
+        /// <param name="assetBundle"> 装有模型的AB包。需要提前使用LoadAssetBundle方法读取。</param>
+        /// <param name="ModID"> 模型MOD的PackageID </param>
+        /// <param name="modelPath"> L2D模型在AB包中的路径和名字 </param>
+        /// <param name="rigJsonPath"> [可选]L2D模型在Json文件夹中的路径和名字 </param>
+        /// <param name="renderTargetName"> [可选，带默认值] 希望把L2D模型渲染在哪个游戏物体上。自定义游戏物体必须带有UnityEngine.UI.Image组件，且Spirit需要留空。
+        ///                                                  默认会实例化一个符合条件的内置的prefab。</param>
+        /// <param name="eyeFollowMouse">[默认为是]模型是否带有眼睛和头的追踪功能</param>
+        /// <param name="eyeFollowTarget">[可选，带默认值]如果有头眼追踪功能，追踪的物体。默认是跟随鼠标，并且有速度限制。</param>
+        /// <returns>返回完成以上处理的游戏物体，如果有其他需求可自行更改。</returns>
+        public static GameObject InstantiateLive2DModel(AssetBundle assetBundle, string ModID, string modelPath, string rigJsonPath = null, string renderTargetName = null, bool eyeFollowMouse = true, GameObject eyeFollowTarget = null)
+        {
+            GameObject renderTarget = GameObject.Find("L2DRenderTarget");
+            if (renderTarget == null && renderTargetName == null)
+            {
+                GameObject renderTargetPrefab = l2dResource.LoadAsset<GameObject>("L2DCanvas");
+                GameObject renderTargetInstance = GameObject.Instantiate(renderTargetPrefab);
+            }
+
+            GameObject l2dIns = LoadModelfromAB(assetBundle, modelPath, renderTargetName);
+
+            if (rigJsonPath != null)
+            {
+                try
+                {
+                    LoadRigtoModel(l2dIns, ModID, rigJsonPath);
+                }
+                catch
+                {
+                    Log.Error("[FS.L2D] error when loading rig to model.");
+                }
+            }
+
+
+            if (eyeFollowMouse)
+            {
+                if (eyeFollowTarget != null)
+                {
+                    l2dIns.GetComponent<CubismLookController>().Target = eyeFollowTarget;
+                }
+                else
+                {
+                    GameObject eyeTargetInstance = GameObject.Find("EyeTarget");
+                    if (eyeTargetInstance == null)
+                    {
+                        GameObject eyeTargetPrefab = l2dResource.LoadAsset<GameObject>("EyeTarget");
+                        eyeTargetInstance = GameObject.Instantiate(eyeTargetPrefab);
+                    }
+                    l2dIns.GetComponent<CubismLookController>().Target = eyeTargetInstance;
+                }
+            }
+
+            return l2dIns;
+        }
+
+       /* public static void DrawLive()
         {
 
             if (true)
             {
-                //GameObject l2dPrefab = TypeDef.ricepicotest.LoadAsset<GameObject>("rice_pro_t03Motion");
-                //GameObject l2dins = GameObject.Instantiate(l2dPrefab);
 
-                /*cubismPhysics = l2dins.GetComponent<CubismPhysicsController>();
-                //l2dins.transform.position = new Vector3(10000, 10000, 0);
-                string physics3JsonAsString = File.ReadAllText(@"S:\rice_pro_zh\runtime\rice_pro_t03.physics3.json");
-                CubismPhysics3Json physics3Json = LitJson.JsonMapper.ToObject<CubismPhysics3Json>(physics3JsonAsString);
-                
-                l2dins.GetComponent<CubismPhysicsController>().Initialize(physics3Json.ToRig());
-                cubismPhysics.HasUpdateController = true;*/
 
                 GameObject l2dins = LoadModelfromAB(TypeDef.ricepicotest, "rice_pro_t03Motion");
-                l2dins.GetComponent<OffScreenCameraRendering>().renderTarget = GameObject.Find("AG");
+                l2dins.GetComponent<OffscreenRendering>().renderTarget = GameObject.Find("AG");
 
                 LoadRigtoModel(l2dins, ModID, "rice_pro_t03.physics3.json");
 
@@ -190,20 +232,7 @@ namespace FS_LivelyRim
             //l2dins.SetActive(true);
             //Log.Message($"{l2dins.GetComponentInChildren<CubismPart>() == null}");
 
-            if (false)
-            {
-
-                RenderTexture renderTexture = new RenderTexture(1920, 1080, 24);
-                Camera.targetTexture = renderTexture;
-                Camera.transform.position = new Vector3(10000, 10000, -10);
-                Camera.transparencySortAxis = new Vector3(0, 0, 1);
-
-
-                GameObject.Find("AG").GetComponent<Image>().material = TypeDef.l2dResource.LoadAsset<Material>("OffScreenCameraMaterial");
-                GameObject.Find("AG").GetComponent<Image>().material.mainTexture = renderTexture;
-            }
-            //GameObject.Find("AG").GetComponent<Image>().material.mainTexture = ContentFinder<Texture2D>.Get(RIWindowHandler.operatorDefs[1].Values.First().stand);
-        }
+        }*/
         public static object BuiltinLoadAssetAtPath(Type assetType, string absolutePath)
         {
             Debug.Log(absolutePath);

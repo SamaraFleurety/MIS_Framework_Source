@@ -260,6 +260,7 @@ namespace AK_DLL
             DrawSubFeature();
 
             DrawStand();
+            
         }
 
         private void DrawNavBtn()
@@ -379,16 +380,24 @@ namespace AK_DLL
 
         private void DrawStand()
         {
+            if (SecretaryDef == null)
+            {
+                Log.Error($"MIS. missing operator named {AK_ModSettings.secretary}");
+                return;
+            }
+
             GameObject opStandObj = GameObject.Find("OpStand");
             Image opStand = opStandObj.GetComponent<Image>();
             Vector3 opStandLoc = SecretaryLoc;
             Texture2D tex;
             int preferredSkin = AK_ModSettings.secretarySkin;
 
-            if (preferredSkin == 0) tex = ContentFinder<Texture2D>.Get(SecretaryDef.commonStand);
-            else if (preferredSkin == 1) tex = ContentFinder<Texture2D>.Get(SecretaryDef.stand);
-            else tex = ContentFinder<Texture2D>.Get(SecretaryDef.fashion[preferredSkin - 2]);
+            if (preferredSkin == 0) tex = ContentFinder<Texture2D>.Get(SecretaryDef.commonStand, false);
+            else if (preferredSkin == 1) tex = ContentFinder<Texture2D>.Get(SecretaryDef.stand, false);
+            else tex = ContentFinder<Texture2D>.Get(SecretaryDef.fashion[preferredSkin - 2], false);
+            
 
+            Log.Message("cc");
             opStand.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
             opStandObj.transform.localPosition = new Vector3(opStandLoc.x, opStandLoc.y);
             opStandObj.transform.localScale = new Vector3(opStandLoc.z, opStandLoc.z, opStandLoc.z);

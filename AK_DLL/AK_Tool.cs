@@ -142,7 +142,7 @@ namespace AK_DLL
             {
                 if(i.ContainsKey(operatorID)) return i[operatorID];
             }
-            return GetDef("Amiya");
+            return null;
         }
         public static OperatorDocument GetDoc(this Pawn p)
         {

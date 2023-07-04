@@ -13,6 +13,8 @@ namespace FS_LivelyRim
     {
         public static AssetBundle l2dResource => CubismBuiltinMaterials.AB;
 
+        public static Dictionary<string, GameObject> Live2DModels = new Dictionary<string, GameObject>();
+
         //fixme: delete when done
         public static AssetBundle ricepicotest;
 

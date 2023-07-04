@@ -5,6 +5,7 @@ using System.Text;
 using System.Collections.Generic;
 using UnityEngine;
 using RimWorld.Planet;
+using FS_LivelyRim;
 
 namespace AK_DLL
 {
@@ -50,6 +51,7 @@ namespace AK_DLL
         public string stand;//精2立绘
         public string commonStand;  //精0立绘
         public List<string> fashion;
+        public List<string> live2dModel; //L2D支持 要求格式为[mod package id]_[assetbundle id]_[model id]; 例如，packageID为L2DWarfarin，其中模型在名为warfain的ab包中，名叫FS_warfarin，则这里填写L2DWarfarin_warfarin_FS_warfarin
 
         //因为并不知道是否有某种立绘，所以用字典存。约定-1为头像，0是精0立绘，1是精2立绘，2-后面是换装
         //这里的V3，x和y是x轴和y轴的偏移，z其实是缩放
@@ -464,7 +466,48 @@ namespace AK_DLL
                 temp = standPath + TypeDef.romanNumber[i];
                 if (ContentFinder<Texture2D>.Get(temp, false) != null) this.fashion.Add(temp);
             }
+            AutoFill_Live2D();
         }
+
+        private void AutoFill_Live2D()
+        {
+            //检查live2D的格式，然后处理成只有ID（用的时候从typedef里面读）
+            if (ModLister.GetActiveModWithIdentifier("FS.LivelyRim") != null)
+            {
+                List<string> modelNames = new List<string>();
+                if (live2dModel == null) live2dModel = new List<string>();
+                foreach (string i in live2dModel)
+                {
+                    string[] tempString = i.Split('_');
+                    if (tempString.Length != 3)
+                    {
+                        Log.Error($"FS.L2D. error with {nickname}'s live2d named {i} : bad format");
+                        continue;
+                    }
+                    if (ModLister.GetActiveModWithIdentifier(tempString[0]) == null)
+                    {
+                        Log.Error($"FS.L2D. error with {nickname}'s live2d named {i} : missing mod with ID {tempString[0]}");
+                        continue;
+                    }
+                    AssetBundle ab = FS_Tool.LoadAssetBundle(tempString[0], tempString[1]);
+                    if (ab == null)
+                    {
+                        Log.Error($"FS.L2D. error with {nickname}'s live2d named {i} : missing assetbundle named {tempString[1]}");
+                        continue;
+                    }
+                    GameObject modelPrefab = ab.LoadAsset<GameObject>(tempString[2]);
+                    if (modelPrefab == null)
+                    {
+                        Log.Error($"FS.L2D. error with {nickname}'s live2d named {i} : missing model named {tempString[2]}");
+                        continue;
+                    }
+                    modelNames.Add(tempString[2]);
+                    FS_LivelyRim.TypeDef.Live2DModels.Add(tempString[2], modelPrefab);
+                }
+                live2dModel = modelNames;
+            }
+        }
+
         private void AutoFill_Apparel()
         {
             if (this.apparels == null) this.apparels = new List<ThingDef>();

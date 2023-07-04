@@ -40,6 +40,11 @@ namespace AK_DLL
         }
     }
 
+    public enum StandType : Byte
+    {
+        Static = 0,
+        Live2D
+    }
     public enum SkinType : Byte
     {
         Vanilla = 0,

@@ -423,7 +423,7 @@ namespace AK_DLL
 
         //换装按钮会被记录于 this.fashionbtns
 
-    #region 左边界面
+        #region 左边界面
         private void DrawDescription()
         {
             GameObject OpDescPanel = GameObject.Find("OpDescPanel");
@@ -495,22 +495,41 @@ namespace AK_DLL
                 ChangeStandTo(1);
             });
 
+            int logicOrder = 2;
             if (Def.fashion != null)
             {
                 v3 = fashionIconPrefab.transform.localPosition;
                 for (int i = 0; i < Def.fashion.Count; ++i)
                 {
                     //逻辑顺序 代表这按钮在面板上实际的位置（即精2按钮之后）
-                    int logicOrder = i + 2;
                     fashionIcon = GameObject.Instantiate(fashionIconPrefab);
                     fashionIcon.transform.localPosition = new Vector3(v3.x * logicOrder, v3.y);
                     fashionIcon.SetActive(true);
                     fashionIcon.name = "FSUI_FashIc_" + logicOrder;
+                    int j = logicOrder;
                     fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
                     {
-                        ChangeStandTo(btnOrder(ClickedBtn));
+                        //ChangeStandTo(btnOrder(ClickedBtn));
+                        ChangeStandTo(j);
                     });
                     fashionBtns.Add(logicOrder, fashionIcon);
+                    ++logicOrder;
+                }
+            }
+            //在服装按钮实例化l2d换装按钮
+            if (ModLister.GetActiveModWithIdentifier("FS.LivelyRim") != null)
+            {
+                v3 = fashionIconPrefab.transform.localPosition;
+                for (int i = 0; i < Def.live2dModel.Count; ++i)
+                {
+                    fashionIcon = GameObject.Instantiate(fashionIconPrefab);
+                    fashionIcon.transform.localPosition = new Vector3(v3.x * logicOrder, v3.y);
+                    int j = logicOrder;
+                    fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+                    {
+
+                    });
+                    ++logicOrder;
                 }
             }
         }
@@ -703,7 +722,8 @@ namespace AK_DLL
             }
         }
 
-        private void ChangeStandTo(int val, bool forceChange = false)
+        //fixme:写完l2d分支
+        private void ChangeStandTo(int val, bool forceChange = false, StandType standType = StandType.Static)
         {
             GameObject fBtn;
             if (!forceChange && val == preferredSkin) return;
@@ -717,11 +737,12 @@ namespace AK_DLL
             fBtn.transform.GetChild(0).gameObject.SetActive(true);
             fBtn.transform.GetChild(1).gameObject.SetActive(false);
 
+            //启用新的换装按钮
             preferredSkin = val;
             fBtn = fashionBtns[preferredSkin];
             fBtn.transform.GetChild(0).gameObject.SetActive(false);
             fBtn.transform.GetChild(1).gameObject.SetActive(true);
-            DrawStand();
+            DrawStand(); //实际刷新立绘立绘
         }
 
         void DrawDebugPanel()

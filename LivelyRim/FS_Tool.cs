@@ -85,6 +85,7 @@ namespace FS_LivelyRim
             catch
             {
                 Log.Error($"Unable to load assetbundle at {fullPath}");
+                return null;
             }
             return assetBundle;
         }

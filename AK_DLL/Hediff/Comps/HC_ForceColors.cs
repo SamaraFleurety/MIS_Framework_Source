@@ -39,5 +39,6 @@ namespace AK_DLL
                 this.Def.comps.Remove(this.props);
             }
         }
+
     }
 }

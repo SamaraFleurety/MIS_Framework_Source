@@ -7,6 +7,8 @@ using Verse;
 using Live2D.Cubism.Core;
 using System.Reflection;
 using Live2D.Cubism.Framework.Json;
+using UnityEngine.UI;
+using FS_LivelyRim;
 
 namespace AK_DLL
 {
@@ -90,17 +92,7 @@ namespace AK_DLL
 
         }
 
-        //我真的不知道为什么这个ev system过一会自己就会变null。
-        public static void setEV(bool value)
-        {
-            if (value)
-            {
-                if (EVSystemInstance == null) EVSystemInstance = GameObject.Instantiate(EVSystem);
-                EVSystemInstance.SetActive(true);
-            }
-            else EVSystemInstance.SetActive(false);
-        }
-
+        #region 字符串处理，文档/干员ID/def转换
         public static string GetPrefixFrom(string XMLdefName)
         {
             string[] temp = XMLdefName.Split('_');
@@ -140,7 +132,7 @@ namespace AK_DLL
         {
             foreach (Dictionary<string, OperatorDef> i in RIWindowHandler.operatorDefs.Values)
             {
-                if(i.ContainsKey(operatorID)) return i[operatorID];
+                if (i.ContainsKey(operatorID)) return i[operatorID];
             }
             return null;
         }
@@ -149,7 +141,9 @@ namespace AK_DLL
             if (p.health.hediffSet.GetFirstHediff<Hediff_Operator>() == null) return null;
             return p.health.hediffSet.GetFirstHediff<Hediff_Operator>().document;
         }
+        #endregion
 
+        #region IMGUI渲染
         public static void DrawBottomLeftPortrait()
         {
             if (AK_ModSettings.displayBottomLeftPortrait == false) return;
@@ -167,17 +161,80 @@ namespace AK_DLL
                 GUI.DrawTexture(rect, highlight);
             }
         }
+        #endregion
 
-        /*public static Hediff_Operator GetArkNightsHeDiffByPawn(Pawn pawn)
-		{
-			var hediffCandidate = pawn.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("AK_Operator"));
-			if (hediffCandidate is null)
-			{
-				return null;
-			}
-			return hediffCandidate as Hediff_Operator;
-		}*/
+        #region UGUI绘制立绘/L2D
+        public static void DrawStaticOperatorStand(OperatorDef def, int preferredSkin, GameObject OpStand, Vector3? offset = null)
+        {
+            Transform containerLoc = OpStand.transform;
+            containerLoc.localPosition = Vector3.zero;
+            Image opStand = OpStand.GetComponent<Image>();
+            Texture2D tex;
 
+            if (preferredSkin == 0) tex = ContentFinder<Texture2D>.Get(def.commonStand);
+            else if (preferredSkin == 1) tex = ContentFinder<Texture2D>.Get(def.stand);
+            else tex = ContentFinder<Texture2D>.Get(def.fashion[preferredSkin - 2]);
+
+            opStand.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
+
+            if (offset == null && def.standOffsets != null && def.standOffsets.ContainsKey(preferredSkin))
+            {
+                offset = def.standOffsets[preferredSkin];
+            }
+
+            if (offset is Vector3 rOffset)
+            {
+                containerLoc.localPosition = new Vector3(rOffset.x, rOffset.y);
+                containerLoc.localScale = new Vector3(rOffset.z, rOffset.z, rOffset.z);
+            }
+
+        }
+
+        public static GameObject DrawLive2DOperatorStand(OperatorDef def, int l2dOrder, string opL2DRenderTargetName, Vector3? offset = null)
+        {
+            if (ModLister.GetActiveModWithIdentifier("FS.LivelyRim") != null)
+            {
+                Log.Error("MIS. loading a live2d but FS.LivelyRim not found");
+                return null;
+            }
+            GameObject L2DInstance;
+            if (l2dOrder > 1000) l2dOrder -= 1000;
+            if (l2dOrder > def.live2dModel.Count)
+            {
+                Log.Error("MIS. l2d skin out of array");
+                return null;
+            }
+            if (TypeDef.cachedLive2DModels.ContainsKey(def.live2dModel[l2dOrder].modelName))
+            {
+                L2DInstance = TypeDef.cachedLive2DModels[def.live2dModel[l2dOrder].modelName];
+                FS_Tool.SetModelActive(L2DInstance, opL2DRenderTargetName);
+            }
+            else
+            {
+                OperatorLiveDef l2dDef = def.live2dModel[l2dOrder];
+                AssetBundle ab = FS_Tool.LoadAssetBundle(l2dDef.modID, l2dDef.assetBundle);
+                L2DInstance = FS_Tool.InstantiateLive2DModel(ab, l2dDef.modID, l2dDef.modelName, rigJsonPath: l2dDef.rigJsonPath, renderTargetName: opL2DRenderTargetName);
+                if (true) //给mod设置预留
+                {
+                    TypeDef.cachedLive2DModels.Add(l2dDef.modelName, L2DInstance);
+                }
+            }
+            return L2DInstance;
+        }
+
+        //我真的不知道为什么这个ev system过一会自己就会变null。
+        public static void setEV(bool value)
+        {
+            if (value)
+            {
+                if (EVSystemInstance == null) EVSystemInstance = GameObject.Instantiate(EVSystem);
+                EVSystemInstance.SetActive(true);
+            }
+            else EVSystemInstance.SetActive(false);
+        }
+        #endregion
+
+        #region 算法（自己造轮子）
         //模式1是精确搜索，2是找第一个更大值，3是找第一个更小值
         public static int quickSearch(int[] arr, int leftPtr, int rightPtr, int target, int mode)
         {
@@ -222,5 +279,6 @@ namespace AK_DLL
 
             return quickSearch(arr, 0, arr.Length - 1, rd, 2);
         }
+#endregion
     }
 }

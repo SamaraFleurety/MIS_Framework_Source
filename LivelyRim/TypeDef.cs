@@ -13,12 +13,13 @@ namespace FS_LivelyRim
     {
         public static AssetBundle l2dResource => CubismBuiltinMaterials.AB;
 
-        public static Dictionary<string, GameObject> Live2DModels = new Dictionary<string, GameObject>();
-
         //fixme: delete when done
         public static AssetBundle ricepicotest;
 
         public static string ModID = "FS.LivelyRim";
+
+        //用来缓存ab包。ab重复读是null
+        public static Dictionary<string, AssetBundle> cachedAssetBundle = new Dictionary<string, AssetBundle>();
 
         public static void Initialize()
         {

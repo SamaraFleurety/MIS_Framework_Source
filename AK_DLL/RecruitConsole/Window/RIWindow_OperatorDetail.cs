@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using TMPro;
 using FSUI;
+using FS_LivelyRim;
 
 namespace AK_DLL
 {
@@ -251,7 +252,7 @@ namespace AK_DLL
 
         private bool canRecruit;
 
-        int preferredSkin = 1;  //当前选中皮肤
+        int preferredSkin = 1;  //当前选中皮肤。同时存储于干员文档（如果有）来实现主界面左下角显示立绘，和mod设置的秘书选择。
 
         static int preferredVanillaSkillChart = 0;
 
@@ -263,7 +264,9 @@ namespace AK_DLL
 
         GameObject floatingBubbleInstance;
 
-        static Transform opStandLoc;
+        public GameObject OpStand; //干员静态立绘的渲染目标
+        public GameObject OpL2D;   //干员动态立绘的渲染目标（不是模型本身）
+        static string OpL2DRenderTargetName = "L2DRenderTarget";  //干员动态立绘的渲染目标的名字
 
         #region 快捷属性
         private OperatorDef Def
@@ -357,69 +360,11 @@ namespace AK_DLL
             }
             floatingBubbleInstance = GameObject.Find("FloatingInfPanel");
             floatingBubbleInstance.SetActive(false);
+
+            OpStand = GameObject.Find("OpStand");
+            OpL2D = GameObject.Find(OpL2DRenderTargetName);
         }
         #region 绘制UI
-        //确认招募和取消也是导航键
-        private void DrawNavBtn()
-        {
-            GameObject navBtn;
-            //Home
-            navBtn = GameObject.Find("BtnHome");
-            navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
-            {
-                this.Close(false);
-                RIWindow_OperatorDetail.isRecruit = true;
-                RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
-            });
-            //取消
-            navBtn = GameObject.Find("BtnCancel");
-            navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
-            {
-                this.ReturnToParent(false);
-            });
-            //确认招募/更换助理
-            navBtn = GameObject.Find("BtnConfirm");
-            Button button = navBtn.GetComponentInChildren<Button>();
-            if (isRecruit)
-            {
-                GameObject.Find("TexChangeSec").SetActive(false);
-                //FIXME: 更换贴图
-                button.onClick.AddListener(delegate ()
-                {
-                    //如果招募曾经招过的干员
-                    if (doc != null && !doc.currentExist)
-                    {
-                    }
-                    //如果干员未招募过，或已死亡
-                    if (canRecruit)
-                    {
-                        this.Close(true);
-                        RecruitConsole.TryGetComp<CompRefuelable>().ConsumeFuel(Def.ticketCost);
-                        Def.Recruit(RecruitConsole.Map);
-                        if (false)
-                        {
-                            RIWindowHandler.OpenRIWindow(RIWindowType.Op_List);
-                        }
-                        /*RIWindow_OperatorList window = new RIWindow_OperatorList(new DiaNode(new TaggedString()), true);
-                        window.soundAmbient = SoundDefOf.RadioComms_Ambience;
-                        Find.WindowStack.Add(window);*/
-                    }
-                });
-            }
-            else
-            {
-                //fixme
-                button.onClick.AddListener(delegate ()
-                {
-                    isRecruit = true;
-                    AK_ModSettings.secretary = AK_Tool.GetOperatorIDFrom(Def.defName);
-                    AK_ModSettings.secretaryLoc = TypeDef.defaultSecLoc;
-                    AK_ModSettings.secretarySkin = preferredSkin;
-                    this.Close(false);
-                    RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
-                });
-            }
-        }
 
         //换装按钮会被记录于 this.fashionbtns
 
@@ -470,13 +415,14 @@ namespace AK_DLL
 
         private void DrawFashionBtn()
         {
-            Transform FashionPanel = GameObject.Find("FashionPanel").transform;
+            Transform FashionPanel = GameObject.Find("FashionPanel").transform;  //切换换装按钮的面板。因为做的时候不会用Grid，所以需要手动设置按钮位置，乐
             GameObject fashionIconPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("FashionIcon");
             GameObject fashionIcon;
             Vector3 v3;
 
             fashionBtns = new Dictionary<int, GameObject>();
 
+            //精0/精1立绘 切换按钮
             fashionIcon = GameObject.Find("Elite0");
             fashionBtns.Add(0, fashionIcon);
             if (Def.commonStand != null)
@@ -488,6 +434,7 @@ namespace AK_DLL
             }
             else fashionIcon.SetActive(false);
 
+            //精2立绘按钮。因为历史问题，这是默认立绘，必须有。
             fashionIcon = GameObject.Find("Elite2");
             fashionBtns.Add(1, fashionIcon);
             fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
@@ -495,6 +442,7 @@ namespace AK_DLL
                 ChangeStandTo(1);
             });
 
+            //换装按钮。第一个换装（面板上第3个）在数组内是2。
             int logicOrder = 2;
             if (Def.fashion != null)
             {
@@ -502,7 +450,7 @@ namespace AK_DLL
                 for (int i = 0; i < Def.fashion.Count; ++i)
                 {
                     //逻辑顺序 代表这按钮在面板上实际的位置（即精2按钮之后）
-                    fashionIcon = GameObject.Instantiate(fashionIconPrefab);
+                    fashionIcon = GameObject.Instantiate(fashionIconPrefab, FashionPanel);
                     fashionIcon.transform.localPosition = new Vector3(v3.x * logicOrder, v3.y);
                     fashionIcon.SetActive(true);
                     fashionIcon.name = "FSUI_FashIc_" + logicOrder;
@@ -516,24 +464,26 @@ namespace AK_DLL
                     ++logicOrder;
                 }
             }
-            //在服装按钮实例化l2d换装按钮
+            //在服装按钮界面实例化l2d换装按钮
             if (ModLister.GetActiveModWithIdentifier("FS.LivelyRim") != null)
             {
                 v3 = fashionIconPrefab.transform.localPosition;
                 for (int i = 0; i < Def.live2dModel.Count; ++i)
                 {
-                    fashionIcon = GameObject.Instantiate(fashionIconPrefab);
+                    fashionIcon = GameObject.Instantiate(fashionIconPrefab, FashionPanel);
                     fashionIcon.transform.localPosition = new Vector3(v3.x * logicOrder, v3.y);
-                    int j = logicOrder;
+                    int j = i + 1000; //用j来标记选中的哪个l2d。+1000代表选的l2d而不是静态换装。
                     fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
                     {
-
+                        ChangeStandTo(j);
                     });
+                    fashionBtns.Add(j, fashionIcon);
                     ++logicOrder;
                 }
             }
         }
 
+        //原版的驯兽等技能的面板
         private void DrawVanillaSkills()
         {
             //柱状图按钮
@@ -625,7 +575,125 @@ namespace AK_DLL
             }
         }
 
+        void DrawDebugPanel()
+        {
+            if (Prefs.DevMode == false)
+            {
+                GameObject.Find("DebugToolPanel").SetActive(false);
+            }
+            else
+            {
+                GameObject.Find("_DPlus").GetComponent<Button>().onClick.AddListener(delegate ()
+                {
+                    Transform loc = GameObject.Find("OpStand").transform;
+                    Vector3 v3 = loc.localScale;
+                    loc.localScale = new Vector3(v3.z + 0.1f, v3.z + 0.1f, v3.z + 0.1f);
+                    Log.Message($"MIS. {Def.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
+                });
+                GameObject.Find("_DMinus").GetComponent<Button>().onClick.AddListener(delegate ()
+                {
+                    Transform loc = GameObject.Find("OpStand").transform;
+                    Vector3 v3 = loc.localScale;
+                    loc.localScale = new Vector3(v3.z - 0.1f, v3.z - 0.1f, v3.z - 0.1f);
+                    Log.Message($"MIS. {Def.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
+                });
+                GameObject.Find("_DUP").GetComponent<Button>().onClick.AddListener(delegate ()
+                {
+                    Transform loc = GameObject.Find("OpStand").transform;
+                    Vector3 v3 = loc.localPosition;
+                    loc.localPosition = new Vector3(v3.x, v3.y + 10f, v3.z);
+                    Log.Message($"MIS. {Def.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
+                });
+                GameObject.Find("_DDown").GetComponent<Button>().onClick.AddListener(delegate ()
+                {
+                    Transform loc = GameObject.Find("OpStand").transform;
+                    Vector3 v3 = loc.localPosition;
+                    loc.localPosition = new Vector3(v3.x, v3.y - 10f, v3.z);
+                    Log.Message($"MIS. {Def.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
+                });
+                GameObject.Find("_DLeft").GetComponent<Button>().onClick.AddListener(delegate ()
+                {
+                    Transform loc = GameObject.Find("OpStand").transform;
+                    Vector3 v3 = loc.localPosition;
+                    loc.localPosition = new Vector3(v3.x - 10f, v3.y, v3.z);
+                    Log.Message($"MIS. {Def.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
+                });
+                GameObject.Find("_DRight").GetComponent<Button>().onClick.AddListener(delegate ()
+                {
+                    Transform loc = GameObject.Find("OpStand").transform;
+                    Vector3 v3 = loc.localPosition;
+                    loc.localPosition = new Vector3(v3.x + 10f, v3.y, v3.z);
+                    Log.Message($"MIS. {Def.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
+                });
+            }
+        }
+
         #endregion
+
+        #region 右边界面
+
+        //确认招募和取消也是导航键
+        private void DrawNavBtn()
+        {
+            GameObject navBtn;
+            //Home
+            navBtn = GameObject.Find("BtnHome");
+            navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            {
+                this.Close(false);
+                RIWindow_OperatorDetail.isRecruit = true;
+                RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
+            });
+            //取消
+            navBtn = GameObject.Find("BtnCancel");
+            navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            {
+                this.ReturnToParent(false);
+            });
+            //确认招募/更换助理
+            navBtn = GameObject.Find("BtnConfirm");
+            Button button = navBtn.GetComponentInChildren<Button>();
+            if (isRecruit)
+            {
+                GameObject.Find("TexChangeSec").SetActive(false);
+                //FIXME: 更换贴图
+                button.onClick.AddListener(delegate ()
+                {
+                    //如果招募曾经招过的干员
+                    if (doc != null && !doc.currentExist)
+                    {
+                    }
+                    //如果干员未招募过，或已死亡
+                    if (canRecruit)
+                    {
+                        this.Close(true);
+                        RecruitConsole.TryGetComp<CompRefuelable>().ConsumeFuel(Def.ticketCost);
+                        Def.Recruit(RecruitConsole.Map);
+                        if (false)
+                        {
+                            RIWindowHandler.OpenRIWindow(RIWindowType.Op_List);
+                        }
+                        /*RIWindow_OperatorList window = new RIWindow_OperatorList(new DiaNode(new TaggedString()), true);
+                        window.soundAmbient = SoundDefOf.RadioComms_Ambience;
+                        Find.WindowStack.Add(window);*/
+                    }
+                });
+            }
+            else
+            {
+                //fixme
+                button.onClick.AddListener(delegate ()
+                {
+                    isRecruit = true;
+                    AK_ModSettings.secretary = AK_Tool.GetOperatorIDFrom(Def.defName);
+                    AK_ModSettings.secretaryLoc = TypeDef.defaultSecLoc;
+                    AK_ModSettings.secretarySkin = preferredSkin;
+                    this.Close(false);
+                    RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
+                });
+            }
+        }
+
         //FIXME:切换技能逻辑不对 需要大修
         private void DrawOperatorAbility()
         {
@@ -682,29 +750,6 @@ namespace AK_DLL
             opSkills[PreferredAbility].transform.GetChild(1).gameObject.SetActive(true);
         }
 
-        private void DrawStand()
-        {
-            GameObject opStandObj = GameObject.Find("OpStand");
-            opStandLoc = opStandObj.transform;
-            opStandLoc.localPosition = Vector3.zero;
-            Image opStand = opStandObj.GetComponent<Image>();
-            Texture2D tex;
-
-            if (preferredSkin == 0) tex = ContentFinder<Texture2D>.Get(Def.commonStand);
-            else if (preferredSkin == 1) tex = ContentFinder<Texture2D>.Get(Def.stand);
-            else tex = ContentFinder<Texture2D>.Get(Def.fashion[preferredSkin - 2]);
-
-            opStand.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
-
-            if (Def.standOffsets != null && Def.standOffsets.ContainsKey(preferredSkin))
-            {
-                Vector3 V3 = Def.standOffsets[preferredSkin];
-                Transform opStandLoc = opStandObj.transform;
-                opStandLoc.localPosition = new Vector3(V3.x, V3.y);
-                opStandLoc.localScale = new Vector3(V3.z, V3.z, V3.z);
-            }
-        }
-
         private void DrawTrait()
         {
             if (Def.traits == null || Def.traits.Count == 0) return;
@@ -721,8 +766,29 @@ namespace AK_DLL
                 InitializeEventTrigger(traitInstance.GetComponent<EventTrigger>(), Def.traits[i].def.DataAtDegree(Def.traits[i].degree).description);
             }
         }
+        #endregion
+        private void DrawStand()
+        {
+            //禁用掉之前的立绘
+            OpStand.SetActive(false);
+            OpL2D.SetActive(false);
+            if (L2DInstance != null) L2DInstance.SetActive(false);
 
-        //fixme:写完l2d分支
+            //静态立绘
+            if (preferredSkin < 1000)
+            {
+                OpStand.SetActive(true);
+                AK_Tool.DrawStaticOperatorStand(Def, preferredSkin, OpStand);
+            }
+            //l2d
+            else
+            {
+                OpL2D.SetActive(true);
+                AK_Tool.DrawLive2DOperatorStand(Def, preferredSkin, OpL2DRenderTargetName);
+            }
+        }
+
+
         private void ChangeStandTo(int val, bool forceChange = false, StandType standType = StandType.Static)
         {
             GameObject fBtn;
@@ -745,58 +811,6 @@ namespace AK_DLL
             DrawStand(); //实际刷新立绘立绘
         }
 
-        void DrawDebugPanel()
-        {
-            if (Prefs.DevMode == false)
-            {
-                GameObject.Find("DebugToolPanel").SetActive(false);
-            }
-            else
-            {
-                GameObject.Find("_DPlus").GetComponent<Button>().onClick.AddListener(delegate ()
-                {
-                    Transform loc = GameObject.Find("OpStand").transform;
-                    Vector3 v3 = loc.localScale;
-                    loc.localScale = new Vector3(v3.z + 0.1f, v3.z + 0.1f, v3.z + 0.1f);
-                    Log.Message($"MIS. {Def.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
-                });
-                GameObject.Find("_DMinus").GetComponent<Button>().onClick.AddListener(delegate ()
-                {
-                    Transform loc = GameObject.Find("OpStand").transform;
-                    Vector3 v3 = loc.localScale;
-                    loc.localScale = new Vector3(v3.z - 0.1f, v3.z - 0.1f, v3.z - 0.1f);
-                    Log.Message($"MIS. {Def.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
-                });
-                GameObject.Find("_DUP").GetComponent<Button>().onClick.AddListener(delegate ()
-                {
-                    Transform loc = GameObject.Find("OpStand").transform;
-                    Vector3 v3 = loc.localPosition;
-                    loc.localPosition = new Vector3(v3.x, v3.y + 10f, v3.z);
-                    Log.Message($"MIS. {Def.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
-                });
-                GameObject.Find("_DDown").GetComponent<Button>().onClick.AddListener(delegate ()
-                {
-                    Transform loc = GameObject.Find("OpStand").transform;
-                    Vector3 v3 = loc.localPosition;
-                    loc.localPosition = new Vector3(v3.x, v3.y - 10f, v3.z);
-                    Log.Message($"MIS. {Def.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
-                });
-                GameObject.Find("_DLeft").GetComponent<Button>().onClick.AddListener(delegate ()
-                {
-                    Transform loc = GameObject.Find("OpStand").transform;
-                    Vector3 v3 = loc.localPosition;
-                    loc.localPosition = new Vector3(v3.x - 10f, v3.y, v3.z);
-                    Log.Message($"MIS. {Def.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
-                });
-                GameObject.Find("_DRight").GetComponent<Button>().onClick.AddListener(delegate ()
-                {
-                    Transform loc = GameObject.Find("OpStand").transform;
-                    Vector3 v3 = loc.localPosition;
-                    loc.localPosition = new Vector3(v3.x + 10f, v3.y, v3.z);
-                    Log.Message($"MIS. {Def.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
-                });
-            }
-        }
 
         //对于不存在于界面预制体内的obj，不能在unity里面设定关掉悬浮窗。
         void InitializeEventTrigger(EventTrigger ev, string text)
@@ -841,6 +855,7 @@ namespace AK_DLL
             RIWindowHandler.OpenRIWindow(RIWindowType.Op_List);
             base.ReturnToParent(closeEV);
         }
+
         #endregion
     }
 }

@@ -11,7 +11,7 @@ namespace AK_DLL
         private static bool moved = false; // 标志位，记录窗口是否已经移动
         [HarmonyPatch("DoWindowContents")]
         [HarmonyPostfix]
-        public static void postfix(Dialog_Trade __instance, ref Rect inRect)
+        public static void Postfix_DoWindowContents(Dialog_Trade __instance, ref Rect inRect)
         {
             if (!moved)
             {
@@ -26,7 +26,7 @@ namespace AK_DLL
         }
         [HarmonyPatch("PostOpen")]
         [HarmonyPostfix]
-        public static void Postfix_Close()
+        public static void Postfix_PostOpen()
         {
             moved = false;
         }

@@ -15,12 +15,16 @@ namespace AK_DLL
         public GameObject UIPrefab;
         public GameObject UIInstance;
 
+        public GameObject L2DInstance = null; //干员l2d的模型本身
+
         internal AssetBundle bundle => AK_Tool.FSAsset;
 
+        //设计是处理UI内元素，但你要拿去和外部交互我也管不着
         public virtual void Initialize()
         {
         }
 
+        //设计顺序是DrawUI(读取UI的Prefab)->Initialize初始化UI中元素->DoContent实际绘制UI
         public virtual void DrawUI(string path)
         {
             UIPrefab = bundle.LoadAsset<GameObject>(path);
@@ -42,6 +46,11 @@ namespace AK_DLL
         {
             this.UIInstance.SetActive(false);
             GameObject.Destroy(UIInstance);
+            if (L2DInstance != null)
+            {
+                L2DInstance.SetActive(false);
+                L2DInstance = null;
+            }
             if (closeEV)
             {
                 AK_Tool.setEV(false);

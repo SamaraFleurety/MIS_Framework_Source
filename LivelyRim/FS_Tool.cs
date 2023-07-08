@@ -72,23 +72,54 @@ namespace FS_LivelyRim
         /// </summary>
         /// <param name="modPackageID">写在About.xml里面的PackageID</param>
         /// <param name="path"></param>
+        /// <param name="AssetBundleID">如果path和ab包实际名字不一致，需要输入想使用的名字</param>>
         /// <returns></returns>
-        public static AssetBundle LoadAssetBundle(string modPackageID, string path)
+        public static AssetBundle LoadAssetBundle(string modPackageID, string path, string AssetBundleID = null)
         {
             AssetBundle assetBundle = null;
-            //string fullPath = modPath[modPackageID.ToLower()] + "/Asset/" + path;
+
+            if (AssetBundleID == null) AssetBundleID = path;
+
+            if (TypeDef.cachedAssetBundle.ContainsKey(AssetBundleID)) return TypeDef.cachedAssetBundle[AssetBundleID];
+
             string fullPath = ModIDtoPath(modPackageID, path, "/Asset/");
+            Log.Message(fullPath);
             try
             {
                 assetBundle = AssetBundle.LoadFromFile(fullPath);
+                if (assetBundle != null)
+                {
+                    TypeDef.cachedAssetBundle.Add(AssetBundleID, assetBundle);
+                }
+                else
+                {
+                    Log.Error($"FS.L2D. Unable to load assetbundle at {fullPath}");
+                    return null;
+                }
             }
             catch
             {
-                Log.Error($"Unable to load assetbundle at {fullPath}");
+                Log.Error($"FS.L2D. Unable to load assetbundle at {fullPath}");
                 return null;
             }
             return assetBundle;
         }
+
+        /// <summary>
+        /// 对于已经加载的ab包，直接通过id读
+        /// </summary>
+        /// <param name="AssetBundleID"></param>
+        /// <returns></returns>
+        public static AssetBundle LoadAssetBundle(string AssetBundleID)
+        {
+            if (TypeDef.cachedAssetBundle.ContainsKey(AssetBundleID)) return TypeDef.cachedAssetBundle[AssetBundleID];
+            else
+            {
+                Log.Error($"FS.L2D. Unable to load assetbundle named {AssetBundleID}");
+                return null;
+            }
+        }
+
 
         //从mod根目录/Json/开始索引 这个是手动加载模型Json用的。
         public static CubismModel3Json LoadCubismJson(string modPackageID, string path)
@@ -148,11 +179,11 @@ namespace FS_LivelyRim
         public static GameObject LoadModelfromAB(AssetBundle AB, string path, string renderTargetName = null)
         {
             GameObject l2dPrefab = AB.LoadAsset<GameObject>(path);
-            GameObject l2dInstance = GameObject.Instantiate(l2dPrefab);
             if (renderTargetName != null)
             {
-                l2dInstance.GetComponent<OffscreenRendering>().renderTargetName = renderTargetName;
+                l2dPrefab.GetComponent<OffscreenRendering>().renderTargetName = renderTargetName;
             }
+            GameObject l2dInstance = GameObject.Instantiate(l2dPrefab);
             return l2dInstance;
         }
 
@@ -211,6 +242,29 @@ namespace FS_LivelyRim
             }
 
             return l2dIns;
+        }
+
+        /// <summary>
+        /// 启用已经实例化的模型时，并重新指定渲染目标。
+        /// 禁用时直接setActive(false)就可以了。
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="active"></param>
+        /// <param name="renderTargetName"></param>
+        /// <returns></returns>
+        public static GameObject SetModelActive(GameObject model, string renderTargetName = null)
+        {
+            if (model == null)
+            {
+                Log.Error($"FS.L2D. invaild model");
+                return null;
+            }
+            if (renderTargetName != null && renderTargetName != "")
+            {
+                model.GetComponent<OffscreenRendering>().renderTargetName = renderTargetName;
+            }
+            model.SetActive(true);
+            return model;
         }
 
        /* public static void DrawLive()

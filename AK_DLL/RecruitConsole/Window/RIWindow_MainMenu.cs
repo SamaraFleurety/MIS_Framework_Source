@@ -221,6 +221,9 @@ namespace AK_DLL
         //调整秘书位置的按钮
         List<GameObject> adjustSecBtns;
 
+        public GameObject OpStand; //干员静态立绘的渲染目标
+        public GameObject OpL2D;   //干员动态立绘的渲染目标（不是模型本身）
+
         #region 快捷函数
         private GameObject ClickedBtn
         {
@@ -243,15 +246,20 @@ namespace AK_DLL
             get { return AK_ModSettings.secLocSensitive * 10; }
         }
         #endregion
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            OpStand = GameObject.Find("OpStand");
+            OpL2D = GameObject.Find("L2DRenderTarget");
+        }
+
         public override void DoContent()
         {
-            //DrawLive();
-            Log.Message("st draw l2d");
-            //FS_Tool.DrawLive();
-            FS_Tool.InstantiateLive2DModel(FS_LivelyRim.TypeDef.ricepicotest, FS_LivelyRim.TypeDef.ModID, "rice_pro_t03Motion", "rice_pro_t03.physics3.json", "L2DBG");
-            Log.Message("ed draw l2d");
-            if (AK_ModSettings.debugOverride) return;
-            base.Initialize();
+            //FS_Tool.InstantiateLive2DModel(FS_LivelyRim.TypeDef.ricepicotest, FS_LivelyRim.TypeDef.ModID, "rice_pro_t03Motion", "rice_pro_t03.physics3.json");
+            //Log.Message("ed draw l2d");
+            //if (AK_ModSettings.debugOverride) return;
+            base.DoContent();
 
             DrawNavBtn();
             DrawResoureHeader();
@@ -260,7 +268,6 @@ namespace AK_DLL
             DrawSubFeature();
 
             DrawStand();
-            
         }
 
         private void DrawNavBtn()
@@ -380,27 +387,40 @@ namespace AK_DLL
 
         private void DrawStand()
         {
+            OpStand.SetActive(false);
+            OpL2D.SetActive(false);
+
             if (SecretaryDef == null)
             {
                 Log.Error($"MIS. missing operator named {AK_ModSettings.secretary}");
                 return;
             }
 
-            GameObject opStandObj = GameObject.Find("OpStand");
-            Image opStand = opStandObj.GetComponent<Image>();
-            Vector3 opStandLoc = SecretaryLoc;
-            Texture2D tex;
             int preferredSkin = AK_ModSettings.secretarySkin;
 
-            if (preferredSkin == 0) tex = ContentFinder<Texture2D>.Get(SecretaryDef.commonStand, false);
-            else if (preferredSkin == 1) tex = ContentFinder<Texture2D>.Get(SecretaryDef.stand, false);
-            else tex = ContentFinder<Texture2D>.Get(SecretaryDef.fashion[preferredSkin - 2], false);
-            
+            if (preferredSkin < 1000)
+            {
+                OpStand.SetActive(true);
+                GameObject opStandObj = GameObject.Find("OpStand");
+                AK_Tool.DrawStaticOperatorStand(SecretaryDef, preferredSkin, opStandObj, SecretaryLoc);
 
-            Log.Message("cc");
-            opStand.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
-            opStandObj.transform.localPosition = new Vector3(opStandLoc.x, opStandLoc.y);
-            opStandObj.transform.localScale = new Vector3(opStandLoc.z, opStandLoc.z, opStandLoc.z);
+                /*Image opStand = opStandObj.GetComponent<Image>();
+                Vector3 opStandLoc = SecretaryLoc;
+                Texture2D tex;
+
+                if (preferredSkin == 0) tex = ContentFinder<Texture2D>.Get(SecretaryDef.commonStand, false);
+                else if (preferredSkin == 1) tex = ContentFinder<Texture2D>.Get(SecretaryDef.stand, false);
+                else tex = ContentFinder<Texture2D>.Get(SecretaryDef.fashion[preferredSkin - 2], false);
+
+                opStand.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
+                opStandObj.transform.localPosition = new Vector3(opStandLoc.x, opStandLoc.y);
+                opStandObj.transform.localScale = new Vector3(opStandLoc.z, opStandLoc.z, opStandLoc.z);*/
+            }
+            else
+            {
+                OpL2D.SetActive(true);
+                AK_Tool.DrawLive2DOperatorStand(SecretaryDef, preferredSkin, "L2DRenderTarget");
+            }
         }
         //FIXME 没做
         private void DrawResoureHeader()

@@ -35,6 +35,8 @@ namespace AK_DLL
 
         public static Vector3 defaultSecLoc => new Vector3(400, 0, 1);
 
+        public static Dictionary<string, GameObject> cachedLive2DModels = new Dictionary<string, GameObject>();
+
         static TypeDef()
         {
         }

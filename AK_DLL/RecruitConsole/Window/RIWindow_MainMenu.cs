@@ -419,7 +419,7 @@ namespace AK_DLL
             else
             {
                 OpL2D.SetActive(true);
-                AK_Tool.DrawLive2DOperatorStand(SecretaryDef, preferredSkin, "L2DRenderTarget");
+                L2DInstance =  AK_Tool.DrawLive2DOperatorStand(SecretaryDef, preferredSkin, "L2DRenderTarget");
             }
         }
         //FIXME 没做

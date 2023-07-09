@@ -192,13 +192,13 @@ namespace AK_DLL
 
         public static GameObject DrawLive2DOperatorStand(OperatorDef def, int l2dOrder, string opL2DRenderTargetName, Vector3? offset = null)
         {
-            if (ModLister.GetActiveModWithIdentifier("FS.LivelyRim") != null)
+            if (ModLister.GetActiveModWithIdentifier("FS.LivelyRim") == null)
             {
                 Log.Error("MIS. loading a live2d but FS.LivelyRim not found");
                 return null;
             }
             GameObject L2DInstance;
-            if (l2dOrder > 1000) l2dOrder -= 1000;
+            if (l2dOrder >= 1000) l2dOrder -= 1000;
             if (l2dOrder > def.live2dModel.Count)
             {
                 Log.Error("MIS. l2d skin out of array");

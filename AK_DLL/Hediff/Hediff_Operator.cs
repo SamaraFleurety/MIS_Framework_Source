@@ -52,6 +52,7 @@ namespace AK_DLL
 
 
         public OperatorDocument document;
+        //缓存。绕过存档时，本质是存的这类HC，而非所有HC。
         public List<HC_Ability> compAbilities = new List<HC_Ability>();
     }
 }

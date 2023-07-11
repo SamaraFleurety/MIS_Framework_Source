@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using RimWorld.Planet;
 using FS_LivelyRim;
+using System.Reflection;
 
 namespace AK_DLL
 {
@@ -138,7 +139,7 @@ namespace AK_DLL
 
             //operator_Pawn.story.CrownType = CrownType.Average;
 
-            Thing weapon = Recruit_Inventory();
+            ThingWithComps weapon = Recruit_Inventory();
 
             GenSpawn.Spawn(operator_Pawn, intVec, map);
             CameraJumper.TryJump(new GlobalTargetInfo(intVec, map));
@@ -212,7 +213,7 @@ namespace AK_DLL
         protected static Pawn operator_Pawn;
         protected void Recruit_Ability(Hediff_Operator hediff)
         {
-            //技能
+            //绑定干员技能
             if (this.abilities != null && this.abilities.Count > 0)
             {
 
@@ -340,7 +341,7 @@ namespace AK_DLL
             }
             //从干员文档更新属性
         }
-        protected Thing Recruit_Inventory()
+        protected ThingWithComps Recruit_Inventory()
         {
             operator_Pawn.inventoryStock.stockEntries.Clear();
             //增加物品
@@ -364,6 +365,7 @@ namespace AK_DLL
                     comp.CodeFor(operator_Pawn);
                 }
                 operator_Pawn.apparel.Wear(apparel, true, false);
+                operator_Pawn.outfits.forcedHandler.SetForced(apparel, true);
             }
             //装备武器
             ThingWithComps weapon = null;

@@ -1,12 +1,22 @@
 ﻿using System;
-using RimWorld;
-using System.Linq;
-using UnityEngine;
-using Verse;
 using System.Collections.Generic;
+using RimWorld;
+using Verse;
+using UnityEngine;
+using System.Linq;
 
 namespace AK_DLL
 {
+    //预防出错保留 大概率根本没啥用
+    //绑定在干员Hediff上的入口。要求必须有干员ID。
+    public class HCP_Ability : HediffCompProperties
+    {
+        public HCP_Ability()
+        {
+            this.compClass = typeof(HC_Ability);
+        }
+    }
+
     public class HC_Ability : HediffComp, IExposable
     {
         public OperatorDocument Document

@@ -293,6 +293,7 @@
     <Compile Include="HarmonyPatch\PatchTraderDialog.cs" />
     <Compile Include="HarmonyPatch\PatchWindowsOnGui%28Bottom Portrait%29.cs" />
     <Compile Include="HarmonyPatch\temppatch.cs" />
+    <Compile Include="OpAbility\Comp\TCP_Ability.cs" />
     <Compile Include="Oripathy\Hediff\HC_OripathyInfo.cs" />
     <Compile Include="Oripathy\Hediff\HC_RandAddHediff.cs" />
     <Compile Include="HotSwap.cs" />
@@ -354,10 +355,9 @@
     <Compile Include="HarmonyPatch\Patch\Patch_ForbidDrop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Def\OperatorDef\SkillAndFire.cs" />
-    <Compile Include="OpAbility\HediffComp\HCP_Ability.cs" />
+    <Compile Include="OpAbility\Comp\HCP_Ability.cs" />
     <Compile Include="Thing\CompProperties\CompProperties_AbilityEffectPush.cs" />
     <Compile Include="OpAbility\AbilityEffect\AddHediff\AbilityEffect_AddHediff.cs" />
-    <Compile Include="OpAbility\HediffComp\HC_Ability.cs" />
     <Compile Include="OpAbility\AbilityEffect\AbilityEffectBase.cs" />
     <Compile Include="OpAbility\AbilityEffect\Effect\AbilityEffect_Heal.cs" />
     <Compile Include="OpAbility\AbilityEffect\Effect\CompAbilityEffect_Push.cs" />

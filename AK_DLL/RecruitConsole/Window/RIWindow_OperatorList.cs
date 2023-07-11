@@ -426,21 +426,20 @@ namespace AK_DLL
                 textTMP = sortBtnInstance.GetComponentInChildren<TextMeshProUGUI>();
                 //按钮的显示文字
                 textTMP.text = TypeDef.SortOrderSkill[i].label.Translate();
-                //使用了投机取巧而不是正常的方式存储数据。
+                //使用了投机取巧而不是正常的方式存储数据。 已弃用。 
                 sortBtnInstance.name = "FSUI_Sorter_" + i;
                 int k = i;
                 sortBtnInstance.GetComponent<Button>().onClick.AddListener(delegate ()
                 {
-                    Log.Message($"{i}:{k}:{btnOrder(ClickedBtn)}");
                     sortBtnInstance = ClickedBtn;
-                    if (NeedSortTo(btnOrder(ClickedBtn)))
+                    if (NeedSortTo(k))
                     {
                         SortOperator<int>(delegate (int a, int b)
                         {
                             return !(a <= b);
                         }, delegate (OperatorDef def)
                         {
-                            return def.SortedSkills[btnOrder(ClickedBtn)].level;
+                            return def.SortedSkills[k].level;
                         });
                     }
                     DrawOperatorListContent();
@@ -563,12 +562,9 @@ namespace AK_DLL
                     if (weight == 0) meleeDPS = 0;
                     else meleeDPS /= weight;
                 }
-                //Log.Message($"p3 : {w.defName}");
                 //命中率100%远程dps
                 if (w.Verbs != null && w.Verbs.Count > 0)
                 {
-                    //Log.Message(w.Verbs[0].ToString());
-                    //Log.Message(w.Verbs[0].verbClass.ToString());
                     VerbProperties verb = w.Verbs[0];
                     ProjectileProperties bullet = verb.defaultProjectile.projectile;
                     if (bullet == null) goto LABEL_NoRanged;

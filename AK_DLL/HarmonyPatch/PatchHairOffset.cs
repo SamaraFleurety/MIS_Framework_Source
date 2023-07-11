@@ -10,6 +10,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
+//转译器和Traverse测试
 namespace AK_DLL
 {
     /*[HarmonyPatch(typeof(Graphic_Multi), "Init")]

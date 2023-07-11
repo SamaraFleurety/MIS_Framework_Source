@@ -78,23 +78,10 @@ namespace AK_DLL
             operatorDef = RIWindowHandler.operatorDefs[operatorClass].Values.RandomElement();
         }
 
-        public override void PostMapGenerate(Map map)
-        {
-            List<Pawn> colonists = new List<Pawn>(PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_Colonists);
-            Log.Message($"postmap {colonists.Count}");
-        }
-
-        public override IEnumerable<Thing> PlayerStartingThings()
-        {
-            List<Pawn> colonists = new List<Pawn>(PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_Colonists);
-            Log.Message($"pst {colonists.Count}");
-            return base.PlayerStartingThings();
-        }
-
         public override void PostGameStart()
         {
             List<Pawn> colonists = new List<Pawn>(PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_Colonists);
-            Log.Message($"pgs {colonists.Count}");
+            //Log.Message($"pgs {colonists.Count}");
             operatorDef.Recruit(Find.CurrentMap);
             foreach (Pawn p in colonists)
             {

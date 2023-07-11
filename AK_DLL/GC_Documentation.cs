@@ -153,10 +153,13 @@ namespace AK_DLL
                 Log.Error("没保存起");
             }           
             Scribe.mode = 0;
-            foreach (KeyValuePair<string, OperatorDocument> node in operatorDocument)
+            if (AK_ModSettings.debugOverride)
             {
-                node.Value.RecordSkills();
-                Log.Message($"当前已招募 {node.Value.operatorID}");
+                foreach (KeyValuePair<string, OperatorDocument> node in operatorDocument)
+                {
+                    node.Value.RecordSkills();
+                    Log.Message($"当前已招募 {node.Value.operatorID}");
+                }
             }
         }
 

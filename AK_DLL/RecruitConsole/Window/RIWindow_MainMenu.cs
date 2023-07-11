@@ -256,9 +256,6 @@ namespace AK_DLL
 
         public override void DoContent()
         {
-            //FS_Tool.InstantiateLive2DModel(FS_LivelyRim.TypeDef.ricepicotest, FS_LivelyRim.TypeDef.ModID, "rice_pro_t03Motion", "rice_pro_t03.physics3.json");
-            //Log.Message("ed draw l2d");
-            //if (AK_ModSettings.debugOverride) return;
             base.DoContent();
 
             DrawNavBtn();

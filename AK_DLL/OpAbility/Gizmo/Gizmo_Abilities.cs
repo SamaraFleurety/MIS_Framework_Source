@@ -65,13 +65,9 @@ namespace AK_DLL
         {
             return false;
         }
-
+        //按下按钮后，在这个方法执行目标输入
         public override void ProcessInput(Event ev)
         {
-            /*Log.Message("needTarget: "+ (this.needTarget).ToString()); 
-            Log.Message("verb: " + (this.verb == null).ToString());
-            Log.Message("pawn: " + (this.pawn == null).ToString());
-            Log.Message("pos: " + (this.pawn.Position == null).ToString());*/
             switch (this.targetMode)
             {
                 case (TargetMode.Single): 

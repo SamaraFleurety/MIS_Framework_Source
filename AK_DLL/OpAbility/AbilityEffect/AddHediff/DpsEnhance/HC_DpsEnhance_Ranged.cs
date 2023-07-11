@@ -88,7 +88,6 @@ namespace AK_DLL
                 if (stats.range != 0)
                 {
                     if (saveOrigin) this.originalStat.range = verb.range;
-                    Log.Message($"org:{this.originalStat.range}; cur:{verb.range}, offs:{stats.range}");
                     verb.range = stats.range + verb.range * multipler;
                 }
                 if (stats.burstInterval != 0)

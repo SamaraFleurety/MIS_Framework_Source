@@ -174,7 +174,7 @@ namespace FS_LivelyRim
         /// </summary>
         /// <param name="AB"></param>
         /// <param name="path"></param>
-        /// <param name="renderTargetName">模型采用离屏渲染规避泰南的UI。不能为空，需要提前实例化离屏渲染目标，不然别问我为什么看不到模型。</param>
+        /// <param name="renderTargetName">模型采用离屏渲染规避泰南的UI。需要提前实例化离屏渲染目标，不然看不到模型。渲染目标需要是1920*1080,带有空Image组件的游戏物体。此处留空会默认寻找名叫"L2DRenderTarget"的游戏物体。</param>
         /// <returns></returns>
         public static GameObject LoadModelfromAB(AssetBundle AB, string path, string renderTargetName = null)
         {

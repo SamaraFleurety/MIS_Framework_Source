@@ -399,7 +399,6 @@ namespace AK_DLL
                 weaponIconObj.SetActive(false);
                 return;
             }
-            Log.Message("draw weapon");
             GameObject WeaponPanel = GameObject.Find("WeaponPanel");
             Texture2D weaponIcon = ContentFinder<Texture2D>.Get(Def.weapon.graphicData.texPath);
             weaponIconObj.GetComponent<Image>().sprite = Sprite.Create(weaponIcon, new Rect(0, 0, weaponIcon.width, weaponIcon.height), Vector2.zero);
@@ -408,7 +407,6 @@ namespace AK_DLL
 
             entry.callback.AddListener((data) =>
             {
-                Log.Message(Def.weapon.description.Translate());
                 DrawFloatingBubble(Def.weapon.description.Translate());
             });
         }
@@ -842,8 +840,6 @@ namespace AK_DLL
             else pivot = new Vector2(1, 1);
             ((RectTransform)floatingBubbleInstance.transform).pivot = pivot;
             floatingBubbleInstance.transform.position = Input.mousePosition;
-            Log.Message($"{Input.mousePosition.x} {Input.mousePosition.y}");
-            Log.Message($"{floatingBubbleInstance.transform.position.x} {floatingBubbleInstance.transform.position.y}");
 
             //自动计算大小
             floatingBubbleInstance.SetActive(true);

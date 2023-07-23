@@ -23,7 +23,10 @@ namespace AK_DLL
         public Pawn pawn;
         public Thing weapon;
         public Hediff_Operator hediff;
-        public Thing apparel; 
+
+        public int preferredFashionSet = -1;
+        public List<Thing> apparel; 
+
         public Dictionary<SkillDef, int> skillLevel;
         public VoicePackDef voicePack;
         public List<HC_Ability> groupedAbilities;
@@ -31,7 +34,7 @@ namespace AK_DLL
         public OperatorDef operatorDef;
         public int oripathySeverity = 0;
 
-        public int preferedSkin = 1;  //0是精0, 1是精2, 后面是换装
+        public int preferedSkin = 1;  //立绘,0是精0, 1是精2, 后面是换装
 
         public OperatorDocument(string defName, Pawn p, Thing weapon, OperatorDef operatorDef) : this()
         {
@@ -43,6 +46,27 @@ namespace AK_DLL
             this.hediff = p.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("AK_Operator")) as Hediff_Operator;
             this.RecordSkills();
         }
+
+        //在档案中注册衣服。衣服会在换装时回收
+        public void RegisterFashionSet(List<Thing> fashionSet)
+        {
+            apparel = new List<Thing>();
+            foreach(Thing i in fashionSet)
+            {
+                apparel.Add(i);
+            }
+        }
+
+        //回收当前衣服。
+        public void DestroyFashionSet()
+        {
+            foreach(Thing i in apparel)
+            {
+                i.Destroy(DestroyMode.Vanish);
+            }
+            apparel.Clear();
+        }
+
         public OperatorDocument() {
             this.skillLevel = new Dictionary<SkillDef, int>();
             groupedAbilities = new List<HC_Ability>();
@@ -64,6 +88,10 @@ namespace AK_DLL
             Scribe_Values.Look(ref this.currentExist, "alive");
             Scribe_References.Look<Pawn>(ref this.pawn, "operator", true);
             Scribe_References.Look(ref this.weapon, "weapon", true);
+
+            Scribe_Values.Look(ref this.preferredFashionSet, "fashionSet", -1);
+            Scribe_Collections.Look(ref this.apparel, "apparel", LookMode.Reference);
+
             Scribe_Collections.Look(ref this.skillLevel, "skill", LookMode.Def, LookMode.Value);
             Scribe_Defs.Look(ref this.operatorDef, "def");
             Scribe_Values.Look<int>(ref this.preferedAbility, "preferedAbility", 0, true);
@@ -98,11 +126,11 @@ namespace AK_DLL
 
     public class GameComp_OperatorDocumentation : GameComponent
     {
-        public static Dictionary<string, OperatorDocument> operatorDocument;
+        public static Dictionary<string, OperatorDocument> opDocArchive;
 
         public GameComp_OperatorDocumentation(Game game)
         {
-            operatorDocument = new Dictionary<string, OperatorDocument>();
+            opDocArchive = new Dictionary<string, OperatorDocument>();
         }
 
         public override void StartedNewGame()
@@ -112,14 +140,14 @@ namespace AK_DLL
             {
                 Find.LetterStack.ReceiveLetter(LetterMaker.MakeLetter(Translator.Translate("AK_StartLabel"), Translator.Translate("AK_StartDesc"), LetterDefOf.NeutralEvent, null, null));
             }
-            if (operatorDocument == null) operatorDocument = new Dictionary<string, OperatorDocument>();
+            if (opDocArchive == null) opDocArchive = new Dictionary<string, OperatorDocument>();
         }
 
         public override void LoadedGame()
         {
             base.LoadedGame();
             VoicePlayer.LoadedGame();
-            if (operatorDocument == null) operatorDocument = new Dictionary<string, OperatorDocument>();
+            if (opDocArchive == null) opDocArchive = new Dictionary<string, OperatorDocument>();
         }
 
         public override void ExposeData()
@@ -132,7 +160,7 @@ namespace AK_DLL
                 List<OperatorDocument> value = new List<OperatorDocument>();
                 try
                 {
-                    Scribe_Collections.Look(ref operatorDocument, "operatorDocument", LookMode.Value, LookMode.Deep, ref key, ref value);
+                    Scribe_Collections.Look(ref opDocArchive, "operatorDocument", LookMode.Value, LookMode.Deep, ref key, ref value);
                 }
                 catch { Log.Error("没保存起"); }
             }
@@ -146,7 +174,7 @@ namespace AK_DLL
             Scribe.mode = LoadSaveMode.ResolvingCrossRefs;
             try
             {
-                Scribe_Collections.Look(ref operatorDocument, "operatorDocument", LookMode.Value, LookMode.Deep, ref key, ref value);
+                Scribe_Collections.Look(ref opDocArchive, "operatorDocument", LookMode.Value, LookMode.Deep, ref key, ref value);
             }
             catch
             {
@@ -155,7 +183,7 @@ namespace AK_DLL
             Scribe.mode = 0;
             if (AK_ModSettings.debugOverride)
             {
-                foreach (KeyValuePair<string, OperatorDocument> node in operatorDocument)
+                foreach (KeyValuePair<string, OperatorDocument> node in opDocArchive)
                 {
                     node.Value.RecordSkills();
                     Log.Message($"当前已招募 {node.Value.operatorID}");
@@ -163,17 +191,21 @@ namespace AK_DLL
             }
         }
 
-        public static void AddPawn(string defName, OperatorDef operatorDef , Pawn pawn, Thing weapon)
+        public static void AddPawn(string defName, OperatorDef operatorDef , Pawn pawn, Thing weapon, List<Thing> fashionSet)
         {
-            if (operatorDocument.ContainsKey(defName) == false)
+            OperatorDocument doc;
+            if (opDocArchive.ContainsKey(defName) == false)
             {
-                operatorDocument.Add(defName, new OperatorDocument(defName, pawn, weapon, operatorDef));
+                doc  = new OperatorDocument(defName, pawn, weapon, operatorDef);
+                opDocArchive.Add(defName, doc);
             }
             else
             {
-                DestroyHeritage(operatorDocument[defName]);
-                ReRecruit(operatorDocument[defName] , defName, pawn, weapon);
+                doc = opDocArchive[defName];
+                DestroyHeritage(doc);
+                ReRecruit(doc, defName, pawn, weapon);
             }
+            doc.RegisterFashionSet(fashionSet);
         }
 
         public override void GameComponentTick()

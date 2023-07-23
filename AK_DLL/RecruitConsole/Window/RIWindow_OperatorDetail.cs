@@ -244,7 +244,7 @@ namespace AK_DLL
 
     public class RIWindow_OperatorDetail : RIWindow
     {
-        public static bool isRecruit = true;
+        public static OpDetailType windowPurpose = OpDetailType.Recruit;
 
         OperatorDocument doc = null;
 
@@ -336,9 +336,9 @@ namespace AK_DLL
         public override void Initialize()
         {
             base.Initialize();
-            if (GameComp_OperatorDocumentation.operatorDocument.ContainsKey(Def.OperatorID))
+            if (GameComp_OperatorDocumentation.opDocArchive.ContainsKey(Def.OperatorID))
             {
-                doc = GameComp_OperatorDocumentation.operatorDocument[Def.OperatorID];
+                doc = GameComp_OperatorDocumentation.opDocArchive[Def.OperatorID];
                 preferredSkin = doc.preferedSkin;
             }
             canRecruit = false;
@@ -639,7 +639,7 @@ namespace AK_DLL
             navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
                 this.Close(false);
-                RIWindow_OperatorDetail.isRecruit = true;
+                RIWindow_OperatorDetail.windowPurpose = OpDetailType.Recruit;
                 RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
             });
             //取消
@@ -648,10 +648,10 @@ namespace AK_DLL
             {
                 this.ReturnToParent(false);
             });
-            //确认招募/更换助理
+            //确认招募
             navBtn = GameObject.Find("BtnConfirm");
             Button button = navBtn.GetComponentInChildren<Button>();
-            if (isRecruit)
+            if (windowPurpose == OpDetailType.Recruit)
             {
                 GameObject.Find("TexChangeSec").SetActive(false);
                 //FIXME: 更换贴图
@@ -677,18 +677,23 @@ namespace AK_DLL
                     }
                 });
             }
-            else
+            // 更换助理
+            else if (windowPurpose == OpDetailType.Secretary)
             {
                 //fixme
                 button.onClick.AddListener(delegate ()
                 {
-                    isRecruit = true;
+                    windowPurpose = OpDetailType.Recruit;
                     AK_ModSettings.secretary = AK_Tool.GetOperatorIDFrom(Def.defName);
                     AK_ModSettings.secretaryLoc = TypeDef.defaultSecLoc;
                     AK_ModSettings.secretarySkin = preferredSkin;
                     this.Close(false);
                     RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
                 });
+            }
+            else if (windowPurpose == OpDetailType.Fashion)
+            {
+                
             }
         }
 

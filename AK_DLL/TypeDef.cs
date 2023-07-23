@@ -42,6 +42,13 @@ namespace AK_DLL
         }
     }
 
+    public enum OpDetailType : byte
+    {
+        Recruit,
+        Secretary,
+        Fashion
+    }
+
     public enum StandType : Byte
     {
         Static = 0,

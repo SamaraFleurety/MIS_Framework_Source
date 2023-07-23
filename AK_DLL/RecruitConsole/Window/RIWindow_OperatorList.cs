@@ -192,14 +192,14 @@ namespace AK_DLL
             navBtn = GameObject.Find("btnEscape").transform.GetChild(0).gameObject;
             navBtn.GetComponent<Button>().onClick.AddListener(delegate ()
             {
-                RIWindow_OperatorDetail.isRecruit = true;
+                RIWindow_OperatorDetail.windowPurpose = OpDetailType.Recruit;
                 this.Close();
             });
         }
 
         public override void ReturnToParent(bool closeEV = true)
         {
-            RIWindow_OperatorDetail.isRecruit = true;
+            RIWindow_OperatorDetail.windowPurpose = OpDetailType.Recruit;
             RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
             base.ReturnToParent(closeEV);
         }

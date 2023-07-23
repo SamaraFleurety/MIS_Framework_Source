@@ -73,8 +73,10 @@ namespace AK_DLL
 
         #endregion
 
-        #region
+        #region 快捷属性
         public static bool currentlyGenerating = false;
+
+        private static List<Thing> fashionSet;
         public string Prefix
         {
             get { return AK_Tool.GetPrefixFrom(this.defName); }
@@ -118,7 +120,7 @@ namespace AK_DLL
         {
             get
             {
-                if (GameComp_OperatorDocumentation.operatorDocument.ContainsKey(this.OperatorID) == false)
+                if (GameComp_OperatorDocumentation.opDocArchive.ContainsKey(this.OperatorID) == false)
                 {
                     return ContentFinder<Texture2D>.Get(this.stand);
                 }
@@ -158,8 +160,9 @@ namespace AK_DLL
             this.voicePackDef.recruitSound.PlaySound();
 
             //档案系统
-            GameComp_OperatorDocumentation.AddPawn(this.OperatorID, this, operator_Pawn, weapon);
-            hediff.document = GameComp_OperatorDocumentation.operatorDocument[this.OperatorID];
+            GameComp_OperatorDocumentation.AddPawn(this.OperatorID, this, operator_Pawn, weapon, fashionSet);
+            fashionSet.Clear();
+            hediff.document = GameComp_OperatorDocumentation.opDocArchive[this.OperatorID];
             hediff.document.voicePack = this.voicePackDef;
             //hediff.document.operatorDef = this;
 
@@ -241,9 +244,9 @@ namespace AK_DLL
             if (this.relations == null || this.relations.Count == 0) return;
             foreach (KeyValuePair<string, PawnRelationDef> node in relations)
             {
-                if (GameComp_OperatorDocumentation.operatorDocument.ContainsKey(node.Key))
+                if (GameComp_OperatorDocumentation.opDocArchive.ContainsKey(node.Key))
                 {
-                    operator_Pawn.relations.AddDirectRelation(node.Value, GameComp_OperatorDocumentation.operatorDocument[node.Key].pawn);
+                    operator_Pawn.relations.AddDirectRelation(node.Value, GameComp_OperatorDocumentation.opDocArchive[node.Key].pawn);
                 }
             }
         }
@@ -335,9 +338,9 @@ namespace AK_DLL
                 operator_Pawn.skills.skills.Add(skill);
             }
             //技能属性更改
-            if (GameComp_OperatorDocumentation.operatorDocument.ContainsKey(AK_Tool.GetOperatorIDFrom(this.defName)))
+            if (GameComp_OperatorDocumentation.opDocArchive.ContainsKey(AK_Tool.GetOperatorIDFrom(this.defName)))
             {
-                Dictionary<SkillDef, int> skills = GameComp_OperatorDocumentation.operatorDocument[AK_Tool.GetOperatorIDFrom(this.defName)].skillLevel;
+                Dictionary<SkillDef, int> skills = GameComp_OperatorDocumentation.opDocArchive[AK_Tool.GetOperatorIDFrom(this.defName)].skillLevel;
                 foreach (SkillRecord i in operator_Pawn.skills.skills)
                 {
                     i.Level = skills[i.def];
@@ -358,18 +361,22 @@ namespace AK_DLL
                     operator_Pawn.inventory.TryAddAndUnforbid(newThing);
                 }
             }
-            //装备衣物
+            //装备衣物和配件
             operator_Pawn.apparel.DestroyAll();
-            foreach (ThingDef apparelDef in this.apparels)
+            fashionSet = new List<Thing>();
+            if (apparels != null)
             {
-                Apparel apparel = (Apparel)ThingMaker.MakeThing(apparelDef);
-                CompBiocodable comp = apparel.GetComp<CompBiocodable>();
-                if (comp != null)
+                foreach (ThingDef apparelDef in this.apparels)
                 {
-                    comp.CodeFor(operator_Pawn);
+                    Recruit_Inventory_Wear(apparelDef, operator_Pawn, true);
                 }
-                operator_Pawn.apparel.Wear(apparel, true, false);
-                operator_Pawn.outfits.forcedHandler.SetForced(apparel, true);
+            }
+            if (accessory != null)
+            {
+                foreach (ThingDef accDef in this.accessory)
+                {
+                    Recruit_Inventory_Wear(accDef, operator_Pawn, false);
+                }
             }
             //装备武器
             ThingWithComps weapon = null;
@@ -383,6 +390,19 @@ namespace AK_DLL
                 operator_Pawn.equipment.AddEquipment(weapon);
             }
             return weapon;
+        }
+
+        protected void Recruit_Inventory_Wear(ThingDef apparelDef, Pawn p, bool isFashion = true)
+        {
+            Apparel apparel = (Apparel)ThingMaker.MakeThing(apparelDef);
+            CompBiocodable comp = apparel.GetComp<CompBiocodable>();
+            if (comp != null) comp.CodeFor(p);
+            p.apparel.Wear(apparel, true, false);
+            p.outfits.forcedHandler.SetForced(apparel, true);
+            if (isFashion)
+            {
+                fashionSet.Add(apparel);
+            }
         }
 #endregion
 

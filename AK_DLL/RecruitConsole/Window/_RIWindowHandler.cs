@@ -40,7 +40,7 @@ namespace AK_DLL
             switch (window)
             {
                 case RIWindowType.MainMenu:
-                    RIWindow_OperatorDetail.isRecruit = true;
+                    RIWindow_OperatorDetail.windowPurpose = OpDetailType.Recruit;
                     actualRIWindow = new RIWindow_MainMenu();
                     actualRIWindow.DrawUI("MainMenu");
 
@@ -77,12 +77,24 @@ namespace AK_DLL
             OpenRIWindow(windowType);
         }
 
+        //打开干员详情界面时，必须输入干员def
         public static void OpenRIWindow_OpDetail(OperatorDef operatorDef)
         {
             window = RIWindowType.Op_Detail;
             def = operatorDef;
             OpenRIWindow();
         }
+
+        //打开干员详情界面，但是因为换装
+        public static void OpenRIWindow_OpDetail(Pawn p, Thing Console)
+        {
+            recruitConsole = Console;
+            window = RIWindowType.Op_Detail;
+            def = p.GetDoc().operatorDef;
+            RIWindow_OperatorDetail.windowPurpose = OpDetailType.Fashion;
+            OpenRIWindow();
+        }
+
         #endregion
 
         #region 初始化数据

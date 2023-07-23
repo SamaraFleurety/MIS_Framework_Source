@@ -337,6 +337,7 @@
     <Compile Include="Def\OperatorDef\OperatorDef.cs" />
     <Compile Include="GC_Documentation.cs" />
     <Compile Include="Opinion\ThoughtWorker_OpinionToTrait.cs" />
+    <Compile Include="RecruitConsole\Job\JobDriver_OpenFashionTab.cs" />
     <Compile Include="RecruitConsole\Window\RIWindow.cs" />
     <Compile Include="RecruitConsole\Window\RIWindow_MainMenu.cs" />
     <Compile Include="RecruitConsole\Window\RIWindow_Option.cs" />

@@ -280,7 +280,7 @@ namespace AK_DLL
         {
             GameObject.Find("MBtn_Recruit").GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
-                RIWindow_OperatorDetail.isRecruit = true;
+                RIWindow_OperatorDetail.windowPurpose = OpDetailType.Recruit;
                 RIWindowHandler.OpenRIWindow(RIWindowType.Op_List);
                 this.Close(false);
             });
@@ -298,7 +298,7 @@ namespace AK_DLL
             GameObject temp;
             GameObject.Find("SBtn_ChangeSecretary").GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
-                RIWindow_OperatorDetail.isRecruit = false;
+                RIWindow_OperatorDetail.windowPurpose = OpDetailType.Secretary;
                 RIWindowHandler.OpenRIWindow(RIWindowType.Op_List);
                 this.Close(false);
             });
@@ -427,7 +427,7 @@ namespace AK_DLL
 
         public override void ReturnToParent(bool closeEV = true)
         {
-            RIWindow_OperatorDetail.isRecruit = true;
+            RIWindow_OperatorDetail.windowPurpose = OpDetailType.Recruit;
             base.ReturnToParent(closeEV);
         }
     }

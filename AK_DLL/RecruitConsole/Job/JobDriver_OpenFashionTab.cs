@@ -6,7 +6,8 @@ using Verse;
 
 namespace AK_DLL
 {
-    public class JobDriver_UseRecruitConsole : JobDriver
+    //fixme:干员换装 可能没写完。 逻辑是让可能换装的干员自己操作通讯台换装。
+    public class JobDriver_OpenFashionTab : JobDriver
     {
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
@@ -20,7 +21,7 @@ namespace AK_DLL
             {
                 Find.TickManager.Pause();
                 RIWindow_OperatorDetail.windowPurpose = OpDetailType.Recruit;
-                RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu,TargetThingA);
+                RIWindowHandler.OpenRIWindow_OpDetail(pawn, TargetThingA);
             };
             yield return t;
             yield break;

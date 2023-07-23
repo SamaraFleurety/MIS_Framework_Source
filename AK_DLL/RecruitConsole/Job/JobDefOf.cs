@@ -12,5 +12,6 @@ namespace AK_DLL
 			DefOfHelper.EnsureInitializedInCtor(typeof(SoundDefOf));
 		}
 		public static JobDef AK_UseRecruitConsole;
+		public static JobDef AK_OperatorChangeFashion;
 	}
 }

@@ -23,34 +23,36 @@ namespace AK_DLL
             {
                 yield return new FloatMenuOption("AK_PawnNull".Translate(), null); yield break;
             }
+
+            OperatorDocument doc = selPawn.GetDoc();
+            if (doc != null && doc.operatorDef.clothSet != null && doc.operatorDef.clothSet.Count > 0)
+            {
+                yield return new FloatMenuOption("AK_ChangeFashion".Translate(),
+                delegate
+                {
+                    selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(JobDefOf.AK_OperatorChangeFashion, this));
+                }
+                );
+            }
+
+            if (compRefuelable.Fuel >= 0.1)
+            {
+                yield return new FloatMenuOption("AK_CanReach".Translate(),
+                delegate
+                {
+                    selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(JobDefOf.AK_UseRecruitConsole, this));
+                }
+                ); yield break;
+            }
             else
             {
-                if (compRefuelable.Fuel >= 0.1)
-                {
-                    yield return new FloatMenuOption("AK_CanReach".Translate(),
-                    delegate
-                    {
-                        selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(JobDefOf.AK_UseRecruitConsole, this));
-                    }
-                    ); yield break;
-                }
-                else
-                {
-                    yield return new FloatMenuOption("AK_NoTicket".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0); yield break;
-                }
+                yield return new FloatMenuOption("AK_NoTicket".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0); yield break;
             }
+            
 
         }
 
-        //招募干员放进class operatorDef了
-
-        /*public override void ExposeData()
-        {
-            base.ExposeData();
-            //Scribe_Collections.Look(ref recruitedOperators, "spawnedOperators", LookMode.Def);
-        } */
         public CompPowerTrader compPower;
         public CompRefuelable compRefuelable;
-        //public List<OperatorDef> recruitedOperators = new List<OperatorDef>();
     }
 }

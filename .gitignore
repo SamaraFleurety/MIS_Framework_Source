@@ -4,3 +4,4 @@
 */packages/*
 AK_DLL/AK_Library.csproj
 *.cache
+*.cache

@@ -211,7 +211,7 @@ namespace AK_DLL
             }
             else
             {
-                OperatorLiveDef l2dDef = def.live2dModel[l2dOrder];
+                LiveModelDef l2dDef = def.live2dModel[l2dOrder];
                 AssetBundle ab = FS_Tool.LoadAssetBundle(l2dDef.modID, l2dDef.assetBundle);
                 L2DInstance = FS_Tool.InstantiateLive2DModel(ab, l2dDef.modID, l2dDef.modelName, rigJsonPath: l2dDef.rigJsonPath, renderTargetName: opL2DRenderTargetName);
                 if (true) //给mod设置预留

@@ -9,6 +9,7 @@ using UnityEngine;
 
 namespace AK_DLL
 {
+    //个人详细属性界面显示立绘
     [HarmonyPatch(typeof(Dialog_InfoCard), "FillCard")]
     public class PatchInfoCardPortrait
     {

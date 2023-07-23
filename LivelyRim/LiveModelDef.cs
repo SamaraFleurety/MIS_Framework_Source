@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Verse;
 
-namespace AK_DLL
+namespace FS_LivelyRim
 {
-    public class OperatorLiveDef : Def
+    public class LiveModelDef : Def
     {
         public string modID;
         public string assetBundle;

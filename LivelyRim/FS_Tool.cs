@@ -26,17 +26,20 @@ namespace FS_LivelyRim
         //存所有mod的路径 <packageID, 路径>
         public static Dictionary<string, string> modPath = new Dictionary<string, string>();
 
-        static string ModID => TypeDef.ModID;
+        static string ModID => TypeDef.ModID; //本mod的id
 
         static AssetBundle l2dResource => TypeDef.l2dResource;
 
-        //执行所有初始化 FIXME：记得写个IO装载原生库
+        //执行所有初始化 原生库只有x64
         static FS_Tool ()
         {
-            InitializeCubismDll();
-
             //因为广泛需要读取prefab或者json，需要知道路径。泰南的MODContentInfo竟然tm是个list
             LoadAllModPath();
+
+            CheckCubismCoreLib();
+
+            InitializeCubismDll();
+
 
             TypeDef.Initialize();
         }
@@ -47,6 +50,21 @@ namespace FS_LivelyRim
             for (int i = 0; i < Mods.Count; ++i)
             {
                 modPath.Add(Mods[i].PackageId, Mods[i].RootDir);
+            }
+        }
+        
+        //自动装载原生库。很可能不兼容x86/mac/linux
+        static void CheckCubismCoreLib()
+        {
+            if (FS_ModSettings.autofillCubismCoreLib)
+            {
+                string targetPath = Application.dataPath + "/Plugins/x86_64/Live2DCubismCore.dll";
+                string oriPath = ModIDtoPath(ModID, "Live2DCubismCore.dll", "/CoreLib/Windows/x86_64/");
+                if (!File.Exists(targetPath))
+                {
+                    File.Copy(oriPath, targetPath);
+                }
+                FS_ModSettings.autofillCubismCoreLib = false;
             }
         }
 
@@ -61,7 +79,8 @@ namespace FS_LivelyRim
         }
 
         //从mod的ID读获取要的文件的路径
-        //实际路径为[MOD根目录]/[subfolder]/path
+        //实际路径为[MOD根目录][subfolder]path
+        //subfolder前后应该包括'/'
         private static string ModIDtoPath(string modPackageID, string path, string subfolder = "")
         {
             return modPath[modPackageID.ToLower()] + subfolder + path;
@@ -308,5 +327,32 @@ namespace FS_LivelyRim
             throw new NotSupportedException();
         }
 
+        #region 主界面/商店 看板相关
+        static GameObject StoreFront => TypeDef.cachedStoreFront;
+        public static void SetStoreFront(GameObject model, bool destroyModel = true, Vector3? location = null, Vector3? scale = null)
+        {
+            if (StoreFront != null)
+            {
+                StoreFront.SetActive(false);
+                if (destroyModel)
+                {
+                    GameObject.Destroy(StoreFront);
+                }
+            }
+            if (location is Vector3 loc) model.transform.position = loc;
+            if (scale is Vector3 sca) model.transform.localScale = sca;
+            TypeDef.cachedStoreFront = model;
+        }
+
+        public static void SetStoreFrontActive(bool active, Vector3? setLocation)
+        {
+            if (StoreFront != null)
+            {
+                StoreFront.SetActive(active);
+                if (setLocation is Vector3 loc) StoreFront.transform.position = loc;
+            }
+        }
+
+        #endregion
     }
 }

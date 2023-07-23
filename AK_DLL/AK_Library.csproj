@@ -281,8 +281,8 @@
     <Compile Include="Def\OperatorClassDef.cs" />
     <Compile Include="Def\OperatorDef\HediffStat.cs" />
     <Compile Include="Def\OperatorDef\ItemOnSpawn.cs" />
+    <Compile Include="Def\OperatorDef\OperatorClothSet.cs" />
     <Compile Include="Def\OperatorDef\OperatorDef_Reserve.cs" />
-    <Compile Include="Def\OperatorDef\OperatorLiveDef.cs" />
     <Compile Include="Def\OperatorInteractionDef.cs" />
     <Compile Include="Def\OperatorSeriesDef.cs" />
     <Compile Include="GC_MiscData.cs" />
@@ -290,7 +290,6 @@
     <Compile Include="HarmonyPatch\PatchDisableRootUI.cs" />
     <Compile Include="HarmonyPatch\PatchHairOffset.cs" />
     <Compile Include="HarmonyPatch\PatchInfoCardPortrait.cs" />
-    <Compile Include="HarmonyPatch\PatchTraderDialog.cs" />
     <Compile Include="HarmonyPatch\PatchWindowsOnGui%28Bottom Portrait%29.cs" />
     <Compile Include="HarmonyPatch\temppatch.cs" />
     <Compile Include="OpAbility\Comp\TCP_Ability.cs" />

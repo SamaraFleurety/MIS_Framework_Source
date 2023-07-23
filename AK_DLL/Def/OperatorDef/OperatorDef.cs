@@ -37,6 +37,7 @@ namespace AK_DLL
         public List<TraitAndDegree> traits;//干员特性
         public ThingDef weapon;//干员武器                                                  
         public List<ThingDef> apparels;//干员衣服
+        public List<ThingDef> accessory; //干员配件。和衣服的区别是在换装时不会丢掉。适合填入比如护盾。
         public List<ItemOnSpawn> items;
         public BodyTypeDef bodyTypeDef;//干员的体型
         public HeadTypeDef headTypeDef;
@@ -51,8 +52,11 @@ namespace AK_DLL
 
         public string stand;//精2立绘
         public string commonStand;  //精0立绘
-        public List<string> fashion;
-        public List<OperatorLiveDef> live2dModel;
+        public List<string> fashion; //换装
+        //换装后，体现在rw服装上的变化。key的int是换装在List<string> fashion中的下标。
+        //按理说应该和上面的干员衣服整合一起，但现在已经几百个干员了，要整合工作量太大。立项的时候没考虑做换装。
+        public Dictionary<int, OperatorClothSet> clothSet; 
+        public List<LiveModelDef> live2dModel;
 
         //因为并不知道是否有某种立绘，所以用字典存。约定-1为头像，0是精0立绘，1是精2立绘，2-后面是换装
         //这里的V3，x和y是x轴和y轴的偏移，z其实是缩放
@@ -479,10 +483,10 @@ namespace AK_DLL
                 List<string> modelNames = new List<string>();
                 if (live2dModel == null)
                 {
-                    live2dModel = new List<OperatorLiveDef>();
+                    live2dModel = new List<LiveModelDef>();
                     return;
                 }
-                foreach (OperatorLiveDef i in live2dModel)
+                foreach (LiveModelDef i in live2dModel)
                 {
                     if (ModLister.GetActiveModWithIdentifier(i.modID) == null)
                     {

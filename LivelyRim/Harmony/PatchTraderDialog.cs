@@ -3,7 +3,7 @@ using RimWorld;
 using Verse;
 using UnityEngine;
 
-namespace AK_DLL
+namespace FS_LivelyRim
 {
     [HarmonyPatch(typeof(Dialog_Trade))]
     public class PatchTraderDialog
@@ -29,6 +29,12 @@ namespace AK_DLL
         public static void Postfix_PostOpen()
         {
             moved = false;
+        }
+        [HarmonyPatch("Close")]
+        [HarmonyPostfix]
+        public static void Postfix_Close()
+        {
+            Log.Message("mect close");
         }
     }
 }

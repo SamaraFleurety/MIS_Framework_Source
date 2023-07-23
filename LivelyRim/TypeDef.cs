@@ -21,6 +21,12 @@ namespace FS_LivelyRim
         //用来缓存ab包。ab重复读是null
         public static Dictionary<string, AssetBundle> cachedAssetBundle = new Dictionary<string, AssetBundle>();
 
+        //商店和主界面看板
+        public static GameObject cachedStoreFront = null;
+        //l2d分别放在商店和主界面时 的默认位置。注意需要考虑离屏相机的偏移。
+        public static Vector3 defaultStoreFrontLocAtMenu = new Vector3(0, 0, 0);
+        public static Vector3 defaultStoreFrontLocAtMerchant = new Vector3(0, 0, 0);
+
         public static void Initialize()
         {
             //CubismBuiltinMaterials.AB = AssetBundle.LoadFromFile(FS_Tool.modPath[ModID] + "/Asset/l2dtest");

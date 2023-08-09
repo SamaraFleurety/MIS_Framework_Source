@@ -69,6 +69,10 @@
     <Reference Include="UnityEngine.ImageConversionModule">
       <HintPath>..\AK_DLL\bin\Debug\UnityEngine.ImageConversionModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.IMGUIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\AK_DLL\bin\Debug\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>..\AK_DLL\bin\Debug\UnityEngine.UI.dll</HintPath>
     </Reference>

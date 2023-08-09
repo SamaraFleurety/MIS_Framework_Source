@@ -787,7 +787,9 @@ namespace AK_DLL
             else
             {
                 OpL2D.SetActive(true);
-                L2DInstance =  AK_Tool.DrawLive2DOperatorStand(Def, preferredSkin, OpL2DRenderTargetName);
+                FS_Tool.SetDefaultCanvas(false);
+                //GameObject renderTarget =  GameObject.Find("OpL2DRenderTargetName");
+                L2DInstance =  AK_Tool.DrawLive2DOperatorStand(Def, preferredSkin, OpL2D);
             }
         }
 

@@ -222,7 +222,7 @@ namespace AK_DLL
         List<GameObject> adjustSecBtns;
 
         public GameObject OpStand; //干员静态立绘的渲染目标
-        public GameObject OpL2D;   //干员动态立绘的渲染目标（不是模型本身）
+        public GameObject OpL2D;   //干员动态立绘的渲染目标（不是模型本身，是名为L2DRenderTarget的游戏物体）
 
         #region 快捷函数
         private GameObject ClickedBtn
@@ -416,7 +416,7 @@ namespace AK_DLL
             else
             {
                 OpL2D.SetActive(true);
-                L2DInstance =  AK_Tool.DrawLive2DOperatorStand(SecretaryDef, preferredSkin, "L2DRenderTarget");
+                L2DInstance =  AK_Tool.DrawLive2DOperatorStand(SecretaryDef, preferredSkin, OpL2D);
             }
         }
         //FIXME 没做

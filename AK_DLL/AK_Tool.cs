@@ -190,7 +190,7 @@ namespace AK_DLL
 
         }
 
-        public static GameObject DrawLive2DOperatorStand(OperatorDef def, int l2dOrder, string opL2DRenderTargetName, Vector3? offset = null)
+        public static GameObject DrawLive2DOperatorStand(OperatorDef def, int l2dOrder, GameObject renderTarget, Vector3? offset = null)
         {
             if (ModLister.GetActiveModWithIdentifier("FS.LivelyRim") == null)
             {
@@ -207,13 +207,13 @@ namespace AK_DLL
             if (TypeDef.cachedLive2DModels.ContainsKey(def.live2dModel[l2dOrder].modelName))
             {
                 L2DInstance = TypeDef.cachedLive2DModels[def.live2dModel[l2dOrder].modelName];
-                FS_Tool.SetModelActive(L2DInstance, opL2DRenderTargetName);
+                FS_Tool.SetModelActive(L2DInstance, renderTarget);
             }
             else
             {
                 LiveModelDef l2dDef = def.live2dModel[l2dOrder];
                 AssetBundle ab = FS_Tool.LoadAssetBundle(l2dDef.modID, l2dDef.assetBundle);
-                L2DInstance = FS_Tool.InstantiateLive2DModel(ab, l2dDef.modID, l2dDef.modelName, rigJsonPath: l2dDef.rigJsonPath, renderTargetName: opL2DRenderTargetName);
+                L2DInstance = FS_Tool.InstantiateLive2DModel(ab, l2dDef.modID, l2dDef.modelName, rigJsonPath: l2dDef.rigJsonPath, renderTargetName: renderTarget, eyeFollowMouse : l2dDef.eyeFollowMouse);
                 if (true) //给mod设置预留
                 {
                     TypeDef.cachedLive2DModels.Add(l2dDef.modelName, L2DInstance);

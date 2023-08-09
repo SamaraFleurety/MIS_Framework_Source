@@ -18,6 +18,8 @@ using System.Linq;
 using Live2D.Cubism.Framework.LookAt;
 using Live2D.Cubism.FSAddon;
 
+
+//fixme:静态存个canvas得了
 namespace FS_LivelyRim
 {
     [StaticConstructorOnStartup]
@@ -30,6 +32,15 @@ namespace FS_LivelyRim
 
         static AssetBundle l2dResource => TypeDef.l2dResource;
 
+        //public static GameObject l2dPrefab;
+        public static GameObject defaultModelInstance;
+        public static LiveModelDef l2dDef;
+
+        public static GameObject defaultCanvas;
+        public static GameObject defaultRenderTarget;
+
+        public static RenderTexture OffScreenCameraRenderTarget => OffscreenRendering.OffCamera.targetTexture;
+
         //执行所有初始化 原生库只有x64
         static FS_Tool ()
         {
@@ -40,10 +51,12 @@ namespace FS_LivelyRim
 
             InitializeCubismDll();
 
-
             TypeDef.Initialize();
+
+            SetDefaultCanvas(false);
         }
 
+        #region IO
         static void LoadAllModPath()
         {
             List<ModContentPack> Mods = LoadedModManager.RunningMods.ToList();
@@ -108,6 +121,7 @@ namespace FS_LivelyRim
                 assetBundle = AssetBundle.LoadFromFile(fullPath);
                 if (assetBundle != null)
                 {
+                    //记录这次加载的ab包
                     TypeDef.cachedAssetBundle.Add(AssetBundleID, assetBundle);
                 }
                 else
@@ -188,20 +202,41 @@ namespace FS_LivelyRim
             physicsController.HasUpdateController = true;
         }
 
+        #endregion
+
+        #region 内部加载模型相关
+
         /// <summary>
-        /// 从AB包读取模型。如果希望自己完成后续处理就用这个。在使用此方法前需要提前实例化离屏渲染目标。
+        /// 从AB包读取模型，不会做后续处理。如果希望自己完成后续处理就用这个。在使用此方法前需要提前实例化离屏渲染目标。
         /// </summary>
         /// <param name="AB"></param>
         /// <param name="path"></param>
-        /// <param name="renderTargetName">模型采用离屏渲染规避泰南的UI。需要提前实例化离屏渲染目标，不然看不到模型。渲染目标需要是1920*1080,带有空Image组件的游戏物体。此处留空会默认寻找名叫"L2DRenderTarget"的游戏物体。</param>
+        /// <param name="renderTarget">模型采用离屏渲染规避泰南的UI。需要提前实例化离屏渲染目标，不然看不到模型。渲染目标需要是1920*1080,带有空Image组件的游戏物体。此处留空会默认使用defaultCanvas</param>
         /// <returns></returns>
-        public static GameObject LoadModelfromAB(AssetBundle AB, string path, string renderTargetName = null)
+        public static GameObject LoadModelfromAB(AssetBundle AB, string path, GameObject renderTarget = null)
         {
-            GameObject l2dPrefab = AB.LoadAsset<GameObject>(path);
-            if (renderTargetName != null)
+            if (AB == null)
             {
-                l2dPrefab.GetComponent<OffscreenRendering>().renderTargetName = renderTargetName;
+                Log.Error("[FS.L2D] loading model from empty asset bundle");
+                return null;
             }
+            GameObject l2dPrefab = AB.LoadAsset<GameObject>(path);
+            if (l2dPrefab == null)
+            {
+                Log.Error($"[FS.L2D] fail to load l2d model named {path}");
+                return null;
+            }
+
+            if (renderTarget == null) renderTarget = defaultRenderTarget;
+
+            OffscreenRendering offscreenRenderingComp = l2dPrefab.GetComponent<OffscreenRendering>();
+            if (offscreenRenderingComp == null)
+            {
+                Log.Error("[FS.L2D] model lacks off screen rendering component");
+                return null;
+            }
+            offscreenRenderingComp.renderTarget = renderTarget;
+
             GameObject l2dInstance = GameObject.Instantiate(l2dPrefab);
             return l2dInstance;
         }
@@ -218,16 +253,29 @@ namespace FS_LivelyRim
         /// <param name="eyeFollowMouse">[默认为是]模型是否带有眼睛和头的追踪功能</param>
         /// <param name="eyeFollowTarget">[可选，带默认值]如果有头眼追踪功能，追踪的物体。默认是跟随鼠标，并且有速度限制。</param>
         /// <returns>返回完成以上处理的游戏物体，如果有其他需求可自行更改。</returns>
-        public static GameObject InstantiateLive2DModel(AssetBundle assetBundle, string ModID, string modelPath, string rigJsonPath = null, string renderTargetName = null, bool eyeFollowMouse = true, GameObject eyeFollowTarget = null)
+        public static GameObject InstantiateLive2DModel(AssetBundle assetBundle, string ModID, string modelPath, string rigJsonPath = null, GameObject renderTargetName = null, bool eyeFollowMouse = true, GameObject eyeFollowTarget = null)
         {
-            GameObject renderTarget = GameObject.Find("L2DRenderTarget");
-            if (renderTarget == null && renderTargetName == null)
+            //不允许传入空ab包
+            if (assetBundle == null)
             {
-                GameObject renderTargetPrefab = l2dResource.LoadAsset<GameObject>("L2DCanvas");
-                GameObject renderTargetInstance = GameObject.Instantiate(renderTargetPrefab);
+                Log.Error("[FS.L2D]Error: received null ab");
+                return null;
+            }
+
+            //GameObject renderTarget = GameObject.Find("L2DRenderTarget");
+            if (renderTargetName == null)
+            {
+                renderTargetName = SetDefaultCanvas(true);
             }
 
             GameObject l2dIns = LoadModelfromAB(assetBundle, modelPath, renderTargetName);
+
+            //没能成功从ab包加载模型
+            if (l2dIns == null)
+            {
+                Log.Error($"[FS.L2D]failed to load model with path {modelPath}");
+                return null;
+            }
 
             if (rigJsonPath != null)
             {
@@ -264,49 +312,134 @@ namespace FS_LivelyRim
         }
 
         /// <summary>
+        /// 从LiveModelDef，快捷地加载并返回一个实例化模型。
+        /// </summary>
+        /// <param name="def">l2d的def</param>
+        /// <param name="setAsDefault">设置为本框架渲染主菜单l2d和商人界面l2d时默认使用的模型</param>
+        /// <param name="modelID">保存在TypeDef中的模型缓存，方便二次调用。传入null就是不想保存。</param>
+        /// <returns></returns>
+        public static GameObject InstantiateLive2DModel(LiveModelDef def, GameObject renderTarget = null, bool setAsDefault = false, string modelID = null)
+        {
+            GameObject l2dInstance;
+            if (modelID != null && TypeDef.cachedL2DModel.ContainsKey(modelID))
+            {
+                l2dInstance = TypeDef.cachedL2DModel[modelID];
+                if (l2dInstance != null) return l2dInstance;
+            }
+
+            AssetBundle ab = FS_Tool.LoadAssetBundle(def.modID, def.assetBundle);
+            l2dInstance = FS_Tool.InstantiateLive2DModel(ab, def.modID, def.modelName, rigJsonPath: def.rigJsonPath, renderTargetName: renderTarget, eyeFollowMouse: def.eyeFollowMouse);
+            
+            if (l2dInstance == null)
+            {
+                Log.Error($"[FS.L2D] failed to load live2d model named {def.defName}");
+                return null;
+            }
+
+            if (setAsDefault)
+            {
+                defaultModelInstance = l2dInstance; 
+                l2dDef = def;
+            }
+            
+            if (modelID != null)
+            {
+                if (TypeDef.cachedL2DModel.ContainsKey(modelID)) TypeDef.cachedL2DModel[modelID] = l2dInstance;
+                else TypeDef.cachedL2DModel.Add(modelID, l2dInstance);
+            }
+
+            return l2dInstance;
+        }
+
+        #endregion
+
+        #region 封装的加载模型方法
+        /// <summary>
         /// 启用已经实例化的模型时，并重新指定渲染目标。
         /// 禁用时直接setActive(false)就可以了。
         /// </summary>
         /// <param name="model"></param>
         /// <param name="active"></param>
-        /// <param name="renderTargetName"></param>
+        /// <param name="renderTarget"></param>
         /// <returns></returns>
-        public static GameObject SetModelActive(GameObject model, string renderTargetName = null)
+        public static GameObject SetModelActive(this GameObject model, GameObject renderTarget = null)
         {
             if (model == null)
             {
                 Log.Error($"FS.L2D. invaild model");
                 return null;
             }
-            if (renderTargetName != null && renderTargetName != "")
+            if (renderTarget == null)
             {
-                model.GetComponent<OffscreenRendering>().renderTargetName = renderTargetName;
+                renderTarget = SetDefaultCanvas(true);
             }
+            model.GetComponent<OffscreenRendering>().renderTarget = renderTarget;
             model.SetActive(true);
             return model;
         }
 
-       /* public static void DrawLive()
+        public static GameObject DrawModel(int drawAt, LiveModelDef def)
         {
-
-            if (true)
+            if (defaultModelInstance == null)
             {
-
-
-                GameObject l2dins = LoadModelfromAB(TypeDef.ricepicotest, "rice_pro_t03Motion");
-                l2dins.GetComponent<OffscreenRendering>().renderTarget = GameObject.Find("AG");
-
-                LoadRigtoModel(l2dins, ModID, "rice_pro_t03.physics3.json");
-
-
-                GameObject eyeTargetPrefab = TypeDef.ricepicotest.LoadAsset<GameObject>("EyeTarget");
-                GameObject eyeTargetIns = GameObject.Instantiate(eyeTargetPrefab);
-                l2dins.GetComponent<CubismLookController>().Target = eyeTargetIns;
+                Log.Error("[FS.L2D] default model is null");
             }
-            //l2dins.SetActive(true);
-            //Log.Message($"{l2dins.GetComponentInChildren<CubismPart>() == null}");
+            ModelTransform modelTransform;
+            if (def.transform.ContainsKey(drawAt))
+            {
+                modelTransform = def.transform[drawAt];
+            }
+            else modelTransform = null;
 
-        }*/
+            defaultModelInstance.SetModelActive();
+
+            return defaultModelInstance;
+        }
+
+        public static GameObject ChangeDefaultModel(LiveModelDef def)
+        {
+            if (defaultModelInstance != null) defaultModelInstance.SetActive(false);
+            GameObject obj = InstantiateLive2DModel(def, null, true, def.defName);
+            if (obj != null) obj.SetActive(false);
+            else Log.Error($"[FS.L2D] failed to change default l2d to {def.defName}");
+            return obj;
+        }
+
+        //加载/启用禁用 默认Canvas，并返回渲染目标。
+        public static GameObject SetDefaultCanvas(bool active = true)
+        {
+            if (defaultCanvas == null)
+            {
+                GameObject canvasPrefab = l2dResource.LoadAsset<GameObject>("L2DCanvas");
+                defaultCanvas = GameObject.Instantiate(canvasPrefab);
+                defaultRenderTarget = defaultCanvas.transform.GetChild(0).gameObject;
+            }
+            defaultCanvas.SetActive(active);
+            return defaultRenderTarget;
+        }
+
+        #endregion
+        /* public static void DrawLive()
+         {
+
+             if (true)
+             {
+
+
+                 GameObject l2dins = LoadModelfromAB(TypeDef.ricepicotest, "rice_pro_t03Motion");
+                 l2dins.GetComponent<OffscreenRendering>().renderTarget = GameObject.Find("AG");
+
+                 LoadRigtoModel(l2dins, ModID, "rice_pro_t03.physics3.json");
+
+
+                 GameObject eyeTargetPrefab = TypeDef.ricepicotest.LoadAsset<GameObject>("EyeTarget");
+                 GameObject eyeTargetIns = GameObject.Instantiate(eyeTargetPrefab);
+                 l2dins.GetComponent<CubismLookController>().Target = eyeTargetIns;
+             }
+             //l2dins.SetActive(true);
+             //Log.Message($"{l2dins.GetComponentInChildren<CubismPart>() == null}");
+
+         }*/
         public static object BuiltinLoadAssetAtPath(Type assetType, string absolutePath)
         {
             Debug.Log(absolutePath);

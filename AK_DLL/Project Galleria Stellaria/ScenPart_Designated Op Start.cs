@@ -31,6 +31,7 @@ namespace AK_DLL
                 Widgets.ButtonText(rect, "No op exist");
                 return;
             }
+            //IMGUI，选择干员职业
             if (Widgets.ButtonText(rect, RIWindowHandler.operatorClasses[operatorClass].label.Translate()))
             {
                 List<FloatMenuOption> list = new List<FloatMenuOption>();
@@ -46,6 +47,7 @@ namespace AK_DLL
                 Find.WindowStack.Add(new FloatMenu(list));
             }
 
+            //选择干员def
             rect.y += scenPartRect.height / 2f;
             if (Widgets.ButtonText(rect, operatorDef.nickname.Translate()))
             {

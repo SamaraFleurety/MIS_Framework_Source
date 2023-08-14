@@ -293,8 +293,6 @@
     <Compile Include="HarmonyPatch\PatchWindowsOnGui%28Bottom Portrait%29.cs" />
     <Compile Include="HarmonyPatch\temppatch.cs" />
     <Compile Include="OpAbility\Comp\TCP_Ability.cs" />
-    <Compile Include="Oripathy\Hediff\HC_OripathyInfo.cs" />
-    <Compile Include="Oripathy\Hediff\HC_RandAddHediff.cs" />
     <Compile Include="HotSwap.cs" />
     <Compile Include="OpAbility\AbilityEffect\AE_ShootProjectile.cs" />
     <Compile Include="OpAbility\AbilityEffect\Effect\AbilityEffect_DisableAttack.cs" />
@@ -328,7 +326,6 @@
     <Compile Include="Hediff\CompProperties\HediffCompProperties_Heal.cs" />
     <Compile Include="Hediff\Comps\HediffComp_IncreaseAttackPower.cs" />
     <Compile Include="Hediff\CompProperties\HediffCompProperties_IncreaseAttackPower.cs" />
-    <Compile Include="Oripathy\Thing\TC_OripathyMonitor.cs" />
     <Compile Include="Project Galleria Stellaria\ScenPart_Designated Op Start.cs" />
     <Compile Include="RecruitConsole\Job\JobDefOf.cs" />
     <Compile Include="RecruitConsole\Job\JobDriver_UseRecruitTable.cs" />
@@ -382,6 +379,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DeathWorker\" />
+    <Folder Include="Oripathy\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

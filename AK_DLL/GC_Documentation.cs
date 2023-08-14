@@ -10,11 +10,6 @@ using RimWorld;
 
 namespace AK_DLL
 {
-    /*public static class Operator_Recruited
-    {
-        public static List<OperatorDef> RecruitedOperators = new List<OperatorDef>();
-    }*/
-
     //下面这个GameComponent使用了和原版不一样的存读档流程。除非真的知道你在干什么，不然别改。
     public class OperatorDocument : IExposable , ILoadReferenceable
     {

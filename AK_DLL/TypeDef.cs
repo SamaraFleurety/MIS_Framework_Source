@@ -102,6 +102,8 @@ namespace AK_DLL
     public enum TimeToTick
     {
         tick = 1,          //游戏中
+        tickRare = 250,
+        tickLong = 2000,
         hour = 2500,
         day = hour * 24,   //60k
         season = day * 15, //0.9M

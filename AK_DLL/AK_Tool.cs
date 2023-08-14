@@ -164,6 +164,7 @@ namespace AK_DLL
         #endregion
 
         #region UGUI绘制立绘/L2D
+        //普通的图片立绘
         public static void DrawStaticOperatorStand(OperatorDef def, int preferredSkin, GameObject OpStand, Vector3? offset = null)
         {
             Transform containerLoc = OpStand.transform;
@@ -207,7 +208,7 @@ namespace AK_DLL
             if (TypeDef.cachedLive2DModels.ContainsKey(def.live2dModel[l2dOrder].modelName))
             {
                 L2DInstance = TypeDef.cachedLive2DModels[def.live2dModel[l2dOrder].modelName];
-                FS_Tool.SetModelActive(L2DInstance, renderTarget);
+                FS_Utilities.SetModelActive(L2DInstance, renderTarget);
             }
             else
             {

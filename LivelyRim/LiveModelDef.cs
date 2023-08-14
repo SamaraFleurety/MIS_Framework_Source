@@ -10,8 +10,8 @@ namespace FS_LivelyRim
 {
     public class ModelTransform
     {
-        Vector3? location = null;
-        Vector3? rotation = null;
+        public Vector3? location = null;
+        public Vector3? rotation = null;
     }
 
     public class LiveModelDef : Def

@@ -30,8 +30,12 @@ namespace FS_LivelyRim
         [HarmonyPostfix]
         public static void Postfix_PostOpen()
         {
-            moved = false; 
-            if (cachedJanus == null)
+            moved = false;
+            GameObject ins = FS_Utilities.DrawModel(DisplayModelAt.MerchantRight, FS_Tool.defaultModelDef);
+
+            ins.GetComponent<CubismRenderController>().SortingMode = CubismSortingMode.BackToFrontOrder;
+
+            /*if (cachedJanus == null)
             {
                 LiveModelDef l2dDef = DefDatabase<LiveModelDef>.GetNamed("AZ_Live_Janus");
                 //GameObject janusPrefab = TypeDef.janustest.LoadAsset<GameObject>("FileReferences_Moc_0");
@@ -41,13 +45,14 @@ namespace FS_LivelyRim
                 Vector3 v3 = cachedJanus.transform.rotation.eulerAngles;
                 Log.Message($"{v3.x};;{v3.y};;{v3.z}");
             }
-            cachedJanus.SetActive(true);
+            cachedJanus.SetActive(true);*/
         }
         [HarmonyPatch("Close")]
         [HarmonyPostfix]
         public static void Postfix_Close()
         {
-            cachedJanus.SetActive(false);
+            FS_Utilities.SetDefaultModelInActive();
+            //cachedJanus.SetActive(false);
             Log.Message("mect close");
         }
     }

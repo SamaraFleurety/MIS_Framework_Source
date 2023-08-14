@@ -22,6 +22,7 @@ namespace AK_DLL
             Scribe_Defs.Look(ref operatorDef, "opDef");
         }
         
+        //ui
         public override void DoEditInterface(Listing_ScenEdit listing)
         {
             Rect scenPartRect = listing.GetScenPartRect(this, ScenPart.RowHeight * 2f);
@@ -80,6 +81,7 @@ namespace AK_DLL
             operatorDef = RIWindowHandler.operatorDefs[operatorClass].Values.RandomElement();
         }
 
+        //游戏开始后，删掉所有原生pawn
         public override void PostGameStart()
         {
             List<Pawn> colonists = new List<Pawn>(PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_Colonists);

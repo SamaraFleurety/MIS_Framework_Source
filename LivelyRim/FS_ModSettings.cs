@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,8 @@ namespace FS_LivelyRim
         public static bool mainMenuLive = true;
 
         //在商店，主菜单等地方画的l2d的def
-        public static LiveModelDef l2dDef = DefDatabase<LiveModelDef>.GetNamed("AZ_Live_Janus");
+        public static LiveModelDef l2dDef = null;
+        public static string l2dDefname;
 
         public static bool autofillCubismCoreLib = true;
 
@@ -27,13 +29,24 @@ namespace FS_LivelyRim
             Scribe_Values.Look(ref merchantSideLive, "merchantSide", true);
             Scribe_Values.Look(ref autofillCubismCoreLib, "fillCore", true, true);
             Scribe_Values.Look(ref mainMenuLive, "menuLive", true);
-            Scribe_Defs.Look<LiveModelDef>(ref l2dDef, "l2dDef");
+            Scribe_Values.Look(ref l2dDefname, "l2dDef");
         }
+
     }
 
     public class FS_Mod : Mod
     {
         FS_ModSettings settings;
+
+        LiveModelDef selectedLiveDef
+        {
+            get
+            {
+                if (FS_ModSettings.l2dDef == null) FS_ModSettings.l2dDef = DefDatabase<LiveModelDef>.GetNamed("AZ_Live_Janus");
+                return FS_ModSettings.l2dDef;
+            }
+            set { FS_ModSettings.l2dDef = value; }
+        }
 
         public FS_Mod(ModContentPack content) : base(content)
         {
@@ -48,6 +61,27 @@ namespace FS_LivelyRim
             listingStandard.CheckboxLabeled("merchantsidelive".Translate(), ref FS_ModSettings.merchantSideLive, "merchantsidelivedesc".Translate());
             listingStandard.CheckboxLabeled("menulive".Translate(), ref FS_ModSettings.mainMenuLive, "menulivedesc".Translate());
             listingStandard.CheckboxLabeled("fillCore".Translate(), ref FS_ModSettings.autofillCubismCoreLib, "fillCoreDesc".Translate());
+
+            List<LiveModelDef> allDefs = DefDatabase<LiveModelDef>.AllDefsListForReading;
+            List<String> defLabels = allDefs.Select(td => td.label).ToList();
+
+            //Rect rect = listingStandard.GetRect(Text.LineHeight);
+            if (listingStandard.ButtonTextLabeled("selectl2ddef".Translate(), selectedLiveDef.label))
+            {
+                List<FloatMenuOption> list = new List<FloatMenuOption>();
+                foreach(LiveModelDef i in allDefs)
+                {
+                    LiveModelDef local = i;
+                    list.Add(new FloatMenuOption(i.label.Translate(), delegate ()
+                    {
+                        //selectedLiveDef = local;
+                        //FS_ModSettings.l2dDefname = local.defName;
+                        FS_Utilities.ChangeDefaultModel(local);
+                    }));
+                    Find.WindowStack.Add(new FloatMenu(list));
+                }
+            }
+
             //fixme:选择l2d
             listingStandard.End();
             base.DoSettingsWindowContents(inRect);

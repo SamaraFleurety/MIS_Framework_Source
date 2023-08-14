@@ -15,7 +15,6 @@ C:\Users\Fleurety\Desktop\rw\AK_DLL\LivelyRim\bin\Debug\NAudio.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\LivelyRim\bin\Debug\NVorbis.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\LivelyRim\bin\Debug\UnityEngine.AudioModule.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\LivelyRim\bin\Debug\com.rlabrecque.steamworks.net.dll
-C:\Users\Fleurety\Desktop\rw\AK_DLL\LivelyRim\bin\Debug\UnityEngine.TextRenderingModule.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\LivelyRim\bin\Debug\Assembly-CSharp-firstpass.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\LivelyRim\bin\Debug\UnityEngine.PhysicsModule.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\LivelyRim\bin\Debug\Unity.TextMeshPro.dll

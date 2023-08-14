@@ -34,12 +34,11 @@ namespace FS_LivelyRim
 
         //public static GameObject l2dPrefab;
         public static GameObject defaultModelInstance;
-        public static LiveModelDef l2dDef;
+        public static LiveModelDef defaultModelDef;
 
         public static GameObject defaultCanvas;
         public static GameObject defaultRenderTarget;
 
-        public static RenderTexture OffScreenCameraRenderTarget => OffscreenRendering.OffCamera.targetTexture;
 
         //执行所有初始化 原生库只有x64
         static FS_Tool ()
@@ -54,6 +53,7 @@ namespace FS_LivelyRim
             TypeDef.Initialize();
 
             SetDefaultCanvas(false);
+
         }
 
         #region IO
@@ -201,7 +201,25 @@ namespace FS_LivelyRim
 
             physicsController.HasUpdateController = true;
         }
-
+        public static object BuiltinLoadAssetAtPath(Type assetType, string absolutePath)
+        {
+            Debug.Log(absolutePath);
+            if (assetType == typeof(byte[]))
+            {
+                return File.ReadAllBytes(absolutePath);
+            }
+            else if (assetType == typeof(string))
+            {
+                return File.ReadAllText(absolutePath);
+            }
+            else if (assetType == typeof(Texture2D))
+            {
+                var texture = new Texture2D(1, 1);
+                texture.LoadImage(File.ReadAllBytes(absolutePath));
+                return texture;
+            }
+            throw new NotSupportedException();
+        }
         #endregion
 
         #region 内部加载模型相关
@@ -339,7 +357,7 @@ namespace FS_LivelyRim
             if (setAsDefault)
             {
                 defaultModelInstance = l2dInstance; 
-                l2dDef = def;
+                defaultModelDef = def;
             }
             
             if (modelID != null)
@@ -354,57 +372,6 @@ namespace FS_LivelyRim
         #endregion
 
         #region 封装的加载模型方法
-        /// <summary>
-        /// 启用已经实例化的模型时，并重新指定渲染目标。
-        /// 禁用时直接setActive(false)就可以了。
-        /// </summary>
-        /// <param name="model"></param>
-        /// <param name="active"></param>
-        /// <param name="renderTarget"></param>
-        /// <returns></returns>
-        public static GameObject SetModelActive(this GameObject model, GameObject renderTarget = null)
-        {
-            if (model == null)
-            {
-                Log.Error($"FS.L2D. invaild model");
-                return null;
-            }
-            if (renderTarget == null)
-            {
-                renderTarget = SetDefaultCanvas(true);
-            }
-            model.GetComponent<OffscreenRendering>().renderTarget = renderTarget;
-            model.SetActive(true);
-            return model;
-        }
-
-        public static GameObject DrawModel(int drawAt, LiveModelDef def)
-        {
-            if (defaultModelInstance == null)
-            {
-                Log.Error("[FS.L2D] default model is null");
-            }
-            ModelTransform modelTransform;
-            if (def.transform.ContainsKey(drawAt))
-            {
-                modelTransform = def.transform[drawAt];
-            }
-            else modelTransform = null;
-
-            defaultModelInstance.SetModelActive();
-
-            return defaultModelInstance;
-        }
-
-        public static GameObject ChangeDefaultModel(LiveModelDef def)
-        {
-            if (defaultModelInstance != null) defaultModelInstance.SetActive(false);
-            GameObject obj = InstantiateLive2DModel(def, null, true, def.defName);
-            if (obj != null) obj.SetActive(false);
-            else Log.Error($"[FS.L2D] failed to change default l2d to {def.defName}");
-            return obj;
-        }
-
         //加载/启用禁用 默认Canvas，并返回渲染目标。
         public static GameObject SetDefaultCanvas(bool active = true)
         {
@@ -417,75 +384,7 @@ namespace FS_LivelyRim
             defaultCanvas.SetActive(active);
             return defaultRenderTarget;
         }
-
         #endregion
-        /* public static void DrawLive()
-         {
 
-             if (true)
-             {
-
-
-                 GameObject l2dins = LoadModelfromAB(TypeDef.ricepicotest, "rice_pro_t03Motion");
-                 l2dins.GetComponent<OffscreenRendering>().renderTarget = GameObject.Find("AG");
-
-                 LoadRigtoModel(l2dins, ModID, "rice_pro_t03.physics3.json");
-
-
-                 GameObject eyeTargetPrefab = TypeDef.ricepicotest.LoadAsset<GameObject>("EyeTarget");
-                 GameObject eyeTargetIns = GameObject.Instantiate(eyeTargetPrefab);
-                 l2dins.GetComponent<CubismLookController>().Target = eyeTargetIns;
-             }
-             //l2dins.SetActive(true);
-             //Log.Message($"{l2dins.GetComponentInChildren<CubismPart>() == null}");
-
-         }*/
-        public static object BuiltinLoadAssetAtPath(Type assetType, string absolutePath)
-        {
-            Debug.Log(absolutePath);
-            if (assetType == typeof(byte[]))
-            {
-                return File.ReadAllBytes(absolutePath);
-            }
-            else if (assetType == typeof(string))
-            {
-                return File.ReadAllText(absolutePath);
-            }
-            else if (assetType == typeof(Texture2D))
-            {
-                var texture = new Texture2D(1, 1);
-                texture.LoadImage(File.ReadAllBytes(absolutePath));
-                return texture;
-            }
-            throw new NotSupportedException();
-        }
-
-        #region 主界面/商店 看板相关
-        static GameObject StoreFront => TypeDef.cachedStoreFront;
-        public static void SetStoreFront(GameObject model, bool destroyModel = true, Vector3? location = null, Vector3? scale = null)
-        {
-            if (StoreFront != null)
-            {
-                StoreFront.SetActive(false);
-                if (destroyModel)
-                {
-                    GameObject.Destroy(StoreFront);
-                }
-            }
-            if (location is Vector3 loc) model.transform.position = loc;
-            if (scale is Vector3 sca) model.transform.localScale = sca;
-            TypeDef.cachedStoreFront = model;
-        }
-
-        public static void SetStoreFrontActive(bool active, Vector3? setLocation)
-        {
-            if (StoreFront != null)
-            {
-                StoreFront.SetActive(active);
-                if (setLocation is Vector3 loc) StoreFront.transform.position = loc;
-            }
-        }
-
-        #endregion
     }
 }

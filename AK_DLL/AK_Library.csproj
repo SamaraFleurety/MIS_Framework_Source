@@ -274,6 +274,9 @@
     <Reference Include="UnityEngine.XRModule">
       <HintPath>./packages/UnityEngine.XRModule.dll</HintPath>
     </Reference>
+    <Reference Include="Vanya_ShieldBelt">
+      <HintPath>S:\Program Files (x86)\Steam\steamapps\workshop\content\294100\2432738429\1.4\Assemblies\Vanya_ShieldBelt.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AK_Tool4Unity.cs" />

@@ -83,3 +83,4 @@ C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\LitJSON.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\LivelyRim.dll
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\LivelyRim.pdb
 C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\CubismRimAddon.dll
+C:\Users\Fleurety\Desktop\rw\AK_DLL\AK_DLL\bin\Debug\Vanya_ShieldBelt.dll

@@ -6,7 +6,7 @@ using HarmonyLib;
 
 namespace AK_DLL
 {
-    [HarmonyPatch(typeof(JobDriver), "SetupToils",null)]
+    /*[HarmonyPatch(typeof(JobDriver), "SetupToils",null)]
     public class Patch_ForbidDrop
     {
         [HarmonyPrefix]
@@ -18,5 +18,5 @@ namespace AK_DLL
             }
             return true;
         }
-    }
+    }*/
 }

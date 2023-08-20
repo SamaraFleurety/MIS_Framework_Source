@@ -21,6 +21,7 @@ namespace FS_LivelyRim
         [HarmonyPostfix]
         public static void postfix(UIRoot_Entry __instance)
         {
+            return;
             //初始化。设置里面不可以直接存def，因为读档的时候还没加载def
             if (FS_Tool.defaultModelInstance == null) FS_Utilities.ChangeDefaultModel(DefDatabase<LiveModelDef>.GetNamed(FS_ModSettings.l2dDefname));
             

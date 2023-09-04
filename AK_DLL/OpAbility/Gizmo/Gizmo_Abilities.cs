@@ -54,8 +54,10 @@ namespace AK_DLL
             }
             Widgets.DrawTextureFitted(rect, badTex, this.iconDrawScale * 0.85f, this.iconProportions, this.iconTexCoords, this.iconAngle, null);
             Widgets.Label(rect, this.CDs.charge + "/" + this.CDs.maxCharge);
+            //冷却
             GUI.DrawTexture(new Rect(rect.x, rect.y, width(rect.width), rect.height), ContentFinder<Texture2D>.Get("UI/Abilities/White"));
             GUI.color = Color.white;
+            //开关技能 右上角的勾叉
             if (this.targetMode == TargetMode.AutoEnemy)
             {
                 GUI.DrawTexture(new Rect(rect.x + rect.width - 24f, rect.y, 24f, 24f), this.Toggled ? Widgets.CheckboxOnTex : Widgets.CheckboxOffTex);

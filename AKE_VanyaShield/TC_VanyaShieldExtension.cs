@@ -17,7 +17,7 @@ namespace AKE_VanyaShield
         public string bubbleStaticTexPath = null;
         public string bubbleRotateTexPath = null;
 
-        public float reflectionRatio = 0;
+        public float reflectionRatio = -1;
 
         public TCP_VanyaShieldExtension()
         {
@@ -27,9 +27,11 @@ namespace AKE_VanyaShield
 
     public class TC_VanyaShieldExtension : ThingComp
     {
-        public bool HideVanillaBubble => Props.hideVanillaBubble;
-
         TCP_VanyaShieldExtension Props => (TCP_VanyaShieldExtension)props;
+        Vanya_ShieldBelt Parent => (Vanya_ShieldBelt)parent;
+
+        public bool HideVanillaBubble => Props.hideVanillaBubble;
+        public float ReflectionRatio => Props.reflectionRatio;
 
         bool bubbleRefreshed = false;
         Material staticBubble = null;
@@ -39,7 +41,9 @@ namespace AKE_VanyaShield
         public override void CompDrawWornExtras()
         {
             if (ModLister.GetActiveModWithIdentifier("Mlie.VanyaShield") == null) return;
-            Vanya_ShieldBelt shield = parent as Vanya_ShieldBelt;
+
+            //有能量而且征召时才显示气泡
+            Vanya_ShieldBelt shield = Parent;
 
             PropertyInfo info = shield.GetType().GetProperty("ShieldState", BindingFlags.NonPublic | BindingFlags.Instance);
             ShieldState shieldState = (ShieldState)info.GetValue(shield);
@@ -69,18 +73,19 @@ namespace AKE_VanyaShield
 
         public override void PostPostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
         {
-            base.PostPostApplyDamage(dinfo, totalDamageDealt);
-            Log.Message($"受到伤害{dinfo.Amount}:{totalDamageDealt}");
+            //Log.Message($"受到伤害{dinfo.Amount}:{totalDamageDealt}");
         }
         /*public override void PostPreApplyDamage(DamageInfo dinfo, out bool absorbed)
         {
             base.PostPreApplyDamage(dinfo, out absorbed);
         }*/
 
-        void RefreshBubbleMaterial()
+        private void RefreshBubbleMaterial()
         {
             if (Props.bubbleStaticTexPath != null) staticBubble = MaterialPool.MatFrom(Props.bubbleStaticTexPath, ShaderDatabase.Transparent);
             if (Props.bubbleRotateTexPath != null) rotateBubble = MaterialPool.MatFrom(Props.bubbleRotateTexPath, ShaderDatabase.Transparent);
         }
+
+        
     }
 }

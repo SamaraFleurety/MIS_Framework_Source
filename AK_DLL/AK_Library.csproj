@@ -315,7 +315,6 @@
     <Compile Include="OpAbility\AbilityEffect\AddHediff\DpsEnhance\HC_DpsEnhance_Melee.cs" />
     <Compile Include="OpAbility\AbilityEffect\AddHediff\Regrow\HC_Regrow.cs" />
     <Compile Include="OpAbility\AbilityEffect\AddHediff\DelayedSelfExplosion\HC_SelfExplosion.cs" />
-    <Compile Include="HarmonyPatch\ExtendProjectileProperties.cs" />
     <Compile Include="Hediff\Comps\HC_ForceColors.cs" />
     <Compile Include="Hediff\Comps\HediffComp_Bandage.cs" />
     <Compile Include="Hediff\Comps\HediffComp_Heal.cs" />

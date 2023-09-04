@@ -274,7 +274,7 @@ namespace AK_DLL
             {
                 foreach (HediffStat i in this.hediffInate)
                 {
-                    AbilityEffect_AddHediff.AddHediff(operator_Pawn, i.hediff, i.part, i.serverity);
+                    AbilityEffect_AddHediff.AddHediff(operator_Pawn, i.hediff, i.part, severity : i.serverity );
                 }
             }
             return hediff;

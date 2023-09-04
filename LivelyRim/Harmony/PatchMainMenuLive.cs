@@ -21,7 +21,6 @@ namespace FS_LivelyRim
         [HarmonyPostfix]
         public static void postfix(UIRoot_Entry __instance)
         {
-            return;
             //初始化。设置里面不可以直接存def，因为读档的时候还没加载def
             if (FS_Tool.defaultModelInstance == null) FS_Utilities.ChangeDefaultModel(DefDatabase<LiveModelDef>.GetNamed(FS_ModSettings.l2dDefname));
             
@@ -66,7 +65,29 @@ namespace FS_LivelyRim
         [HarmonyPostfix]
         public static void postfix()
         {
-            GUI.DrawTexture(new Rect(0,0, 1920, 1080), t);
+            if (t == null) return;
+            int width = Screen.width;
+            int height = Screen.height;
+            int widthRatio = width / 16;
+            int heightRatio = height / 9;
+            if (widthRatio != heightRatio)
+            {
+                //超长屏幕，比如32:9
+                if (widthRatio > heightRatio)
+                {
+                    width = heightRatio * 16;
+                }
+                //超高屏
+                else
+                {
+                    height = widthRatio * 9;
+                }
+            }
+
+            width = (int)(width / Prefs.UIScale);
+            height = (int)(height / Prefs.UIScale);
+
+            GUI.DrawTexture(new Rect(0,0, width, height), t);
         }
     }
 }

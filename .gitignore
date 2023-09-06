@@ -5,3 +5,4 @@
 AK_DLL/AK_Library.csproj
 */bin/*
 */obj/*
+*.pdb

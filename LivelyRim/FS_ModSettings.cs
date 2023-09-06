@@ -18,7 +18,7 @@ namespace FS_LivelyRim
 
         //在商店，主菜单等地方画的l2d的def
         public static LiveModelDef l2dDef = null;
-        public static string l2dDefname;
+        public static string l2dDefname = "AZ_Live_Janus";
 
         public static bool autofillCubismCoreLib = true;
 

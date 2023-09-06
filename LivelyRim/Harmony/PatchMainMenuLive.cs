@@ -17,7 +17,6 @@ namespace FS_LivelyRim
     [HarmonyPatch(typeof(UIRoot_Entry), "DoMainMenu")]
     public class PatchMainMenuLive
     {
-        static GameObject cachedJanus = null;
         [HarmonyPostfix]
         public static void postfix(UIRoot_Entry __instance)
         {

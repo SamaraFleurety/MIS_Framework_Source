@@ -101,6 +101,8 @@ namespace AK_DLL
 				base.DrawHighlight(target);
 			}
         }
+
+
         public override float HighlightFieldRadiusAroundTarget(out bool needLOSToCenter)
         {
 			needLOSToCenter = true;

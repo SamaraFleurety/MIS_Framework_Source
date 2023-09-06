@@ -96,6 +96,11 @@ namespace FS_LivelyRim
         //subfolder前后应该包括'/'
         private static string ModIDtoPath(string modPackageID, string path, string subfolder = "")
         {
+            if (!modPath.ContainsKey(modPackageID.ToLower()))
+            {
+                Log.Error($"FS.L2D Error loading mod with ID {modPackageID}");
+                return null;
+            }
             return modPath[modPackageID.ToLower()] + subfolder + path;
         }
 

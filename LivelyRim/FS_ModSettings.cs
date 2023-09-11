@@ -29,7 +29,7 @@ namespace FS_LivelyRim
             Scribe_Values.Look(ref merchantSideLive, "merchantSide", true);
             Scribe_Values.Look(ref autofillCubismCoreLib, "fillCore", true, true);
             Scribe_Values.Look(ref mainMenuLive, "menuLive", true);
-            Scribe_Values.Look(ref l2dDefname, "l2dDef");
+            Scribe_Values.Look(ref l2dDefname, "l2dDef", "AZ_Live_Janus", true);
         }
 
     }

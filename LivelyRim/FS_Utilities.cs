@@ -48,7 +48,7 @@ namespace FS_LivelyRim
         {
             if (defaultModelInstance == null) return;
 
-            Log.Message("inact");
+            //Log.Message("inact");
             defaultCanvas.SetActive(false);
             defaultModelInstance.SetActive(false);
         }

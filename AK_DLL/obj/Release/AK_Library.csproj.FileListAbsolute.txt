@@ -1,2 +1,0 @@
-C:\Users\fucon\source\repos\AK_DLL_\AK_DLL\obj\Release\AK_Library.csproj.AssemblyReference.cache
-C:\Users\fucon\source\repos\AK_DLL_\AK_DLL\obj\Release\AK_Library.csproj.CoreCompileInputs.cache

@@ -153,7 +153,8 @@ namespace AK_DLL
             //基因
             if (ModLister.BiotechInstalled)
             {
-                operator_Pawn.genes = new Pawn_GeneTracker(operator_Pawn);
+                operator_Pawn.genes.ClearXenogenes();
+                //operator_Pawn.genes = new Pawn_GeneTracker(operator_Pawn);
                 operator_Pawn.genes.SetXenotype(DefDatabase<XenotypeDef>.GetNamed("AK_BaseType"));
             }
             //播放语音

@@ -10,7 +10,7 @@ using RimWorld;
 
 namespace AK_DLL
 {
-    public class GameComponent_MiscData : GameComponent
+    /*public class GameComponent_MiscData : GameComponent
     {
         public GameComponent_MiscData(Game game)
         {
@@ -25,5 +25,5 @@ namespace AK_DLL
         {
             base.ExposeData();
         }
-    }
+    }*/
 }

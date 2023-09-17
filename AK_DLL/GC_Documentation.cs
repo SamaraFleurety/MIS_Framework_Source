@@ -31,6 +31,11 @@ namespace AK_DLL
 
         public int preferedSkin = 1;  //立绘,0是精0, 1是精2, 后面是换装
 
+        public OperatorDocument()
+        {
+            this.skillLevel = new Dictionary<SkillDef, int>();
+            groupedAbilities = new List<HC_Ability>();
+        }
         public OperatorDocument(string defName, Pawn p, Thing weapon, OperatorDef operatorDef) : this()
         {
             this.operatorDef = operatorDef;
@@ -62,10 +67,6 @@ namespace AK_DLL
             apparel.Clear();
         }
 
-        public OperatorDocument() {
-            this.skillLevel = new Dictionary<SkillDef, int>();
-            groupedAbilities = new List<HC_Ability>();
-        }
 
         public string GetUniqueLoadID()
         {

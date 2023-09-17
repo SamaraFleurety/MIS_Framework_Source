@@ -8,6 +8,7 @@ using Verse;
 
 namespace AK_DLL
 {
+    //当前仅用于和弦的，所有人对和弦看法下降。它虽然是个ThoughtWorker，但是和一般的Thought不太一样。
     public class ThoughtWorker_OpinionToOperator : ThoughtWorker
     {
         protected override ThoughtState CurrentSocialStateInternal(Pawn p, Pawn otherPawn)

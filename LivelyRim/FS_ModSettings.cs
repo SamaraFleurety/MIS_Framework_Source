@@ -36,7 +36,7 @@ namespace FS_LivelyRim
 
     public class FS_Mod : Mod
     {
-        FS_ModSettings settings;
+        //FS_ModSettings settings;
 
         LiveModelDef selectedLiveDef
         {
@@ -50,7 +50,7 @@ namespace FS_LivelyRim
 
         public FS_Mod(ModContentPack content) : base(content)
         {
-            settings = GetSettings<FS_ModSettings>();
+            //settings = GetSettings<FS_ModSettings>();
         }
         public override void DoSettingsWindowContents(Rect inRect)
         {

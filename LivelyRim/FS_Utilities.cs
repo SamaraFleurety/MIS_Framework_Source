@@ -55,14 +55,25 @@ namespace FS_LivelyRim
 
         public static GameObject DrawModel(int drawAt, LiveModelDef def, GameObject renderTarget = null)
         {
-            if (defaultModelInstance == null)
+            if (def == null)
             {
-                ChangeDefaultModel(def);
+                Log.Error("[FS.L2D] trying to draw a null live2d def");
+                return null;
             }
-
-            //if (defaultModelInstance.activeInHierarchy) return defaultModelInstance;
-
-            defaultModelInstance.SetModelActive(renderTarget);
+            GameObject model;
+            if (drawAt == DisplayModelAt.MainMenu || drawAt == DisplayModelAt.MerchantRight)
+            {
+                if (defaultModelInstance == null)
+                {
+                    ChangeDefaultModel(def);
+                }
+                defaultModelInstance.SetModelActive(renderTarget);
+                model = defaultModelInstance;
+            }
+            else
+            {
+                model = FS_Tool.InstantiateLive2DModel(def, renderTarget, false, def.defName);
+            }
             //模型的位置是否需要偏移
             if (def.transform.ContainsKey(drawAt))
             {
@@ -72,16 +83,15 @@ namespace FS_LivelyRim
                 {
                     if (modelTransform.location is Vector3 loc)
                     {
-                        defaultModelInstance.transform.position = loc;
+                        model.transform.position = loc;
                     }
                     if (modelTransform.rotation is Vector3 rot)
                     {
-                        defaultModelInstance.transform.rotation = Quaternion.Euler(rot);
+                        model.transform.rotation = Quaternion.Euler(rot);
                     }
                 }
             }
-
-            return defaultModelInstance;
+            return model;
         }
 
         /// <summary>

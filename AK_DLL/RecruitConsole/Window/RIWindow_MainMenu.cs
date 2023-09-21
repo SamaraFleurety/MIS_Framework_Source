@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Verse;
-using RimWorld;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -348,12 +344,12 @@ namespace AK_DLL
                 DrawStand();
             });
             temp.transform.GetChild(1).GetComponent<Button>().onClick.AddListener(delegate
-           {
-               Vector3 v3 = SecretaryLoc;
-               v3.y -= SecretaryLocSensetive;
-               SecretaryLoc = v3;
-               DrawStand();
-           });
+            {
+                Vector3 v3 = SecretaryLoc;
+                v3.y -= SecretaryLocSensetive;
+                SecretaryLoc = v3;
+                DrawStand();
+            });
             temp.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(delegate
             {
                 Vector3 v3 = SecretaryLoc;
@@ -400,23 +396,13 @@ namespace AK_DLL
                 OpStand.SetActive(true);
                 GameObject opStandObj = GameObject.Find("OpStand");
                 AK_Tool.DrawStaticOperatorStand(SecretaryDef, preferredSkin, opStandObj, SecretaryLoc);
-
-                /*Image opStand = opStandObj.GetComponent<Image>();
-                Vector3 opStandLoc = SecretaryLoc;
-                Texture2D tex;
-
-                if (preferredSkin == 0) tex = ContentFinder<Texture2D>.Get(SecretaryDef.commonStand, false);
-                else if (preferredSkin == 1) tex = ContentFinder<Texture2D>.Get(SecretaryDef.stand, false);
-                else tex = ContentFinder<Texture2D>.Get(SecretaryDef.fashion[preferredSkin - 2], false);
-
-                opStand.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
-                opStandObj.transform.localPosition = new Vector3(opStandLoc.x, opStandLoc.y);
-                opStandObj.transform.localScale = new Vector3(opStandLoc.z, opStandLoc.z, opStandLoc.z);*/
             }
             else
             {
                 OpL2D.SetActive(true);
-                L2DInstance =  AK_Tool.DrawLive2DOperatorStand(SecretaryDef, preferredSkin, OpL2D);
+                //L2DInstance =  AK_Tool.DrawLive2DOperatorStand(SecretaryDef, preferredSkin, OpL2D);
+                L2DInstance = FS_Utilities.DrawModel(DisplayModelAt.RIWMain, SecretaryDef.live2dModel[preferredSkin - 1000], OpL2D);
+                L2DInstance.transform.position = SecretaryLoc;
             }
         }
         //FIXME 没做

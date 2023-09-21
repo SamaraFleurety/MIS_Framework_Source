@@ -1,7 +1,4 @@
-﻿using System;
-using Verse;
-using RimWorld.Planet;
-using System.Text;
+﻿using Verse;
 using RimWorld;
 using UnityEngine;
 using UnityEngine.UI;
@@ -685,8 +682,12 @@ namespace AK_DLL
                 {
                     windowPurpose = OpDetailType.Recruit;
                     AK_ModSettings.secretary = AK_Tool.GetOperatorIDFrom(Def.defName);
-                    AK_ModSettings.secretaryLoc = TypeDef.defaultSecLoc;
                     AK_ModSettings.secretarySkin = preferredSkin;
+                    if (preferredSkin < 1000)
+                    {
+                        AK_ModSettings.secretaryLoc = TypeDef.defaultSecLoc;
+                    }
+                    else AK_ModSettings.secretaryLoc = TypeDef.defaultSecLocLive;
                     this.Close(false);
                     RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
                 });
@@ -789,7 +790,8 @@ namespace AK_DLL
                 OpL2D.SetActive(true);
                 FS_Tool.SetDefaultCanvas(false);
                 //GameObject renderTarget =  GameObject.Find("OpL2DRenderTargetName");
-                L2DInstance =  AK_Tool.DrawLive2DOperatorStand(Def, preferredSkin, OpL2D);
+                //L2DInstance =  AK_Tool.DrawLive2DOperatorStand(Def, preferredSkin, OpL2D);
+                L2DInstance = FS_Utilities.DrawModel(DisplayModelAt.RIWDetail, Def.live2dModel[preferredSkin - 1000], OpL2D);
             }
         }
 

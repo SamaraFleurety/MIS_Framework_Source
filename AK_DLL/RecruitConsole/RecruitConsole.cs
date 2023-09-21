@@ -24,6 +24,7 @@ namespace AK_DLL
                 yield return new FloatMenuOption("AK_PawnNull".Translate(), null); yield break;
             }
 
+            //换装,没写完
             OperatorDocument doc = selPawn.GetDoc();
             if (doc != null && doc.operatorDef.clothSet != null && doc.operatorDef.clothSet.Count > 0)
             {
@@ -35,6 +36,7 @@ namespace AK_DLL
                 );
             }
 
+            //可以招募
             if (compRefuelable.Fuel >= 0.1)
             {
                 yield return new FloatMenuOption("AK_CanReach".Translate(),

@@ -24,19 +24,19 @@ namespace FS_LivelyRim
 
         public override void ExposeData()
         {
-            base.ExposeData();
             Scribe_Values.Look(ref debugOverride, "dOverride", false);
             Scribe_Values.Look(ref merchantSideLive, "merchantSide", true);
             Scribe_Values.Look(ref autofillCubismCoreLib, "fillCore", true, true);
             Scribe_Values.Look(ref mainMenuLive, "menuLive", true);
             Scribe_Values.Look(ref l2dDefname, "l2dDef", "AZ_Live_Janus", true);
+            base.ExposeData();
         }
 
     }
 
     public class FS_Mod : Mod
     {
-        //FS_ModSettings settings;
+        FS_ModSettings settings;
 
         LiveModelDef selectedLiveDef
         {
@@ -50,7 +50,7 @@ namespace FS_LivelyRim
 
         public FS_Mod(ModContentPack content) : base(content)
         {
-            //settings = GetSettings<FS_ModSettings>();
+            settings = GetSettings<FS_ModSettings>();
         }
         public override void DoSettingsWindowContents(Rect inRect)
         {

@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Reflection;
 using Verse;
-using RimWorld;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using UnityEngine.Rendering;
 using Live2D.Cubism.Core;
 using Live2D.Cubism.Rendering;
-using Live2D.Cubism.Rendering.Masking;
 using Live2D.Cubism.Framework.Physics;
 using Live2D.Cubism.Framework.Json;
 using System.IO;
@@ -192,7 +187,7 @@ namespace FS_LivelyRim
         /// <param name="JsonPath"></param>
         public static void LoadRigtoModel(GameObject Live2DModel, string modPackageID, string JsonPath)
         {
-            CubismPhysics3Json physics3Json = LitJson.JsonMapper.ToObject<CubismPhysics3Json>(LoadJson(modPackageID, JsonPath));
+            CubismPhysics3Json physics3Json = JsonMapper.ToObject<CubismPhysics3Json>(LoadJson(modPackageID, JsonPath));
 
             CubismPhysicsController physicsController = Live2DModel.GetComponent<CubismPhysicsController>();
 
@@ -271,12 +266,12 @@ namespace FS_LivelyRim
         /// <param name="ModID"> 模型MOD的PackageID </param>
         /// <param name="modelPath"> L2D模型在AB包中的路径和名字 </param>
         /// <param name="rigJsonPath"> [可选]L2D模型在Json文件夹中的路径和名字 </param>
-        /// <param name="renderTargetName"> [可选，带默认值] 希望把L2D模型渲染在哪个游戏物体上。自定义游戏物体必须带有UnityEngine.UI.Image组件，且Spirit需要留空。
+        /// <param name="renderTarget"> [可选，带默认值] 希望把L2D模型渲染在哪个游戏物体上。自定义游戏物体必须带有UnityEngine.UI.Image组件，且Spirit需要留空。
         ///                                                  默认会实例化一个符合条件的内置的prefab。</param>
         /// <param name="eyeFollowMouse">[默认为是]模型是否带有眼睛和头的追踪功能</param>
         /// <param name="eyeFollowTarget">[可选，带默认值]如果有头眼追踪功能，追踪的物体。默认是跟随鼠标，并且有速度限制。</param>
         /// <returns>返回完成以上处理的游戏物体，如果有其他需求可自行更改。</returns>
-        public static GameObject InstantiateLive2DModel(AssetBundle assetBundle, string ModID, string modelPath, string rigJsonPath = null, GameObject renderTargetName = null, bool eyeFollowMouse = true, GameObject eyeFollowTarget = null)
+        public static GameObject InstantiateLive2DModel(AssetBundle assetBundle, string ModID, string modelPath, string rigJsonPath = null, GameObject renderTarget = null, bool eyeFollowMouse = true, GameObject eyeFollowTarget = null)
         {
             //不允许传入空ab包
             if (assetBundle == null)
@@ -286,12 +281,12 @@ namespace FS_LivelyRim
             }
 
             //GameObject renderTarget = GameObject.Find("L2DRenderTarget");
-            if (renderTargetName == null)
+            if (renderTarget == null)
             {
-                renderTargetName = SetDefaultCanvas(true);
+                renderTarget = SetDefaultCanvas(true);
             }
 
-            GameObject l2dIns = LoadModelfromAB(assetBundle, modelPath, renderTargetName);
+            GameObject l2dIns = LoadModelfromAB(assetBundle, modelPath, renderTarget);
 
             //没能成功从ab包加载模型
             if (l2dIns == null)
@@ -336,6 +331,7 @@ namespace FS_LivelyRim
 
         /// <summary>
         /// 从LiveModelDef，快捷地加载并返回一个实例化模型。
+        ///     如果之前已经加载过，就从缓存里面读取。
         /// </summary>
         /// <param name="def">l2d的def</param>
         /// <param name="setAsDefault">设置为本框架渲染主菜单l2d和商人界面l2d时默认使用的模型</param>
@@ -347,11 +343,11 @@ namespace FS_LivelyRim
             if (modelID != null && TypeDef.cachedL2DModel.ContainsKey(modelID))
             {
                 l2dInstance = TypeDef.cachedL2DModel[modelID];
-                if (l2dInstance != null) return l2dInstance;
+                if (l2dInstance != null) goto EndInstantiate;
             }
 
             AssetBundle ab = FS_Tool.LoadAssetBundle(def.modID, def.assetBundle);
-            l2dInstance = FS_Tool.InstantiateLive2DModel(ab, def.modID, def.modelName, rigJsonPath: def.rigJsonPath, renderTargetName: renderTarget, eyeFollowMouse: def.eyeFollowMouse);
+            l2dInstance = FS_Tool.InstantiateLive2DModel(ab, def.modID, def.modelName, rigJsonPath: def.rigJsonPath, renderTarget: renderTarget, eyeFollowMouse: def.eyeFollowMouse);
             
             if (l2dInstance == null)
             {
@@ -371,6 +367,14 @@ namespace FS_LivelyRim
                 else TypeDef.cachedL2DModel.Add(modelID, l2dInstance);
             }
 
+            if (true)
+            {
+                l2dInstance.GetComponent<CubismRenderController>().SortingMode = CubismSortingMode.BackToFrontZ;
+                l2dInstance.GetComponent<CubismRenderController>().SortingMode = CubismSortingMode.BackToFrontOrder;
+            }
+
+        EndInstantiate:
+            l2dInstance.SetModelActive(renderTarget);
             return l2dInstance;
         }
 

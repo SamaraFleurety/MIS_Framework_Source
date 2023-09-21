@@ -4,11 +4,7 @@ using System.Linq;
 using RimWorld;
 using UnityEngine;
 using Verse;
-using Live2D.Cubism.Core;
-using System.Reflection;
-using Live2D.Cubism.Framework.Json;
 using UnityEngine.UI;
-using FS_LivelyRim;
 
 namespace AK_DLL
 {
@@ -191,7 +187,7 @@ namespace AK_DLL
 
         }
 
-        public static GameObject DrawLive2DOperatorStand(OperatorDef def, int l2dOrder, GameObject renderTarget, Vector3? offset = null)
+        /*public static GameObject DrawLive2DOperatorStand(OperatorDef def, int l2dOrder, GameObject renderTarget, Vector3? offset = null)
         {
             if (ModLister.GetActiveModWithIdentifier("FS.LivelyRim") == null)
             {
@@ -214,14 +210,14 @@ namespace AK_DLL
             {
                 LiveModelDef l2dDef = def.live2dModel[l2dOrder];
                 AssetBundle ab = FS_Tool.LoadAssetBundle(l2dDef.modID, l2dDef.assetBundle);
-                L2DInstance = FS_Tool.InstantiateLive2DModel(ab, l2dDef.modID, l2dDef.modelName, rigJsonPath: l2dDef.rigJsonPath, renderTargetName: renderTarget, eyeFollowMouse : l2dDef.eyeFollowMouse);
+                L2DInstance = FS_Tool.InstantiateLive2DModel(ab, l2dDef.modID, l2dDef.modelName, rigJsonPath: l2dDef.rigJsonPath, renderTarget: renderTarget, eyeFollowMouse : l2dDef.eyeFollowMouse);
                 if (true) //给mod设置预留
                 {
                     TypeDef.cachedLive2DModels.Add(l2dDef.modelName, L2DInstance);
                 }
             }
             return L2DInstance;
-        }
+        }*/
 
         //我真的不知道为什么这个ev system过一会自己就会变null。
         public static void setEV(bool value)

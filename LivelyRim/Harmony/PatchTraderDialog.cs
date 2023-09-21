@@ -46,7 +46,7 @@ namespace FS_LivelyRim
             if (!FS_ModSettings.merchantSideLive) return;
             FS_Utilities.SetDefaultModelInActive();
             //cachedJanus.SetActive(false);
-            Log.Message("mect close");
+            //Log.Message("mect close");
         }
     }
 }

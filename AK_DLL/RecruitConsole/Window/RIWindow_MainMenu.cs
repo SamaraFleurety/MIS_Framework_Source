@@ -246,6 +246,7 @@ namespace AK_DLL
         {
             base.Initialize();
 
+            FS_Tool.SetDefaultCanvas(false);
             OpStand = GameObject.Find("OpStand");
             OpL2D = GameObject.Find("L2DRenderTarget");
         }

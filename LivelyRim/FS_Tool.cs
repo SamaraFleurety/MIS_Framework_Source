@@ -285,6 +285,10 @@ namespace FS_LivelyRim
             {
                 renderTarget = SetDefaultCanvas(true);
             }
+            else
+            {
+                SetDefaultCanvas(false);
+            }
 
             GameObject l2dIns = LoadModelfromAB(assetBundle, modelPath, renderTarget);
 

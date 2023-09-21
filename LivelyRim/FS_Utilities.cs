@@ -53,6 +53,13 @@ namespace FS_LivelyRim
             defaultModelInstance.SetActive(false);
         }
 
+        /// <summary>
+        /// 给定live def和渲染目标，返回实例化的模型以备后处理。
+        /// </summary>
+        /// <param name="drawAt"></param>
+        /// <param name="def"></param>
+        /// <param name="renderTarget"></param>
+        /// <returns></returns>
         public static GameObject DrawModel(int drawAt, LiveModelDef def, GameObject renderTarget = null)
         {
             if (def == null)
@@ -90,6 +97,11 @@ namespace FS_LivelyRim
                         model.transform.rotation = Quaternion.Euler(rot);
                     }
                 }
+            }
+            else
+            {
+                model.transform.position = new Vector3(10000, -10, 10000);
+                model.transform.rotation = Quaternion.Euler(90, 0, 0);
             }
             return model;
         }

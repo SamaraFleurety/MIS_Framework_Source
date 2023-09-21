@@ -48,6 +48,7 @@ namespace AK_DLL
             Scribe_Values.Look(ref ratio, "ratio");
             Scribe_Values.Look(ref debugOverride, "dOverride", false);
             Scribe_Values.Look(ref secretary, "secretary", "Amiya", true);
+            Scribe_Values.Look(ref secretarySkin, "secSkin", 1);
             Scribe_Values.Look(ref secretaryLoc, "secLoc", new Vector3(400, 0, 1), true);
             Scribe_Values.Look(ref secLocSensitive, "secSense", 1, true);
             //Scribe_Collections.Look(ref exampleListOfPawns, "exampleListOfPawns", LookMode.Reference);
@@ -57,11 +58,11 @@ namespace AK_DLL
 
     public class AK_Mod : Mod
     {
-        AK_ModSettings settings;
+        public AK_ModSettings settings;
 
         public AK_Mod(ModContentPack content) : base(content)
         {
-            this.settings = GetSettings<AK_ModSettings>();
+            settings = GetSettings<AK_ModSettings>();
         }
 
         public override void DoSettingsWindowContents(Rect inRect)

@@ -688,6 +688,10 @@ namespace AK_DLL
                         AK_ModSettings.secretaryLoc = TypeDef.defaultSecLoc;
                     }
                     else AK_ModSettings.secretaryLoc = TypeDef.defaultSecLocLive;
+
+                    AK_ModSettings settings = LoadedModManager.GetMod<AK_Mod>().settings;
+                    settings.Write();
+
                     this.Close(false);
                     RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
                 });

@@ -134,7 +134,8 @@ namespace AK_DLL
         {
             currentlyGenerating = true;
 
-            operator_Pawn = PawnGenerator.GeneratePawn(PawnKindDefOf.Colonist, Faction.OfPlayer);
+            //operator_Pawn = PawnGenerator.GeneratePawn(new pa PawnKindDefOf.Colonist, Faction.OfPlayer, ge);
+            operator_Pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(PawnKindDefOf.Colonist, Faction.OfPlayer, forcedXenotype: DefDatabase<XenotypeDef>.GetNamed("AK_BaseType")));
             Hediff_Operator hediff = Recruit_Hediff();
 
             Recruit_PersonalStat();
@@ -153,7 +154,7 @@ namespace AK_DLL
             {
                 operator_Pawn.genes.ClearXenogenes();
                 //operator_Pawn.genes = new Pawn_GeneTracker(operator_Pawn);
-                operator_Pawn.genes.SetXenotype(DefDatabase<XenotypeDef>.GetNamed("AK_BaseType"));
+                //operator_Pawn.genes.SetXenotype(DefDatabase<XenotypeDef>.GetNamed("AK_BaseType"));
             }
             //播放语音
             this.voicePackDef.recruitSound.PlaySound();

@@ -33,8 +33,11 @@ namespace AK_DLL
         {
             try
             {
+                if (AK_ModSettings.debugOverride) Log.Message("AK loading series");
                 RIWindowHandler.LoadOperatorSeries();
+                if (AK_ModSettings.debugOverride) Log.Message("AK loading classes");
                 RIWindowHandler.LoadOperatorClasses();
+                if (AK_ModSettings.debugOverride) Log.Message("AK loading operators");
                 RIWindowHandler.AutoFillOperators();
 
                 InitializeUI();

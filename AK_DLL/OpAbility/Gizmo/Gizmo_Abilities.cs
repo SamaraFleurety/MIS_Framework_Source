@@ -9,6 +9,8 @@ namespace AK_DLL
 {
     public class Command_Abilities : Command_VerbTarget
     {
+        public OperatorAbilityDef abilityDef;
+        public Pawn pawn;
         public override Color IconDrawColor
         {
             get
@@ -33,8 +35,6 @@ namespace AK_DLL
         {
             get { return this.abilityDef.targetMode; }
         }
-        public OperatorAbilityDef abilityDef;
-        public Pawn pawn;
 
         public override void DrawIcon(Rect rect, Material buttonMat, GizmoRenderParms parms)
         {

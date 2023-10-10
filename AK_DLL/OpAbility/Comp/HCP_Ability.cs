@@ -159,8 +159,8 @@ namespace AK_DLL
             verb_var.verbProps = verbProp;
             verb_var.verbTracker = new VerbTracker(this.Document.pawn);
             verb_var.ability = this.AbilityDef;
-            verb_var.i = num;
-            verb_var.CDs = this.CDandCharges;
+            verb_var.i = num;  //这玩意儿干嘛的？
+            verb_var.CDs = this.CDandCharges; //fixme：这有必要开个字段吗？
             return verb_var;
             /*if (isntReclaim)
             {

@@ -263,7 +263,7 @@ namespace AK_DLL
             }
 
             HediffDef hediffDef = HediffDef.Named("AK_Operator");
-            fixAlienHairColor(hediffDef);
+            FixAlienHairColor(hediffDef);
             
             Hediff_Operator hediff = HediffMaker.MakeHediff(hediffDef, operator_Pawn, operator_Pawn.health.hediffSet.GetBrain()) as Hediff_Operator;
 
@@ -279,7 +279,7 @@ namespace AK_DLL
             }
             return hediff;
         }
-        protected void fixAlienHairColor(HediffDef hediffDef)
+        protected void FixAlienHairColor(HediffDef hediffDef)
         {
             //修复外星人会改发色的问题
             if (ModLister.GetActiveModWithIdentifier("erdelf.HumanoidAlienRaces") != null)
@@ -386,7 +386,8 @@ namespace AK_DLL
                     return null;
                 }
                 weapon = (ThingWithComps)ThingMaker.MakeThing(this.weapon);
-                weapon.GetComp<CompBiocodable>().CodeFor(operator_Pawn);
+                CompBiocodable comp = weapon.GetComp<CompBiocodable>();
+                if (comp != null) comp.CodeFor(operator_Pawn);
                 operator_Pawn.equipment.AddEquipment(weapon);
             }
             return weapon;

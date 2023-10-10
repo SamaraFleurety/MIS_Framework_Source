@@ -138,23 +138,30 @@ namespace AK_DLL
         {
             foreach (OperatorClassDef i in DefDatabase<OperatorClassDef>.AllDefs)
             {
-                int tempOrder = 10000001;
-                if (i.sortingOrder >= 10000000)
+                try
                 {
-                    Log.Error(i.label.Translate() + "'s sorting order must lower than 10000000");
+                    int tempOrder = 10000001;
+                    if (i.sortingOrder >= 10000000)
+                    {
+                        Log.Error(i.label.Translate() + "'s sorting order must lower than 10000000");
+                    }
+                    else if (operatorClasses.ContainsKey(i.sortingOrder))
+                    {
+                        Log.Error(i.label.Translate() + "has duplicate loading order with" + operatorClasses[i.sortingOrder].defName);
+                        i.sortingOrder = tempOrder;
+                        operatorClasses.Add(tempOrder, i);
+                        tempOrder++;
+                    }
+                    else
+                    {
+                        operatorClasses.Add(i.sortingOrder, i);
+                    }
+                    i.series.includedClasses.Add(i.sortingOrder);
                 }
-                else if (operatorClasses.ContainsKey(i.sortingOrder))
+                catch
                 {
-                    Log.Error(i.label.Translate() + "has duplicate loading order with" + operatorClasses[i.sortingOrder].defName);
-                    i.sortingOrder = tempOrder;
-                    operatorClasses.Add(tempOrder, i);
-                    tempOrder++;
+                    Log.Error($"AK. Failed loading class def named {i.defName}");
                 }
-                else
-                {
-                    operatorClasses.Add(i.sortingOrder, i);
-                }
-                i.series.includedClasses.Add(i.sortingOrder);
             }
             if (operatorClasses.Count >= 1)
             {

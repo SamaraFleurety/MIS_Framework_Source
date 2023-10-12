@@ -122,7 +122,6 @@ namespace AK_DLL
         }*/
     #endregion
 
-    [HotSwappable]
     public class RIWindow_OperatorList : RIWindow
     {
 #region 属性，字段，快捷属性

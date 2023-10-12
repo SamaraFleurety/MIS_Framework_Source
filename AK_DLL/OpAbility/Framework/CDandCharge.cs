@@ -6,6 +6,7 @@ using Verse;
 
 namespace AK_DLL
 {
+    //此CD逻辑统一为：初始CD = MaxCD, 每tick - 1，到0时增加1Charge
     public class CDandCharge : IExposable
     {
         public CDandCharge()

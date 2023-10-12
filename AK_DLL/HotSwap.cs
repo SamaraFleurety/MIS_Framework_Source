@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace AK_DLL
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
+    /*[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
     public class HotSwappableAttribute : Attribute
     {
-    }
+    }*/
 }

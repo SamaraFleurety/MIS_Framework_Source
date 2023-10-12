@@ -43,7 +43,7 @@ namespace AK_DLL
         }
         public HCP_Ability Props => new HCP_Ability();
         public int MaxSummon = 0;
-        Command_Abilities ability_Command = null;
+        Command_AKAbility ability_Command = null;
         public void Summon()
         {
             this.summoned++;
@@ -97,8 +97,8 @@ namespace AK_DLL
         }
         private void InitGizmo()
         {
-            this.ability_Command = new Command_Abilities();
-            ability_Command.parent = this;
+            this.ability_Command = new Command_AKAbility();
+            ability_Command.parentHC = this;
             ability_Command.defaultLabel = AbilityDef.label;
             ability_Command.defaultDesc = AbilityDef.description;
             ability_Command.verb = this.GetVerb(AbilityDef.verb, 0, true);
@@ -150,7 +150,7 @@ namespace AK_DLL
             {
                 ability_Command.disabled = false;
             }
-            return new List<Gizmo>() { this.ability_Command };
+            yield return ability_Command;
         }
         public Verb GetVerb(VerbProperties verbProp, int num, bool isntReclaim)
         {

@@ -7,7 +7,7 @@ using Unity;
 
 namespace AK_DLL
 {
-    public class Command_Abilities : Command_VerbTarget
+    public class Command_AKAbility : Command_VerbTarget
     {
         public OperatorAbilityDef abilityDef;
         public Pawn pawn;
@@ -19,15 +19,17 @@ namespace AK_DLL
             }
         }
 
-        public HC_Ability parent;
+        public AKAbility parent;
+
+        public HC_Ability parentHC;
         public bool Toggled
         {
-            get { return this.parent.autoCast; }
-            set { this.parent.autoCast = value; }
+            get { return this.parentHC.autoCast; }
+            set { this.parentHC.autoCast = value; }
         }
         public CDandCharge CDs
         {
-            get { return this.parent.CDandCharges; }
+            get { return this.parentHC.CDandCharges; }
         }
 
         //public bool needTarget = true;
@@ -68,6 +70,7 @@ namespace AK_DLL
             return false;
         }
         //按下按钮后，在这个方法执行目标输入
+        //fixme:改为akability的子类
         public override void ProcessInput(Event ev)
         {
             switch (this.targetMode)
@@ -79,7 +82,7 @@ namespace AK_DLL
                     this.verb.TryStartCastOn(new LocalTargetInfo(this.pawn), new LocalTargetInfo(this.pawn));
                     break;
                 case TargetMode.AutoEnemy:
-                    this.parent.autoCast = !this.parent.autoCast;
+                    this.parentHC.autoCast = !this.parentHC.autoCast;
                     break;
                 default:
                     break;

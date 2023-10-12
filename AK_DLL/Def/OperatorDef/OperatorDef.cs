@@ -69,6 +69,8 @@ namespace AK_DLL
 
         public float ticketCost = 1f;
 
+        public XenotypeDef xenoType;
+
         #endregion
 
         #region 快捷属性
@@ -135,7 +137,7 @@ namespace AK_DLL
             currentlyGenerating = true;
 
             //operator_Pawn = PawnGenerator.GeneratePawn(new pa PawnKindDefOf.Colonist, Faction.OfPlayer, ge);
-            operator_Pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(PawnKindDefOf.Colonist, Faction.OfPlayer, forcedXenotype: DefDatabase<XenotypeDef>.GetNamed("AK_BaseType")));
+            operator_Pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(PawnKindDefOf.Colonist, Faction.OfPlayer, forcedXenotype: xenoType));
             Hediff_Operator hediff = Recruit_Hediff();
 
             Recruit_PersonalStat();

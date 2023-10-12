@@ -8,6 +8,12 @@ namespace AK_DLL
 {
     public abstract class AbilityEffectBase
     {
+        public virtual void DoEffect_All(Pawn caster, LocalTargetInfo targetInfo)
+        {
+            Pawn target = targetInfo.Pawn;
+            if (target != null) DoEffect_Pawn(caster, target);
+            DoEffect_IntVec(targetInfo.Cell, caster.Map, caster);
+        }
 
         public virtual void DoEffect_Pawn(Pawn user, Thing target)
         { 

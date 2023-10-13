@@ -4,13 +4,12 @@ using System.Linq;
 using UnityEngine;
 using Verse;
 using Unity;
-using AKA_Ability;
 
-namespace AK_DLL
+namespace AKA_Ability
 {
     public class Command_AKAbility : Command_VerbTarget
     {
-        public OperatorAbilityDef abilityDef;
+        /*public OperatorAbilityDef abilityDef;
         public Pawn pawn;
         public override Color IconDrawColor
         {
@@ -22,7 +21,7 @@ namespace AK_DLL
 
         public AKAbility parent;
 
-        public HC_Ability parentHC;
+        //public HC_Ability parentHC;
         public bool Toggled
         {
             get { return this.parentHC.autoCast; }
@@ -107,12 +106,12 @@ namespace AK_DLL
                 }
             }*/
         }
-
+    /*
         private float width(float rect_heiget)
         {
             float percentage = (float)this.CDs.CD / (float)this.CDs.maxCD;
             return rect_heiget * percentage;
         }
 
-    }
+    }*/
 }

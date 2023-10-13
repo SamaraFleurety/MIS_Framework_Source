@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{92CFB99E-4D93-47F2-A4AD-DD0668EFE739}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AKA_Ability</RootNamespace>
+    <AssemblyName>AKA_Ability</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>..\AK_DLL\bin\Debug\0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\AK_DLL\bin\Debug\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UnityEngine">
+      <HintPath>..\AK_DLL\bin\Debug\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\AK_DLL\bin\Debug\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>..\AK_DLL\bin\Debug\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AbilityEffect\AbilityEffectBase.cs" />
+    <Compile Include="AbilityEffect\AddHediff\AbilityEffect_AddHediff.cs" />
+    <Compile Include="AbilityEffect\AddHediff\DelayedBloodLoss\AE_DelayedBloodLoss.cs" />
+    <Compile Include="AbilityEffect\AddHediff\DelayedBloodLoss\HCP_BloodLoss.cs" />
+    <Compile Include="AbilityEffect\AddHediff\DelayedBloodLoss\HC_BloodLoss.cs" />
+    <Compile Include="AbilityEffect\AddHediff\DelayedSelfExplosion\AE_DelayedSelfExplosion.cs" />
+    <Compile Include="AbilityEffect\AddHediff\DelayedSelfExplosion\HCP_SelfExplosion.cs" />
+    <Compile Include="AbilityEffect\AddHediff\DelayedSelfExplosion\HC_SelfExplosion.cs" />
+    <Compile Include="AbilityEffect\AddHediff\DpsEnhance\AE_DpsEnhance_Melee.cs" />
+    <Compile Include="AbilityEffect\AddHediff\DpsEnhance\AE_DpsEnhance_Ranged.cs" />
+    <Compile Include="AbilityEffect\AddHediff\DpsEnhance\HCP_DpsEnhance_Melee.cs" />
+    <Compile Include="AbilityEffect\AddHediff\DpsEnhance\HCP_DpsEnhance_Ranged.cs" />
+    <Compile Include="AbilityEffect\AddHediff\DpsEnhance\HC_DpsEnhance_Melee.cs" />
+    <Compile Include="AbilityEffect\AddHediff\DpsEnhance\HC_DpsEnhance_Ranged.cs" />
+    <Compile Include="AbilityEffect\AddHediff\Regrow\AE_Regrow.cs" />
+    <Compile Include="AbilityEffect\AddHediff\Regrow\HCP_Regrow.cs" />
+    <Compile Include="AbilityEffect\AddHediff\Regrow\HC_Regrow.cs" />
+    <Compile Include="AbilityEffect\AE_ShootProjectile.cs" />
+    <Compile Include="AbilityEffect\Effect\AbilityEffect_DisableAttack.cs" />
+    <Compile Include="AbilityEffect\Effect\AbilityEffect_Heal.cs" />
+    <Compile Include="AbilityEffect\Effect\AbilityEffect_ReclaimSummoned.cs" />
+    <Compile Include="AbilityEffect\Effect\AbilityEffect_Summon.cs" />
+    <Compile Include="AbilityEffect\Effect\AbilityEffect_Trap.cs" />
+    <Compile Include="Framework\AbilityInstance\AKAbility.cs" />
+    <Compile Include="Framework\AbilityInstance\AKAbility_SelfTarget.cs" />
+    <Compile Include="Framework\AbilityInstance\AKAbility_Toggle.cs" />
+    <Compile Include="Framework\AbilityInstance\AKAbility_VerbTarget.cs" />
+    <Compile Include="Framework\AKAbility_Tracker.cs" />
+    <Compile Include="Framework\CDandCharge.cs" />
+    <Compile Include="OpAbility\Gizmo\Gizmo_Abilities.cs" />
+    <Compile Include="OpAbilityDef.cs" />
+    <Compile Include="OpAbility\Verb\Verb_Ability.cs" />
+    <Compile Include="OpAbility\Verb\Verb_AbilityTargeting.cs" />
+    <Compile Include="OpAbility\Verb\Verb_Reclaim.cs" />
+    <Compile Include="TypeDef.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

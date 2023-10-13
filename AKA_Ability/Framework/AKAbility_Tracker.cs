@@ -6,11 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Verse;
 
-namespace AK_DLL
+namespace AKA_Ability
 {
-    public class AKAbility_Container : IExposable
+    public class AKAbility_Tracker : IExposable
     {
-        public OperatorDocument doc;
+        public Pawn owner;
 
         public int indexActiveGroupedAbility = 0;
 
@@ -33,9 +33,24 @@ namespace AK_DLL
             if (groupedAbilities.Count > 0)  yield return groupedAbilities[indexActiveGroupedAbility].GetGizmo();
         }
 
-        public void ExposeData()
+        public virtual void ExposeData()
         {
-            throw new NotImplementedException();
+            Scribe_References.Look(ref owner, "p");
+            Scribe_Values.Look(ref indexActiveGroupedAbility, "indexAGA");
+
+            Scribe_Collections.Look(ref innateAbilities, "iA", LookMode.Deep);
+            Scribe_Collections.Look(ref groupedAbilities, "gA", LookMode.Deep);
+
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                foreach (AKAbility i in innateAbilities) i.container = this;
+                foreach (AKAbility j in groupedAbilities) j.container = this;
+            }
+        }
+
+        public virtual void PostPlayAbilitySound(AKAbility ability)
+        {
+
         }
     }
 }

@@ -91,6 +91,7 @@ namespace AK_DLL
         Alphabet,
         Tail,
     }
+    [Obsolete]
     public enum AbilityType : Byte
     {
         Summon,//召唤
@@ -99,6 +100,7 @@ namespace AK_DLL
         Heal,//治疗
         Reclaim//回收
     }
+    [Obsolete]
     public enum TargetMode : Byte
     {
         Single = 0,
@@ -118,6 +120,7 @@ namespace AK_DLL
         rSecond = 60       //现实中的1秒
     }
 
+    [Obsolete]
     public enum SFXType : Byte
     {
         atk = 0,
@@ -126,6 +129,7 @@ namespace AK_DLL
         tact
     }
 
+    [Obsolete]
     public enum RegrowType : Byte
     {
         replace = 0, //覆盖模式，无条件覆盖

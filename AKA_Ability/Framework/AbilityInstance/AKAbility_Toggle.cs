@@ -6,17 +6,15 @@ using System.Text;
 using System.Threading.Tasks;
 using Verse;
 
-namespace AK_DLL
+namespace AKA_Ability
 {
     public class AKAbility_Toggle : AKAbility
     {
-        private Command_Toggle cachedGizmo = null;
-
         private bool AutoCast = false;
 
         private LocalTargetInfo Target => CasterPawn.TargetCurrentlyAimingAt;
 
-        public AKAbility_Toggle(OperatorAbilityDef def) : base(def)
+        public AKAbility_Toggle(OpAbilityDef def) : base(def)
         {
         }
 
@@ -25,27 +23,22 @@ namespace AK_DLL
             base.Tick();
             if (AutoCast)
             {
-                if (AutoCast && CoolDown.charge >= 1 && Find.TickManager.TicksGame % 180 == 0)
+                if (AutoCast && cooldown.charge >= 1 && Find.TickManager.TicksGame % 180 == 0)
                 {
                     if (!CasterPawn.Drafted || Target == null) return;
                     //this.ability_Command.verb.TryStartCastOn(new LocalTargetInfo(this.Document.pawn), target); 
                     foreach (AbilityEffectBase compEffect in this.def.compEffectList)
                     {
-                        compEffect.DoEffect_Pawn(CasterPawn, Target.Pawn);
-                        compEffect.DoEffect_IntVec(Target.Cell, CasterPawn.Map, CasterPawn);
+                        compEffect.DoEffect_All(CasterPawn, CasterPawn.TargetCurrentlyAimingAt);
+                        /*compEffect.DoEffect_Pawn(CasterPawn, Target.Pawn);
+                        compEffect.DoEffect_IntVec(Target.Cell, CasterPawn.Map, CasterPawn);*/
                     }
                     UseOneCharge();
                 }
             }
         }
 
-        public override Gizmo GetGizmo()
-        {
-            if (cachedGizmo == null) InitializeGizmo();
-            return cachedGizmo;
-        }
-
-        private void InitializeGizmo()
+        protected override void InitializeGizmo()
         {
             cachedGizmo = new Command_Toggle
             {

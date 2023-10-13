@@ -6,23 +6,20 @@ using System.Text;
 using System.Threading.Tasks;
 using Verse;
 
-namespace AK_DLL
+namespace AKA_Ability
 {
     public class AKAbility_SelfTarget : AKAbility
     {
-        private Command_Action cachedGizmo = null;
 
-        public AKAbility_SelfTarget(OperatorAbilityDef def) : base(def)
+        public AKAbility_SelfTarget(OpAbilityDef def) : base(def)
         {
         }
 
-        public override Gizmo GetGizmo()
+        protected override void UpdateGizmo()
         {
-            if (cachedGizmo == null) InitializeGizmo();
-            return cachedGizmo;
         }
 
-        private void InitializeGizmo()
+        protected override void InitializeGizmo()
         {
             cachedGizmo = new Command_Action
             {
@@ -30,8 +27,7 @@ namespace AK_DLL
                 {
                     foreach (AbilityEffectBase compEffect in this.def.compEffectList)
                     {
-                        compEffect.DoEffect_Pawn(CasterPawn, CasterPawn);
-                        compEffect.DoEffect_IntVec(CasterPawn.Position, CasterPawn.Map, CasterPawn);
+                        compEffect.DoEffect_All(CasterPawn, CasterPawn, CasterPawn.Position, CasterPawn.Map);
                     }
                     UseOneCharge();
                 },

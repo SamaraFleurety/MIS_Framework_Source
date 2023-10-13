@@ -4,7 +4,7 @@ using System.Linq;
 using RimWorld;
 using Verse;
 
-namespace AK_DLL
+namespace AKA_Ability
 {
     public abstract class AbilityEffectBase
     {
@@ -15,10 +15,10 @@ namespace AK_DLL
             if (targetInfo.Cell.InBounds(caster.Map)) DoEffect_IntVec(targetInfo.Cell, caster.Map, caster);
         }
 
-        public virtual void DoEffect_All(Pawn caster, Thing target, IntVec3 cell, Map map)
+        public virtual void DoEffect_All(Pawn caster, Thing target, IntVec3? cell, Map map)
         {
             if (target != null) DoEffect_Pawn(caster, target);
-            if (cell != null && cell.InBounds(map)) DoEffect_IntVec(cell, map, caster);
+            if (cell is IntVec3 vec && vec.InBounds(map)) DoEffect_IntVec(vec, map, caster);
         }
 
         public virtual void DoEffect_Pawn(Pawn user, Thing target)

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using RimWorld.Planet;
 using FS_LivelyRim;
+using AKA_Ability;
 
 namespace AK_DLL
 {
@@ -22,6 +23,7 @@ namespace AK_DLL
         public BackstoryDef adultHood;//成年背景故事
 
         public List<OperatorAbilityDef> abilities = new List<OperatorAbilityDef>();//技能
+        public List<OpAbilityDef> AKAbilities = new List<OpAbilityDef>();
 
         public int age = 16;//年龄
         public int realAge = -1; //实际年龄
@@ -53,7 +55,7 @@ namespace AK_DLL
         public List<string> fashion; //换装
         //换装后，体现在rw服装上的变化。key的int是换装在List<string> fashion中的下标。
         //按理说应该和上面的干员衣服整合一起，但现在已经几百个干员了，要整合工作量太大。立项的时候没考虑做换装。
-        public Dictionary<int, OperatorClothSet> clothSet; 
+        public Dictionary<int, OperatorClothSet> clothSet;
         public List<LiveModelDef> live2dModel;
 
         //因为并不知道是否有某种立绘，所以用字典存。约定-1为头像，0是精0立绘，1是精2立绘，2-后面是换装
@@ -100,7 +102,7 @@ namespace AK_DLL
             get
             {
                 if (skillSorted) return skills;
-                for(int i = 0; i < skills.Count; ++i)
+                for (int i = 0; i < skills.Count; ++i)
                 {
                     int loc = TypeDef.statType[skills[i].skill.defName];
                     SkillAndFire temp;
@@ -108,7 +110,7 @@ namespace AK_DLL
                     {
                         temp = skills[i];
                         skills[i] = skills[loc];
-                        skills[loc] = temp; 
+                        skills[loc] = temp;
                         loc = TypeDef.statType[skills[i].skill.defName];
                     }
                 }
@@ -138,7 +140,8 @@ namespace AK_DLL
 
             //operator_Pawn = PawnGenerator.GeneratePawn(new pa PawnKindDefOf.Colonist, Faction.OfPlayer, ge);
             operator_Pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(PawnKindDefOf.Colonist, Faction.OfPlayer, forcedXenotype: xenoType));
-            Hediff_Operator hediff = Recruit_Hediff();
+            //Hediff_Operator hediff = 
+            Recruit_Hediff();
 
             Recruit_PersonalStat();
 
@@ -162,13 +165,16 @@ namespace AK_DLL
             this.voicePackDef.recruitSound.PlaySound();
 
             //档案系统
-            GameComp_OperatorDocumentation.AddPawn(this.OperatorID, this, operator_Pawn, weapon, fashionSet);
             fashionSet.Clear();
-            hediff.document = GameComp_OperatorDocumentation.opDocArchive[this.OperatorID];
-            hediff.document.voicePack = this.voicePackDef;
-            //hediff.document.operatorDef = this;
+            VAbility_Operator operatorID = Recruit_OperatorID(weapon);
+            /*operatorID.document = GameComp_OperatorDocumentation.opDocArchive[this.OperatorID];
+            operatorID.Document.voicePack = voicePackDef;*/
 
-            Recruit_Ability(hediff);
+            /*hediff.document = GameComp_OperatorDocumentation.opDocArchive[this.OperatorID];
+            hediff.document.voicePack = this.voicePackDef;
+            //hediff.document.operatorDef = this;*/
+
+            Recruit_Ability(operatorID);
 
             currentlyGenerating = false;
         }
@@ -218,12 +224,12 @@ namespace AK_DLL
             AutoFill_Age();
         }
 
-#region RecruitSubMethods
+        #region RecruitSubMethods
         protected static Pawn operator_Pawn;
-        protected void Recruit_Ability(Hediff_Operator hediff)
+        protected void Recruit_Ability(VAbility_Operator hediff)
         {
             //绑定干员技能
-            if (this.abilities != null && this.abilities.Count > 0)
+            /*if (this.abilities != null && this.abilities.Count > 0)
             {
 
                 foreach (OperatorAbilityDef i in this.abilities)
@@ -238,6 +244,14 @@ namespace AK_DLL
             for (int i = 1; i < hediff.document.groupedAbilities.Count; ++i)
             {
                 hediff.document.groupedAbilities[i].enabled = false;
+            }*/
+            AKAbility_Tracker tracker = hediff.AKATracker;
+            if (this.AKAbilities != null && this.AKAbilities.Count > 0)
+            {
+                foreach (OpAbilityDef i in this.AKAbilities)
+                {
+                    AKAbilityMaker.MakeAKAbility(i, tracker);
+                }
             }
         }
         protected void Recruit_AddRelations()
@@ -253,7 +267,26 @@ namespace AK_DLL
             }
         }
 
-        protected Hediff_Operator Recruit_Hediff()
+        protected VAbility_Operator Recruit_OperatorID(Thing weapon)
+        {   
+            //档案系统
+            GameComp_OperatorDocumentation.AddPawn(this.OperatorID, this, operator_Pawn, weapon, fashionSet);
+            OperatorDocument document = GameComp_OperatorDocumentation.opDocArchive[this.OperatorID];
+            document.voicePack = voicePackDef;
+
+            //干员身份证，改放在原版技能里了
+            VAbility_Operator vAbility = AbilityUtility.MakeAbility(AKDefOf.AK_VAbility_Operator, operator_Pawn) as VAbility_Operator;
+            Log.Message($"va:{vAbility == null}");
+            vAbility.AKATracker = new AK_AbilityTracker
+            {
+                doc = document,
+                owner = operator_Pawn
+            };
+            operator_Pawn.abilities.abilities.Add(vAbility);
+            return vAbility;
+        }
+
+        protected void Recruit_Hediff()
         {
             operator_Pawn.health.hediffSet.Clear();
             foreach (Hediff hediff_Pawn in operator_Pawn.health.hediffSet.hediffs)
@@ -264,22 +297,22 @@ namespace AK_DLL
                 }
             }
 
-            HediffDef hediffDef = HediffDef.Named("AK_Operator");
+            /*HediffDef hediffDef = HediffDef.Named("AK_Operator");
             FixAlienHairColor(hediffDef);
-            
+
             Hediff_Operator hediff = HediffMaker.MakeHediff(hediffDef, operator_Pawn, operator_Pawn.health.hediffSet.GetBrain()) as Hediff_Operator;
 
             //增加多功能hediff
-            operator_Pawn.health.AddHediff(hediff, null, null, null);
+            operator_Pawn.health.AddHediff(hediff, null, null, null);*/
 
             if (this.hediffInate != null && this.hediffInate.Count > 0)
             {
                 foreach (HediffStat i in this.hediffInate)
                 {
-                    AbilityEffect_AddHediff.AddHediff(operator_Pawn, i.hediff, i.part, severity : i.serverity );
+                    AbilityEffect_AddHediff.AddHediff(operator_Pawn, i.hediff, i.part, severity: i.serverity);
                 }
             }
-            return hediff;
+            return;
         }
         protected void FixAlienHairColor(HediffDef hediffDef)
         {
@@ -384,7 +417,8 @@ namespace AK_DLL
             ThingWithComps weapon = null;
             if (this.weapon != null)
             {
-                if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null && AK_ModSettings.debugOverride) {
+                if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null && AK_ModSettings.debugOverride)
+                {
                     return null;
                 }
                 weapon = (ThingWithComps)ThingMaker.MakeThing(this.weapon);
@@ -407,9 +441,9 @@ namespace AK_DLL
                 fashionSet.Add(apparel);
             }
         }
-#endregion
+        #endregion
 
-#region AutoFillSubMethods 自动补齐相关方法
+        #region AutoFillSubMethods 自动补齐相关方法
         private void AutoFill_Name()
         {
             if (this.name == null && this.nickname == null)
@@ -566,7 +600,7 @@ namespace AK_DLL
             if (this.age <= 0) this.age = 16;
             if (this.realAge <= 0) this.realAge = this.age;
         }
-#endregion
+        #endregion
     }
 }
 

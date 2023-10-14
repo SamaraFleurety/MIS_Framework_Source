@@ -17,7 +17,7 @@ namespace AKA_Ability
 
         public OpAbilityDef def;
 
-        protected Gizmo cachedGizmo = null;
+        protected Command cachedGizmo = null;
         public AKAbility()
         {
 
@@ -40,7 +40,7 @@ namespace AKA_Ability
             }
         }
 
-        public virtual Gizmo GetGizmo()
+        public virtual Command GetGizmo()
         {
             if (cachedGizmo == null) InitializeGizmo();
             UpdateGizmo();

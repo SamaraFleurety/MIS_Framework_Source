@@ -13,6 +13,14 @@ namespace AK_DLL
     {
         public OperatorDocument doc;
 
+        public AK_AbilityTracker() : base()
+        {
+        }
+
+        public AK_AbilityTracker(Pawn p) : base(p)
+        {
+        }
+
         public override void ExposeData()
         {
             base.ExposeData();

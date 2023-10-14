@@ -14,6 +14,7 @@ namespace AKA_Ability
     /// </summary>
     public class OpAbilityDef : Def
     {
+        public Type abilityClass;
         public string icon;
         public int CD = 1;
         public TimeToTick CDUnit = TimeToTick.day;
@@ -22,9 +23,9 @@ namespace AKA_Ability
         public VerbProperties verb = null;
         //public VerbProperties verb_Reclaim;
         //public string iconReclaim;
-        public string reclaimLabel;
-        public string reclaimDesc;
-        public PawnKindDef canReclaimPawn;
+        //public string reclaimLabel;
+        //public string reclaimDesc;
+        //public PawnKindDef canReclaimPawn;
         public SoundDef useSound;
         //public SFXType typeSFX = SFXType.tact;
 

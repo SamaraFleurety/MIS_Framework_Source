@@ -4,12 +4,20 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AK_Library", "AK_DLL\AK_Library.csproj", "{25A323A4-A832-487C-9AB2-32E14C56E148}"
+	ProjectSection(ProjectDependencies) = postProject
+		{92CFB99E-4D93-47F2-A4AD-DD0668EFE739} = {92CFB99E-4D93-47F2-A4AD-DD0668EFE739}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FS_LivelyRim", "LivelyRim\FS_LivelyRim.csproj", "{CA2D2594-7051-4FC9-B1E1-EF077F439FCF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AK_Compliment", "AK_Compliment\AK_Compliment.csproj", "{5B677CF7-1A8B-478C-99ED-AB7518DB0EAA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AKE_VanyaShield", "AKE_VanyaShield\AKE_VanyaShield.csproj", "{3CE0B967-28FB-447C-B9ED-A62629528C04}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CA2D2594-7051-4FC9-B1E1-EF077F439FCF} = {CA2D2594-7051-4FC9-B1E1-EF077F439FCF}
+		{92CFB99E-4D93-47F2-A4AD-DD0668EFE739} = {92CFB99E-4D93-47F2-A4AD-DD0668EFE739}
+		{25A323A4-A832-487C-9AB2-32E14C56E148} = {25A323A4-A832-487C-9AB2-32E14C56E148}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AKA_Ability", "AKA_Ability\AKA_Ability.csproj", "{92CFB99E-4D93-47F2-A4AD-DD0668EFE739}"
 EndProject

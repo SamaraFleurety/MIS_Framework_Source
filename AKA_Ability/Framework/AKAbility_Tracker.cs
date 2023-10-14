@@ -12,11 +12,20 @@ namespace AKA_Ability
     {
         public Pawn owner;
 
-        public int indexActiveGroupedAbility = 0;
+        public int indexActiveGroupedAbility = -1;
 
         public List<AKAbility> innateAbilities = new List<AKAbility>();
 
         public List<AKAbility> groupedAbilities = new List<AKAbility>();
+
+        public AKAbility_Tracker()
+        {
+        }
+
+        public AKAbility_Tracker(Pawn p)
+        {
+            owner = p;
+        }
 
         public void Tick()
         {
@@ -27,15 +36,16 @@ namespace AKA_Ability
             if (groupedAbilities.Count > 0) groupedAbilities[indexActiveGroupedAbility].Tick();
         }
 
-        public IEnumerable<Gizmo> GetGizmos()
+        public IEnumerable<Command> GetGizmos()
         {
+            if (owner == null) yield break;
             foreach (AKAbility i in innateAbilities) yield return i.GetGizmo();
-            if (groupedAbilities.Count > 0)  yield return groupedAbilities[indexActiveGroupedAbility].GetGizmo();
+            if (indexActiveGroupedAbility != -1 && groupedAbilities.Count > 0)  yield return groupedAbilities[indexActiveGroupedAbility].GetGizmo();
         }
 
         public virtual void ExposeData()
         {
-            Scribe_References.Look(ref owner, "p");
+            //Scribe_References.Look(ref owner, "p");
             Scribe_Values.Look(ref indexActiveGroupedAbility, "indexAGA");
 
             Scribe_Collections.Look(ref innateAbilities, "iA", LookMode.Deep);

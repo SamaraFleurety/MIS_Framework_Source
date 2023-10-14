@@ -46,27 +46,3 @@
 //        }
 //    }
 //}
-
-using RimWorld;
-using System.Reflection;
-using Verse;
-using HarmonyLib;
-using System;
-
-
-namespace VanillaPlantsExpanded
-{
-
-
-
-    [HarmonyPatch(typeof(Plant))]
-    [HarmonyPatch("PlantCollected")]
-    public static class PatchPlant
-    {
-        [HarmonyPostfix]
-        public static void postfix(Plant __instance, Pawn by)
-        {
-            Log.Message("used PlantCollected function");
-        }
-    }
-}

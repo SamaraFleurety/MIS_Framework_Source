@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Verse;
 
-namespace AK_DLL
+namespace AKA_Ability
 {
     public class HediffCompProperties_Regrow : HediffCompProperties
     {

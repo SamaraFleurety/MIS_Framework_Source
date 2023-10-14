@@ -137,8 +137,11 @@ namespace AK_DLL
         }
         public static OperatorDocument GetDoc(this Pawn p)
         {
-            if (p.health.hediffSet.GetFirstHediff<Hediff_Operator>() == null) return null;
-            return p.health.hediffSet.GetFirstHediff<Hediff_Operator>().document;
+            //if (p.health.hediffSet.GetFirstHediff<Hediff_Operator>() == null) return null;
+            VAbility_Operator va = p.abilities.GetAbility(AKDefOf.AK_VAbility_Operator) as VAbility_Operator;
+            if (va == null) return null;
+            OperatorDocument doc = va.Document;
+            return doc;
         }
         #endregion
 

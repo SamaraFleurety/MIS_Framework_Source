@@ -43,6 +43,12 @@ namespace AK_DLL
         }
     }
 
+    [DefOf]
+    public static class AKDefOf
+    {
+        public static AbilityDef AK_VAbility_Operator;
+    }
+
     public static class HarmonyPrefixRet
     {
         public static bool skipOriginal = false;

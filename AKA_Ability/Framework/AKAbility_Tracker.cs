@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Verse;
+using Verse.Sound;
 
 namespace AKA_Ability
 {
@@ -18,6 +19,7 @@ namespace AKA_Ability
 
         public List<AKAbility> groupedAbilities = new List<AKAbility>();
 
+        public static SoundDef[] abilitySFX = new SoundDef[4] { AKADefOf.AK_SFX_Atkboost, AKADefOf.AK_SFX_Defboost, AKADefOf.AK_SFX_Healboost, AKADefOf.AK_SFX_Tactboost };
         public AKAbility_Tracker()
         {
         }
@@ -39,8 +41,17 @@ namespace AKA_Ability
         public IEnumerable<Command> GetGizmos()
         {
             if (owner == null) yield break;
-            foreach (AKAbility i in innateAbilities) yield return i.GetGizmo();
-            if (indexActiveGroupedAbility != -1 && groupedAbilities.Count > 0)  yield return groupedAbilities[indexActiveGroupedAbility].GetGizmo();
+            Command c;
+            foreach (AKAbility i in innateAbilities)
+            {
+                c = i.GetGizmo();
+                if (c != null) yield return c;
+            }
+            if (indexActiveGroupedAbility != -1 && groupedAbilities.Count > 0)
+            {
+                c = groupedAbilities[indexActiveGroupedAbility].GetGizmo();
+                if (c != null) yield return c;
+            }
         }
 
         public virtual void ExposeData()
@@ -60,7 +71,16 @@ namespace AKA_Ability
 
         public virtual void PostPlayAbilitySound(AKAbility ability)
         {
-
+            AKAbilityDef defAbility = ability.def;
+            SoundDef defSound = defAbility.useSound;
+            if (defSound != null)
+            {
+                defSound.PlayOneShotOnCamera();
+            }
+            if (defAbility.typeSFX != SFXType.none)
+            {
+                abilitySFX[(int)defAbility.typeSFX].PlayOneShot(null);
+            }
         }
     }
 }

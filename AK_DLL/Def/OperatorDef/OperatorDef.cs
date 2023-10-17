@@ -23,12 +23,12 @@ namespace AK_DLL
         public BackstoryDef adultHood;//成年背景故事
 
         public List<OperatorAbilityDef> abilities = new List<OperatorAbilityDef>();//技能
-        public List<OpAbilityDef> AKAbilities = new List<OpAbilityDef>();
+        public List<AKAbilityDef> AKAbilities = new List<AKAbilityDef>();
 
         public int age = 16;//年龄
         public int realAge = -1; //实际年龄
         public bool isMale = false;//性别
-        public List<HediffStat> hediffInate;
+        public List<HediffStat> hediffInate; //天生自带hediff 源石病之类的
 
         public VoicePackDef voicePackDef;
 
@@ -226,7 +226,7 @@ namespace AK_DLL
 
         #region RecruitSubMethods
         protected static Pawn operator_Pawn;
-        protected void Recruit_Ability(VAbility_Operator hediff)
+        protected void Recruit_Ability(VAbility_Operator vanillaAbility)
         {
             //绑定干员技能
             /*if (this.abilities != null && this.abilities.Count > 0)
@@ -245,10 +245,10 @@ namespace AK_DLL
             {
                 hediff.document.groupedAbilities[i].enabled = false;
             }*/
-            AKAbility_Tracker tracker = hediff.AKATracker;
+            AKAbility_Tracker tracker = vanillaAbility.AKATracker;
             if (this.AKAbilities != null && this.AKAbilities.Count > 0)
             {
-                foreach (OpAbilityDef i in this.AKAbilities)
+                foreach (AKAbilityDef i in this.AKAbilities)
                 {
                     AKAbilityMaker.MakeAKAbility(i, tracker);
                 }
@@ -276,7 +276,7 @@ namespace AK_DLL
 
             //干员身份证，改放在原版技能里了
             VAbility_Operator vAbility = AbilityUtility.MakeAbility(AKDefOf.AK_VAbility_Operator, operator_Pawn) as VAbility_Operator;
-            Log.Message($"va:{vAbility == null}");
+            //Log.Message($"va:{vAbility == null}");
             vAbility.AKATracker = new AK_AbilityTracker
             {
                 doc = document,

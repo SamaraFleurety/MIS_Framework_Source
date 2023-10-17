@@ -8,7 +8,7 @@ using RimWorld;
 namespace AKA_Ability
 {
     //此技能一般以1秒，而不是1小时计时
-    /*public class AbilityEffect_Regrow : AbilityEffect_AddHediff
+    public class AbilityEffect_Regrow : AbilityEffect_AddHediff
     {
         float lastTime = 1f; //单位是小时。每小时是2500tick, 每10小时是1严重度。
         int healInterval = 60; //每多少tick治疗一次。60tick是现实中的一秒
@@ -42,7 +42,7 @@ namespace AKA_Ability
                         hediffComp = comp as HediffComp_Regrow;
                         break;
                     }
-                }*//*
+                }*/
                 hediffComp = hediffRegrow.TryGetComp<HediffComp_Regrow>();
                 //调整再生的数值
                 if (hediffComp == null) Log.Error("治疗Hediff的Comp是空的");
@@ -71,5 +71,5 @@ namespace AKA_Ability
             if (((this.severity + 0.02) * this.healAmount / (float)this.healInterval) > (oldRegrow.parent.Severity * oldRegrow.HealAmount / (float)oldRegrow.HealInterval)) return true;
             return false;
         }
-    }*/
+    }
 }

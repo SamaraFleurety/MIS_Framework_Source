@@ -126,7 +126,6 @@ namespace AK_DLL
         rSecond = 60       //现实中的1秒
     }
 
-    [Obsolete]
     public enum SFXType : Byte
     {
         atk = 0,

@@ -20,5 +20,6 @@ namespace AK_DLL
             : base(pawn, def)
         {
         }
+
     }
 }

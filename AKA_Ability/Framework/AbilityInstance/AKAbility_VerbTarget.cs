@@ -10,9 +10,17 @@ namespace AKA_Ability
 {
     public class AKAbility_VerbTarget : AKAbility
     {
+        public AKAbility_VerbTarget() : base()
+        {
+        }
+
+        public AKAbility_VerbTarget(AKAbilityDef def) : base(def)
+        {
+        }
+
         protected override void InitializeGizmo()
         {
-            cachedGizmo = new Command_VerbTarget
+            cachedGizmo = new Command_AKAbility
             {
                 defaultLabel = def.label,
                 defaultDesc = def.description,
@@ -21,8 +29,9 @@ namespace AKA_Ability
                 {
                     verbProps = def.verb,
                     caster = CasterPawn,
-                    verbTracker = new VerbTracker(CasterPawn)
-                }
+                    verbTracker = new VerbTracker(CasterPawn),
+                },
+                ability = this
             };
         }
     }

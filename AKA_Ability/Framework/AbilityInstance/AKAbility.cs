@@ -15,14 +15,16 @@ namespace AKA_Ability
 
         public CDandCharge cooldown;
 
-        public OpAbilityDef def;
+        public AKAbilityDef def;
 
         protected Command cachedGizmo = null;
+
+        public Pawn Caster => container.owner; 
         public AKAbility()
         {
 
         }
-        public AKAbility(OpAbilityDef def)
+        public AKAbility(AKAbilityDef def)
         {
             this.def = def;
         }
@@ -42,6 +44,7 @@ namespace AKA_Ability
 
         public virtual Command GetGizmo()
         {
+            if (!Caster.Drafted && !def.displayGizmoUndraft) return null;
             if (cachedGizmo == null) InitializeGizmo();
             UpdateGizmo();
             return cachedGizmo;

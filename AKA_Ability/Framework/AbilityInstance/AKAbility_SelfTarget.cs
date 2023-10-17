@@ -11,19 +11,18 @@ namespace AKA_Ability
     public class AKAbility_SelfTarget : AKAbility
     {
 
-        public AKAbility_SelfTarget(OpAbilityDef def) : base(def)
+        public AKAbility_SelfTarget() : base()
         {
         }
-
-        protected override void UpdateGizmo()
+        public AKAbility_SelfTarget(AKAbilityDef def) : base(def)
         {
         }
 
         protected override void InitializeGizmo()
         {
-            cachedGizmo = new Command_Action
+            cachedGizmo = new Command_AKAbility
             {
-                action = delegate ()
+                Action = delegate ()
                 {
                     foreach (AbilityEffectBase compEffect in this.def.compEffectList)
                     {
@@ -33,8 +32,10 @@ namespace AKA_Ability
                 },
                 defaultLabel = def.label,
                 defaultDesc = def.description,
-                icon = def.Icon
+                icon = def.Icon,
+                ability = this
             };
         }
     }
 }
+    

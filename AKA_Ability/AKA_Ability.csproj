@@ -84,8 +84,8 @@
     <Compile Include="Framework\AKAbility_Tracker.cs" />
     <Compile Include="Framework\CDandCharge.cs" />
     <Compile Include="Framework\VAbility_AKATrackerContainer.cs" />
-    <Compile Include="OpAbility\Gizmo\Gizmo_Abilities.cs" />
-    <Compile Include="OpAbilityDef.cs" />
+    <Compile Include="OpAbility\Gizmo\Gizmo_AKAGizmo.cs" />
+    <Compile Include="AKAbilityDef.cs" />
     <Compile Include="OpAbility\Verb\Verb_Ability.cs" />
     <Compile Include="OpAbility\Verb\Verb_AbilityTargeting.cs" />
     <Compile Include="OpAbility\Verb\Verb_Reclaim.cs" />

@@ -105,13 +105,5 @@ namespace AK_DLL
             this.diedSound = DefDatabase<SoundDef>.GetNamedSilentFail(AK_Tool.GetThingdefNameFrom(operatorName, prefix, "Voice_Die"));
             if (this.diedSound == null) this.diedSound = DefDatabase<SoundDef>.GetNamed("AK_Voice_Die_Default");
         }
-
-        /*public override string ToString()
-        {
-            string s = "";
-            s += this.defName + "\n";
-            s += this.undraftSound + "\n";
-            return s;
-        }*/
     }
 }

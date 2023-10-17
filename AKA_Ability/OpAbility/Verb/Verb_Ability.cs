@@ -24,7 +24,7 @@ namespace AKA_Ability
 			}
 
 			IntVec3 intVec3 = this.currentTarget.Cell;
-			if (!this.ability.isSectorAbility)
+			if (true /*!this.ability.isSectorAbility*/)
 			{
 				//只要选了格子就可以释放对格子的技能
 				foreach (AbilityEffectBase compEffect in this.ability.compEffectList)
@@ -89,7 +89,7 @@ namespace AKA_Ability
 			}
 			return true;
 		}
-		public override void DrawHighlight(LocalTargetInfo target)
+		/*public override void DrawHighlight(LocalTargetInfo target)
 		{
 			if (this.ability.isSectorAbility)
 			{
@@ -100,7 +100,7 @@ namespace AKA_Ability
 			{
 				base.DrawHighlight(target);
 			}
-        }
+        }*/
 
 
         public override float HighlightFieldRadiusAroundTarget(out bool needLOSToCenter)
@@ -134,7 +134,7 @@ namespace AKA_Ability
 		}
 
 		public AbilityEffectBase effect;
-		public OpAbilityDef ability;
+		public AKAbilityDef ability;
 		public CDandCharge CDs;
 		public int i;
     }

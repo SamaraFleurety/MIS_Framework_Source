@@ -4,6 +4,7 @@ using System.Linq;
 using RimWorld;
 using Verse;
 using Verse.Sound;
+using AKA_Ability;
 
 namespace AK_DLL
 {
@@ -18,6 +19,37 @@ namespace AK_DLL
             this.comps.Clear();
             base.Notify_PawnDied();
         }
+
+        public override void Tick()
+        {
+            Log.Message($"AK 执行旧存档干员身份迁移: {pawn.Name}");
+            VAbility_Operator vAbility = AbilityUtility.MakeAbility(AKDefOf.AK_VAbility_Operator, pawn) as VAbility_Operator; 
+            vAbility.AKATracker = new AK_AbilityTracker
+            {
+                doc = document,
+                owner = pawn
+            }; 
+            pawn.abilities.abilities.Add(vAbility); 
+            AKAbility_Tracker tracker = vAbility.AKATracker;
+            foreach (HediffComp i in this.comps)
+            {
+                if (i is HC_Ability j)
+                {
+                    string oldName = j.AbilityDef.defName.Split('_').Last();
+                    if (oldName == "ignit") oldName = "Ignit";
+                    string newName = "AKA_Ability_" + oldName;
+                    AKAbilityDef def = DefDatabase<AKAbilityDef>.GetNamedSilentFail(newName);
+                    if (def != null)
+                    {
+                        Log.Message($"AK find reworked skill {newName}");
+                        AKAbilityMaker.MakeAKAbility(def, tracker);
+                    }
+                    else Log.Message($"AK not find reworked skill {newName}");
+                }
+            }
+            pawn.health.hediffSet.hediffs.Remove(this);
+        }
+
         public override void ExposeData()
         {
             base.ExposeData();

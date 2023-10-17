@@ -8,7 +8,7 @@ namespace AK_DLL
 	{
 		public static float lastVoiceLength = 0;
 		static float lastVoiceTime = 0; 
-		public static SoundDef[] abilitySFX = new SoundDef[4] { DefDatabase<SoundDef>.GetNamed("AK_SFX_Atkboost"), DefDatabase<SoundDef>.GetNamed("AK_SFX_Defboost"), DefDatabase<SoundDef>.GetNamed("AK_SFX_Healboost"), DefDatabase<SoundDef>.GetNamed("AK_SFX_Tactboost") };
+		//public static SoundDef[] abilitySFX = new SoundDef[4] { DefDatabase<SoundDef>.GetNamed("AK_SFX_Atkboost"), DefDatabase<SoundDef>.GetNamed("AK_SFX_Defboost"), DefDatabase<SoundDef>.GetNamed("AK_SFX_Healboost"), DefDatabase<SoundDef>.GetNamed("AK_SFX_Tactboost") };
 		public static void LoadedGame()
 		{
 			lastVoiceTime = 0;
@@ -28,8 +28,8 @@ namespace AK_DLL
 		//播放技能语音
 		public static void PlaySound(this Pawn pawn, SFXType type)
 		{
-			abilitySFX[(int)type].PlayOneShot(null);
-			pawn.GetDoc().voicePack.abilitySounds.RandomElement().PlaySound();
+			OperatorDocument doc = pawn.GetDoc();
+			if (doc != null) doc.voicePack.abilitySounds.RandomElement().PlaySound();
 		}
 	}
 }

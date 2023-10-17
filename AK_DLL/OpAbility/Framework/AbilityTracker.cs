@@ -26,5 +26,12 @@ namespace AK_DLL
             base.ExposeData();
             Scribe_References.Look(ref doc, "doc");
         }
+
+        public override void PostPlayAbilitySound(AKAbility ability)
+        {
+            if (VoicePlayer.CanPlayNow()) return;
+            base.PostPlayAbilitySound(ability);
+            if (doc != null) doc.voicePack.abilitySounds.RandomElement().PlaySound();
+        }
     }
 }

@@ -10,11 +10,16 @@ namespace AKA_Ability
 {
     public class AKAbility_Toggle : AKAbility
     {
-        private bool AutoCast = false;
+        public bool AutoCast = false;
 
         private LocalTargetInfo Target => CasterPawn.TargetCurrentlyAimingAt;
 
-        public AKAbility_Toggle(OpAbilityDef def) : base(def)
+        public AKAbility_Toggle() : base()
+        {
+
+        }
+
+        public AKAbility_Toggle(AKAbilityDef def) : base(def)
         {
         }
 
@@ -40,20 +45,23 @@ namespace AKA_Ability
 
         protected override void InitializeGizmo()
         {
-            cachedGizmo = new Command_Toggle
+            cachedGizmo = new Command_AKAbility
             {
-                toggleAction = delegate ()
+                Action = delegate ()
                 {
                     AutoCast = !AutoCast;
                 },
-                isActive = delegate()
-                {
-                    return AutoCast;
-                },
                 defaultLabel = def.label,
                 defaultDesc = def.description,
-                icon = def.Icon
+                icon = def.Icon,
+                ability = this
             };
+        }
+
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Values.Look(ref AutoCast, "auto");
         }
     }
 }

@@ -7,7 +7,7 @@ using Verse.AI;
 
 namespace AK_DLL
 {
-    public class Verb_Reclaim : Verb_CastBase
+    /*public class Verb_Reclaim : Verb_CastBase
     {
         protected override bool TryCastShot()
         {
@@ -34,5 +34,5 @@ namespace AK_DLL
             Scribe_Defs.Look(ref pawn,"pawn");
         }
         public PawnKindDef pawn;
-    }
+    }*/
 }

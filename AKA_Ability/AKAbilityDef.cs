@@ -12,13 +12,14 @@ namespace AKA_Ability
     ///技能def。招募时，会在Recruit_Ability方法内，每个def都往Hediff_Operator（干员ID Hediff）上新增一个HC_Ability来保存技能cd/技能选择等数据。
     ///调用：HC_Ability会产生Gizmo（即按钮，亦称Command）。点击gizmo后，触发gizmo的ProcessInput方法，决定目标选择。决定目标后，会调用verb_ability的方法，依次执行本def中compEffectList的效果。
     /// </summary>
-    public class OpAbilityDef : Def
+    public class AKAbilityDef : Def
     {
         public Type abilityClass;
         public string icon;
         public int CD = 1;
         public TimeToTick CDUnit = TimeToTick.day;
-        public AbilityType abilityType;
+        public int maxCharge = 1;
+        //public AbilityType abilityType;
         public int? range;
         public VerbProperties verb = null;
         //public VerbProperties verb_Reclaim;
@@ -26,24 +27,24 @@ namespace AKA_Ability
         //public string reclaimLabel;
         //public string reclaimDesc;
         //public PawnKindDef canReclaimPawn;
-        public SoundDef useSound;
-        //public SFXType typeSFX = SFXType.tact;
+        public SoundDef useSound = null;
+        public SFXType typeSFX = SFXType.tact;
 
-        public bool isSectorAbility = false;
-        public float sectorRadius;
-        public float minAngle;
-        public float maxAngle;
+        //public bool isSectorAbility = false;
+        //public float sectorRadius;
+        //public float minAngle;
+        //public float maxAngle;
 
         public List<AbilityEffectBase> compEffectList;
         public bool needCD;
         //public bool needTarget;
         public TargetMode targetMode = TargetMode.Self;
 
-        public List<HediffDef> selfHediff;
-        public float debuffSeverity;
+        //public List<HediffDef> selfHediff;
+        //public float debuffSeverity;
 
-        public int maxCharge = 1;
-        public bool displayOnUndraft = false;
+        //public Type gizmoClass = null;
+        public bool displayGizmoUndraft = false;
         public bool grouped = false;
 
         public Texture2D Icon => ContentFinder<Texture2D>.Get(icon);

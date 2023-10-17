@@ -1,14 +1,27 @@
-﻿using System;
+﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Verse;
 
 namespace AKA_Ability
 {
     public static class TypeDef
     {
     }
+
+    [DefOf]
+    public static class AKADefOf
+    {
+        public static SoundDef AK_SFX_Atkboost;
+        public static SoundDef AK_SFX_Defboost;
+        public static SoundDef AK_SFX_Healboost;
+        public static SoundDef AK_SFX_Tactboost;
+
+    }
+
     public enum TimeToTick
     {
         tick = 1,          //游戏中
@@ -22,10 +35,11 @@ namespace AKA_Ability
     }
     public enum SFXType : Byte
     {
-        atk = 0,
+        atk,
         def,
         heal,
-        tact
+        tact,
+        none = 255
     }
     public enum RegrowType : Byte
     {
@@ -45,7 +59,7 @@ namespace AKA_Ability
 
     public enum TargetMode : Byte
     {
-        Single = 0,
+        VerbSingle = 0,
         Self,
         AutoEnemy, //没做
         Multi //没做，别用

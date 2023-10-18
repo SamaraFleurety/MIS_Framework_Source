@@ -15,10 +15,16 @@ namespace AK_DLL
 			lastVoiceLength = 0;
 		}
 
+		public static bool CanPlayNow()
+        {
+			if (Time.realtimeSinceStartup - lastVoiceTime <= AK_ModSettings.voiceIntervalTime / 2.0 || Time.realtimeSinceStartup - lastVoiceTime <= lastVoiceLength || !AK_ModSettings.playOperatorVoice) return false;
+			return true;
+		}
+
 		public static void PlaySound(this SoundDef sound)
 		{
 			//Log.Message($"尝试播放{sound.defName}.{Time.realtimeSinceStartup} : {lastVoiceTime}");
-			if (Time.realtimeSinceStartup - lastVoiceTime <= AK_ModSettings.voiceIntervalTime / 2.0 || Time.realtimeSinceStartup - lastVoiceTime <= lastVoiceLength || !AK_ModSettings.playOperatorVoice) return;
+			if (!CanPlayNow()) return;
 			lastVoiceLength = sound.Duration.max;
 			sound.PlayOneShotOnCamera(null);
 			lastVoiceTime = Time.realtimeSinceStartup;

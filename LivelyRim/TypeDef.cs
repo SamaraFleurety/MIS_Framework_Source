@@ -14,14 +14,14 @@ namespace FS_LivelyRim
         public static AssetBundle l2dResource => CubismBuiltinMaterials.AB;
 
         //fixme: delete when done
-        public static AssetBundle ricepicotest;
-        public static AssetBundle janustest;
+        //public static AssetBundle ricepicotest;
+        //public static AssetBundle janustest;
 
         public static string ModID = "FS.LivelyRim";
 
-        //用来缓存ab包。ab包重复读是null
+        //用来缓存ab包。ab包重复从路径读是null
         public static Dictionary<string, AssetBundle> cachedAssetBundle = new Dictionary<string, AssetBundle>();
-        //缓存已经加载的l2d的GameObject
+        //缓存已经加载的l2d的GameObject(模型)
         public static Dictionary<string, GameObject> cachedL2DModel = new Dictionary<string, GameObject>();
 
         //商店和主界面看板
@@ -30,15 +30,15 @@ namespace FS_LivelyRim
         //public static Vector3 defaultStoreFrontLocAtMenu = new Vector3(0, 0, 0);
         //public static Vector3 defaultStoreFrontLocAtMerchant = new Vector3(0, 0, 0);
 
-        public static RenderTexture tempRT;
+        //public static RenderTexture tempRT;
 
         public static void Initialize()
         {
             //CubismBuiltinMaterials.AB = AssetBundle.LoadFromFile(FS_Tool.modPath[ModID] + "/Asset/l2dtest");
             CubismBuiltinMaterials.AB = FS_Tool.LoadAssetBundle(ModID, "cubismresources");
             //ricepicotest = FS_Tool.LoadAssetBundle(ModID, "ricepro");
-            janustest = FS_Tool.LoadAssetBundle(ModID, "janustest");
-            Log.Message($"{janustest == null}");
+            //janustest = FS_Tool.LoadAssetBundle(ModID, "janustest");
+            //Log.Message($"{janustest == null}");
         }
     }
 

@@ -34,7 +34,7 @@ namespace AKA_Ability
                     newlyAdded = true;
                 }
                 hediffRegrow = target_Pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef) as HediffWithComps;
-                HediffComp_Regrow hediffComp = null;
+                HC_Regrow hediffComp = null;
                 /*foreach (HediffComp comp in hediffRegrow.comps)
                 {
                     if (comp is HediffComp_Regrow)
@@ -43,7 +43,7 @@ namespace AKA_Ability
                         break;
                     }
                 }*/
-                hediffComp = hediffRegrow.TryGetComp<HediffComp_Regrow>();
+                hediffComp = hediffRegrow.TryGetComp<HC_Regrow>();
                 //调整再生的数值
                 if (hediffComp == null) Log.Error("治疗Hediff的Comp是空的");
                 else
@@ -66,7 +66,7 @@ namespace AKA_Ability
             }
         }
 
-        private bool NewRegrowIsBetter(HediffComp_Regrow oldRegrow)
+        private bool NewRegrowIsBetter(HC_Regrow oldRegrow)
         {
             if (((this.severity + 0.02) * this.healAmount / (float)this.healInterval) > (oldRegrow.parent.Severity * oldRegrow.HealAmount / (float)oldRegrow.HealInterval)) return true;
             return false;

@@ -68,12 +68,10 @@
     <Compile Include="AbilityEffect\AddHediff\DpsEnhance\HC_DpsEnhance_Melee.cs" />
     <Compile Include="AbilityEffect\AddHediff\DpsEnhance\HC_DpsEnhance_Ranged.cs" />
     <Compile Include="AbilityEffect\AddHediff\Regrow\AE_Regrow.cs" />
-    <Compile Include="AbilityEffect\AddHediff\Regrow\HCP_Regrow.cs" />
     <Compile Include="AbilityEffect\AddHediff\Regrow\HC_Regrow.cs" />
     <Compile Include="AbilityEffect\AE_ShootProjectile.cs" />
     <Compile Include="AbilityEffect\Effect\AbilityEffect_DisableAttack.cs" />
     <Compile Include="AbilityEffect\Effect\AbilityEffect_Heal.cs" />
-    <Compile Include="AbilityEffect\Effect\AbilityEffect_ReclaimSummoned.cs" />
     <Compile Include="AbilityEffect\Effect\AbilityEffect_Summon.cs" />
     <Compile Include="AbilityEffect\Effect\AbilityEffect_Trap.cs" />
     <Compile Include="AKA_Utilities.cs" />
@@ -86,9 +84,7 @@
     <Compile Include="Framework\VAbility_AKATrackerContainer.cs" />
     <Compile Include="OpAbility\Gizmo\Gizmo_AKAGizmo.cs" />
     <Compile Include="AKAbilityDef.cs" />
-    <Compile Include="OpAbility\Verb\Verb_Ability.cs" />
     <Compile Include="OpAbility\Verb\Verb_AbilityTargeting.cs" />
-    <Compile Include="OpAbility\Verb\Verb_Reclaim.cs" />
     <Compile Include="TypeDef.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

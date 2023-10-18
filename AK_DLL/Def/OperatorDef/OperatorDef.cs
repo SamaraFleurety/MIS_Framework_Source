@@ -28,7 +28,7 @@ namespace AK_DLL
         public int age = 16;//年龄
         public int realAge = -1; //实际年龄
         public bool isMale = false;//性别
-        public List<HediffStat> hediffInate; //天生自带hediff 源石病之类的
+        public List<HediffStat> hediffInate = new List<HediffStat>(); //天生自带hediff 源石病之类的
 
         public VoicePackDef voicePackDef;
 
@@ -309,7 +309,7 @@ namespace AK_DLL
             {
                 foreach (HediffStat i in this.hediffInate)
                 {
-                    AbilityEffect_AddHediff.AddHediff(operator_Pawn, i.hediff, i.part, severity: i.serverity);
+                    AbilityEffect_AddHediff.AddHediff(operator_Pawn, i.hediff, i.part, i.partCustomLabel, severity: i.serverity);
                 }
             }
             return;

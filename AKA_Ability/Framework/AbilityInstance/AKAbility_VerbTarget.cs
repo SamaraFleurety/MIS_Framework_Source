@@ -30,9 +30,11 @@ namespace AKA_Ability
                     verbProps = def.verb,
                     caster = CasterPawn,
                     verbTracker = new VerbTracker(CasterPawn),
+                    parent = this
                 },
                 ability = this
             };
         }
+
     }
 }

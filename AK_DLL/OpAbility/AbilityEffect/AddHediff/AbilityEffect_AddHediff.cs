@@ -39,14 +39,14 @@ namespace AK_DLL
         /// 分支:
         ///     如果part与part record都为空，那就直接加在全身
         ///         然后直接调整严重度，ret
-        ///     如果part record不为空，直接使用；否则依据part随机检索一个。
+        ///     如果part record不为空，直接使用；否则依据part(BodyPartDef)检索, 如果有customLabel就检索带特定label的，否则随机检索一个。
         ///         -如果还是检索不到那就直接ret空 (指定的part已经不存在)
         ///         检索此部位是否已有Hediff，如果有就直接调整严重度。
         ///         如果没有
         ///             -如果严重度小于等于0(即减少严重度)，那就ret空 (减少不存在的hediff没有意义)
         ///             -否则就增加此Hediff并调整严重度。
         /// </summary>
-        public static Hediff AddHediff (Pawn target, HediffDef hediffDef, BodyPartDef part = null, BodyPartRecord partRecord = null, float severity = 1)
+        public static Hediff AddHediff (Pawn target, HediffDef hediffDef, BodyPartDef part = null, string customLabel = null, BodyPartRecord partRecord = null, float severity = 1)
         {
             if (target == null) return null;
 
@@ -59,7 +59,7 @@ namespace AK_DLL
             }
             else
             {
-                if (partRecord == null) partRecord = GetBodyPartRecord(target, part);
+                if (partRecord == null) partRecord = GetBodyPartRecord(target, part, customLabel);
                 if (partRecord == null) return null;
 
                 //hediff = target.health.hediffSet.GetFirstHediffOfDef(hediffDef);
@@ -85,12 +85,17 @@ namespace AK_DLL
             return hediff;
         }
 
-        public static BodyPartRecord GetBodyPartRecord(Pawn p, BodyPartDef partDef)
+        public static BodyPartRecord GetBodyPartRecord(Pawn p, BodyPartDef partDef, string customLabel = null)
         {
             if (p == null || p.Dead || partDef == null) return null;
             IEnumerable<BodyPartRecord> candidate = p.health.hediffSet.GetNotMissingParts();
             candidate = candidate.Where((BodyPartRecord record) => record.def == partDef);
+
             if (candidate == null || candidate.Count() == 0) return null;
+
+            if (customLabel != null) candidate = candidate.Where((BodyPartRecord record) => record.untranslatedCustomLabel == customLabel);
+            if (candidate == null || candidate.Count() == 0) return null;
+
             BodyPartRecord r = candidate.RandomElement();
             return r;
         }

@@ -7,18 +7,29 @@ using Verse;
 
 namespace AKA_Ability
 {
-    public class HediffComp_Regrow : HediffComp
+    public class HCP_Regrow : HediffCompProperties
+    {
+        public int healInterval = 60;
+
+        public float healAmount = 1f;
+
+        public HCP_Regrow()
+        {
+            this.compClass = typeof(HC_Regrow);
+        }
+    }
+    public class HC_Regrow : HediffComp
     {
         #region 属性
-        public HediffCompProperties_Regrow Props
+        public HCP_Regrow Props
         {
             get
             {
-                return (HediffCompProperties_Regrow)base.props;
+                return (HCP_Regrow)base.props;
             }
         }
 
-        private HediffCompProperties_Regrow exactProps = new HediffCompProperties_Regrow();
+        private HCP_Regrow exactProps = new HCP_Regrow();
 
         public int HealInterval
         {

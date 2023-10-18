@@ -19,14 +19,8 @@ namespace AKA_Ability
         public int CD = 1;
         public TimeToTick CDUnit = TimeToTick.day;
         public int maxCharge = 1;
-        //public AbilityType abilityType;
         public int? range;
         public VerbProperties verb = null;
-        //public VerbProperties verb_Reclaim;
-        //public string iconReclaim;
-        //public string reclaimLabel;
-        //public string reclaimDesc;
-        //public PawnKindDef canReclaimPawn;
         public SoundDef useSound = null;
         public SFXType typeSFX = SFXType.tact;
 
@@ -39,9 +33,6 @@ namespace AKA_Ability
         public bool needCD;
         //public bool needTarget;
         public TargetMode targetMode = TargetMode.Self;
-
-        //public List<HediffDef> selfHediff;
-        //public float debuffSeverity;
 
         //public Type gizmoClass = null;
         public bool displayGizmoUndraft = false;

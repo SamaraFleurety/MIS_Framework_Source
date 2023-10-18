@@ -67,7 +67,7 @@ namespace AKA_Ability
             Scribe_Deep.Look(ref cooldown, "CD");
         }
 
-        protected virtual void UseOneCharge()
+        public virtual void UseOneCharge()
         {
             if (cooldown.charge == cooldown.maxCharge) cooldown.CD = cooldown.maxCD;
             cooldown.charge -= 1;

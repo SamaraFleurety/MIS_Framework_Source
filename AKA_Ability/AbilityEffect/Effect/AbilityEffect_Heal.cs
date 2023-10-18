@@ -11,42 +11,35 @@ namespace AKA_Ability
     {
         public override void DoEffect_Pawn(Pawn user, Thing target)
         {
-            if (target == null|| target.GetType() != typeof(Pawn))
+            if (target == null || !(target is Pawn t))
             {
                 return;
             }
-            Pawn pawn = target as Pawn;
-            if (pawn.Faction == null&&this.healNullFaction == true) 
+            //Pawn t = target as Pawn;
+            if (!healNullFaction && t.Faction == null)
             {
-                this.Heal(pawn);
+                return;
             }
 
-            if (pawn.Faction is Faction faction&&user.Faction is Faction faction1) 
+            if (t.Faction is Faction faction && user.Faction is Faction faction1)
             {
                 if (faction != faction1)
                 {
-                    if (faction.RelationKindWith(faction1) == FactionRelationKind.Hostile && this.healHostile)
+                    if (!healHostile && faction.RelationKindWith(faction1) == FactionRelationKind.Hostile)
                     {
-                        this.Heal(pawn);
+                        return;
                     }
-                    if (faction.RelationKindWith(faction1) == FactionRelationKind.Neutral && this.healNeutral)
+                    if (!healNeutral && faction.RelationKindWith(faction1) == FactionRelationKind.Neutral)
                     {
-                        this.Heal(pawn);
+                        return;
                     }
-                    if (faction.RelationKindWith(faction1) == FactionRelationKind.Ally)
-                    {
-                        this.Heal(pawn);
-                    }
-                }
-                else 
-                {
-                    this.Heal(pawn);
                 }
             }
 
+            this.Heal(t);
         }
 
-        private void Heal(Pawn target) 
+        private void Heal(Pawn target)
         {
             float heal = (float)this.healPoint;
             foreach (Hediff_Injury injury in target.health.hediffSet.GetInjuriesTendable().ToList())
@@ -56,7 +49,7 @@ namespace AKA_Ability
                     injury.Heal(injury.Severity);
                     heal -= injury.Severity;
                 }
-                else 
+                else
                 {
                     injury.Heal(heal);
                     heal -= heal;

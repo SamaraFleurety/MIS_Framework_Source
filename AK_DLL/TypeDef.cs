@@ -15,6 +15,7 @@ namespace AK_DLL
         public static string[] romanNumber = new string[] { "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI" };
         //如果增加了要自动绑定的服装种类，只需要往这个字符串数组增加。
         public static string[] apparelType = new string[] { "Apparel", "Hat" };
+        public static string ModID = "MIS.Framework";
 
         public static Dictionary<string, int> statType = new Dictionary<string, int>() {
             { "Shooting", 0 },

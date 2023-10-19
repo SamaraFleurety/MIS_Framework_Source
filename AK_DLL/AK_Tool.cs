@@ -70,7 +70,7 @@ namespace AK_DLL
         {
             for (int i = 0; i < Mods.Count; ++i)
             {
-                if (Mods[i].Name == "M.I.S. - Framework")
+                if (/*Mods[i].Name == "M.I.S. - Framework" ||*/ Mods[i].PackageId == TypeDef.ModID.ToLower())
                 {
                     Log.Message(Mods[i].RootDir);
                     FSAsset = AssetBundle.LoadFromFile(Mods[i].RootDir + "/Asset/fsassets");

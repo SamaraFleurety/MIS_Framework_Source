@@ -268,7 +268,7 @@ namespace AK_DLL
         }
 
         protected VAbility_Operator Recruit_OperatorID(Thing weapon)
-        {   
+        {
             //档案系统
             GameComp_OperatorDocumentation.AddPawn(this.OperatorID, this, operator_Pawn, weapon, fashionSet);
             OperatorDocument document = GameComp_OperatorDocumentation.opDocArchive[this.OperatorID];

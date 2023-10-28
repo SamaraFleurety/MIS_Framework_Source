@@ -27,12 +27,25 @@ namespace FS_LivelyRim
             }
         }
 
+        public static LiveModelDef def;
         [HarmonyPatch("PostOpen")]
         [HarmonyPostfix]
         public static void Postfix_PostOpen()
         {
             if (!FS_ModSettings.merchantSideLive) return;
-            moved = false;
+            if (FS_Tool.defaultModelInstance == null)
+            {
+                if (def == null)
+                    def = DefDatabase<LiveModelDef>.GetNamedSilentFail(FS_ModSettings.l2dDefname);
+                if (def == null)
+                {
+                    Log.Error($"[FS.L2D] Try loading null def named {FS_ModSettings.l2dDefname}. resetting to janus");
+                    def = DefDatabase<LiveModelDef>.GetNamed("AZ_Live_Janus");
+                }
+                FS_Utilities.ChangeDefaultModel(def);
+            }
+
+            moved = false; 
             //仅在开始时绘制一次模型
             GameObject ins = FS_Utilities.DrawModel(DisplayModelAt.MerchantRight, FS_Tool.defaultModelDef);
 

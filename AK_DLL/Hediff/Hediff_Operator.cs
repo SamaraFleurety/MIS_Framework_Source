@@ -14,7 +14,7 @@ namespace AK_DLL
         public override void Notify_PawnDied()
         {
             this.document.voicePack.diedSound.PlayOneShot(null);
-            this.document.RecordSkills();
+            //this.document.RecordSkills();
             this.document.currentExist = false;
             this.comps.Clear();
             base.Notify_PawnDied();
@@ -22,6 +22,8 @@ namespace AK_DLL
 
         public override void Tick()
         {
+            base.Tick();
+            return;
             Log.Message($"AK 执行旧存档干员身份迁移: {pawn.Name}");
             VAbility_Operator vAbility = AbilityUtility.MakeAbility(AKDefOf.AK_VAbility_Operator, pawn) as VAbility_Operator; 
             vAbility.AKATracker = new AK_AbilityTracker
@@ -52,6 +54,7 @@ namespace AK_DLL
 
         public override void ExposeData()
         {
+            return;
             base.ExposeData();
             Scribe_References.Look(ref this.document, "doc");
             //HC_Ability的定制存档 绕过HediffComp不可存档
@@ -72,7 +75,7 @@ namespace AK_DLL
                 {
                     this.comps.Add(i);
                     i.parent = this;
-                    if(i.AbilityDef.grouped) i.Document.groupedAbilities.Add(i);
+                    //if(i.AbilityDef.grouped) i.Document.groupedAbilities.Add(i);
                 }
                 compAbilities.Clear();
             }

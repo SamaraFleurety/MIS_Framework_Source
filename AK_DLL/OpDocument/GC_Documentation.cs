@@ -24,17 +24,19 @@ namespace AK_DLL
 
         public Dictionary<SkillDef, int> skillLevel;
         public VoicePackDef voicePack;
-        public List<HC_Ability> groupedAbilities;
+        //public List<HC_Ability> groupedAbilities;
         public int preferedAbility = 0;
         public OperatorDef operatorDef;
         public int oripathySeverity = 0;
 
         public int preferedSkin = 1;  //立绘,0是精0, 1是精2, 后面是换装
 
+        public int pendingFashion = -1; //将要换装的序号
+
         public OperatorDocument()
         {
             this.skillLevel = new Dictionary<SkillDef, int>();
-            groupedAbilities = new List<HC_Ability>();
+            //groupedAbilities = new List<HC_Ability>();
         }
         public OperatorDocument(string defName, Pawn p, Thing weapon, OperatorDef operatorDef) : this()
         {
@@ -51,6 +53,7 @@ namespace AK_DLL
         public void RegisterFashionSet(List<Thing> fashionSet)
         {
             apparel = new List<Thing>();
+            DestroyFashionSet();
             foreach(Thing i in fashionSet)
             {
                 apparel.Add(i);
@@ -62,7 +65,7 @@ namespace AK_DLL
         {
             foreach(Thing i in apparel)
             {
-                i.Destroy(DestroyMode.Vanish);
+                if (i != null && !i.Destroyed) i.Destroy(DestroyMode.Vanish);
             }
             apparel.Clear();
         }
@@ -93,6 +96,8 @@ namespace AK_DLL
             Scribe_Values.Look<int>(ref this.preferedAbility, "preferedAbility", 0, true);
             Scribe_Values.Look<int>(ref this.oripathySeverity, "oriSev", 0, true);
             Scribe_Values.Look<int>(ref this.preferedSkin, "skin");
+
+            Scribe_Values.Look(ref pendingFashion, "fashion");
             //if (this.pawn == null) { return; }
         }
 
@@ -216,7 +221,7 @@ namespace AK_DLL
         public static void DestroyHeritage (OperatorDocument doc)
         {
             doc.currentExist = false;
-            doc.groupedAbilities.Clear();
+            //doc.groupedAbilities.Clear();
             doc.preferedAbility = 0;
             if (doc.pawn != null) 
             { 

@@ -53,7 +53,7 @@ namespace AK_DLL
         public string stand;//精2立绘
         public string commonStand;  //精0立绘
         public List<string> fashion; //换装
-        //换装后，体现在rw服装上的变化。key的int是换装在List<string> fashion中的下标。
+        //换装后，体现在rw服装上的变化。key的int是换装在List<string> fashion中的下标+3。
         //按理说应该和上面的干员衣服整合一起，但现在已经几百个干员了，要整合工作量太大。立项的时候没考虑做换装。
         public Dictionary<int, OperatorClothSet> clothSet;
         public List<LiveModelDef> live2dModel;
@@ -78,7 +78,8 @@ namespace AK_DLL
         #region 快捷属性
         public static bool currentlyGenerating = false;
 
-        private static List<Thing> fashionSet;
+        //缓存 招募时给的衣服。这个时候有可能还没生成doc
+        private static List<Thing> clothTemp = new List<Thing>();
         public string Prefix
         {
             get { return AK_Tool.GetPrefixFrom(this.defName); }
@@ -134,13 +135,64 @@ namespace AK_DLL
         }
         #endregion
 
+        public void ChangeFashion(int index, Pawn p)
+        {
+            OperatorDocument doc = p.GetDoc();
+            if (doc == null)
+            {
+                Log.Error($"[AK] trying to change fashion for non-operator: {p.Name}");
+                return;
+            }
+            if (index != -1 && !clothSet.ContainsKey(index))
+            {
+                Log.Error($"[AK] {p.Name} doesn't have fashion numbered {index}");
+                return;
+            }
+
+            doc.DestroyFashionSet();
+
+            operator_Pawn = p;
+            if (index == -1)
+            {
+                if (apparels != null)
+                {
+                    foreach (ThingDef apparelDef in this.apparels)
+                    {
+                        Recruit_Inventory_Wear(apparelDef, operator_Pawn, true);
+                    }
+                }
+                operator_Pawn.story.hairDef = hair == null ? HairDefOf.Bald : hair;
+            }
+            else
+            {
+                OperatorClothSet set = clothSet[index];
+                foreach(ThingDef def in set.apparels)
+                {
+                    Recruit_Inventory_Wear(def, operator_Pawn, true);
+                }
+                if (set.hair != null) operator_Pawn.story.hairDef = set.hair;
+                if (set.weapon != null)
+                {
+                    doc.weapon.Destroy();
+                    if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null)
+                    {
+                        return;
+                    }
+                    ThingWithComps weapon = (ThingWithComps)ThingMaker.MakeThing(set.weapon);
+                    CompBiocodable comp = weapon.GetComp<CompBiocodable>();
+                    if (comp != null) comp.CodeFor(operator_Pawn);
+                    operator_Pawn.equipment.AddEquipment(weapon);
+                }
+            }
+            doc.RegisterFashionSet(clothTemp);
+            clothTemp.Clear();
+        }
+
         public virtual void Recruit(IntVec3 intVec, Map map)
         {
             currentlyGenerating = true;
 
-            //operator_Pawn = PawnGenerator.GeneratePawn(new pa PawnKindDefOf.Colonist, Faction.OfPlayer, ge);
             operator_Pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(PawnKindDefOf.Colonist, Faction.OfPlayer, forcedXenotype: xenoType));
-            //Hediff_Operator hediff = 
             Recruit_Hediff();
 
             Recruit_PersonalStat();
@@ -165,8 +217,8 @@ namespace AK_DLL
             this.voicePackDef.recruitSound.PlaySound();
 
             //档案系统
-            fashionSet.Clear();
             VAbility_Operator operatorID = Recruit_OperatorID(weapon);
+            clothTemp.Clear();
             /*operatorID.document = GameComp_OperatorDocumentation.opDocArchive[this.OperatorID];
             operatorID.Document.voicePack = voicePackDef;*/
 
@@ -228,24 +280,28 @@ namespace AK_DLL
         protected static Pawn operator_Pawn;
         protected void Recruit_Ability(VAbility_Operator vanillaAbility)
         {
-            //绑定干员技能
-            /*if (this.abilities != null && this.abilities.Count > 0)
+            if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null)
             {
-
-                foreach (OperatorAbilityDef i in this.abilities)
-                {
-                    HC_Ability HC = new HC_Ability(i);
-                    hediff.comps.Add(HC);
-                    HC.parent = hediff;
-                    if (i.grouped) hediff.document.groupedAbilities.Add(HC);
-                }
+                return;
             }
-            //禁用非第一个的可选技能
-            for (int i = 1; i < hediff.document.groupedAbilities.Count; ++i)
-            {
-                hediff.document.groupedAbilities[i].enabled = false;
-            }*/
-            AKAbility_Tracker tracker = vanillaAbility.AKATracker;
+                //绑定干员技能
+                /*if (this.abilities != null && this.abilities.Count > 0)
+                {
+
+                    foreach (OperatorAbilityDef i in this.abilities)
+                    {
+                        HC_Ability HC = new HC_Ability(i);
+                        hediff.comps.Add(HC);
+                        HC.parent = hediff;
+                        if (i.grouped) hediff.document.groupedAbilities.Add(HC);
+                    }
+                }
+                //禁用非第一个的可选技能
+                for (int i = 1; i < hediff.document.groupedAbilities.Count; ++i)
+                {
+                    hediff.document.groupedAbilities[i].enabled = false;
+                }*/
+                AKAbility_Tracker tracker = vanillaAbility.AKATracker;
             if (this.AKAbilities != null && this.AKAbilities.Count > 0)
             {
                 foreach (AKAbilityDef i in this.AKAbilities)
@@ -270,7 +326,7 @@ namespace AK_DLL
         protected VAbility_Operator Recruit_OperatorID(Thing weapon)
         {
             //档案系统
-            GameComp_OperatorDocumentation.AddPawn(this.OperatorID, this, operator_Pawn, weapon, fashionSet);
+            GameComp_OperatorDocumentation.AddPawn(this.OperatorID, this, operator_Pawn, weapon, clothTemp);
             OperatorDocument document = GameComp_OperatorDocumentation.opDocArchive[this.OperatorID];
             document.voicePack = voicePackDef;
 
@@ -297,13 +353,13 @@ namespace AK_DLL
                 }
             }
 
-            /*HediffDef hediffDef = HediffDef.Named("AK_Operator");
+            HediffDef hediffDef = HediffDef.Named("AK_Operator");
             FixAlienHairColor(hediffDef);
 
             Hediff_Operator hediff = HediffMaker.MakeHediff(hediffDef, operator_Pawn, operator_Pawn.health.hediffSet.GetBrain()) as Hediff_Operator;
 
             //增加多功能hediff
-            operator_Pawn.health.AddHediff(hediff, null, null, null);*/
+            operator_Pawn.health.AddHediff(hediff, null, null, null);
 
             if (this.hediffInate != null && this.hediffInate.Count > 0)
             {
@@ -344,7 +400,7 @@ namespace AK_DLL
             //发型与体型设置
             operator_Pawn.story.bodyType = this.bodyTypeDef;
             operator_Pawn.story.headType = this.headTypeDef ?? DefDatabase<HeadTypeDef>.GetNamed("Female_NarrowPointy");
-            operator_Pawn.story.hairDef = this.hair == null ? HairDefOf.Bald : this.hair;
+            operator_Pawn.story.hairDef = hair == null ? HairDefOf.Bald : hair;
             operator_Pawn.style.beardDef = this.beard == null ? BeardDefOf.NoBeard : this.beard;
             operator_Pawn.story.skinColorOverride = this.skinColor;
             operator_Pawn.story.HairColor = this.hairColor;
@@ -398,7 +454,7 @@ namespace AK_DLL
             }
             //装备衣物和配件
             operator_Pawn.apparel.DestroyAll();
-            fashionSet = new List<Thing>();
+            clothTemp = new List<Thing>();
             if (apparels != null)
             {
                 foreach (ThingDef apparelDef in this.apparels)
@@ -417,7 +473,7 @@ namespace AK_DLL
             ThingWithComps weapon = null;
             if (this.weapon != null)
             {
-                if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null && AK_ModSettings.debugOverride)
+                if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null)
                 {
                     return null;
                 }
@@ -438,7 +494,7 @@ namespace AK_DLL
             p.outfits.forcedHandler.SetForced(apparel, true);
             if (isFashion)
             {
-                fashionSet.Add(apparel);
+                clothTemp.Add(apparel);
             }
         }
         #endregion

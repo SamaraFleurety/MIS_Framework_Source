@@ -10,7 +10,10 @@ namespace AK_DLL
 {
     public class OperatorClothSet
     {
+        [MustTranslate]
+        public string label;
         public HairDef hair = null;
-        public List<ThingDef> apparels;
+        public ThingDef weapon = null;
+        public List<ThingDef> apparels = new List<ThingDef>();
     }
 }

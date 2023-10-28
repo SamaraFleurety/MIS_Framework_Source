@@ -34,7 +34,7 @@ namespace AK_DLL
             UIInstance = GameObject.Instantiate(UIPrefab);
             UIInstance.SetActive(true);
             this.DoContent();
-            AK_Tool.setEV(true);
+            AK_Tool.SetEV(true);
         }
         public virtual void DoContent()
         {
@@ -53,7 +53,7 @@ namespace AK_DLL
             }
             if (closeEV)
             {
-                AK_Tool.setEV(false);
+                AK_Tool.SetEV(false);
                 AK_Tool.disableIMGUI = false;
             }
         }

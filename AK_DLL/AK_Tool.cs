@@ -228,7 +228,7 @@ namespace AK_DLL
         }*/
 
         //我真的不知道为什么这个ev system过一会自己就会变null。
-        public static void setEV(bool value)
+        public static void SetEV(bool value)
         {
             if (value)
             {

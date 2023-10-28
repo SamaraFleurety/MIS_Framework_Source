@@ -32,7 +32,11 @@ namespace FS_LivelyRim
                 FS_Utilities.ChangeDefaultModel(def);
             }
 
-            if (!FS_ModSettings.mainMenuLive) FS_Utilities.SetDefaultModelInActive();
+            if (!FS_ModSettings.mainMenuLive)
+            {
+                FS_Utilities.SetDefaultModelInActive();
+                return;
+            }
 
             PropertyInfo doMenuProp = typeof(UIRoot_Entry).GetProperty("ShouldDoMainMenu", BindingFlags.Instance | BindingFlags.NonPublic);
             bool doMenuFlag = (bool)doMenuProp.GetValue(__instance);

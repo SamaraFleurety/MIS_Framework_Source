@@ -28,12 +28,23 @@ namespace AK_DLL
             OperatorDocument doc = selPawn.GetDoc();
             if (doc != null && doc.operatorDef.clothSet != null && doc.operatorDef.clothSet.Count > 0)
             {
-                yield return new FloatMenuOption("AK_ChangeFashion".Translate(),
+                yield return new FloatMenuOption("AK_ChangeFashionDefault".Translate(),
                 delegate
                 {
+                    doc.pendingFashion = -1;
                     selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(JobDefOf.AK_OperatorChangeFashion, this));
                 }
                 );
+                foreach (KeyValuePair<int, OperatorClothSet> set in doc.operatorDef.clothSet)
+                {
+                    int j = set.Key;
+                    yield return new FloatMenuOption("ChangeFashionTo".Translate() + set.Value.label.Translate(),
+                        delegate ()
+                        {
+                            doc.pendingFashion = j;
+                            selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(JobDefOf.AK_OperatorChangeFashion, this));
+                        });
+                }
             }
 
             //可以招募
@@ -50,7 +61,7 @@ namespace AK_DLL
             {
                 yield return new FloatMenuOption("AK_NoTicket".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0); yield break;
             }
-            
+
 
         }
 

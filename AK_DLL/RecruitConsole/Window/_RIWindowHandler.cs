@@ -42,7 +42,7 @@ namespace AK_DLL
                 case RIWindowType.MainMenu:
                     RIWindow_OperatorDetail.windowPurpose = OpDetailType.Recruit;
                     actualRIWindow = new RIWindow_MainMenu();
-                    actualRIWindow.DrawUI("MainMenu");
+                    actualRIWindow.DrawUI("yccMainMenu");
 
                     /*RIWindow_MainMenu window_MainMenu = new RIWindow_MainMenu(new DiaNode(new TaggedString()), true);
                     Find.WindowStack.Add(window_MainMenu);*/
@@ -53,7 +53,8 @@ namespace AK_DLL
                 //break;
                 case RIWindowType.Op_List:
                     actualRIWindow = new RIWindow_OperatorList();
-                    actualRIWindow.DrawUI("Operator List");
+                    //actualRIWindow.DrawUI("Operator List");
+                    actualRIWindow.DrawUI("yccOpList");
                     break;
                 case RIWindowType.Op_Detail:
                     actualRIWindow = new RIWindow_OperatorDetail();

@@ -38,7 +38,7 @@ namespace AK_DLL
                 foreach (KeyValuePair<int, OperatorClothSet> set in doc.operatorDef.clothSet)
                 {
                     int j = set.Key;
-                    yield return new FloatMenuOption("ChangeFashionTo".Translate() + set.Value.label.Translate(),
+                    yield return new FloatMenuOption("AK_ChangeFashionTo".Translate() + set.Value.label.Translate(),
                         delegate ()
                         {
                             doc.pendingFashion = j;

@@ -29,7 +29,7 @@ namespace AK_DLL
             Rect rect = new Rect(scenPartRect.x, scenPartRect.y, scenPartRect.width, scenPartRect.height / 2f);
             if (operatorDef == null)
             {
-                Widgets.ButtonText(rect, "No op exist");
+                Widgets.ButtonText(rect, "No operator exist");
                 return;
             }
             //IMGUI，选择干员职业

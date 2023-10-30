@@ -15,5 +15,6 @@ namespace AK_DLL
         public HairDef hair = null;
         public ThingDef weapon = null;
         public List<ThingDef> apparels = new List<ThingDef>();
+        public VoicePackDef voice = null;
     }
 }

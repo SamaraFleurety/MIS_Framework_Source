@@ -162,6 +162,16 @@ namespace AK_DLL
                     }
                 }
                 operator_Pawn.story.hairDef = hair == null ? HairDefOf.Bald : hair;
+                doc.weapon.Destroy();
+                if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null)
+                {
+                    return;
+                }
+                ThingWithComps weapon = (ThingWithComps)ThingMaker.MakeThing(this.weapon);
+                CompBiocodable comp = weapon.GetComp<CompBiocodable>();
+                if (comp != null) comp.CodeFor(operator_Pawn);
+                operator_Pawn.equipment.AddEquipment(weapon);
+                doc.voicePack = this.voicePackDef;
             }
             else
             {
@@ -182,6 +192,10 @@ namespace AK_DLL
                     CompBiocodable comp = weapon.GetComp<CompBiocodable>();
                     if (comp != null) comp.CodeFor(operator_Pawn);
                     operator_Pawn.equipment.AddEquipment(weapon);
+                }
+                if (set.voice != null)
+                {
+                    doc.voicePack = set.voice;
                 }
             }
             doc.RegisterFashionSet(clothTemp);

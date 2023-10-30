@@ -282,6 +282,7 @@ namespace AK_DLL
                 this.Close(false);
             });
 
+            return;
             //fixme:没做
             GameObject.Find("MBtn_Config").GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
@@ -301,7 +302,7 @@ namespace AK_DLL
             });
 
             //点击已解锁的按钮变成未解锁。 解锁时，只需要启用锁定图标，不需要禁用未锁定图标。
-            GameObject.Find("SBtn_UnlockedSec").GetComponent<Button>().onClick.AddListener(delegate
+            /*GameObject.Find("SBtn_UnlockedSec").GetComponent<Button>().onClick.AddListener(delegate
             {
                 GameObject.Find("SBtn_UnlockedSec").transform.GetChild(0).gameObject.SetActive(true);
                 SetSecretaryOffsetBtnsActive(false);
@@ -311,12 +312,12 @@ namespace AK_DLL
             {
                 SetSecretaryOffsetBtnsActive(true);
                 ClickedBtn.SetActive(false);
-            });
+            });*/
 
             temp = GameObject.Find("SBtn_Sec_ScaleUp");
             adjustSecBtns = new List<GameObject>();
             adjustSecBtns.Add(temp);
-            temp.GetComponent<Button>().onClick.AddListener(delegate ()
+            temp.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
                 Vector3 v3 = SecretaryLoc;
                 v3.z += 0.05f;
@@ -326,7 +327,7 @@ namespace AK_DLL
 
             temp = GameObject.Find("SBtn_Sec_ScaleDown");
             adjustSecBtns.Add(temp);
-            temp.GetComponent<Button>().onClick.AddListener(delegate ()
+            temp.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
                 Vector3 v3 = SecretaryLoc;
                 v3.z -= 0.05f;
@@ -366,7 +367,7 @@ namespace AK_DLL
                 DrawStand();
             });
 
-            SetSecretaryOffsetBtnsActive(false);
+            //SetSecretaryOffsetBtnsActive(false);
 
         }
 

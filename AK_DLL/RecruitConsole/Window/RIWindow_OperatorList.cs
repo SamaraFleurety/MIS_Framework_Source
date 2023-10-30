@@ -138,6 +138,8 @@ namespace AK_DLL
         private List<OperatorSeriesDef> AllSeries => RIWindowHandler.operatorSeries;
         private List<int> activeClasses => AllSeries[series].includedClasses;
 
+        private bool choosingSeries = false;
+
         private GameObject ClickedBtn
         {
             get
@@ -176,20 +178,20 @@ namespace AK_DLL
         {
             GameObject navBtn;
             //左上角返回按钮 虽然现在返回就是主界面，但就是有这个按钮
-            navBtn = GameObject.Find("btnBack").transform.GetChild(0).gameObject;
+            /*navBtn = GameObject.Find("btnBack").transform.GetChild(0).gameObject;
             navBtn.GetComponent<Button>().onClick.AddListener(delegate ()
             {
                 this.ReturnToParent(false);
-            });
+            });*/
             //主界面按钮
-            navBtn = GameObject.Find("btnHome").transform.GetChild(0).gameObject;
-            navBtn.GetComponent<Button>().onClick.AddListener(delegate ()
+            navBtn = GameObject.Find("btnHome");
+            navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
                 this.ReturnToParent(false);
             });
             //退出按钮
-            navBtn = GameObject.Find("btnEscape").transform.GetChild(0).gameObject;
-            navBtn.GetComponent<Button>().onClick.AddListener(delegate ()
+            navBtn = GameObject.Find("btnEscape");
+            navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
                 RIWindow_OperatorDetail.windowPurpose = OpDetailType.Recruit;
                 this.Close();
@@ -210,8 +212,15 @@ namespace AK_DLL
         /// </summary>
         private void DrawAllClassBtn()
         {
+            if (choosingSeries) return;
             GameObject classBtnPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("btnClassTemplate");
-            Transform classColumn = GameObject.Find("btnClassColumn").transform;
+            Transform classColumn;
+            //新版ui
+            if (true)
+            {
+                classColumn = GameObject.Find("seriesSelectPanel").transform;
+            }
+            else classColumn = GameObject.Find("btnClassColumn").transform;
             GameObject classBtnInstance;
             AK_Tool4Unity.ClearAllChild(classColumn); //直接清空所有老的职业图标 懒得复用了，感觉占不到几个性能
             int i = 0; //FIXME：晚点给删了
@@ -257,21 +266,26 @@ namespace AK_DLL
                 return;
             }
             if (AllSeries.Count == 0) return;
-            GameObject classBtnPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("btnClassTemplate");
-            Transform seriesPanel = GameObject.Find("seriesPanel").transform; //所有系列图标的总面板
-            Transform seriesColumn = GameObject.Find("seriesSelectPanel").transform;  //可隐藏的，显示所有系列的面板
-            GameObject seriesBtnInstance;
+            //GameObject classBtnPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("btnClassTemplate");
+            //Transform seriesBtn = GameObject.Find("btnSeries").transform;
+
+            //Transform seriesPanel = GameObject.Find("seriesPanel").transform; //所有系列图标的总面板
+            //Transform seriesColumn = GameObject.Find("seriesSelectPanel").transform;  //可隐藏的，显示所有系列的面板
+            //GameObject seriesBtnInstance;
 
             GameObject btnCurrentSeries = GameObject.Find("btnSeries");
             btnCurrentSeries.GetComponent<Image>().sprite = AK_Tool4Unity.Image2Spirit(AllSeries[series].Icon);
             btnCurrentSeries.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
-                bool isActive = seriesPanel.GetChild(0).gameObject.activeInHierarchy;
+                choosingSeries = !choosingSeries;
+                DrawSeriesPanel();
+                DrawAllClassBtn();
+                /*bool isActive = seriesPanel.GetChild(0).gameObject.activeInHierarchy;
                 seriesPanel.GetChild(0).gameObject.SetActive(!isActive);
-                seriesPanel.GetChild(1).gameObject.SetActive(!isActive);
+                seriesPanel.GetChild(1).gameObject.SetActive(!isActive);*/
             });
             //绘制所有的系列图标（可隐藏）
-            for (int i = 0; i < AllSeries.Count; ++i)
+            /*for (int i = 0; i < AllSeries.Count; ++i)
             {
                 seriesBtnInstance = GameObject.Instantiate(classBtnPrefab, seriesColumn);
                 DrawOneClassBtn(seriesBtnInstance, AllSeries[i].Icon, AllSeries[i].label);
@@ -283,10 +297,33 @@ namespace AK_DLL
                     series = j;
                     DrawAllClassBtn();
                 });
-            }
+            }*/
 
-            seriesPanel.GetChild(0).gameObject.SetActive(false);
-            seriesPanel.GetChild(1).gameObject.SetActive(false);
+            /*seriesPanel.GetChild(0).gameObject.SetActive(false);
+            seriesPanel.GetChild(1).gameObject.SetActive(false);*/
+        }
+
+        private void DrawSeriesPanel()
+        {
+            if (!choosingSeries) return; 
+            GameObject classBtnPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("btnClassTemplate");
+            Transform seriesColumn = GameObject.Find("seriesSelectPanel").transform;
+            GameObject seriesBtnInstance;
+            AK_Tool4Unity.ClearAllChild(seriesColumn);           
+            for (int i = 0; i < AllSeries.Count; ++i)
+            {
+                seriesBtnInstance = GameObject.Instantiate(classBtnPrefab, seriesColumn);
+                DrawOneClassBtn(seriesBtnInstance, AllSeries[i].Icon, AllSeries[i].label);
+                seriesBtnInstance.GetComponent<Image>().sprite = AK_Tool4Unity.Image2Spirit(AllSeries[i].Icon);
+
+                int j = i;
+                seriesBtnInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+                {
+                    choosingSeries = false;
+                    series = j;
+                    DrawAllClassBtn();
+                });
+            }
         }
 
         //画单个图标。如果没有图片 就显示字
@@ -428,7 +465,7 @@ namespace AK_DLL
                 //使用了投机取巧而不是正常的方式存储数据。 已弃用。 
                 sortBtnInstance.name = "FSUI_Sorter_" + i;
                 int k = i;
-                sortBtnInstance.GetComponent<Button>().onClick.AddListener(delegate ()
+                sortBtnInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
                 {
                     sortBtnInstance = ClickedBtn;
                     if (NeedSortTo(k))
@@ -445,7 +482,7 @@ namespace AK_DLL
                 });
                 sortBtnInstance.SetActive(true);
 
-                sortBtnInstance.transform.localPosition = new Vector3(sortBtnInstance.transform.localPosition.x * (i - (i / 7 * 7)), sortBtnInstance.transform.localPosition.y * (i / 7));
+                //sortBtnInstance.transform.localPosition = new Vector3(sortBtnInstance.transform.localPosition.x * (i - (i / 7 * 7)), sortBtnInstance.transform.localPosition.y * (i / 7));
 
                 sorterBtns.Add(sortBtnInstance.transform);
             }
@@ -459,7 +496,7 @@ namespace AK_DLL
             int temp = (int)OperatorSortType.Dps;
             sortBtnInstance.name = "FSUI_Sorter_" + temp;
 
-            sortBtnInstance.GetComponent<Button>().onClick.AddListener(delegate ()
+            sortBtnInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
              
                 if (NeedSortTo((int)OperatorSortType.Dps))
@@ -489,7 +526,7 @@ namespace AK_DLL
             temp = (int)OperatorSortType.Alphabet;
             sortBtnInstance.name = "FSUI_Sorter_" + temp;
 
-            sortBtnInstance.GetComponent<Button>().onClick.AddListener(delegate ()
+            sortBtnInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
                 if (NeedSortTo((int)OperatorSortType.Alphabet))
                 {
@@ -599,24 +636,24 @@ namespace AK_DLL
             Vector3 tempV3;
             if (sortType == newSortType && !overrd)
             {
-                tempV3 = sorterBtns[sortType].GetChild(3).eulerAngles;
-                sorterBtns[sortType].GetChild(3).eulerAngles = new Vector3(tempV3.x, tempV3.y, (tempV3.z + 180) % 360);
+                //tempV3 = sorterBtns[sortType].GetChild(3).eulerAngles;
+                //sorterBtns[sortType].GetChild(3).eulerAngles = new Vector3(tempV3.x, tempV3.y, (tempV3.z + 180) % 360);
                 sortReverseOrder = !sortReverseOrder;
                 return false;
             }
             else
             {
                 //先把之前的按钮改回去,3是被选中的白标,2是没选中的灰标
-                sorterBtns[sortType].GetChild(3).gameObject.SetActive(false);
-                sorterBtns[sortType].GetChild(2).gameObject.SetActive(true);
+                //sorterBtns[sortType].GetChild(3).gameObject.SetActive(false);
+                //sorterBtns[sortType].GetChild(2).gameObject.SetActive(true);
                 
                 sortReverseOrder = false;
                 sortType = newSortType;
                 //更改新按钮的标记
-                sorterBtns[sortType].GetChild(3).gameObject.SetActive(true);
-                sorterBtns[sortType].GetChild(2).gameObject.SetActive(false);
+                //sorterBtns[sortType].GetChild(3).gameObject.SetActive(true);
+                //sorterBtns[sortType].GetChild(2).gameObject.SetActive(false);
                 //因为其他按钮默认从大往小排，但字母序是小往大
-                if (sortType == (int)OperatorSortType.Alphabet) sorterBtns[sortType].GetChild(3).eulerAngles = new Vector3(0, 0, 180);
+                //if (sortType == (int)OperatorSortType.Alphabet) sorterBtns[sortType].GetChild(3).eulerAngles = new Vector3(0, 0, 180);
                 return true;
             }
         }

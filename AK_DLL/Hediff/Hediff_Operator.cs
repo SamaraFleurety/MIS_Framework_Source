@@ -54,8 +54,8 @@ namespace AK_DLL
 
         public override void ExposeData()
         {
-            return;
             base.ExposeData();
+            return;
             Scribe_References.Look(ref this.document, "doc");
             //HC_Ability的定制存档 绕过HediffComp不可存档
             if (Scribe.mode == LoadSaveMode.Saving)

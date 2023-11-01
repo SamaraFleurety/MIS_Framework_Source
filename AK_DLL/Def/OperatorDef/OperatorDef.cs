@@ -137,6 +137,7 @@ namespace AK_DLL
 
         public void ChangeFashion(int index, Pawn p)
         {
+            currentlyGenerating = true;
             OperatorDocument doc = p.GetDoc();
             if (doc == null)
             {
@@ -152,6 +153,7 @@ namespace AK_DLL
             doc.DestroyFashionSet();
 
             operator_Pawn = p;
+            clothTemp = new List<Thing>();
             if (index == -1)
             {
                 if (apparels != null)
@@ -161,17 +163,21 @@ namespace AK_DLL
                         Recruit_Inventory_Wear(apparelDef, operator_Pawn, true);
                     }
                 }
-                operator_Pawn.story.hairDef = hair == null ? HairDefOf.Bald : hair;
-                doc.weapon.Destroy();
+                operator_Pawn.story.hairDef = hair ?? HairDefOf.Bald;
+                doc.voicePack = this.voicePackDef;
                 if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null)
                 {
                     return;
                 }
-                ThingWithComps weapon = (ThingWithComps)ThingMaker.MakeThing(this.weapon);
-                CompBiocodable comp = weapon.GetComp<CompBiocodable>();
-                if (comp != null) comp.CodeFor(operator_Pawn);
-                operator_Pawn.equipment.AddEquipment(weapon);
-                doc.voicePack = this.voicePackDef;
+                else if (this.weapon != null)
+                {
+                    if (doc.weapon != null && !doc.weapon.DestroyedOrNull()) doc.weapon.Destroy();
+                    ThingWithComps weapon = (ThingWithComps)ThingMaker.MakeThing(this.weapon);
+                    CompBiocodable comp = weapon.GetComp<CompBiocodable>();
+                    if (comp != null) comp.CodeFor(operator_Pawn);
+                    operator_Pawn.equipment.AddEquipment(weapon);
+                    doc.weapon = weapon;
+                }
             }
             else
             {
@@ -181,9 +187,13 @@ namespace AK_DLL
                     Recruit_Inventory_Wear(def, operator_Pawn, true);
                 }
                 if (set.hair != null) operator_Pawn.story.hairDef = set.hair;
+                if (set.voice != null)
+                {
+                    doc.voicePack = set.voice;
+                }
                 if (set.weapon != null)
                 {
-                    doc.weapon.Destroy();
+                    if (doc.weapon != null && !doc.weapon.DestroyedOrNull()) doc.weapon.Destroy();
                     if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null)
                     {
                         return;
@@ -192,14 +202,12 @@ namespace AK_DLL
                     CompBiocodable comp = weapon.GetComp<CompBiocodable>();
                     if (comp != null) comp.CodeFor(operator_Pawn);
                     operator_Pawn.equipment.AddEquipment(weapon);
-                }
-                if (set.voice != null)
-                {
-                    doc.voicePack = set.voice;
+                    doc.weapon = weapon;
                 }
             }
             doc.RegisterFashionSet(clothTemp);
             clothTemp.Clear();
+            currentlyGenerating = false;
         }
 
         public virtual void Recruit(IntVec3 intVec, Map map)

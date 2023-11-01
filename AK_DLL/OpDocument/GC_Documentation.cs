@@ -52,8 +52,8 @@ namespace AK_DLL
         //在档案中注册衣服。衣服会在换装时回收
         public void RegisterFashionSet(List<Thing> fashionSet)
         {
-            apparel = new List<Thing>();
             DestroyFashionSet();
+            if (apparel == null) apparel = new List<Thing>();
             foreach(Thing i in fashionSet)
             {
                 apparel.Add(i);

@@ -205,6 +205,8 @@ namespace AK_DLL
                     doc.weapon = weapon;
                 }
             }
+            operator_Pawn.style.Notify_StyleItemChanged();
+            operator_Pawn.style.MakeHairFilth();
             doc.RegisterFashionSet(clothTemp);
             clothTemp.Clear();
             currentlyGenerating = false;

@@ -63,6 +63,7 @@ namespace AK_DLL
         //回收当前衣服。
         public void DestroyFashionSet()
         {
+            if (apparel == null || apparel.Count == 0) return;
             foreach(Thing i in apparel)
             {
                 if (i != null && !i.Destroyed) i.Destroy(DestroyMode.Vanish);

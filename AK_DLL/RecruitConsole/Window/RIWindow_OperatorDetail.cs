@@ -771,7 +771,7 @@ namespace AK_DLL
                 TraitDegreeData traitDef = Def.traits[i].def.DataAtDegree(Def.traits[i].degree);
                 traitInstance.GetComponentInChildren<TextMeshProUGUI>().text = traitDef.label.Translate();
                 traitInstance.name = "FSUI_Traits_" + i;
-                InitializeEventTrigger(traitInstance.GetComponent<EventTrigger>(), Def.traits[i].def.DataAtDegree(Def.traits[i].degree).description);
+                InitializeEventTrigger(traitInstance.GetComponent<EventTrigger>(), AK_Tool.DescriptionManualResolve(Def.traits[i].def.DataAtDegree(Def.traits[i].degree).description, Def.nickname, Def.isMale ? Gender.Male : Gender.Female));
             }
         }
         #endregion

@@ -5,6 +5,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 using UnityEngine.UI;
+using System.Text.RegularExpressions;
 
 namespace AK_DLL
 {
@@ -283,6 +284,23 @@ namespace AK_DLL
             int rd = UnityEngine.Random.Range(1, arr.Last());
 
             return quickSearch(arr, 0, arr.Length - 1, rd, 2);
+        }
+
+        public static string DescriptionManualResolve(string s, string name, Gender gender)
+        {
+            /*s = s.Replace("PAWN_nameDef", name);
+            s = s.Replace("PAWN_pronoun", GenderUtility.GetPronoun(gender));
+            s = s.Replace("PAWN_objective", GenderUtility.GetObjective(gender));
+            s = s.Replace("PAWN_possessive", GenderUtility.GetPossessive(gender));
+            s = s.Replace('{', '\0');
+            s = s.Replace('}', '\0');
+            s = s.Replace('[', '\0');
+            s = s.Replace(']', '\0');*/
+            s = Regex.Replace(s, @"\{PAWN_nameDef\}|\[PAWN_nameDef\]", name);
+            s = Regex.Replace(s, @"\{PAWN_pronoun\}|\[PAWN_pronoun\]", GenderUtility.GetPronoun(gender));
+            s = Regex.Replace(s, @"\{PAWN_objective\}|\[PAWN_objective\]", GenderUtility.GetObjective(gender));
+            s = Regex.Replace(s, @"\{PAWN_possessive\}|\[PAWN_possessive\]", GenderUtility.GetPossessive(gender));
+            return s;
         }
 #endregion
     }

@@ -11,6 +11,7 @@ using RimWorld;
 namespace AK_DLL
 {
     //下面这个GameComponent使用了和原版不一样的存读档流程。除非真的知道你在干什么，不然别改。
+    //一个干员的档案
     public class OperatorDocument : IExposable , ILoadReferenceable
     {
         internal string operatorID;
@@ -145,6 +146,8 @@ namespace AK_DLL
             if (opDocArchive == null) opDocArchive = new Dictionary<string, OperatorDocument>();
         }
 
+
+        //先FinalizeInit再LoadedGame
         public override void LoadedGame()
         {
             base.LoadedGame();

@@ -18,7 +18,6 @@ namespace AKM_MusicPlayer
 
     public class TC_MusicPlayer : ThingComp
     {
-        
         public override IEnumerable<FloatMenuOption> CompFloatMenuOptions(Pawn selPawn)
         {
             foreach(ArkSongDef i in GC_MusicMuseum.enabledSongs)

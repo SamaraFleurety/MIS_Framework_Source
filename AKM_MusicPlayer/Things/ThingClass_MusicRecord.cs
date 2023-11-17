@@ -1,17 +1,15 @@
 ﻿using RimWorld;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Verse;
 using Verse.AI;
 
 namespace AKM_MusicPlayer
 {
-    public class ThingClass_MusicRecord : Thing
+    public class ThingClass_MusicRecord : ThingWithComps
     {
         public ArkSongDef recordedSong;
+
+        public const int XPGain = 500;
 
         public ThingClass_MusicRecord()
         {

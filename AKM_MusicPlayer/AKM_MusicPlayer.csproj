@@ -55,8 +55,9 @@
   <ItemGroup>
     <Compile Include="ArkSongDef.cs" />
     <Compile Include="GC_MusicMuseum.cs" />
+    <Compile Include="JobDriver_InsertMusicRecorder.cs" />
     <Compile Include="Things\TCP_MusicPlayer.cs" />
-    <Compile Include="Things\ThingClass_MusicRecorder.cs" />
+    <Compile Include="Things\ThingClass_MusicRecord.cs" />
     <Compile Include="TypeDef.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities.cs" />

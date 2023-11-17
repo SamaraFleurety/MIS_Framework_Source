@@ -28,22 +28,28 @@ namespace AKM_MusicPlayer
 
         protected override IEnumerable<Toil> MakeNewToils()
         {
-            this.FailOnDespawnedOrNull(indexRecord);
-            this.FailOnForbidden(indexRecord);
-
             this.FailOnDespawnedOrNull(indexPlayer);
             this.FailOnForbidden(indexPlayer);
 
-            yield return Toils_Goto.GotoThing(indexRecord, PathEndMode.Touch);
+
+            yield return Toils_General.DoAtomic(delegate ()
+            {
+                job.count = 1;
+            });
+
+            Toil reserveThing = Toils_Reserve.Reserve(indexRecord);
+            yield return reserveThing;
+
+            yield return Toils_Goto.GotoThing(indexRecord, PathEndMode.Touch).FailOnDespawnedNullOrForbidden(indexRecord).FailOnSomeonePhysicallyInteracting(indexRecord);
 
             //拿起来
-            yield return Toils_Haul.StartCarryThing(indexRecord);
+            yield return Toils_Haul.StartCarryThing(indexRecord,false, true).FailOnDestroyedNullOrForbidden(indexRecord); 
 
             yield return Toils_Goto.GotoThing(indexPlayer, PathEndMode.InteractionCell);
 
             Toil toilWait = Toils_General.Wait(100);
-            toilWait.FailOnCannotTouch(indexPlayer, PathEndMode.InteractionCell);
             toilWait.WithProgressBarToilDelay(indexPlayer);
+            toilWait.FailOnCannotTouch(indexPlayer,PathEndMode.Touch);
             yield return toilWait;
 
             Toil insertRecordIntoPlayer = ToilMaker.MakeToil();
@@ -51,6 +57,10 @@ namespace AKM_MusicPlayer
             {
                 GC_MusicMuseum.EnableSong(thingRecord.recordedSong);
                 thingRecord.Destroy();
+                if (pawn.skills != null)
+                {
+                    pawn.skills.GetSkill(SkillDefOf.Artistic).Learn(ThingClass_MusicRecord.XPGain);
+                }
             };
             insertRecordIntoPlayer.defaultCompleteMode = ToilCompleteMode.Instant;
             yield return insertRecordIntoPlayer;

@@ -13,6 +13,10 @@ namespace AKM_MusicPlayer
         public static HashSet<ArkSongDef> enabledSongs = new HashSet<ArkSongDef>();
         public static HashSet<ArkSongDef> potentialSongs = new HashSet<ArkSongDef>();
 
+        public GC_MusicMuseum(Game game)
+        {
+        }
+
         public override void StartedNewGame()
         {
             base.StartedNewGame();

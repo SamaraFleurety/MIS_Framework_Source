@@ -6,6 +6,7 @@ using UnityEngine;
 using RimWorld.Planet;
 using FS_LivelyRim;
 using AKA_Ability;
+using AKM_MusicPlayer;
 
 namespace AK_DLL
 {
@@ -226,6 +227,9 @@ namespace AK_DLL
             //operator_Pawn.story.CrownType = CrownType.Average;
 
             ThingWithComps weapon = Recruit_Inventory();
+
+            if (ModLister.GetActiveModWithIdentifier("mis.arkmusic") != null) Recruit_ArkSongExtension();
+                
 
             GenSpawn.Spawn(operator_Pawn, intVec, map);
             CameraJumper.TryJump(new GlobalTargetInfo(intVec, map));
@@ -471,9 +475,10 @@ namespace AK_DLL
             {
                 foreach (ItemOnSpawn i in this.items)
                 {
-                    Thing newThing = ThingMaker.MakeThing(i.item);
+                    Recruit_Inventory_Additem(i.item, i.amount);
+                    /*Thing newThing = ThingMaker.MakeThing(i.item);
                     newThing.stackCount = i.amount;
-                    operator_Pawn.inventory.TryAddAndUnforbid(newThing);
+                    operator_Pawn.inventory.TryAddAndUnforbid(newThing);*/
                 }
             }
             //装备衣物和配件
@@ -519,6 +524,31 @@ namespace AK_DLL
             if (isFashion)
             {
                 clothTemp.Add(apparel);
+            }
+        }
+
+        protected Thing Recruit_Inventory_Additem(ThingDef itemDef, int cnt = 1)
+        {
+            Thing t = ThingMaker.MakeThing(itemDef);
+            t.stackCount = cnt;
+            operator_Pawn.inventory.TryAddAndUnforbid(t);
+            return t;
+        }
+
+        protected void Recruit_ArkSongExtension()
+        {
+            DefExt_ArkSong ext = this.GetModExtension<DefExt_ArkSong>();
+            if (ext == null) return;
+            ThingDef recordDef = DefDatabase<ThingDef>.GetNamed("AKM_Item_Record");
+            if (ext.arkSong != null)
+            {
+                ThingClass_MusicRecord t = Recruit_Inventory_Additem(recordDef, 1) as ThingClass_MusicRecord;
+                t.recordedSong = ext.arkSong;
+            }
+            foreach(ArkSongDef i in ext.arkSongs)
+            {
+                ThingClass_MusicRecord t = Recruit_Inventory_Additem(recordDef, 1) as ThingClass_MusicRecord;
+                t.recordedSong = i;
             }
         }
         #endregion

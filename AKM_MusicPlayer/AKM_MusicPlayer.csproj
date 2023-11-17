@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArkSongDef.cs" />
+    <Compile Include="DefExt_ArkSong.cs" />
     <Compile Include="GC_MusicMuseum.cs" />
     <Compile Include="JobDriver_InsertMusicRecorder.cs" />
     <Compile Include="Things\TCP_MusicPlayer.cs" />

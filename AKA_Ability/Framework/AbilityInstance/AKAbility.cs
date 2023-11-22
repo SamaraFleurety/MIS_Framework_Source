@@ -11,7 +11,7 @@ namespace AKA_Ability
 {
     public abstract class AKAbility : IExposable
     {
-        public AKAbility_Tracker container;
+        public AKA_AbilityTracker container;
 
         public CDandCharge cooldown;
 

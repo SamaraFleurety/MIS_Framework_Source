@@ -6,8 +6,8 @@ using Verse;
 
 namespace AK_DLL
 {
-    //fixme:干员换装 可能没写完。 逻辑是让可能换装的干员自己操作通讯台换装。
-    public class JobDriver_OpenFashionTab : JobDriver
+    //已经弃用的打开换装界面job
+    /*public class JobDriver_OpenFashionTab : JobDriver
     {
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
@@ -26,5 +26,5 @@ namespace AK_DLL
             yield return t;
             yield break;
         }
-    }
+    }*/
 }

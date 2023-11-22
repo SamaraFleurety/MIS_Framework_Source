@@ -31,7 +31,7 @@ namespace AK_DLL
 			return;
 		}
 
-		//播放技能语音
+		//随机播放技能语音
 		public static void PlaySound(this Pawn pawn, SFXType type)
 		{
 			OperatorDocument doc = pawn.GetDoc();

@@ -15,7 +15,7 @@ namespace AKA_Ability
 
     public static class AKAbilityMaker
     {
-        public static AKAbility MakeAKAbility(AKAbilityDef def, AKAbility_Tracker tracker)
+        public static AKAbility MakeAKAbility(AKAbilityDef def, AKA_AbilityTracker tracker)
         {
 
             AKAbility ability = (AKAbility)Activator.CreateInstance(AutoAbilityClass(def));

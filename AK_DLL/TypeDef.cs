@@ -39,6 +39,8 @@ namespace AK_DLL
 
         public static Dictionary<string, GameObject> cachedLive2DModels = new Dictionary<string, GameObject>();
 
+        public static Texture2D tempTexture => ContentFinder<Texture2D>.Get("Things/Item/RecruitTicket/RecruitTicket_a");
+
         static TypeDef()
         {
         }
@@ -48,6 +50,9 @@ namespace AK_DLL
     public static class AKDefOf
     {
         public static AbilityDef AK_VAbility_Operator;
+
+        public static JobDef AK_Job_UseRecruitConsole;
+        public static JobDef AK_Job_OperatorChangeFashion;
     }
 
     public static class HarmonyPrefixRet

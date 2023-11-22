@@ -6,6 +6,7 @@ using Verse;
 
 namespace AKA_Ability
 {
+    //既是property，也是效果器
     public abstract class AbilityEffectBase
     {
         public virtual void DoEffect_All(Pawn caster, LocalTargetInfo targetInfo)

@@ -136,6 +136,7 @@ namespace AK_DLL
         }
         #endregion
 
+        //换成fashion[index]的时装
         public void ChangeFashion(int index, Pawn p)
         {
             currentlyGenerating = true;
@@ -329,7 +330,7 @@ namespace AK_DLL
                 {
                     hediff.document.groupedAbilities[i].enabled = false;
                 }*/
-                AKAbility_Tracker tracker = vanillaAbility.AKATracker;
+                AKA_AbilityTracker tracker = vanillaAbility.AKATracker;
             if (this.AKAbilities != null && this.AKAbilities.Count > 0)
             {
                 foreach (AKAbilityDef i in this.AKAbilities)

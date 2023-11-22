@@ -9,7 +9,7 @@ using AKA_Ability;
 
 namespace AK_DLL
 {
-    public class AK_AbilityTracker : AKAbility_Tracker
+    public class AK_AbilityTracker : AKA_AbilityTracker
     {
         public OperatorDocument doc;
 

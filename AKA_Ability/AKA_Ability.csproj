@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>..\AK_DLL\bin\Debug\0Harmony.dll</HintPath>
+    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\AK_DLL\bin\Debug\Assembly-CSharp.dll</HintPath>
     </Reference>
@@ -74,12 +77,13 @@
     <Compile Include="AbilityEffect\Effect\AbilityEffect_Heal.cs" />
     <Compile Include="AbilityEffect\Effect\AbilityEffect_Summon.cs" />
     <Compile Include="AbilityEffect\Effect\AbilityEffect_Trap.cs" />
+    <Compile Include="AbilityEffect\Effect\AE_ChangeHair.cs" />
     <Compile Include="AKA_Utilities.cs" />
     <Compile Include="Framework\AbilityInstance\AKAbility.cs" />
     <Compile Include="Framework\AbilityInstance\AKAbility_SelfTarget.cs" />
     <Compile Include="Framework\AbilityInstance\AKAbility_Toggle.cs" />
     <Compile Include="Framework\AbilityInstance\AKAbility_VerbTarget.cs" />
-    <Compile Include="Framework\AKAbility_Tracker.cs" />
+    <Compile Include="Framework\AKA_AbilityTracker.cs" />
     <Compile Include="Framework\CDandCharge.cs" />
     <Compile Include="Framework\VAbility_AKATrackerContainer.cs" />
     <Compile Include="OpAbility\Gizmo\Gizmo_AKAGizmo.cs" />

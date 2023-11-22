@@ -32,7 +32,7 @@ namespace AK_DLL
                 owner = pawn
             }; 
             pawn.abilities.abilities.Add(vAbility); 
-            AKAbility_Tracker tracker = vAbility.AKATracker;
+            AKA_AbilityTracker tracker = vAbility.AKATracker;
             foreach (HediffComp i in this.comps)
             {
                 if (i is HC_Ability j)
@@ -56,7 +56,7 @@ namespace AK_DLL
         {
             base.ExposeData();
             return;
-            Scribe_References.Look(ref this.document, "doc");
+            /*Scribe_References.Look(ref this.document, "doc");
             //HC_Ability的定制存档 绕过HediffComp不可存档
             if (Scribe.mode == LoadSaveMode.Saving)
             {
@@ -82,7 +82,7 @@ namespace AK_DLL
             else 
             {
                 Scribe_Collections.Look(ref this.compAbilities, "AK_abilities", LookMode.Deep);
-            } 
+            } */
         }
 
 

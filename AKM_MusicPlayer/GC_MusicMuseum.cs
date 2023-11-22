@@ -54,7 +54,6 @@ namespace AKM_MusicPlayer
 
         public override void ExposeData()
         {
-            base.ExposeData();
             Scribe_Collections.Look(ref enabledSongs, "songs", LookMode.Def);
         }
     }

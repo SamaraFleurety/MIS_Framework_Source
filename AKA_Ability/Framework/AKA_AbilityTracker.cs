@@ -9,7 +9,7 @@ using Verse.Sound;
 
 namespace AKA_Ability
 {
-    public class AKAbility_Tracker : IExposable
+    public class AKA_AbilityTracker : IExposable
     {
         public Pawn owner;
 
@@ -20,11 +20,13 @@ namespace AKA_Ability
         public List<AKAbility> groupedAbilities = new List<AKAbility>();
 
         public static SoundDef[] abilitySFX = new SoundDef[4] { AKADefOf.AK_SFX_Atkboost, AKADefOf.AK_SFX_Defboost, AKADefOf.AK_SFX_Healboost, AKADefOf.AK_SFX_Tactboost };
-        public AKAbility_Tracker()
+        
+        //用这个构造器需要手动绑定owner
+        public AKA_AbilityTracker()
         {
         }
 
-        public AKAbility_Tracker(Pawn p)
+        public AKA_AbilityTracker(Pawn p)
         {
             owner = p;
         }

@@ -9,7 +9,7 @@ using Verse.AI;
 
 namespace AK_DLL
 {
-
+    //禁止随机变化发型
     [HarmonyPatch(typeof(JobGiver_UseStylingStationAutomatic), "TryGiveJob")]
     public static class PatchAutoChangeHair
     {

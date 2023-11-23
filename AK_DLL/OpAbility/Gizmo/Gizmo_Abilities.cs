@@ -8,7 +8,7 @@ using AKA_Ability;
 
 namespace AK_DLL
 {
-    public class Command_AKAbility : Command_VerbTarget
+    /*public class Command_AKAbility : Command_VerbTarget
     {
         public OperatorAbilityDef abilityDef;
         public Pawn pawn;
@@ -105,7 +105,7 @@ namespace AK_DLL
                         abilityEffectBase.DoEffect_IntVec(this.pawn.Position, this.pawn.Map);
                     }
                 }
-            }*/
+            }
         }
 
         private float width(float rect_heiget)
@@ -114,5 +114,5 @@ namespace AK_DLL
             return rect_heiget * percentage;
         }
 
-    }
+    }*/
 }

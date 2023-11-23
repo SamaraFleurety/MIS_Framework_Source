@@ -15,7 +15,7 @@ namespace AKA_Ability
         float healAmount = 10f; //每次治疗量
         RegrowType regrowType = RegrowType.compare;
 
-        public override void DoEffect_Pawn(Pawn user, Thing target)
+        public override void DoEffect_Pawn(Pawn user, Thing target, bool delayed)
         {
             this.hediffDef = DefDatabase<HediffDef>.GetNamed("AK_Hediff_Regrow");
             this.severity = lastTime * 0.1f;

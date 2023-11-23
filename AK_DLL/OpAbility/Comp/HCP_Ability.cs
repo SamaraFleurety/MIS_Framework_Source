@@ -9,7 +9,7 @@ namespace AK_DLL
 {
     //预防出错保留 大概率根本没啥用
     //绑定在干员Hediff上的入口。要求必须有干员ID。
-    public class HCP_Ability : HediffCompProperties
+    /*public class HCP_Ability : HediffCompProperties
     {
         public HCP_Ability()
         {
@@ -58,7 +58,7 @@ namespace AK_DLL
         {
             get { return this.CDandCharges.maxCharge; }
         }*/
-
+    /*
         public override void CompPostMake()
         {
             base.CompPostMake();
@@ -133,7 +133,7 @@ namespace AK_DLL
                 i += 1;
             }
             else
-            {*/
+            {*//*
             if (this.AbilityDef.targetMode == TargetMode.AutoEnemy)
             {
 
@@ -172,7 +172,7 @@ namespace AK_DLL
                 verb.verbProps = verbProp;
                 verb.verbTracker = new VerbTracker(this);
                 return verb;
-            }*/
+            }*//*
         }
 
 
@@ -189,5 +189,5 @@ namespace AK_DLL
         public CDandCharge CDandCharges;
         public int summoned = 0;
         public bool autoCast = false;
-    }
+    }*/
 }

@@ -9,7 +9,7 @@ namespace AKA_Ability
 {
     public class AbilityEffect_Heal : AbilityEffectBase
     {
-        public override void DoEffect_Pawn(Pawn user, Thing target)
+        public override void DoEffect_Pawn(Pawn user, Thing target, bool delayed)
         {
             if (target == null || !(target is Pawn t))
             {

@@ -18,7 +18,7 @@ namespace AK_DLL
         public bool currentExist;
         public Pawn pawn;
         public Thing weapon;
-        public Hediff_Operator hediff;
+        //public Hediff_Operator hediff;
 
         public int preferredFashionSet = -1;
         public List<Thing> apparel; 
@@ -46,7 +46,7 @@ namespace AK_DLL
             this.currentExist = true;
             this.pawn = p;
             this.weapon = weapon;
-            this.hediff = p.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("AK_Operator")) as Hediff_Operator;
+            //this.hediff = p.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("AK_Operator")) as Hediff_Operator;
             this.RecordSkills();
         }
 
@@ -241,7 +241,7 @@ namespace AK_DLL
         {
             doc.pawn = p;
             doc.weapon = weapon;
-            doc.hediff = p.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("AK_Operator")) as Hediff_Operator;
+            //doc.hediff = p.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("AK_Operator")) as Hediff_Operator;
             doc.currentExist = true;
         }
     }

@@ -10,7 +10,7 @@ namespace AKA_Ability
     {
         protected virtual void preProcess() { 
         }
-        public override void DoEffect_Pawn(Pawn user, Thing target)
+        public override void DoEffect_Pawn(Pawn user, Thing target, bool delayed)
         {
             preProcess();
             if (onSelf) target = user;

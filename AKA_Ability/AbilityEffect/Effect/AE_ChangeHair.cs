@@ -10,7 +10,7 @@ namespace AKA_Ability
 {
     public class AE_ChangeHair : AbilityEffectBase
     {
-        public override void DoEffect_Pawn(Pawn user, Thing target)
+        public override void DoEffect_Pawn(Pawn user, Thing target, bool delayed)
         {
             if (!(target is Pawn p)) return;
             if (p.story == null) return;

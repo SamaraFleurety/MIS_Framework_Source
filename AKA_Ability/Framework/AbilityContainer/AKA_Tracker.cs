@@ -20,7 +20,7 @@ namespace AKA_Ability
         public List<AKAbility> groupedAbilities = new List<AKAbility>();
 
         public static SoundDef[] abilitySFX = new SoundDef[4] { AKADefOf.AK_SFX_Atkboost, AKADefOf.AK_SFX_Defboost, AKADefOf.AK_SFX_Healboost, AKADefOf.AK_SFX_Tactboost };
-        
+
         //用这个构造器需要手动绑定owner
         public AKA_AbilityTracker()
         {

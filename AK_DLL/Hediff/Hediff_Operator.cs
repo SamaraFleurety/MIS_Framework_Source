@@ -8,7 +8,7 @@ using AKA_Ability;
 
 namespace AK_DLL
 {
-    public class Hediff_Operator : HediffWithComps
+    /*public class Hediff_Operator : HediffWithComps
     {
         public override bool ShouldRemove => false;
         public override void Notify_PawnDied()
@@ -82,12 +82,12 @@ namespace AK_DLL
             else 
             {
                 Scribe_Collections.Look(ref this.compAbilities, "AK_abilities", LookMode.Deep);
-            } */
+            } 
         }
 
 
         public OperatorDocument document;
         //缓存。绕过存档时，本质是存的这类HC，而非所有HC。
         public List<HC_Ability> compAbilities = new List<HC_Ability>();
-    }
+    }*/
 }

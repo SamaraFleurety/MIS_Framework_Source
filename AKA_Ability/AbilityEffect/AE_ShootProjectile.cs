@@ -12,8 +12,9 @@ namespace AKA_Ability
         public VerbProperties verb;
         private Verb_Shoot v = null;
 
-        public override void DoEffect_Pawn(Pawn user, Thing target)
+        public override void DoEffect_Pawn(Pawn user, Thing target, bool delayed)
         {
+            Log.Message($"delayed? {delayed}");
             if (v == null)
             {
                 v = (Verb_Shoot)Activator.CreateInstance(verb.verbClass);
@@ -26,6 +27,22 @@ namespace AKA_Ability
 
             Projectile proj = (Projectile)GenSpawn.Spawn(verb.defaultProjectile, shootLine.Source, user.Map, WipeMode.Vanish);
             proj.Launch(user, user.DrawPos, user.TargetCurrentlyAimingAt, user.TargetCurrentlyAimingAt, ProjectileHitFlags.All, false, null, null);
+
+            if (!delayed)
+            {
+                Log.Message("add delayed");
+                int delayBase = verb.ticksBetweenBurstShots;
+                if (delayBase <= 0) delayBase = 1;
+                uint delay = (uint)delayBase;
+                int burstCnt = verb.burstShotCount - 1;
+                DelayedAbility delayedAbility = new DelayedAbility(user, null, target, null, target.Map, this);
+                while (burstCnt > 1)
+                {
+                    GC_DelayedAbilityManager.AddDelayedAbilities(delay, delayedAbility);
+                    burstCnt -= 1;
+                    delay += (uint)delayBase;
+                }
+            }
 
             //v.TryStartCastOn(new LocalTargetInfo(user), new LocalTargetInfo(target), false, true, false, false);
         }

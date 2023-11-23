@@ -38,6 +38,9 @@
       <HintPath>..\AK_DLL\bin\Debug\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Generic.RedBlack, Version=1.3.4618.26633, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Generic.RedBlack.1.3.4618\lib\net40\System.Collections.Generic.RedBlack.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -78,19 +81,26 @@
     <Compile Include="AbilityEffect\Effect\AbilityEffect_Summon.cs" />
     <Compile Include="AbilityEffect\Effect\AbilityEffect_Trap.cs" />
     <Compile Include="AbilityEffect\Effect\AE_ChangeHair.cs" />
+    <Compile Include="AbilityEffect\Effect\AE_TeleportSelfToTarget.cs" />
     <Compile Include="AKA_Utilities.cs" />
+    <Compile Include="Framework\AbilityContainer\TCP_AKATrackerContainer.cs" />
     <Compile Include="Framework\AbilityInstance\AKAbility.cs" />
     <Compile Include="Framework\AbilityInstance\AKAbility_SelfTarget.cs" />
     <Compile Include="Framework\AbilityInstance\AKAbility_Toggle.cs" />
     <Compile Include="Framework\AbilityInstance\AKAbility_VerbTarget.cs" />
-    <Compile Include="Framework\AKA_AbilityTracker.cs" />
+    <Compile Include="Framework\AbilityContainer\AKA_Tracker.cs" />
+    <Compile Include="Framework\AbilityInstance\DelayedAbility.cs" />
     <Compile Include="Framework\CDandCharge.cs" />
-    <Compile Include="Framework\VAbility_AKATrackerContainer.cs" />
+    <Compile Include="Framework\AbilityContainer\VAbility_AKATrackerContainer.cs" />
+    <Compile Include="GC_DelayedAbilityManager.cs" />
     <Compile Include="OpAbility\Gizmo\Gizmo_AKAGizmo.cs" />
     <Compile Include="AKAbilityDef.cs" />
     <Compile Include="OpAbility\Verb\Verb_AbilityTargeting.cs" />
     <Compile Include="TypeDef.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

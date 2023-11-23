@@ -184,7 +184,7 @@ namespace AK_DLL
             else
             {
                 OperatorClothSet set = clothSet[index];
-                foreach(ThingDef def in set.apparels)
+                foreach (ThingDef def in set.apparels)
                 {
                     Recruit_Inventory_Wear(def, operator_Pawn, true);
                 }
@@ -230,7 +230,7 @@ namespace AK_DLL
             ThingWithComps weapon = Recruit_Inventory();
 
             if (ModLister.GetActiveModWithIdentifier("mis.arkmusic") != null) Recruit_ArkSongExtension();
-                
+
 
             GenSpawn.Spawn(operator_Pawn, intVec, map);
             CameraJumper.TryJump(new GlobalTargetInfo(intVec, map));
@@ -313,24 +313,24 @@ namespace AK_DLL
             {
                 return;
             }
-                //绑定干员技能
-                /*if (this.abilities != null && this.abilities.Count > 0)
-                {
+            //绑定干员技能
+            /*if (this.abilities != null && this.abilities.Count > 0)
+            {
 
-                    foreach (OperatorAbilityDef i in this.abilities)
-                    {
-                        HC_Ability HC = new HC_Ability(i);
-                        hediff.comps.Add(HC);
-                        HC.parent = hediff;
-                        if (i.grouped) hediff.document.groupedAbilities.Add(HC);
-                    }
-                }
-                //禁用非第一个的可选技能
-                for (int i = 1; i < hediff.document.groupedAbilities.Count; ++i)
+                foreach (OperatorAbilityDef i in this.abilities)
                 {
-                    hediff.document.groupedAbilities[i].enabled = false;
-                }*/
-                AKA_AbilityTracker tracker = vanillaAbility.AKATracker;
+                    HC_Ability HC = new HC_Ability(i);
+                    hediff.comps.Add(HC);
+                    HC.parent = hediff;
+                    if (i.grouped) hediff.document.groupedAbilities.Add(HC);
+                }
+            }
+            //禁用非第一个的可选技能
+            for (int i = 1; i < hediff.document.groupedAbilities.Count; ++i)
+            {
+                hediff.document.groupedAbilities[i].enabled = false;
+            }*/
+            AKA_AbilityTracker tracker = vanillaAbility.AKATracker;
             if (this.AKAbilities != null && this.AKAbilities.Count > 0)
             {
                 foreach (AKAbilityDef i in this.AKAbilities)
@@ -385,10 +385,10 @@ namespace AK_DLL
             HediffDef hediffDef = HediffDef.Named("AK_Operator");
             FixAlienHairColor(hediffDef);
 
-            Hediff_Operator hediff = HediffMaker.MakeHediff(hediffDef, operator_Pawn, operator_Pawn.health.hediffSet.GetBrain()) as Hediff_Operator;
+            /*Hediff_Operator hediff = HediffMaker.MakeHediff(hediffDef, operator_Pawn, operator_Pawn.health.hediffSet.GetBrain()) as Hediff_Operator;
 
             //增加多功能hediff
-            operator_Pawn.health.AddHediff(hediff, null, null, null);
+            operator_Pawn.health.AddHediff(hediff, null, null, null);*/
 
             if (this.hediffInate != null && this.hediffInate.Count > 0)
             {
@@ -546,7 +546,7 @@ namespace AK_DLL
                 ThingClass_MusicRecord t = Recruit_Inventory_Additem(recordDef, 1) as ThingClass_MusicRecord;
                 t.recordedSong = ext.arkSong;
             }
-            foreach(ArkSongDef i in ext.arkSongs)
+            foreach (ArkSongDef i in ext.arkSongs)
             {
                 ThingClass_MusicRecord t = Recruit_Inventory_Additem(recordDef, 1) as ThingClass_MusicRecord;
                 t.recordedSong = i;

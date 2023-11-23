@@ -3,6 +3,7 @@ using RimWorld;
 using Verse;
 using Verse.AI;
 using HarmonyLib;
+using Verse.Sound;
 
 namespace AK_DLL
 {
@@ -12,10 +13,11 @@ namespace AK_DLL
         [HarmonyPostfix]
         public static void postfix(Pawn __instance) 
         {
-            if (__instance.health.hediffSet.HasHediff(HediffDef.Named("AK_Operator")))
-            {
-                __instance.Corpse.Destroy();
-            }
+            OperatorDocument doc = __instance.GetDoc();
+            if (doc == null) return;
+            __instance.Corpse.Destroy();
+            doc.voicePack.diedSound.PlayOneShot(null);
+            doc.currentExist = false;
         }
     }
 }

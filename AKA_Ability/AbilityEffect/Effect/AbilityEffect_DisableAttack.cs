@@ -8,7 +8,7 @@ namespace AKA_Ability
 {
     public class AbilityEffect_GainTraitSelf : AbilityEffectBase
     {
-        public override void DoEffect_Pawn(Pawn user, Thing target)
+        public override void DoEffect_Pawn(Pawn user, Thing target, bool delayed)
         {
             int? degree_var = this.degree == null ?0:this.degree;
             user.story.traits.GainTrait(new Trait(this.trait, (int)degree_var));

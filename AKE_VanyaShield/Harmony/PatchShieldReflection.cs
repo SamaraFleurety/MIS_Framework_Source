@@ -16,14 +16,13 @@ namespace AKE_VanyaShield
         [HarmonyPostfix]
         public static void postfix(DamageInfo dinfo, Vanya_ShieldBelt __instance, ref bool __result)
         {
-            //Log.Message($"受到伤害{dinfo.Amount} from {dinfo.Instigator.Label}");
+            if (dinfo.Instigator == null) return;
             if (__result == true)
             {
                 TC_VanyaShieldExtension comp = __instance.GetComp<TC_VanyaShieldExtension>();
                 if (comp == null) return;
                 if (ShouldReflect(dinfo, __instance, comp))
                 {
-                    Log.Message($"执行反伤");
                     dinfo.Instigator.TakeDamage(new DamageInfo(dinfo.Def, dinfo.Amount * comp.ReflectionRatio, dinfo.ArmorPenetrationInt, dinfo.Angle, dinfo.Instigator, dinfo.HitPart));
                 }
             }

@@ -21,7 +21,6 @@ namespace AKA_Ability
         public override void GameComponentTick()
         {
             base.GameComponentTick();
-            Log.Message($"gc: crt{tick} : {first} : {delayedAbilities.Count}");
             if (!delayedAbilities.Any())
             {
                 tick = 0;

@@ -49,6 +49,8 @@ namespace AK_DLL
     [DefOf]
     public static class AKDefOf
     {
+        public static HediffDef AK_Hediff_AlienRacePatch;
+
         public static AbilityDef AK_VAbility_Operator;
 
         public static JobDef AK_Job_UseRecruitConsole;

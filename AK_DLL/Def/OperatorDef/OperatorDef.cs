@@ -385,7 +385,16 @@ namespace AK_DLL
                 }
             }
 
-            //fixme:外星人发色兼容找个hediff
+            //外星人发色兼容
+
+            if (ModLister.GetActiveModWithIdentifier("erdelf.HumanoidAlienRaces") != null)
+            {
+                HediffWithComps hediffAlienPatch = HediffMaker.MakeHediff(AKDefOf.AK_Hediff_AlienRacePatch, operator_Pawn, operator_Pawn.health.hediffSet.GetBrain()) as HediffWithComps;
+                HC_ForceColors comp = hediffAlienPatch.TryGetComp<HC_ForceColors>();
+                comp.exactProps.skinColor = this.skinColor;
+                comp.exactProps.hairColor = this.hairColor;
+            }
+
             /*HediffDef hediffDef = HediffDef.Named("AK_Operator");
             FixAlienHairColor(hediffDef);*/
 

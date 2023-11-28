@@ -43,11 +43,11 @@ namespace AK_DLL
             Initialize();
         }
         
+        //后处理：切换字体
         public virtual void PostDoContent()
         {
             if (UIInstance == null) return;
             TMP_FontAsset font = AK_Tool4Unity.GetUGUIFont();
-            Log.Message($"font? {font == null}");
             foreach (TextMeshProUGUI i in UIInstance.GetComponents<TextMeshProUGUI>())
             {
                 i.font = font;

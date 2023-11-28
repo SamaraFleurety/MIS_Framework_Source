@@ -19,6 +19,8 @@ namespace AK_DLL
     {
         public HCP_ForceColors Props => (HCP_ForceColors)this.props;
 
+        public HCP_ForceColors exactProps = new HCP_ForceColors();
+
         public override string CompLabelInBracketsExtra
         {
             get

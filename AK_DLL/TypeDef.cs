@@ -39,6 +39,8 @@ namespace AK_DLL
 
         public static Dictionary<string, GameObject> cachedLive2DModels = new Dictionary<string, GameObject>();
 
+        public static Texture2D iconTeleTowerChangeName => ContentFinder<Texture2D>.Get("UI/Gizmo/ChangeName");
+
         public static Texture2D tempTexture => ContentFinder<Texture2D>.Get("Things/Item/RecruitTicket/RecruitTicket_a");
 
         static TypeDef()

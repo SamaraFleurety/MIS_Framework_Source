@@ -27,9 +27,15 @@ namespace AKM_MusicPlayer
         {
             get
             {
-                return $"{base.Label.Translate()}: {recordedSong.label.Translate()} ({StatusString})";
+                return $"{base.def.label.Translate()}: {recordedSong.label.Translate()} ({StatusString})";
             }
         }
+
+        public override string LabelCap => Label;
+        public override string LabelNoCount => Label;
+        public override string LabelCapNoCount => Label;
+        public override string LabelShort => Label;
+        public override string LabelShortCap => Label;
 
         public override void ExposeData()
         {

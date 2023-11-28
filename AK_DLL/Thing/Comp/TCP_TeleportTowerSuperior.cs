@@ -39,7 +39,7 @@ namespace AK_DLL
                 {
                     cachedChangeAliasGizmo = new Command_Action
                     {
-                        icon = TypeDef.tempTexture,
+                        icon = TypeDef.iconTeleTowerChangeName,
                         defaultDesc = "AK_ChangeRecruitTowerAliasDesc".Translate(),
                         defaultLabel = "AK_ChangeRecruitTowerAliasLabel".Translate(),
                         action = delegate ()

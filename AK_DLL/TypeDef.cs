@@ -53,6 +53,8 @@ namespace AK_DLL
 
         public static JobDef AK_Job_UseRecruitConsole;
         public static JobDef AK_Job_OperatorChangeFashion;
+
+        public static FontDef AK_Font_YouYuan;
     }
 
     public static class HarmonyPrefixRet

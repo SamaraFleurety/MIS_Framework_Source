@@ -63,7 +63,7 @@ namespace FS_LivelyRim
             listingStandard.CheckboxLabeled("fillCore".Translate(), ref FS_ModSettings.autofillCubismCoreLib, "fillCoreDesc".Translate());
 
             List<LiveModelDef> allDefs = DefDatabase<LiveModelDef>.AllDefsListForReading;
-            List<String> defLabels = allDefs.Select(td => td.label).ToList();
+            //List<String> defLabels = allDefs.Select(td => td.label).ToList();
 
             //Rect rect = listingStandard.GetRect(Text.LineHeight);
             if (listingStandard.ButtonTextLabeled("selectl2ddef".Translate(), selectedLiveDef.label))

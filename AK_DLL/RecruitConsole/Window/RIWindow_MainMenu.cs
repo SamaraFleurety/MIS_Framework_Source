@@ -387,7 +387,7 @@ namespace AK_DLL
 
             if (SecretaryDef == null)
             {
-                Log.Error($"MIS. missing operator named {AK_ModSettings.secretary}");
+                Log.Error($"[MIS] missing operator named {AK_ModSettings.secretary}");
                 return;
             }
 

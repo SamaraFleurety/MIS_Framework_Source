@@ -378,7 +378,7 @@ namespace AK_DLL
             {
                 TextMeshProUGUI TMP = opClassIcon.GetComponentInChildren<TextMeshProUGUI>();
                 TMP.gameObject.SetActive(true);
-                TMP.text = Def.operatorType.label.Translate();
+                TMP.text = Def.operatorType.label.Translate(); 
             }
             else
             {
@@ -674,7 +674,7 @@ namespace AK_DLL
                     }
                 });
             }
-            // 更换助理
+            // 更换助理按钮
             else if (windowPurpose == OpDetailType.Secretary)
             {
                 //fixme
@@ -689,6 +689,7 @@ namespace AK_DLL
                     }
                     else AK_ModSettings.secretaryLoc = TypeDef.defaultSecLocLive;
 
+                    //手动保存设置
                     AK_ModSettings settings = LoadedModManager.GetMod<AK_Mod>().settings;
                     settings.Write();
 

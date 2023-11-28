@@ -74,6 +74,8 @@ namespace AK_DLL
 
         public XenotypeDef xenoType;
 
+        public AbilityDef operatorID = null;
+
         #endregion
 
         #region 快捷属性
@@ -360,7 +362,8 @@ namespace AK_DLL
             document.voicePack = voicePackDef;
 
             //干员身份证，改放在原版技能里了
-            VAbility_Operator vAbility = AbilityUtility.MakeAbility(AKDefOf.AK_VAbility_Operator, operator_Pawn) as VAbility_Operator;
+            if (this.operatorID == null) operatorID = AKDefOf.AK_VAbility_Operator;
+            VAbility_Operator vAbility = AbilityUtility.MakeAbility(operatorID, operator_Pawn) as VAbility_Operator;
             //Log.Message($"va:{vAbility == null}");
             vAbility.AKATracker = new AK_AbilityTracker
             {
@@ -382,8 +385,9 @@ namespace AK_DLL
                 }
             }
 
-            HediffDef hediffDef = HediffDef.Named("AK_Operator");
-            FixAlienHairColor(hediffDef);
+            //fixme:外星人发色兼容找个hediff
+            /*HediffDef hediffDef = HediffDef.Named("AK_Operator");
+            FixAlienHairColor(hediffDef);*/
 
             /*Hediff_Operator hediff = HediffMaker.MakeHediff(hediffDef, operator_Pawn, operator_Pawn.health.hediffSet.GetBrain()) as Hediff_Operator;
 

@@ -446,7 +446,7 @@ namespace AK_DLL
         //按钮的功能有一定的优化空间，但我懒得做
         private void DrawSortBtns()
         {
-            GameObject sortBtnPrefab = bundle.LoadAsset<GameObject>("btnSortTemplate");
+            GameObject sortBtnPrefab = Bundle.LoadAsset<GameObject>("btnSortTemplate");
             GameObject sortBtnInstance;
             TextMeshProUGUI textTMP;
             if (sorterColumnLoc == null)

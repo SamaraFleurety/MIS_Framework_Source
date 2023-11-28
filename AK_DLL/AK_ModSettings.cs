@@ -31,6 +31,7 @@ namespace AK_DLL
         public static int secretarySkin = 1;
         public static Vector3 secretaryLoc = new Vector3(400, 0, 1); //(x坐标, y坐标, 缩放倍率)。坐标使用unity体系，即左下角是(0,0)，上右为正。
         public static int secLocSensitive = 1; //调整主界面秘书位置时，每次按钮移动的像素数量；实际效果是值*10
+        public static FontDef font = null;
         #endregion
 
         //public List<Pawn> exampleListOfPawns = new List<Pawn>();
@@ -51,6 +52,7 @@ namespace AK_DLL
             Scribe_Values.Look(ref secretarySkin, "secSkin", 1);
             Scribe_Values.Look(ref secretaryLoc, "secLoc", new Vector3(400, 0, 1), true);
             Scribe_Values.Look(ref secLocSensitive, "secSense", 1, true);
+            Scribe_Defs.Look(ref font, "font");
             //Scribe_Collections.Look(ref exampleListOfPawns, "exampleListOfPawns", LookMode.Reference);
             base.ExposeData();
         }
@@ -79,6 +81,22 @@ namespace AK_DLL
             AK_ModSettings.ratio = (int)listingStandard.SliderLabeled("AK_Option_ratio".Translate() + $"{(float)AK_ModSettings.ratio * 0.05f}", AK_ModSettings.ratio, 1, 40);
 
             AK_ModSettings.secLocSensitive = (int)listingStandard.SliderLabeled("AK_Option_SecSensetive".Translate() + $"{(float)AK_ModSettings.secLocSensitive * 10}", AK_ModSettings.secLocSensitive, 1, 10);
+
+            if (AK_ModSettings.font == null) AK_ModSettings.font = AKDefOf.AK_Font_YouYuan;
+            List<FontDef> allFontDefs = DefDatabase<FontDef>.AllDefsListForReading;
+            if (listingStandard.ButtonTextLabeled("AK_Option_selectFont".Translate(), AK_ModSettings.font.label.Translate()))
+            {
+                List<FloatMenuOption> list = new List<FloatMenuOption>();
+                foreach (FontDef i in allFontDefs)
+                {
+                    FontDef j = i;
+                    list.Add(new FloatMenuOption(j.label.Translate(),delegate()
+                    {
+                        AK_ModSettings.font = j;
+                    }));
+                    Find.WindowStack.Add(new FloatMenu(list));
+                }
+            }
 
             listingStandard.End();
             base.DoSettingsWindowContents(inRect);

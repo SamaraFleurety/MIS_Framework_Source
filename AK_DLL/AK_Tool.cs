@@ -141,7 +141,11 @@ namespace AK_DLL
             //if (p.health.hediffSet.GetFirstHediff<Hediff_Operator>() == null) return null;
             if (p == null) return null;
             if (p.abilities == null) return null;
-            VAbility_Operator va = p.abilities.GetAbility(AKDefOf.AK_VAbility_Operator) as VAbility_Operator;
+            VAbility_Operator va = null;
+            foreach (Ability i in p.abilities.abilities)
+            {
+                if (i is VAbility_Operator vab) va = vab;
+            }
             if (va == null) return null;
             OperatorDocument doc = va.Document;
             return doc;

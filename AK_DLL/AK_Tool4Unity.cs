@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using FSUI;
+using TMPro;
+using FS_LivelyRim;
+using Verse;
 
 namespace AK_DLL
 {
@@ -30,6 +33,30 @@ namespace AK_DLL
         {
             Sprite sprite = Sprite.Create(image, new Rect(0, 0, image.width, image.height), new Vector2(0.5f, 0.5f));
             return sprite;
+        }
+
+        public static TMP_FontAsset GetUGUIFont()
+        {
+            if (AK_ModSettings.font == null)
+            {
+                Log.Error($"[MIS] missing font. reset to YouYuan");
+                AK_ModSettings.font = AKDefOf.AK_Font_YouYuan;
+                AK_ModSettings settings = LoadedModManager.GetMod<AK_Mod>().settings;
+                settings.Write();
+            }
+            if (AK_ModSettings.font == AKDefOf.AK_Font_YouYuan)
+            {
+                return AK_Tool.FSAsset.LoadAsset<TMP_FontAsset>(AK_ModSettings.font.modelName);
+            }
+            return GetUGUIFont(AK_ModSettings.font);
+        }
+
+        public static TMP_FontAsset GetUGUIFont(FontDef def)
+        {
+            Debug.Log("get font stdef");
+            AssetBundle AB = FS_Tool.LoadAssetBundle(def.modID, def.assetBundle);
+            Debug.Log("get font stdefret");
+            return AB.LoadAsset<TMP_FontAsset>(def.modelName);
         }
     }
 }

@@ -37,18 +37,18 @@ namespace AK_DLL
 
         public static TMP_FontAsset GetUGUIFont()
         {
-            if (AK_ModSettings.font == null)
+            if (AK_ModSettings.Font == null)
             {
                 Log.Error($"[MIS] missing font. reset to YouYuan");
-                AK_ModSettings.font = AKDefOf.AK_Font_YouYuan;
+                AK_ModSettings.Font = AKDefOf.AK_Font_YouYuan;
                 AK_ModSettings settings = LoadedModManager.GetMod<AK_Mod>().settings;
                 settings.Write();
             }
-            if (AK_ModSettings.font == AKDefOf.AK_Font_YouYuan)
+            if (AK_ModSettings.Font == AKDefOf.AK_Font_YouYuan)
             {
-                return AK_Tool.FSAsset.LoadAsset<TMP_FontAsset>(AK_ModSettings.font.modelName);
+                return AK_Tool.FSAsset.LoadAsset<TMP_FontAsset>(AK_ModSettings.Font.modelName);
             }
-            return GetUGUIFont(AK_ModSettings.font);
+            return GetUGUIFont(AK_ModSettings.Font);
         }
 
         public static TMP_FontAsset GetUGUIFont(FontDef def)

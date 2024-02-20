@@ -55,7 +55,7 @@ namespace AK_DLL
             foreach (TextMeshProUGUI i in UIInstance.GetComponentsInChildren<TextMeshProUGUI>(true))
             {
                 i.font = font;
-            }
+            }        
         }
 
         //要是从UGUI转UGUI就不要关ev。UGUI转IMGUI或者全关可以关掉ev。

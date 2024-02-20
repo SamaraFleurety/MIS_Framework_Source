@@ -34,7 +34,11 @@ namespace AK_DLL
         public static string font = "AK_Font_YouYuan";
         public static FontDef Font
         {
-            get { return DefDatabase<FontDef>.GetNamedSilentFail(font); }
+            get
+            {
+                if (font == null || DefDatabase<FontDef>.GetNamedSilentFail(font) == null) font = "AK_Font_YouYuan";
+                return DefDatabase<FontDef>.GetNamedSilentFail(font);
+            }
             set { font = value.defName; }
         }
         #endregion
@@ -57,7 +61,7 @@ namespace AK_DLL
             Scribe_Values.Look(ref secretarySkin, "secSkin", 1);
             Scribe_Values.Look(ref secretaryLoc, "secLoc", new Vector3(400, 0, 1), true);
             Scribe_Values.Look(ref secLocSensitive, "secSense", 1, true);
-            Scribe_Values.Look(ref font, "font");
+            Scribe_Values.Look(ref font, "font", "AK_Font_YouYuan", true);
             //Scribe_Collections.Look(ref exampleListOfPawns, "exampleListOfPawns", LookMode.Reference);
             base.ExposeData();
         }
@@ -95,10 +99,10 @@ namespace AK_DLL
                 foreach (FontDef i in allFontDefs)
                 {
                     FontDef j = i;
-                    list.Add(new FloatMenuOption(j.label.Translate(),delegate()
-                    {
-                        AK_ModSettings.Font = j;
-                    }));
+                    list.Add(new FloatMenuOption(j.label.Translate(), delegate ()
+                     {
+                         AK_ModSettings.Font = j;
+                     }));
                     Find.WindowStack.Add(new FloatMenu(list));
                 }
             }

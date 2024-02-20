@@ -12,7 +12,7 @@ namespace AKA_Ability
     public class GC_DelayedAbilityManager : GameComponent
     {
         public static ulong tick = 0;
-        public static RedBlackTree<ulong, DelayedAbility> delayedAbilities = new RedBlackTree<ulong, DelayedAbility>();
+        public static RedBlackTree<ulong, DelayedAbility> delayedAbilities = new RedBlackTree<ulong, DelayedAbility>(); //key:被执行时的tick
         private static ulong first = 0;
         public GC_DelayedAbilityManager(Game game)
         {

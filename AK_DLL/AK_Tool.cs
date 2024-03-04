@@ -292,14 +292,6 @@ namespace AK_DLL
 
         public static string DescriptionManualResolve(string s, string name, Gender gender)
         {
-            /*s = s.Replace("PAWN_nameDef", name);
-            s = s.Replace("PAWN_pronoun", GenderUtility.GetPronoun(gender));
-            s = s.Replace("PAWN_objective", GenderUtility.GetObjective(gender));
-            s = s.Replace("PAWN_possessive", GenderUtility.GetPossessive(gender));
-            s = s.Replace('{', '\0');
-            s = s.Replace('}', '\0');
-            s = s.Replace('[', '\0');
-            s = s.Replace(']', '\0');*/
             s = Regex.Replace(s, @"\{PAWN_nameDef\}|\[PAWN_nameDef\]", name);
             s = Regex.Replace(s, @"\{PAWN_pronoun\}|\[PAWN_pronoun\]", GenderUtility.GetPronoun(gender));
             s = Regex.Replace(s, @"\{PAWN_objective\}|\[PAWN_objective\]", GenderUtility.GetObjective(gender));

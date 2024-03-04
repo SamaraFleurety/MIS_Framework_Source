@@ -43,12 +43,17 @@ namespace AKA_Ability
         public IEnumerable<Command> GetGizmos()
         {
             if (owner == null) yield break;
+
+            if (Find.World == null || Find.CurrentMap == null || Find.Selector == null || Find.Selector.AnyPawnSelected == false || Find.Selector.SelectedPawns.Count > 1) yield break;
+
             Command c;
+            //固有的 不取决于分组的技能会一直显示
             foreach (AKAbility i in innateAbilities)
             {
                 c = i.GetGizmo();
                 if (c != null) yield return c;
             }
+            //分组技能 仅显示最多1个
             if (indexActiveGroupedAbility != -1 && groupedAbilities.Count > 0)
             {
                 c = groupedAbilities[indexActiveGroupedAbility].GetGizmo();

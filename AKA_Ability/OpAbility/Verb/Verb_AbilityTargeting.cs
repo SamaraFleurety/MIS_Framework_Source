@@ -13,12 +13,8 @@ namespace AKA_Ability
     {
         public AKAbility parent;
 
-        //Pawn Caster => parent.container.owner;
         protected override bool TryCastShot()
         {
-            /*Log.Message("aka verb");
-            Log.Message($"{CasterPawn == null} ;; {currentTarget == null}");
-            Log.Message($"{currentTarget.Cell == null} ;;; {currentTarget.Thing == null}");*/
             parent.def.CastEffects(CasterPawn, currentTarget.Cell, currentTarget.Thing, Caster.Map);
             parent.UseOneCharge();
             return true;

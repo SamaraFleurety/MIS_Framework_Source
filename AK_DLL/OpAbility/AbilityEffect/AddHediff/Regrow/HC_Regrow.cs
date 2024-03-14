@@ -7,7 +7,7 @@ using Verse;
 
 namespace AK_DLL
 {
-    public class HediffComp_Regrow : HediffComp
+    /*public class HediffComp_Regrow : HediffComp
     {
         #region 属性
         public HediffCompProperties_Regrow Props
@@ -113,8 +113,8 @@ namespace AK_DLL
                  select x).TryRandomElement(out Hediff_Injury hediff_Injury))
             {
                 hediff_Injury.Heal(points);
-            }*/
+            }
         }
 
-    }
+    }*/
 }

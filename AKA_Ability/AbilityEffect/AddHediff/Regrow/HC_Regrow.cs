@@ -112,11 +112,16 @@ namespace AKA_Ability
         
         private void HealRandomInjury(Pawn pawn, float points)
         {
-            if (pawn.health.hediffSet.GetInjuriesTendable() != null && pawn.health.hediffSet.GetInjuriesTendable().Count() > 0)
+            for (int i = 0; i < pawn.health.hediffSet.hediffs.Count; ++i)
+            {
+                Hediff h = pawn.health.hediffSet.hediffs[i];
+                if (h is Hediff_Injury) h.Heal(points);
+            }
+            /*if (pawn.health.hediffSet.GetInjuriesTendable() != null && pawn.health.hediffSet.GetInjuriesTendable().Count() > 0)
             {
                 Hediff_Injury x = pawn.health.hediffSet.GetInjuriesTendable().RandomElement();
                 x.Heal(points);
-            }
+            }*/
             //这函数被太难扬咯，改用上面的丐版方法
             /*wn.health.hediffSet.GetHediffs<Hediff_Injury>();
             if ((from x in pawn.health.hediffSet.GetHediffs<Hediff_Injury>()

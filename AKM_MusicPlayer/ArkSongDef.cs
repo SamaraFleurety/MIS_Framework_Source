@@ -22,7 +22,7 @@ namespace AKM_MusicPlayer
 
         public void PlayMe()
         {
-            Find.MusicManagerPlay.ForceStartSong(this, false);
+            Find.MusicManagerPlay.ForcePlaySong(this, false);
         }
     }
 }

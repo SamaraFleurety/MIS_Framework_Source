@@ -31,11 +31,19 @@ namespace AK_DLL
                 parent.pawn.story.traits.GainTrait(new Trait(TraitAndDegree.def, TraitAndDegree.degree));
                 if (data.skillGains != null)
                 {
+                    foreach (SkillGain skillGain in data.skillGains)
+                    {
+                        SkillRecord record = parent.pawn.skills.GetSkill(skillGain.skill);
+                        if (record != null) record.levelInt += skillGain.amount;
+                    }
+                }
+                /*if (data.skillGains != null)
+                {
                     foreach (SkillRecord j in parent.pawn.skills.skills)
                     {
                         if (data.skillGains.ContainsKey(j.def)) j.Level += data.skillGains[j.def];
                     }
-                }
+                }*/
             }
             parent.Severity = -1;
         }

@@ -17,8 +17,27 @@ namespace AK_DLL
             if (age > this.Props.healOncePer) 
             {
                 float heal = (float)this.Props.healPoint;
-                foreach (Hediff_Injury injury in parent.pawn.health.hediffSet.GetInjuriesTendable().ToList())
+                for (int i = 0; i < parent.pawn.health.hediffSet.hediffs.Count; ++i)
                 {
+                    Hediff injury = parent.pawn.health.hediffSet.hediffs[i];
+                    if (injury is Hediff_Injury)
+                    {
+                        if (heal > this.Props.amountOfHealOnce)
+                        {
+                            injury.Heal(this.Props.amountOfHealOnce);
+                            heal -= this.Props.amountOfHealOnce;
+                        }
+                        else
+                        {
+                            injury.Heal(heal);
+                            heal -= heal;
+                            break;
+                        }
+                    }
+                }
+                /*foreach (Hediff i in parent.pawn.health.hediffSet.GetHediffsTendable().ToList())
+                {
+                    if (!(i is Hediff_Injury injury)) continue;
                     if (heal > this.Props.amountOfHealOnce)
                     {
                         injury.Heal(this.Props.amountOfHealOnce);
@@ -30,7 +49,7 @@ namespace AK_DLL
                         heal -= heal;
                         break;
                     }
-                }
+                }*/
             }
         }
 

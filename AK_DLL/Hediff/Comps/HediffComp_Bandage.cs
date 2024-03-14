@@ -6,7 +6,7 @@ using Verse;
 
 namespace AK_DLL
 {
-    public class HediffComp_Bandage : HediffComp
+    /*public class HediffComp_Bandage : HediffComp
     {
         public HediffCompProperties_Bandage Props => (HediffCompProperties_Bandage)this.props;
         public override void CompPostTick(ref float severityAdjustment)
@@ -16,12 +16,14 @@ namespace AK_DLL
             if (this.age > this.Props.tickOfBandageOnce) 
             {
                 this.age = 0;
-                List<Hediff_Injury> injuries = this.parent.pawn.health.hediffSet.GetInjuriesTendable().ToList();
+                List<Hediff> injuries = this.parent.pawn.health.hediffSet.GetHediffsTendable().ToList();
                 if (!injuries.NullOrEmpty())
                 {
                     int count = 0;
-                    foreach (Hediff_Injury injury in injuries) 
+                    foreach (Hediff i in injuries) 
                     {
+                        Hediff_Injury injury = i as Hediff_Injury;
+                        if (i == null) continue;
                         if (count > this.Props.bandageCount) 
                         {
                             break;
@@ -42,5 +44,5 @@ namespace AK_DLL
             Scribe_Values.Look(ref this.age,"AK_Bandage_Age");
         }
         public int age = 0;
-    }
+    }*/
 }

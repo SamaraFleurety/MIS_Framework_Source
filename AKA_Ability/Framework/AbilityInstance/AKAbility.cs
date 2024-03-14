@@ -52,7 +52,7 @@ namespace AKA_Ability
 
         protected virtual void UpdateGizmo()
         {
-            cachedGizmo.disabled = false;
+            cachedGizmo.Disabled = false;
             if (cooldown.charge == 0 && def.targetMode != TargetMode.AutoEnemy)
             {
                 cachedGizmo.Disable("AK_ChargeIsZero".Translate());

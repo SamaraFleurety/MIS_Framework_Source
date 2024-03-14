@@ -7,7 +7,7 @@ using Verse;
 
 namespace AK_DLL
 {
-    public class HediffCompProperties_Regrow : HediffCompProperties
+    /*public class HediffCompProperties_Regrow : HediffCompProperties
     {
         public int healInterval = 60;
 
@@ -17,5 +17,5 @@ namespace AK_DLL
         {
             this.compClass = typeof(HediffComp_Regrow);
         }
-    }
+    }*/
 }

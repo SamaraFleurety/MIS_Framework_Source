@@ -7,7 +7,7 @@ using Verse;
 
 namespace AK_DLL
 {
-    public class AbilityEffect_Heal : AbilityEffectBase
+    /*public class AbilityEffect_Heal : AbilityEffectBase
     {
         public override void DoEffect_Pawn(Pawn user, Thing target)
         {
@@ -68,5 +68,5 @@ namespace AK_DLL
         public bool healHostile;
         public bool healNeutral;
         public bool healNullFaction;
-    }
+    }*/
 }

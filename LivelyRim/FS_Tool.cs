@@ -48,7 +48,6 @@ namespace FS_LivelyRim
             TypeDef.Initialize();
 
             SetDefaultCanvas(false);
-
         }
 
         #region IO

@@ -42,7 +42,25 @@ namespace AKA_Ability
         private void Heal(Pawn target)
         {
             float heal = (float)this.healPoint;
-            foreach (Hediff_Injury injury in target.health.hediffSet.GetInjuriesTendable().ToList())
+            for (int i = 0; i < target.health.hediffSet.hediffs.Count; ++i)
+            {
+                Hediff injury = target.health.hediffSet.hediffs[i];
+                if (injury is Hediff_Injury)
+                {
+                    if (heal > injury.Severity)
+                    {
+                        heal -= injury.Severity;
+                        injury.Heal(injury.Severity);
+                    }
+                    else
+                    {
+                        injury.Heal(heal);
+                        heal -= heal;
+                        break;
+                    }
+                }
+            }
+            /*foreach (Hediff_Injury injury in target.health.hediffSet.GetInjuriesTendable().ToList())
             {
                 if (heal > injury.Severity)
                 {
@@ -55,7 +73,7 @@ namespace AKA_Ability
                     heal -= heal;
                     break;
                 }
-            }
+            }*/
         }
         public int healPoint;
         public bool healHostile;

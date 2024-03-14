@@ -18,10 +18,7 @@ namespace AK_DLL
                 this.Destroy();
             }
         }
-        public override void Draw()
-        {
-            base.Draw();
-        }
+
         public int age = 0;
         public int duration;
     }

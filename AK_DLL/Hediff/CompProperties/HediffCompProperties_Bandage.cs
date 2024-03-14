@@ -6,7 +6,7 @@ using Verse;
 
 namespace AK_DLL
 {
-    public class HediffCompProperties_Bandage : HediffCompProperties
+    /*public class HediffCompProperties_Bandage : HediffCompProperties
     {
         public HediffCompProperties_Bandage() 
         {
@@ -14,5 +14,5 @@ namespace AK_DLL
         }
         public int tickOfBandageOnce;
         public int bandageCount = 1;
-    }
+    }*/
 }

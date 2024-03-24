@@ -185,7 +185,7 @@ namespace AK_DLL
             {
                 Log.Error("没保存起");
             }           
-            Scribe.mode = 0;
+            Scribe.mode = LoadSaveMode.Inactive;
             if (AK_ModSettings.debugOverride)
             {
                 foreach (KeyValuePair<string, OperatorDocument> node in opDocArchive)

@@ -63,7 +63,6 @@ namespace AK_DLL
             Scribe_Values.Look(ref secLocSensitive, "secSense", 1, true);
             Scribe_Values.Look(ref font, "font", "AK_Font_YouYuan", true);
             //Scribe_Collections.Look(ref exampleListOfPawns, "exampleListOfPawns", LookMode.Reference);
-            base.ExposeData();
         }
     }
 

@@ -40,6 +40,8 @@ namespace AKA_Ability
 
         public Texture2D Icon => ContentFinder<Texture2D>.Get(icon);
 
+        public bool allowPostEffect = true; //有些技能会导致pawn despawn，然后又有诸如刷脏污和声音之类的后效
+
         public void CastEffects(Pawn caster, IntVec3? cell, Thing target = null, Map map = null)
         {
             if (caster == null) Log.Error("AKA casting skill by null caster");

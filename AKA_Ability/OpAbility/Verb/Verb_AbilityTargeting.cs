@@ -15,9 +15,9 @@ namespace AKA_Ability
 
         protected override bool TryCastShot()
         {
-            parent.def.CastEffects(CasterPawn, currentTarget.Cell, currentTarget.Thing, Caster.Map);
             parent.UseOneCharge();
-            return true;
+            parent.def.CastEffects(CasterPawn, currentTarget.Cell, currentTarget.Thing, Caster.Map);
+            return parent.def.allowPostEffect;
         }
     }
 }

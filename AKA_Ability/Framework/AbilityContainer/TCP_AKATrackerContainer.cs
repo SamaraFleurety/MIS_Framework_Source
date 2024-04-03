@@ -8,6 +8,7 @@ using Verse;
 
 namespace AKA_Ability
 {
+    //放衣服上面的技能容器
     public class TCP_AKATracker : CompProperties
     {
         public List<AKAbilityDef> AKAbilities = new List<AKAbilityDef>();

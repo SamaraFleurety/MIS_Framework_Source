@@ -77,12 +77,13 @@
     <Compile Include="AbilityEffect\AddHediff\DpsEnhance\HC_DpsEnhance_Ranged.cs" />
     <Compile Include="AbilityEffect\AddHediff\Regrow\AE_Regrow.cs" />
     <Compile Include="AbilityEffect\AddHediff\Regrow\HC_Regrow.cs" />
-    <Compile Include="AbilityEffect\AE_ShootProjectile.cs" />
+    <Compile Include="AbilityEffect\Effect\AE_ShootProjectile.cs" />
     <Compile Include="AbilityEffect\Effect\AbilityEffect_DisableAttack.cs" />
     <Compile Include="AbilityEffect\Effect\AbilityEffect_Heal.cs" />
     <Compile Include="AbilityEffect\Effect\AbilityEffect_Summon.cs" />
     <Compile Include="AbilityEffect\Effect\AbilityEffect_Trap.cs" />
     <Compile Include="AbilityEffect\Effect\AE_ChangeHair.cs" />
+    <Compile Include="AbilityEffect\Effect\AE_Jump.cs" />
     <Compile Include="AbilityEffect\Effect\AE_TeleportSelfToTarget.cs" />
     <Compile Include="AKA_Utilities.cs" />
     <Compile Include="Framework\AbilityContainer\TCP_AKATrackerContainer.cs" />

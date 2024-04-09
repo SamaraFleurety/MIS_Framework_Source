@@ -84,8 +84,6 @@
     <Compile Include="FS_ModSettings.cs" />
     <Compile Include="FS_Tool.cs" />
     <Compile Include="FS_Utilities.cs" />
-    <Compile Include="Harmony\PatchMainMenuLive.cs" />
-    <Compile Include="Harmony\PatchTraderDialog.cs" />
     <Compile Include="LiveModelDef.cs" />
     <Compile Include="TypeDef.cs" />
     <Compile Include="Harmony\PatchMain.cs" />

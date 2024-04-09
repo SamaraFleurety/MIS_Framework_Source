@@ -63,9 +63,7 @@ namespace FS_LivelyRim
             listingStandard.CheckboxLabeled("fillCore".Translate(), ref FS_ModSettings.autofillCubismCoreLib, "fillCoreDesc".Translate());
 
             List<LiveModelDef> allDefs = DefDatabase<LiveModelDef>.AllDefsListForReading;
-            //List<String> defLabels = allDefs.Select(td => td.label).ToList();
 
-            //Rect rect = listingStandard.GetRect(Text.LineHeight);
             if (listingStandard.ButtonTextLabeled("selectl2ddef".Translate(), selectedLiveDef.label))
             {
                 List<FloatMenuOption> list = new List<FloatMenuOption>();
@@ -74,22 +72,19 @@ namespace FS_LivelyRim
                     LiveModelDef local = i;
                     list.Add(new FloatMenuOption(i.label.Translate(), delegate ()
                     {
-                        //selectedLiveDef = local;
-                        //FS_ModSettings.l2dDefname = local.defName;
                         FS_Utilities.ChangeDefaultModel(local);
                     }));
                     Find.WindowStack.Add(new FloatMenu(list));
                 }
             }
 
-            //fixme:选择l2d
             listingStandard.End();
             base.DoSettingsWindowContents(inRect);
         }
 
         public override string SettingsCategory()
         {
-            return "FS. Live2D Cubism for Rim";
+            return "FS. Live2D Cubism";
         }
     }
 }

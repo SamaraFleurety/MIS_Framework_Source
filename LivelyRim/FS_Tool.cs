@@ -27,13 +27,11 @@ namespace FS_LivelyRim
 
         static AssetBundle l2dResource => TypeDef.l2dResource;
 
-        //public static GameObject l2dPrefab;
         public static GameObject defaultModelInstance;
         public static LiveModelDef defaultModelDef;
 
         public static GameObject defaultCanvas;
         public static GameObject defaultRenderTarget;
-
 
         //执行所有初始化 原生库只有x64
         static FS_Tool ()
@@ -397,6 +395,5 @@ namespace FS_LivelyRim
             return defaultRenderTarget;
         }
         #endregion
-
     }
 }

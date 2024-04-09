@@ -57,9 +57,7 @@ namespace FS_LivelyRim
         public static void Postfix_Close()
         {
             if (!FS_ModSettings.merchantSideLive) return;
-            FS_Utilities.SetDefaultModelInActive();
-            //cachedJanus.SetActive(false);
-            //Log.Message("mect close");
+            FS_Utilities.SetDefaultModelInactive();
         }
     }
 }

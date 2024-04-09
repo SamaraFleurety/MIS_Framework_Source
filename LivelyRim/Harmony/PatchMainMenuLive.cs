@@ -34,7 +34,7 @@ namespace FS_LivelyRim
 
             if (!FS_ModSettings.mainMenuLive)
             {
-                FS_Utilities.SetDefaultModelInActive();
+                FS_Utilities.SetDefaultModelInactive();
                 return;
             }
 
@@ -55,7 +55,7 @@ namespace FS_LivelyRim
             }
             else
             {
-                FS_Utilities.SetDefaultModelInActive();
+                FS_Utilities.SetDefaultModelInactive();
             }
             //PatchMainMenuDrawer.postfix();
             return;

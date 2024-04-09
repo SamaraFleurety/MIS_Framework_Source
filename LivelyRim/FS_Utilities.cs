@@ -1,9 +1,4 @@
 ﻿using Live2D.Cubism.FSAddon;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
@@ -44,11 +39,10 @@ namespace FS_LivelyRim
             return model;
         }
 
-        public static void SetDefaultModelInActive()
+        public static void SetDefaultModelInactive()
         {
             if (defaultModelInstance == null) return;
 
-            //Log.Message("inact");
             defaultCanvas.SetActive(false);
             defaultModelInstance.SetActive(false);
         }

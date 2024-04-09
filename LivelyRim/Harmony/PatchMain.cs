@@ -11,7 +11,6 @@ namespace FS_LivelyRim
         {
             var instance = new Harmony("FS_LivelyRim");
             instance.PatchAll(Assembly.GetExecutingAssembly());
-
         }
     }
 }

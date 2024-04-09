@@ -25,7 +25,7 @@ namespace FS_LivelyRim
 
         static string ModID => TypeDef.ModID; //本mod的id
 
-        static AssetBundle l2dResource => TypeDef.l2dResource;
+        static AssetBundle L2DResource => TypeDef.l2dResource;
 
         public static GameObject defaultModelInstance;
         public static LiveModelDef defaultModelDef;
@@ -320,7 +320,7 @@ namespace FS_LivelyRim
                     GameObject eyeTargetInstance = GameObject.Find("EyeTarget");
                     if (eyeTargetInstance == null)
                     {
-                        GameObject eyeTargetPrefab = l2dResource.LoadAsset<GameObject>("EyeTarget");
+                        GameObject eyeTargetPrefab = L2DResource.LoadAsset<GameObject>("EyeTarget");
                         eyeTargetInstance = GameObject.Instantiate(eyeTargetPrefab);
                     }
                     l2dIns.GetComponent<CubismLookController>().Target = eyeTargetInstance;
@@ -387,7 +387,7 @@ namespace FS_LivelyRim
         {
             if (defaultCanvas == null)
             {
-                GameObject canvasPrefab = l2dResource.LoadAsset<GameObject>("L2DCanvas");
+                GameObject canvasPrefab = L2DResource.LoadAsset<GameObject>("L2DCanvas");
                 defaultCanvas = GameObject.Instantiate(canvasPrefab);
                 defaultRenderTarget = defaultCanvas.transform.GetChild(0).gameObject;
             }

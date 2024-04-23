@@ -250,12 +250,6 @@ namespace AK_DLL
             //档案系统
             VAbility_Operator operatorID = Recruit_OperatorID(weapon);
             clothTemp.Clear();
-            /*operatorID.document = GameComp_OperatorDocumentation.opDocArchive[this.OperatorID];
-            operatorID.Document.voicePack = voicePackDef;*/
-
-            /*hediff.document = GameComp_OperatorDocumentation.opDocArchive[this.OperatorID];
-            hediff.document.voicePack = this.voicePackDef;
-            //hediff.document.operatorDef = this;*/
 
             Recruit_Ability(operatorID);
 

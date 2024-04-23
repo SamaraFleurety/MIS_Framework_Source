@@ -16,6 +16,7 @@ namespace AKA_Ability
         protected override bool TryCastShot()
         {
             parent.UseOneCharge();
+            CasterPawn.jobs.EndCurrentJob(JobCondition.Succeeded);
             parent.def.CastEffects(CasterPawn, currentTarget.Cell, currentTarget.Thing, Caster.Map);
             return parent.def.allowPostEffect;
         }

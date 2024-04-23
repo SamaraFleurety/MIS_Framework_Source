@@ -54,7 +54,8 @@ namespace AKA_Ability
                 defaultLabel = def.label,
                 defaultDesc = def.description,
                 icon = def.Icon,
-                ability = this
+                ability = this,
+                verb = new Verb_AbilityTargeting()  //假的 不会使用 给VEF的MVCF功能留的兼容
             };
         }
 

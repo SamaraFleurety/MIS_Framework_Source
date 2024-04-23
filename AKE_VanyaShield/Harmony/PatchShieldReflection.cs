@@ -10,7 +10,8 @@ using Verse;
 
 namespace AKE_VanyaShield
 {
-    [HarmonyPatch(typeof(Vanya_ShieldBelt), "CheckPreAbsorbDamage")]
+    //fixme:没更新
+    /*[HarmonyPatch(typeof(Vanya_ShieldBelt), "CheckPreAbsorbDamage")]
     public class PatchShieldReflection
     {
         [HarmonyPostfix]
@@ -37,5 +38,5 @@ namespace AKE_VanyaShield
 
             return false;
         }
-    }
+    }*/
 }

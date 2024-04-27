@@ -96,6 +96,7 @@
     <Compile Include="Framework\CDandCharge.cs" />
     <Compile Include="Framework\AbilityContainer\VAbility_AKATrackerContainer.cs" />
     <Compile Include="GC_DelayedAbilityManager.cs" />
+    <Compile Include="Harmony\PatchMain.cs" />
     <Compile Include="OpAbility\Gizmo\Gizmo_AKAGizmo.cs" />
     <Compile Include="AKAbilityDef.cs" />
     <Compile Include="OpAbility\Verb\Verb_AbilityTargeting.cs" />

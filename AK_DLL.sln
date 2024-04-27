@@ -24,6 +24,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AKA_Ability", "AKA_Ability\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AKM_MusicPlayer", "AKM_MusicPlayer\AKM_MusicPlayer.csproj", "{AB2962FE-8A85-43C1-9328-AB9F43BB9160}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AKC_AlienPatch", "AlienPatch\AKC_AlienPatch.csproj", "{AFC6963B-5B61-4D44-B2FA-5E90E508F01D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{25A323A4-A832-487C-9AB2-32E14C56E148} = {25A323A4-A832-487C-9AB2-32E14C56E148}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -158,6 +163,26 @@ Global
 		{AB2962FE-8A85-43C1-9328-AB9F43BB9160}.Release|x64.Build.0 = Release|Any CPU
 		{AB2962FE-8A85-43C1-9328-AB9F43BB9160}.Release|x86.ActiveCfg = Release|Any CPU
 		{AB2962FE-8A85-43C1-9328-AB9F43BB9160}.Release|x86.Build.0 = Release|Any CPU
+		{AFC6963B-5B61-4D44-B2FA-5E90E508F01D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFC6963B-5B61-4D44-B2FA-5E90E508F01D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFC6963B-5B61-4D44-B2FA-5E90E508F01D}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{AFC6963B-5B61-4D44-B2FA-5E90E508F01D}.Debug|ARM.Build.0 = Debug|Any CPU
+		{AFC6963B-5B61-4D44-B2FA-5E90E508F01D}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{AFC6963B-5B61-4D44-B2FA-5E90E508F01D}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{AFC6963B-5B61-4D44-B2FA-5E90E508F01D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AFC6963B-5B61-4D44-B2FA-5E90E508F01D}.Debug|x64.Build.0 = Debug|Any CPU
+		{AFC6963B-5B61-4D44-B2FA-5E90E508F01D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AFC6963B-5B61-4D44-B2FA-5E90E508F01D}.Debug|x86.Build.0 = Debug|Any CPU
+		{AFC6963B-5B61-4D44-B2FA-5E90E508F01D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFC6963B-5B61-4D44-B2FA-5E90E508F01D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFC6963B-5B61-4D44-B2FA-5E90E508F01D}.Release|ARM.ActiveCfg = Release|Any CPU
+		{AFC6963B-5B61-4D44-B2FA-5E90E508F01D}.Release|ARM.Build.0 = Release|Any CPU
+		{AFC6963B-5B61-4D44-B2FA-5E90E508F01D}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{AFC6963B-5B61-4D44-B2FA-5E90E508F01D}.Release|ARM64.Build.0 = Release|Any CPU
+		{AFC6963B-5B61-4D44-B2FA-5E90E508F01D}.Release|x64.ActiveCfg = Release|Any CPU
+		{AFC6963B-5B61-4D44-B2FA-5E90E508F01D}.Release|x64.Build.0 = Release|Any CPU
+		{AFC6963B-5B61-4D44-B2FA-5E90E508F01D}.Release|x86.ActiveCfg = Release|Any CPU
+		{AFC6963B-5B61-4D44-B2FA-5E90E508F01D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -309,23 +309,6 @@ namespace AK_DLL
             {
                 return;
             }
-            //绑定干员技能
-            /*if (this.abilities != null && this.abilities.Count > 0)
-            {
-
-                foreach (OperatorAbilityDef i in this.abilities)
-                {
-                    HC_Ability HC = new HC_Ability(i);
-                    hediff.comps.Add(HC);
-                    HC.parent = hediff;
-                    if (i.grouped) hediff.document.groupedAbilities.Add(HC);
-                }
-            }
-            //禁用非第一个的可选技能
-            for (int i = 1; i < hediff.document.groupedAbilities.Count; ++i)
-            {
-                hediff.document.groupedAbilities[i].enabled = false;
-            }*/
             AKA_AbilityTracker tracker = vanillaAbility.AKATracker;
             if (this.AKAbilities != null && this.AKAbilities.Count > 0)
             {
@@ -388,14 +371,6 @@ namespace AK_DLL
                 comp.exactProps.skinColor = this.skinColor;
                 comp.exactProps.hairColor = this.hairColor;
             }
-
-            /*HediffDef hediffDef = HediffDef.Named("AK_Operator");
-            FixAlienHairColor(hediffDef);*/
-
-            /*Hediff_Operator hediff = HediffMaker.MakeHediff(hediffDef, operator_Pawn, operator_Pawn.health.hediffSet.GetBrain()) as Hediff_Operator;
-
-            //增加多功能hediff
-            operator_Pawn.health.AddHediff(hediff, null, null, null);*/
 
             if (this.hediffInate != null && this.hediffInate.Count > 0)
             {

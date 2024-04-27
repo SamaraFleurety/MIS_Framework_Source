@@ -1,16 +1,16 @@
-﻿using System.Reflection;
-using HarmonyLib;
+﻿using HarmonyLib;
+using System.Reflection;
 using Verse;
-using AlienRace;
 
-namespace AK_DLL
+//AK_Compatiblity
+namespace AKC_AlienRace
 {
     [StaticConstructorOnStartup]
     public class PatchMain
     {
         static PatchMain()
         {
-            Harmony instance = new Harmony("AK_DLL");
+            Harmony instance = new Harmony("AKC_Alien");
             instance.PatchAll(Assembly.GetExecutingAssembly());
         }
     }

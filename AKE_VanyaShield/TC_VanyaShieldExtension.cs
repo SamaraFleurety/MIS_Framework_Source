@@ -14,6 +14,8 @@ namespace AKE_VanyaShield
     public class TCP_VanyaShieldExtension : CompProperties
     {
         public bool hideVanillaBubble = false;
+        public GraphicData bubbleStaticOverlay = null;
+        [Obsolete]
         public string bubbleStaticTexPath = null;
         public string bubbleRotateTexPath = null;
 
@@ -28,19 +30,27 @@ namespace AKE_VanyaShield
     public class TC_VanyaShieldExtension : ThingComp
     {
         TCP_VanyaShieldExtension Props => (TCP_VanyaShieldExtension)props;
-        Vanya_ShieldBelt Parent => (Vanya_ShieldBelt)parent;
+        protected Vanya_ShieldBelt Parent => (Vanya_ShieldBelt)parent;
+        protected Pawn Wearer => Parent.Wearer;
+        protected bool shouldDrawNow = false;
 
         public bool HideVanillaBubble => Props.hideVanillaBubble;
         public float ReflectionRatio => Props.reflectionRatio;
 
         bool bubbleRefreshed = false;
+        [Obsolete]
         Material staticBubble = null;
         Material rotateBubble = null;
         int time = 0;
 
+        //private Graphic graphic;
+
+        private Graphic StaticBubbleGraphic => Props.bubbleStaticOverlay.GraphicColoredFor(Parent);
         public override void CompDrawWornExtras()
         {
+            shouldDrawNow = false;
             if (ModLister.GetActiveModWithIdentifier("Mlie.VanyaShield") == null) return;
+            if (Wearer == null) return;
 
             //有能量而且征召时才显示气泡
             Vanya_ShieldBelt shield = Parent;
@@ -51,6 +61,7 @@ namespace AKE_VanyaShield
             bool shouldDisplay = (bool)info.GetValue(shield);
 
             if (shieldState != ShieldState.Active || !shouldDisplay) return;
+            shouldDrawNow = true;
 
             var num = 2f;
             var vector = shield.Wearer.Drawer.DrawPos;
@@ -61,7 +72,13 @@ namespace AKE_VanyaShield
             var matrix = default(Matrix4x4);
             matrix.SetTRS(vector, Quaternion.AngleAxis(angle, Vector3.up), s);
             if (!bubbleRefreshed) RefreshBubbleMaterial();
-            if (staticBubble != null) Graphics.DrawMesh(MeshPool.plane10, matrix, staticBubble, 2);
+            //静态护盾
+            Vector3 loc = Wearer.DrawPos;
+            if (Wearer.Rotation == Rot4.North) loc.y += 5f;
+            else loc.y -= 5f;
+            if (Props.bubbleStaticOverlay != null && StaticBubbleGraphic != null && Wearer != null) StaticBubbleGraphic.Draw(loc, Wearer.Rotation, Parent);
+            if (staticBubble != null) Graphics.DrawMesh(MeshPool.plane10, matrix, staticBubble, 2); //过时静态护盾 记得删
+            //帧动画护盾
             if (rotateBubble != null)
             {
                 time = (time + 1) % 360;

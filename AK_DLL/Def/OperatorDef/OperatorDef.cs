@@ -28,7 +28,7 @@ namespace AK_DLL
 
         public int age = 16;//年龄
         public int realAge = -1; //实际年龄
-        public bool isMale = false;//性别
+        public bool isMale = false;//性别 谁jb把这玩意写成bool的
         public List<HediffStat> hediffInate = new List<HediffStat>(); //天生自带hediff 源石病之类的
 
         public VoicePackDef voicePackDef;
@@ -62,19 +62,20 @@ namespace AK_DLL
         //因为并不知道是否有某种立绘，所以用字典存。约定-1为头像，0是精0立绘，1是精2立绘，2-后面是换装
         //这里的V3，x和y是x轴和y轴的偏移，z其实是缩放
         public Dictionary<int, Vector3> standOffsets = new Dictionary<int, Vector3>();
+        [Obsolete]
         public Vector2 standOffset;
         public float standRatio = 3f;
-        public string headPortrait;//头像
+        public string headPortrait;         //IMGUI主界面选中时 左下角详情栏上面的头像
         public Vector2 headPortraitOffset;
 
         public ThoughtDef thoughtReceived = null;  //其他所有人都会给这个干员一个想法 当前是和弦独有
         public int TRStage = -1;  //全部丢进同一个想法 节省性能
 
-        public float ticketCost = 1f;
+        public float ticketCost = 1f;   //招募消耗 为了平衡所以可以是非整数票
 
         public XenotypeDef xenoType;
 
-        public AbilityDef operatorID = null;
+        public AbilityDef operatorID = null;    //干员身份证的容器 其他派系角色可以自定义个图标不同的这玩意
 
         #endregion
 
@@ -126,7 +127,7 @@ namespace AK_DLL
         {
             get
             {
-                if (GameComp_OperatorDocumentation.opDocArchive.ContainsKey(this.OperatorID) == false)
+                if (GC_OperatorDocumentation.opDocArchive.ContainsKey(this.OperatorID) == false)
                 {
                     return ContentFinder<Texture2D>.Get(this.stand);
                 }
@@ -324,9 +325,9 @@ namespace AK_DLL
             if (this.relations == null || this.relations.Count == 0) return;
             foreach (KeyValuePair<string, PawnRelationDef> node in relations)
             {
-                if (GameComp_OperatorDocumentation.opDocArchive.ContainsKey(node.Key))
+                if (GC_OperatorDocumentation.opDocArchive.ContainsKey(node.Key))
                 {
-                    operator_Pawn.relations.AddDirectRelation(node.Value, GameComp_OperatorDocumentation.opDocArchive[node.Key].pawn);
+                    operator_Pawn.relations.AddDirectRelation(node.Value, GC_OperatorDocumentation.opDocArchive[node.Key].pawn);
                 }
             }
         }
@@ -334,8 +335,8 @@ namespace AK_DLL
         protected VAbility_Operator Recruit_OperatorID(Thing weapon)
         {
             //档案系统
-            GameComp_OperatorDocumentation.AddPawn(this.OperatorID, this, operator_Pawn, weapon, clothTemp);
-            OperatorDocument document = GameComp_OperatorDocumentation.opDocArchive[this.OperatorID];
+            GC_OperatorDocumentation.AddPawn(this.OperatorID, this, operator_Pawn, weapon, clothTemp);
+            OperatorDocument document = GC_OperatorDocumentation.opDocArchive[this.OperatorID];
             document.voicePack = voicePackDef;
 
             //干员身份证，改放在原版技能里了
@@ -440,9 +441,9 @@ namespace AK_DLL
                 operator_Pawn.skills.skills.Add(skill);
             }
             //技能属性更改
-            if (GameComp_OperatorDocumentation.opDocArchive.ContainsKey(AK_Tool.GetOperatorIDFrom(this.defName)))
+            if (GC_OperatorDocumentation.opDocArchive.ContainsKey(AK_Tool.GetOperatorIDFrom(this.defName)))
             {
-                Dictionary<SkillDef, int> skills = GameComp_OperatorDocumentation.opDocArchive[AK_Tool.GetOperatorIDFrom(this.defName)].skillLevel;
+                Dictionary<SkillDef, int> skills = GC_OperatorDocumentation.opDocArchive[AK_Tool.GetOperatorIDFrom(this.defName)].skillLevel;
                 foreach (SkillRecord i in operator_Pawn.skills.skills)
                 {
                     i.Level = skills[i.def];

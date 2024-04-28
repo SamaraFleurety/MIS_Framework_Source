@@ -333,9 +333,9 @@ namespace AK_DLL
         public override void Initialize()
         {
             base.Initialize();
-            if (GameComp_OperatorDocumentation.opDocArchive.ContainsKey(Def.OperatorID))
+            if (GC_OperatorDocumentation.opDocArchive.ContainsKey(Def.OperatorID))
             {
-                doc = GameComp_OperatorDocumentation.opDocArchive[Def.OperatorID];
+                doc = GC_OperatorDocumentation.opDocArchive[Def.OperatorID];
                 preferredSkin = doc.preferedSkin;
             }
             canRecruit = false;

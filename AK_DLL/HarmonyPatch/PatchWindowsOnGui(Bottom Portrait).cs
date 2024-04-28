@@ -10,15 +10,6 @@ using UnityEngine;
 
 namespace AK_DLL
 {
-    /*[HarmonyPatch(typeof(InspectPaneFiller), "DoPaneContentsFor")]
-    public class test
-    {
-        [HarmonyPrefix]
-        public static void Prefix (ISelectable sel, Rect rect)
-        {
-            Log.Message($"{rect.x} {rect.y} {rect.height} {rect.width}");
-        }
-    }*/
     [HarmonyPatch(typeof(Window), "WindowOnGUI")]
     public class PatchWindowOnGUI
     {

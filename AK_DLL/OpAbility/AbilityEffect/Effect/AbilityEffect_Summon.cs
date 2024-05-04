@@ -6,7 +6,7 @@ using Verse;
 
 namespace AK_DLL
 {
-    public class AbilityEffect_Summon : AbilityEffectBase
+    /*public class AbilityEffect_Summon : AbilityEffectBase
     {
         public override void DoEffect_IntVec(IntVec3 target,Map map, Pawn caster)
         {
@@ -25,5 +25,5 @@ namespace AK_DLL
         }
         public Thing parent;
         public PawnKindDef summoned;
-    }
+    }*/
 }

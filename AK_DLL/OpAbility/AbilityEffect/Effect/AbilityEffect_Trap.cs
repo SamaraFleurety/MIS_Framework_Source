@@ -6,7 +6,7 @@ using Verse;
 
 namespace AK_DLL
 {
-    public class AbilityEffect_Trap : AbilityEffectBase
+    /*public class AbilityEffect_Trap : AbilityEffectBase
     {
         public override void DoEffect_IntVec(IntVec3 target,Map map,Pawn caster)
         {
@@ -21,5 +21,5 @@ namespace AK_DLL
         }
         public int duration;
         public ThingDef trap;
-    }
+    }*/
 }

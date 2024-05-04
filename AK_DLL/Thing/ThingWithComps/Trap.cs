@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace AK_DLL 
 { 
-    public class Trap : Building_TrapExplosive
+    /*public class Trap : Building_TrapExplosive
     {
         public override void Tick()
         {
@@ -21,5 +21,5 @@ namespace AK_DLL
 
         public int age = 0;
         public int duration;
-    }
+    }*/
 }

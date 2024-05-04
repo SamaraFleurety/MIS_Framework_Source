@@ -6,7 +6,7 @@ using Verse;
 
 namespace AK_DLL
 {
-    public class Summoned : Pawn
+    /*public class Summoned : Pawn
     {
 
         public override void Tick()
@@ -39,5 +39,5 @@ namespace AK_DLL
 
         public Thing summoner;
         public Pawn summoner_Pawm;
-    }
+    }*/
 }

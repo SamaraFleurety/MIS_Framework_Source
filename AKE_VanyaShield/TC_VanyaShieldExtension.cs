@@ -74,8 +74,8 @@ namespace AKE_VanyaShield
             if (!bubbleRefreshed) RefreshBubbleMaterial();
             //静态护盾
             Vector3 loc = Wearer.DrawPos;
-            if (Wearer.Rotation == Rot4.North) loc.y += 5f;
-            else loc.y -= 5f;
+            if (Wearer.Rotation != Rot4.South) loc.y += 5f;         //显示在人物上面
+            else loc.y -= 5f;                                       //只有朝南是显示在人物下面
             if (Props.bubbleStaticOverlay != null && StaticBubbleGraphic != null && Wearer != null) StaticBubbleGraphic.Draw(loc, Wearer.Rotation, Parent);
             if (staticBubble != null) Graphics.DrawMesh(MeshPool.plane10, matrix, staticBubble, 2); //过时静态护盾 记得删
             //帧动画护盾

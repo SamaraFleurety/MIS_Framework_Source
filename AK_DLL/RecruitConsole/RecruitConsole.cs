@@ -73,12 +73,6 @@ namespace AK_DLL
             }
         }
 
-
-        public override void ExposeData()
-        {
-            base.ExposeData();
-        }
-
         public override string Label
         {
             get

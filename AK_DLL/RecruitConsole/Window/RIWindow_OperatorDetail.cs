@@ -295,11 +295,11 @@ namespace AK_DLL
             return int.Parse(clickedBtn.name.Substring(RIWindow_OperatorList.orderInName));
         }
 
-        private int btnOpAbilityAbsOrder(GameObject clickedBtn)
+        /*private int btnOpAbilityAbsOrder(GameObject clickedBtn)
         {
             // FSUI_OpAb_{i}_{logicOrder}
             return int.Parse(clickedBtn.name[10].ToString());
-        }
+        }*/
 
         private int PreferredAbility
         {

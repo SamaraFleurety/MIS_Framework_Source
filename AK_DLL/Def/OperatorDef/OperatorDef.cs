@@ -56,7 +56,9 @@ namespace AK_DLL
         public List<string> fashion; //换装
         //换装后，体现在rw服装上的变化。key的int是换装在List<string> fashion中的下标+3。
         //按理说应该和上面的干员衣服整合一起，但现在已经几百个干员了，要整合工作量太大。立项的时候没考虑做换装。
-        public Dictionary<int, OperatorClothSet> clothSet;
+        [Obsolete]
+        public Dictionary<int, OperatorClothSetDef> clothSet;
+        public List<OperatorClothSetDef> clothSets = new List<OperatorClothSetDef>();
         public List<LiveModelDef> live2dModel;
 
         //因为并不知道是否有某种立绘，所以用字典存。约定-1为头像，0是精0立绘，1是精2立绘，2-后面是换装
@@ -92,16 +94,16 @@ namespace AK_DLL
         {
             get { return AK_Tool.GetOperatorIDFrom(this.defName); }
         }
-        public List<SkillAndFire> Skills
+        /*public List<SkillAndFire> Skills
         {
             get
             {
                 /*string operatorName = AK_Tool.GetOperatorNameFromDefName(this.defName);
                 if (GameComp_OperatorDocumentation.operatorDocument.ContainsKey(operatorName)) return GameComp_OperatorDocumentation.operatorDocument[operatorName].skillAndFires;
-                else*/
+                else*//*
                 return skills;
             }
-        }
+        }*/
         public List<SkillAndFire> SortedSkills
         {
             get
@@ -139,7 +141,86 @@ namespace AK_DLL
         }
         #endregion
 
+        //新换装写法 如果给定def就换，如果def是空的就换成原装
+        public void ChangeFashion(OperatorClothSetDef def, Pawn p)
+        {
+            currentlyGenerating = true;
+            OperatorDocument doc = p.GetDoc();
+            if (doc == null)
+            {
+                Log.Error($"[AK] trying to change fashion for non-operator: {p.Name}");
+                return;
+            }
+            /*if (index != -1 && !clothSet.ContainsKey(index))
+            {
+                Log.Error($"[AK] {p.Name} doesn't have fashion numbered {index}");
+                return;
+            }*/
+
+            doc.DestroyFashionSet();
+
+            operator_Pawn = p;
+            clothTemp = new List<Thing>();
+            if (def == null)
+            {
+                if (apparels != null)
+                {
+                    foreach (ThingDef apparelDef in this.apparels)
+                    {
+                        Recruit_Inventory_Wear(apparelDef, operator_Pawn, true);
+                    }
+                }
+                operator_Pawn.story.hairDef = hair ?? HairDefOf.Bald;
+                doc.voicePack = this.voicePackDef;
+                if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null)
+                {
+                    return;
+                }
+                else if (this.weapon != null)
+                {
+                    if (doc.weapon != null && !doc.weapon.DestroyedOrNull()) doc.weapon.Destroy();
+                    ThingWithComps weapon = (ThingWithComps)ThingMaker.MakeThing(this.weapon);
+                    CompBiocodable comp = weapon.GetComp<CompBiocodable>();
+                    if (comp != null) comp.CodeFor(operator_Pawn);
+                    operator_Pawn.equipment.AddEquipment(weapon);
+                    doc.weapon = weapon;
+                }
+            }
+            else
+            {
+                OperatorClothSetDef set = def;
+                foreach (ThingDef apparelDef in set.apparels)
+                {
+                    Recruit_Inventory_Wear(apparelDef, operator_Pawn, true);
+                }
+                if (set.hair != null) operator_Pawn.story.hairDef = set.hair;
+                if (set.voice != null)
+                {
+                    doc.voicePack = set.voice;
+                }
+                if (set.weapon != null)
+                {
+                    if (doc.weapon != null && !doc.weapon.DestroyedOrNull()) doc.weapon.Destroy();
+                    if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null)
+                    {
+                        return;
+                    }
+                    ThingWithComps weapon = (ThingWithComps)ThingMaker.MakeThing(set.weapon);
+                    CompBiocodable comp = weapon.GetComp<CompBiocodable>();
+                    if (comp != null) comp.CodeFor(operator_Pawn);
+                    operator_Pawn.equipment.AddEquipment(weapon);
+                    doc.weapon = weapon;
+                }
+            }
+            operator_Pawn.style.Notify_StyleItemChanged();
+            operator_Pawn.style.MakeHairFilth();
+            doc.RegisterFashionSet(clothTemp);
+            clothTemp.Clear();
+            currentlyGenerating = false;
+        }
+
         //换成fashion[index]的时装
+        [Obsolete]
         public void ChangeFashion(int index, Pawn p)
         {
             currentlyGenerating = true;
@@ -186,7 +267,7 @@ namespace AK_DLL
             }
             else
             {
-                OperatorClothSet set = clothSet[index];
+                OperatorClothSetDef set = clothSet[index];
                 foreach (ThingDef def in set.apparels)
                 {
                     Recruit_Inventory_Wear(def, operator_Pawn, true);
@@ -697,4 +778,3 @@ namespace AK_DLL
         #endregion
     }
 }
-

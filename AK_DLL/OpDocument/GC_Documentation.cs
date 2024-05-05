@@ -33,6 +33,7 @@ namespace AK_DLL
         public int preferedSkin = 1;  //立绘,0是精0, 1是精2, 后面是换装
 
         public int pendingFashion = -1; //将要换装的序号
+        public OperatorClothSetDef pendingFashionDef = null;
 
         public OperatorDocument()
         {
@@ -98,6 +99,7 @@ namespace AK_DLL
             Scribe_Values.Look<int>(ref this.preferedSkin, "skin");
 
             Scribe_Values.Look(ref pendingFashion, "fashion");
+            Scribe_Defs.Look(ref this.pendingFashionDef, "fashionDef");
             //if (this.pawn == null) { return; }
         }
 

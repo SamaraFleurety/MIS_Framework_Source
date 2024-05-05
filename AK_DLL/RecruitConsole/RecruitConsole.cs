@@ -31,16 +31,17 @@ namespace AK_DLL
 
             //换装 右键直接出选项，没有ui
             OperatorDocument doc = selPawn.GetDoc();
-            if (doc != null && doc.operatorDef.clothSet != null && doc.operatorDef.clothSet.Count > 0)
+            if (doc != null && !doc.operatorDef.clothSets.NullOrEmpty())
             {
                 yield return new FloatMenuOption("AK_ChangeFashionDefault".Translate(),
                 delegate
                 {
                     doc.pendingFashion = -1;
+                    doc.pendingFashionDef = null;
                     selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AKDefOf.AK_Job_OperatorChangeFashion, this));
                 }
                 );
-                foreach (KeyValuePair<int, OperatorClothSet> set in doc.operatorDef.clothSet)
+                /*foreach (KeyValuePair<int, OperatorClothSetDef> set in doc.operatorDef.clothSet)
                 {
                     int j = set.Key;
                     yield return new FloatMenuOption("AK_ChangeFashionTo".Translate() + set.Value.label.Translate(),
@@ -49,6 +50,16 @@ namespace AK_DLL
                             doc.pendingFashion = j;
                             selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AKDefOf.AK_Job_OperatorChangeFashion, this));
                         });
+                }*/
+                foreach (OperatorClothSetDef set in doc.operatorDef.clothSets)
+                {
+                    yield return new FloatMenuOption("AK_ChangeFashionTo".Translate() + set.label.Translate(),
+                        delegate
+                        {
+                            doc.pendingFashionDef = set;
+                            selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AKDefOf.AK_Job_OperatorChangeFashion, this));
+                        });
+
                 }
             }
 

@@ -14,10 +14,14 @@ namespace AKE_VanyaShield
     public class TCP_VanyaShieldExtension : CompProperties
     {
         public bool hideVanillaBubble = false;
-        public GraphicData bubbleStaticOverlay = null;
-        [Obsolete]
-        public string bubbleStaticTexPath = null;
+
+        public GraphicData bubbleStaticOverlay = null;          //静态护盾贴图
+        //public Dictionary<Rot4, Vector3> bubbleStaticOverlayOffsets = new Dictionary<Rot4, Vector3>();
+
+        //[Obsolete]
+       //public string bubbleStaticTexPath = null;
         public string bubbleRotateTexPath = null;
+        public Vector3 bubbleRotateOffsets = Vector3.zero;
 
         public float reflectionRatio = -1;
 
@@ -38,8 +42,8 @@ namespace AKE_VanyaShield
         public float ReflectionRatio => Props.reflectionRatio;
 
         bool bubbleRefreshed = false;
-        [Obsolete]
-        Material staticBubble = null;
+        //[Obsolete]
+        //Material staticBubble = null;
         Material rotateBubble = null;
         int time = 0;
 
@@ -48,7 +52,7 @@ namespace AKE_VanyaShield
         private Graphic StaticBubbleGraphic => Props.bubbleStaticOverlay.GraphicColoredFor(Parent);
         public override void CompDrawWornExtras()
         {
-            shouldDrawNow = false;
+            shouldDrawNow = false;      //别删 别的comp扩展要用
             if (ModLister.GetActiveModWithIdentifier("Mlie.VanyaShield") == null) return;
             if (Wearer == null) return;
 
@@ -63,9 +67,34 @@ namespace AKE_VanyaShield
             if (shieldState != ShieldState.Active || !shouldDisplay) return;
             shouldDrawNow = true;
 
+            //静态护盾
+            Rot4 rot = Wearer.Rotation;
+            if (Props.bubbleStaticOverlay.graphicClass == typeof(Graphic_Single)) rot = Rot4.North;     //单图护盾不该旋转
+
+            Vector3 loc = Wearer.DrawPos;
+            if (Props.bubbleStaticOverlay.graphicClass == typeof(Graphic_Single))           //单层贴图默认+5
+            {
+                loc.y += 5f;
+            }
+            else if (Props.bubbleStaticOverlay.graphicClass == typeof(Graphic_Multi))       //多向静态贴图，应用比如碧蓝的舰装
+            {
+                if (Wearer.Rotation != Rot4.South) loc.y += 5f;         //显示在人物上面
+                else loc.y -= 5f;                                       //只有朝南是显示在人物下面
+            }
+
+            loc += Props.bubbleStaticOverlay.DrawOffsetForRot(rot);
+            /*if (Props.bubbleStaticOverlayOffsets.ContainsKey(rot))
+            {
+                loc += Props.bubbleStaticOverlayOffsets[rot];
+            }*/
+
+            if (Props.bubbleStaticOverlay != null && StaticBubbleGraphic != null && Wearer != null) StaticBubbleGraphic.Draw(loc, rot, Parent);
+
+            //旋转护盾
             var num = 2f;
             var vector = shield.Wearer.Drawer.DrawPos;
             vector.y = AltitudeLayer.Blueprint.AltitudeFor();
+            vector += Props.bubbleRotateOffsets;
 
             float angle = 0;
             var s = new Vector3(num, 1f, num);
@@ -73,11 +102,7 @@ namespace AKE_VanyaShield
             matrix.SetTRS(vector, Quaternion.AngleAxis(angle, Vector3.up), s);
             if (!bubbleRefreshed) RefreshBubbleMaterial();
             //静态护盾
-            Vector3 loc = Wearer.DrawPos;
-            if (Wearer.Rotation != Rot4.South) loc.y += 5f;         //显示在人物上面
-            else loc.y -= 5f;                                       //只有朝南是显示在人物下面
-            if (Props.bubbleStaticOverlay != null && StaticBubbleGraphic != null && Wearer != null) StaticBubbleGraphic.Draw(loc, Wearer.Rotation, Parent);
-            if (staticBubble != null) Graphics.DrawMesh(MeshPool.plane10, matrix, staticBubble, 2); //过时静态护盾 记得删
+            //if (staticBubble != null) Graphics.DrawMesh(MeshPool.plane10, matrix, staticBubble, 2); //过时静态护盾 记得删
             //帧动画护盾
             if (rotateBubble != null)
             {
@@ -99,7 +124,7 @@ namespace AKE_VanyaShield
 
         private void RefreshBubbleMaterial()
         {
-            if (Props.bubbleStaticTexPath != null) staticBubble = MaterialPool.MatFrom(Props.bubbleStaticTexPath, ShaderDatabase.Transparent);
+            //if (Props.bubbleStaticTexPath != null) staticBubble = MaterialPool.MatFrom(Props.bubbleStaticTexPath, ShaderDatabase.Transparent);
             if (Props.bubbleRotateTexPath != null) rotateBubble = MaterialPool.MatFrom(Props.bubbleRotateTexPath, ShaderDatabase.Transparent);
         }
 

@@ -53,7 +53,7 @@ namespace AKA_Ability
                     t = typeof(AKAbility_VerbTarget);
                     break;
                 default:
-                    Log.Message($"AKA invalid ability type for {def.defName}");
+                    Log.Error($"AKA invalid ability type for {def.defName}");
                     break;
             }
             return t;

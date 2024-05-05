@@ -14,7 +14,7 @@ namespace AKA_Ability
 
         public override void DoEffect_Pawn(Pawn user, Thing target, bool delayed)
         {
-            Log.Message($"delayed? {delayed}");
+            //Log.Message($"delayed? {delayed}");
             if (v == null)
             {
                 v = (Verb_Shoot)Activator.CreateInstance(verb.verbClass);
@@ -30,7 +30,7 @@ namespace AKA_Ability
 
             if (!delayed)
             {
-                Log.Message("add delayed");
+                //Log.Message("add delayed");
                 int delayBase = verb.ticksBetweenBurstShots;
                 if (delayBase <= 0) delayBase = 1;
                 uint delay = (uint)delayBase;

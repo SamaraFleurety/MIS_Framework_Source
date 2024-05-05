@@ -16,11 +16,17 @@ namespace AK_DLL
         {
             yield return Toils_Goto.GotoCell(TargetIndex.A, PathEndMode.InteractionCell);
             Toil t = new Toil();
-            t.initAction = delegate
+            /*t.initAction = delegate
             {
                 OperatorDocument doc = pawn.GetDoc();
                 if (doc == null) return;
                 doc.operatorDef.ChangeFashion(doc.pendingFashion, pawn);
+            };  */
+            t.initAction = delegate
+            {
+                OperatorDocument doc = pawn.GetDoc();
+                if (doc == null) return;
+                doc.operatorDef.ChangeFashion(doc.pendingFashionDef, pawn);
             };
             yield return t;
             yield break;

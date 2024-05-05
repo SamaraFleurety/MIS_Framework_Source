@@ -7,7 +7,7 @@ using RimWorld;
 
 namespace AK_DLL
 {
-    public class OperatorDef_Reserve : OperatorDef
+    /*public class OperatorDef_Reserve : OperatorDef
     {
         public new List<BackstoryDef> childHood;
         public new List<BackstoryDef> adultHood;
@@ -16,5 +16,5 @@ namespace AK_DLL
         {
             base.AutoFill();
         }
-    }
+    }*/
 }

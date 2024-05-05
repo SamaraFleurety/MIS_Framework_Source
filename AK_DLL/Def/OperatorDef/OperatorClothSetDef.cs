@@ -8,10 +8,10 @@ using RimWorld;
 
 namespace AK_DLL
 {
-    public class OperatorClothSet
+    public class OperatorClothSetDef : Def
     {
-        [MustTranslate]
-        public string label;
+        //public string label;
+        public int order;    //每个干员的每个order只能同时有一个
         public HairDef hair = null;
         public ThingDef weapon = null;
         public List<ThingDef> apparels = new List<ThingDef>();

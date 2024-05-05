@@ -275,13 +275,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AK_Algorithm.cs" />
     <Compile Include="AK_Tool4Unity.cs" />
     <Compile Include="DebugTools.cs" />
     <Compile Include="Def\FontDef.cs" />
     <Compile Include="Def\OperatorClassDef.cs" />
     <Compile Include="Def\OperatorDef\HediffStat.cs" />
     <Compile Include="Def\OperatorDef\ItemOnSpawn.cs" />
-    <Compile Include="Def\OperatorDef\OperatorClothSetDef.cs" />
+    <Compile Include="Def\OperatorDef\OperatorFashionSetDef.cs" />
     <Compile Include="Def\OperatorDef\OperatorDef_Reserve.cs" />
     <Compile Include="GC_AKManager.cs" />
     <Compile Include="HarmonyPatch\PatchTest.cs" />

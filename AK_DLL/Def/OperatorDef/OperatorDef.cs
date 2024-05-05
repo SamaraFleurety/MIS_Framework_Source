@@ -54,11 +54,12 @@ namespace AK_DLL
         public string stand;//精2立绘
         public string commonStand;  //精0立绘
         public List<string> fashion; //换装
-        //换装后，体现在rw服装上的变化。key的int是换装在List<string> fashion中的下标+3。
+
+        //换装后，体现在rw小人服装上的变化。key的int是换装在List<string> fashion中的下标+3。
         //按理说应该和上面的干员衣服整合一起，但现在已经几百个干员了，要整合工作量太大。立项的时候没考虑做换装。
         [Obsolete]
-        public Dictionary<int, OperatorClothSetDef> clothSet;
-        public List<OperatorClothSetDef> clothSets = new List<OperatorClothSetDef>();
+        public Dictionary<int, OperatorFashionSetDef> clothSet;
+        public List<OperatorFashionSetDef> clothSets = new List<OperatorFashionSetDef>();
         public List<LiveModelDef> live2dModel;
 
         //因为并不知道是否有某种立绘，所以用字典存。约定-1为头像，0是精0立绘，1是精2立绘，2-后面是换装
@@ -68,6 +69,7 @@ namespace AK_DLL
         public Vector2 standOffset;
         public float standRatio = 3f;
         public string headPortrait;         //IMGUI主界面选中时 左下角详情栏上面的头像
+        [Obsolete]
         public Vector2 headPortraitOffset;
 
         public ThoughtDef thoughtReceived = null;  //其他所有人都会给这个干员一个想法 当前是和弦独有
@@ -125,24 +127,20 @@ namespace AK_DLL
                 return skills;
             }
         }
-        public Texture2D PreferredStand
+
+        public Texture2D PreferredStand(int preferredSkin)
         {
-            get
-            {
-                if (GC_OperatorDocumentation.opDocArchive.ContainsKey(this.OperatorID) == false)
-                {
-                    return ContentFinder<Texture2D>.Get(this.stand);
-                }
-                else
-                {
-                    return null;
-                }
-            }
+            Texture2D texture;
+            if (preferredSkin == 0) texture = ContentFinder<Texture2D>.Get(this.commonStand);
+            else if (preferredSkin == 1) texture = ContentFinder<Texture2D>.Get(this.stand);
+            else texture = ContentFinder<Texture2D>.Get(this.fashion[preferredSkin - 2]);
+            return texture;
         }
+
         #endregion
 
         //新换装写法 如果给定def就换，如果def是空的就换成原装
-        public void ChangeFashion(OperatorClothSetDef def, Pawn p)
+        public void ChangeFashion(OperatorFashionSetDef def, Pawn p)
         {
             currentlyGenerating = true;
             OperatorDocument doc = p.GetDoc();
@@ -188,7 +186,7 @@ namespace AK_DLL
             }
             else
             {
-                OperatorClothSetDef set = def;
+                OperatorFashionSetDef set = def;
                 foreach (ThingDef apparelDef in set.apparels)
                 {
                     Recruit_Inventory_Wear(apparelDef, operator_Pawn, true);
@@ -267,7 +265,7 @@ namespace AK_DLL
             }
             else
             {
-                OperatorClothSetDef set = clothSet[index];
+                OperatorFashionSetDef set = clothSet[index];
                 foreach (ThingDef def in set.apparels)
                 {
                     Recruit_Inventory_Wear(def, operator_Pawn, true);

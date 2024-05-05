@@ -166,7 +166,8 @@ namespace AK_DLL
             if (p == null) return;
             OperatorDocument doc = AK_Tool.GetDoc(p);
             if (doc == null) return;
-            Widgets.DrawTextureFitted(new Rect(AK_ModSettings.xOffset * 5, AK_ModSettings.yOffset * 5, 408, 408), ContentFinder<Texture2D>.Get(AK_Tool.GetDoc(p).operatorDef.stand), (float)AK_ModSettings.ratio * 0.05f);
+            Texture2D texture = doc.operatorDef.PreferredStand(doc.preferedSkin);
+            Widgets.DrawTextureFitted(new Rect(AK_ModSettings.xOffset * 5, AK_ModSettings.yOffset * 5, 408, 408), texture, (float)AK_ModSettings.ratio * 0.05f);
         }
         /*public static void DrawHighlightMouseOver(this Rect rect, Texture2D highlight)
         {
@@ -184,11 +185,11 @@ namespace AK_DLL
             Transform containerLoc = OpStand.transform;
             containerLoc.localPosition = Vector3.zero;
             Image opStand = OpStand.GetComponent<Image>();
-            Texture2D tex;
+            Texture2D tex = def.PreferredStand(preferredSkin);
 
-            if (preferredSkin == 0) tex = ContentFinder<Texture2D>.Get(def.commonStand);
+            /*if (preferredSkin == 0) tex = ContentFinder<Texture2D>.Get(def.commonStand);
             else if (preferredSkin == 1) tex = ContentFinder<Texture2D>.Get(def.stand);
-            else tex = ContentFinder<Texture2D>.Get(def.fashion[preferredSkin - 2]);
+            else tex = ContentFinder<Texture2D>.Get(def.fashion[preferredSkin - 2]);*/
 
             opStand.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
 

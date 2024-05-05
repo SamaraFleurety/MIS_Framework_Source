@@ -72,14 +72,14 @@ namespace AKE_VanyaShield
             if (Props.bubbleStaticOverlay.graphicClass == typeof(Graphic_Single)) rot = Rot4.North;     //单图护盾不该旋转
 
             Vector3 loc = Wearer.DrawPos;
-            if (Props.bubbleStaticOverlay.graphicClass == typeof(Graphic_Single))           //单层贴图默认+5
+            if (Props.bubbleStaticOverlay.graphicClass == typeof(Graphic_Single))           //单层贴图默认+1
             {
-                loc.y += 5f;
+                loc.y += 1f;
             }
             else if (Props.bubbleStaticOverlay.graphicClass == typeof(Graphic_Multi))       //多向静态贴图，应用比如碧蓝的舰装
             {
-                if (Wearer.Rotation != Rot4.South) loc.y += 5f;         //显示在人物上面
-                else loc.y -= 5f;                                       //只有朝南是显示在人物下面
+                if (Wearer.Rotation != Rot4.South) loc.y += 1f;         //显示在人物上面
+                else loc.y -= 1f;                                       //只有朝南是显示在人物下面
             }
 
             loc += Props.bubbleStaticOverlay.DrawOffsetForRot(rot);

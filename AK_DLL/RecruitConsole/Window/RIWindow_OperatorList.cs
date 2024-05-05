@@ -136,7 +136,7 @@ namespace AK_DLL
         public static int orderInName = "FSUI_whatev_".Length;
 
         private List<OperatorSeriesDef> AllSeries => RIWindowHandler.operatorSeries;
-        private List<int> activeClasses => AllSeries[series].includedClasses;
+        private List<int> ActiveClasses => AllSeries[Series].includedClasses;
 
         private bool choosingSeries = false;
 
@@ -205,7 +205,13 @@ namespace AK_DLL
             base.ReturnToParent(closeEV);
         }
 
-#region 切换系列/职业
+        public override void Close(bool closeEV = true)
+        {
+            base.Close(closeEV);
+            AK_Mod.settings.Write();
+        }
+
+        #region 切换系列/职业
         /// <summary>
         /// 致敬经典 - 废话summary
         /// Just Draw classes buttons
@@ -224,7 +230,7 @@ namespace AK_DLL
             GameObject classBtnInstance;
             AK_Tool4Unity.ClearAllChild(classColumn); //直接清空所有老的职业图标 懒得复用了，感觉占不到几个性能
             int i = 0; //FIXME：晚点给删了
-            foreach(int node in activeClasses)
+            foreach(int node in ActiveClasses)
             {
                 OperatorClassDef opClass = RIWindowHandler.operatorClasses[node];
                 classBtnInstance = GameObject.Instantiate(classBtnPrefab, classColumn);
@@ -238,19 +244,21 @@ namespace AK_DLL
                 int j = node;
                 classBtnInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
                 {
-                    operatorClass = j;
-                    cachedOperatorList = RIWindowHandler.operatorDefs[operatorClass].Values.ToList();
+                    OperatorClass = j;
+                    cachedOperatorList = RIWindowHandler.operatorDefs[OperatorClass].Values.ToList();
                     //默认使用 首字母排序
-                    NeedSortTo((int)OperatorSortType.Alphabet, true);
-                    
+                    //NeedSortTo((int)OperatorSortType.Alphabet, true);
+                    NeedSortTo(sortType, true);
+
                     //实际排序
-                    SortOperator<string>(delegate (string a, string b)
+                    SortOperator(sortType);
+                    /*SortOperator<string>(delegate (string a, string b)
                     {
                         return string.Compare(a, b) <= 0;
                     }, delegate (OperatorDef def)
                     {
                         return AK_Tool.GetOperatorIDFrom(def.defName);
-                    });
+                    });*/
                     DrawOperatorListContent();
                 });
                 DrawOneClassBtn(classBtnInstance, opClass.Icon, opClass.label.Translate());
@@ -260,29 +268,20 @@ namespace AK_DLL
         //按下切换系列按钮后，会重新绘制新的职业按钮组（不在本函数内）
         private void DrawSeriesBtn()
         {
-            if (series == -1)
+            if (Series == -1)
             {
-                Log.Error("MIS. critical error : no series found");
+                Log.Error("[MIS] critical error : no series found");
                 return;
             }
             if (AllSeries.Count == 0) return;
-            //GameObject classBtnPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("btnClassTemplate");
-            //Transform seriesBtn = GameObject.Find("btnSeries").transform;
-
-            //Transform seriesPanel = GameObject.Find("seriesPanel").transform; //所有系列图标的总面板
-            //Transform seriesColumn = GameObject.Find("seriesSelectPanel").transform;  //可隐藏的，显示所有系列的面板
-            //GameObject seriesBtnInstance;
 
             GameObject btnCurrentSeries = GameObject.Find("btnSeries");
-            btnCurrentSeries.GetComponent<Image>().sprite = AK_Tool4Unity.Image2Spirit(AllSeries[series].Icon);
+            btnCurrentSeries.GetComponent<Image>().sprite = AK_Tool4Unity.Image2Spirit(AllSeries[Series].Icon);
             btnCurrentSeries.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
                 choosingSeries = !choosingSeries;
                 DrawSeriesPanel();
                 DrawAllClassBtn();
-                /*bool isActive = seriesPanel.GetChild(0).gameObject.activeInHierarchy;
-                seriesPanel.GetChild(0).gameObject.SetActive(!isActive);
-                seriesPanel.GetChild(1).gameObject.SetActive(!isActive);*/
             });
             //绘制所有的系列图标（可隐藏）
             /*for (int i = 0; i < AllSeries.Count; ++i)
@@ -320,7 +319,7 @@ namespace AK_DLL
                 seriesBtnInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
                 {
                     choosingSeries = false;
-                    series = j;
+                    Series = j;
                     DrawAllClassBtn();
                 });
             }
@@ -346,11 +345,11 @@ namespace AK_DLL
         //绘制干员列表的初期准备, 开1次UI仅运行1次。
         public void DrawOperatorList()
         {
-            if (operatorClass == -1)
+            if (OperatorClass == -1)
             {
                 Log.Message("MIS. Critical error: No class loaded");
             }
-            cachedOperatorList = RIWindowHandler.operatorDefs[operatorClass].Values.ToList();
+            cachedOperatorList = RIWindowHandler.operatorDefs[OperatorClass].Values.ToList();
             NeedSortTo((int)OperatorSortType.Alphabet, true);
             SortOperator<string>(delegate (string a, string b)
             {
@@ -633,7 +632,7 @@ namespace AK_DLL
         }
         private bool NeedSortTo(int newSortType, bool overrd = false)
         {
-            Vector3 tempV3;
+            //Vector3 tempV3;
             if (sortType == newSortType && !overrd)
             {
                 //tempV3 = sorterBtns[sortType].GetChild(3).eulerAngles;
@@ -724,17 +723,50 @@ namespace AK_DLL
 
         private void SortOperator(int sortType)
         {
-            switch(sortType)
+            if (sortType == (int)OperatorSortType.Alphabet)
             {
-                case 1:
-                    break;
-                default:
-                    break;
+                SortOperator<string>(delegate (string a, string b)
+                {
+                    return string.Compare(a, b) <= 0;
+                }, delegate (OperatorDef def)
+                {
+                    return AK_Tool.GetOperatorIDFrom(def.defName);
+                });
+            }
+            else if (sortType == (int)OperatorSortType.Dps)
+            {
+                SortOperator<double>(delegate (double a, double b)
+                {
+                    return !(a <= b);
+                }, delegate (OperatorDef def)
+                {
+                    return DPSCalculator(def);
+                });
+            }
+            else
+            {
+                SortOperator<int>(delegate (int a, int b)
+                {
+                    return !(a <= b);
+                }, delegate (OperatorDef def)
+                {
+                    return def.SortedSkills[sortType].level;
+                });
             }
         }
         #endregion
 
-        public static int series = -1;
+        public static int Series
+        {
+            get => AK_ModSettings.lastViewedSeries;
+            set => AK_ModSettings.lastViewedSeries = value;
+        }
+
+        public static int OperatorClass
+        {
+            get => AK_ModSettings.lastViewedClass;
+            set => AK_ModSettings.lastViewedClass = value;
+        }
 
         static List<Transform> sorterBtns = new List<Transform>();
 
@@ -743,7 +775,6 @@ namespace AK_DLL
         {
             get { return RIWindowHandler.recruitConsole; }
         }
-        public static int operatorClass = -1;
 
     }
 }

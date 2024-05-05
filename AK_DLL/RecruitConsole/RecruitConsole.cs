@@ -36,7 +36,7 @@ namespace AK_DLL
                 yield return new FloatMenuOption("AK_ChangeFashionDefault".Translate(),
                 delegate
                 {
-                    doc.pendingFashion = -1;
+                    //doc.pendingFashion = -1;
                     doc.pendingFashionDef = null;
                     selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AKDefOf.AK_Job_OperatorChangeFashion, this));
                 }
@@ -51,7 +51,7 @@ namespace AK_DLL
                             selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AKDefOf.AK_Job_OperatorChangeFashion, this));
                         });
                 }*/
-                foreach (OperatorClothSetDef set in doc.operatorDef.clothSets)
+                foreach (OperatorFashionSetDef set in doc.operatorDef.clothSets)
                 {
                     yield return new FloatMenuOption("AK_ChangeFashionTo".Translate() + set.label.Translate(),
                         delegate

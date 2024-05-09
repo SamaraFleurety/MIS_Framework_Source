@@ -23,6 +23,8 @@ namespace AK_DLL
     {
         private TCP_TeleportTowerInferior Props => props as TCP_TeleportTowerInferior;
         protected virtual float Radius => Props.radius + 1;
+
+        private static HashSet<TC_TeleportTowerSuperior> AllTowers => GC_AKManager.superiorRecruitTowers;
         public override IEnumerable<FloatMenuOption> CompFloatMenuOptions(Pawn selPawn)
         {
             float distance = selPawn.Position.DistanceTo(parent.Position);
@@ -32,10 +34,18 @@ namespace AK_DLL
                 yield break;
             }
 
+            List<TC_TeleportTowerSuperior> towers = AllTowers.ToList();
+
             //传送，从自己传送到目标点，可以如蜜传如蜜。只能往大传送塔传
-            foreach (TC_TeleportTowerSuperior i in GC_AKManager.superiorRecruitTowers)
+            for (int i = 0; i < towers.Count; ++i)
             {
-                TC_TeleportTowerSuperior j = i;
+                //不知道为啥这玩意经常不会被正确移除
+                if (towers[i] == null || towers[i].parent == null || towers[i].parent.Destroyed || towers[i].parent.Map == null)
+                {
+                    AllTowers.Remove(towers[i]);
+                    continue;
+                }
+                TC_TeleportTowerSuperior j = towers[i];
                 yield return new FloatMenuOption("AK_TeleportToTower".Translate() + j.Alias, delegate ()
                 {
                     //selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AKDefOf.AK_Job_UseTeleportTower, this.parent, j.parent));

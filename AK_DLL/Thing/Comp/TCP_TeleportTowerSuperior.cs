@@ -31,6 +31,8 @@ namespace AK_DLL
 
         private Command_Action cachedChangeAliasGizmo = null;
 
+        private static HashSet<TC_TeleportTowerSuperior> AllTowers => GC_AKManager.superiorRecruitTowers;
+
         private Command_Action CachedChangeAliasGizmo
         {
             get
@@ -66,15 +68,23 @@ namespace AK_DLL
         //往管理器注册 执行传送
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
+            if(!AllTowers.Contains(this)) GC_AKManager.superiorRecruitTowers.Add(this);
             base.PostSpawnSetup(respawningAfterLoad);
-            GC_AKManager.superiorRecruitTowers.Add(this);
         }
 
+        public override void PostDestroy(DestroyMode mode, Map previousMap)
+        {
+            Log.Message("dereg dest");
+            if (AllTowers.Contains(this)) AllTowers.Remove(this);
+            base.PostDestroy(mode, previousMap);
+        }
         public override void PostDeSpawn(Map map)
         {
+            Log.Message("dereg desp");
+            if (AllTowers.Contains(this)) AllTowers.Remove(this);
             base.PostDeSpawn(map);
-            GC_AKManager.superiorRecruitTowers.Remove(this);
         }
+
         public override void PostExposeData()
         {
             base.PostExposeData();

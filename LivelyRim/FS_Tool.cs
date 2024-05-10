@@ -36,16 +36,23 @@ namespace FS_LivelyRim
         //执行所有初始化 原生库只有x64
         static FS_Tool ()
         {
-            //因为广泛需要读取prefab或者json，需要知道路径。泰南的MODContentInfo竟然tm是个list
-            LoadAllModPath();
+            try
+            {
+                //因为广泛需要读取prefab或者json，需要知道路径。泰南的MODContentInfo竟然tm是个list
+                LoadAllModPath();
 
-            CheckCubismCoreLib();
+                CheckCubismCoreLib();
 
-            InitializeCubismDll();
+                InitializeCubismDll();
 
-            TypeDef.Initialize();
+                TypeDef.Initialize();
 
-            SetDefaultCanvas(false);
+                SetDefaultCanvas(false);
+            }
+            catch
+            {
+                Log.Error("[FS] 致命错误: L2D框架未初始化");
+            }
         }
 
         #region IO
@@ -76,11 +83,18 @@ namespace FS_LivelyRim
         //因为cubism dll是在游戏中途加载，所以有些仅游戏开始时执行一次的初始化方法无法被执行
         static void InitializeCubismDll()
         {
-            MethodInfo method = typeof(CubismModel).GetMethod("RegisterCallbackFunction", BindingFlags.NonPublic | BindingFlags.Static);
-            method.Invoke(null, new object[0]);
+            try
+            {
+                MethodInfo method = typeof(CubismModel).GetMethod("RegisterCallbackFunction", BindingFlags.NonPublic | BindingFlags.Static);
+                method.Invoke(null, new object[0]);
 
-            method = typeof(CubismLogging).GetMethod("Initialize", BindingFlags.NonPublic | BindingFlags.Static);
-            method.Invoke(null, new object[0]);
+                method = typeof(CubismLogging).GetMethod("Initialize", BindingFlags.NonPublic | BindingFlags.Static);
+                method.Invoke(null, new object[0]);
+            }
+            catch
+            {
+                Log.Error("[FS] 致命错误：未找到Cubsim DLL");
+            }
         }
 
         //从mod的ID读获取要的文件的路径

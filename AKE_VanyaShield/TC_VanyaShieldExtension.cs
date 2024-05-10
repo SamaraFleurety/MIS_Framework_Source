@@ -36,7 +36,7 @@ namespace AKE_VanyaShield
         TCP_VanyaShieldExtension Props => (TCP_VanyaShieldExtension)props;
         protected Vanya_ShieldBelt Parent => (Vanya_ShieldBelt)parent;
         protected Pawn Wearer => Parent.Wearer;
-        protected bool shouldDrawNow = false;
+        public bool shouldDrawNow = false;
 
         public bool HideVanillaBubble => Props.hideVanillaBubble;
         public float ReflectionRatio => Props.reflectionRatio;

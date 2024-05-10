@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AKC_AlienPatch", "AlienPatc
 		{25A323A4-A832-487C-9AB2-32E14C56E148} = {25A323A4-A832-487C-9AB2-32E14C56E148}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AKE_OperatorExtension", "AKE_OperatorExtension\AKE_OperatorExtension.csproj", "{004B6315-BCF5-49E2-96F7-DA1C42DA4A64}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -183,6 +185,26 @@ Global
 		{AFC6963B-5B61-4D44-B2FA-5E90E508F01D}.Release|x64.Build.0 = Release|Any CPU
 		{AFC6963B-5B61-4D44-B2FA-5E90E508F01D}.Release|x86.ActiveCfg = Release|Any CPU
 		{AFC6963B-5B61-4D44-B2FA-5E90E508F01D}.Release|x86.Build.0 = Release|Any CPU
+		{004B6315-BCF5-49E2-96F7-DA1C42DA4A64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{004B6315-BCF5-49E2-96F7-DA1C42DA4A64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{004B6315-BCF5-49E2-96F7-DA1C42DA4A64}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{004B6315-BCF5-49E2-96F7-DA1C42DA4A64}.Debug|ARM.Build.0 = Debug|Any CPU
+		{004B6315-BCF5-49E2-96F7-DA1C42DA4A64}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{004B6315-BCF5-49E2-96F7-DA1C42DA4A64}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{004B6315-BCF5-49E2-96F7-DA1C42DA4A64}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{004B6315-BCF5-49E2-96F7-DA1C42DA4A64}.Debug|x64.Build.0 = Debug|Any CPU
+		{004B6315-BCF5-49E2-96F7-DA1C42DA4A64}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{004B6315-BCF5-49E2-96F7-DA1C42DA4A64}.Debug|x86.Build.0 = Debug|Any CPU
+		{004B6315-BCF5-49E2-96F7-DA1C42DA4A64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{004B6315-BCF5-49E2-96F7-DA1C42DA4A64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{004B6315-BCF5-49E2-96F7-DA1C42DA4A64}.Release|ARM.ActiveCfg = Release|Any CPU
+		{004B6315-BCF5-49E2-96F7-DA1C42DA4A64}.Release|ARM.Build.0 = Release|Any CPU
+		{004B6315-BCF5-49E2-96F7-DA1C42DA4A64}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{004B6315-BCF5-49E2-96F7-DA1C42DA4A64}.Release|ARM64.Build.0 = Release|Any CPU
+		{004B6315-BCF5-49E2-96F7-DA1C42DA4A64}.Release|x64.ActiveCfg = Release|Any CPU
+		{004B6315-BCF5-49E2-96F7-DA1C42DA4A64}.Release|x64.Build.0 = Release|Any CPU
+		{004B6315-BCF5-49E2-96F7-DA1C42DA4A64}.Release|x86.ActiveCfg = Release|Any CPU
+		{004B6315-BCF5-49E2-96F7-DA1C42DA4A64}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

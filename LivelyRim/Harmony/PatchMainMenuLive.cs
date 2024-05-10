@@ -1,4 +1,7 @@
-﻿using HarmonyLib;
+﻿#define L2DFull
+#if L2DFull
+
+using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -96,3 +99,5 @@ namespace FS_LivelyRim
         }
     }
 }
+
+#endif

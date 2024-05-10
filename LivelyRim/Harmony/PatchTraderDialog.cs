@@ -1,4 +1,7 @@
-﻿using HarmonyLib;
+﻿#define L2DFull
+#if L2DFull
+
+using HarmonyLib;
 using RimWorld;
 using Verse;
 using UnityEngine;
@@ -61,3 +64,5 @@ namespace FS_LivelyRim
         }
     }
 }
+
+#endif

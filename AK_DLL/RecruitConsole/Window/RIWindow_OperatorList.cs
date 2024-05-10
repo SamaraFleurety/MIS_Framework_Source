@@ -148,18 +148,18 @@ namespace AK_DLL
             }
         }
 
-        private GameObject ClickedBtnParent
+        /*private GameObject ClickedBtnParent
         {
             get
             {
                 return ClickedBtn.transform.parent.gameObject;
             }
-        }
+        }*/
         //完了 好像创建临时变量就可以 不需要这么麻烦的方法
-        private int btnOrder(GameObject clickedBtn)
+        /*private int btnOrder(GameObject clickedBtn)
         {
             return int.Parse(clickedBtn.name.Substring(orderInName));
-        }
+        }*/
 
 #endregion
 
@@ -205,7 +205,13 @@ namespace AK_DLL
             base.ReturnToParent(closeEV);
         }
 
-#region 切换系列/职业
+        public override void Close(bool closeEV = true)
+        {
+            base.Close(closeEV);
+            AK_Mod.settings.Write();
+        }
+
+        #region 切换系列/职业
         /// <summary>
         /// 致敬经典 - 废话summary
         /// Just Draw classes buttons
@@ -236,15 +242,15 @@ namespace AK_DLL
                 classBtnInstance.name = "FSUI_classs_" + node;
                 //按钮 非实时
                 int j = node;
-                classBtnInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+                classBtnInstance.GetComponentInChildren<Button>().onClick.AddListener((UnityEngine.Events.UnityAction)delegate ()
                 {
-                    operatorClass = j;
-                    cachedOperatorList = RIWindowHandler.operatorDefs[operatorClass].Values.ToList();
+                    RIWindow_OperatorList.operatorClass = j;
+                    cachedOperatorList = RIWindowHandler.operatorDefs[(int)RIWindow_OperatorList.operatorClass].Values.ToList();
                     //默认使用 首字母排序
                     NeedSortTo((int)OperatorSortType.Alphabet, true);
-                    
+
                     //实际排序
-                    SortOperator<string>(delegate (string a, string b)
+                    SortOperator(delegate (string a, string b)
                     {
                         return string.Compare(a, b) <= 0;
                     }, delegate (OperatorDef def)
@@ -266,12 +272,7 @@ namespace AK_DLL
                 return;
             }
             if (AllSeries.Count == 0) return;
-            //GameObject classBtnPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("btnClassTemplate");
-            //Transform seriesBtn = GameObject.Find("btnSeries").transform;
 
-            //Transform seriesPanel = GameObject.Find("seriesPanel").transform; //所有系列图标的总面板
-            //Transform seriesColumn = GameObject.Find("seriesSelectPanel").transform;  //可隐藏的，显示所有系列的面板
-            //GameObject seriesBtnInstance;
 
             GameObject btnCurrentSeries = GameObject.Find("btnSeries");
             btnCurrentSeries.GetComponent<Image>().sprite = AK_Tool4Unity.Image2Spirit(AllSeries[series].Icon);
@@ -280,9 +281,6 @@ namespace AK_DLL
                 choosingSeries = !choosingSeries;
                 DrawSeriesPanel();
                 DrawAllClassBtn();
-                /*bool isActive = seriesPanel.GetChild(0).gameObject.activeInHierarchy;
-                seriesPanel.GetChild(0).gameObject.SetActive(!isActive);
-                seriesPanel.GetChild(1).gameObject.SetActive(!isActive);*/
             });
             //绘制所有的系列图标（可隐藏）
             /*for (int i = 0; i < AllSeries.Count; ++i)
@@ -417,21 +415,20 @@ namespace AK_DLL
                 if (j >= opList.Count) opList.Add(opPortraitInstance);
                 else opList[j] = opPortraitInstance;
 
-                int k = i;
-                opPortraitInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
-                {
-                    RIWindowHandler.OpenRIWindow_OpDetail(cachedOperatorList[k]);
-                    this.Close(false);
-                });
-                //决定头像框的位置。目前一行8个，共3行。  已经改用unity的grid。
-                //opPortraitInstance.transform.localPosition = new Vector3((j / 8 * -8 + j) * opPortraitInstance.transform.localPosition.x, (j / 8) * opPortraitInstance.transform.localPosition.y);
             }
             else
             {
                 opPortraitInstance = opList[j];
             }
+            int k = i;
+            opPortraitInstance.GetComponentInChildren<Button>().onClick.RemoveAllListeners();
+            opPortraitInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            {
+                RIWindowHandler.OpenRIWindow_OpDetail(cachedOperatorList[k]);
+                this.Close(false);
+            });
             //设定名字中 以后检索干员def时用的数字序
-            opPortraitInstance.name = "FSUI_Opertr_" + i;
+            //opPortraitInstance.name = "FSUI_Opertr_" + i;
             //设定头像 决定干员头像的子物体是第一个子物体。
             opPortraitInstance.transform.GetChild(0).GetComponent<Image>().sprite = Sprite.Create(operatorTex, new Rect(0, 0, operatorTex.width, operatorTex.height), new Vector2(0, 0));
             //干员名字
@@ -463,20 +460,14 @@ namespace AK_DLL
                 //按钮的显示文字
                 textTMP.text = TypeDef.SortOrderSkill[i].label.Translate();
                 //使用了投机取巧而不是正常的方式存储数据。 已弃用。 
-                sortBtnInstance.name = "FSUI_Sorter_" + i;
+                //sortBtnInstance.name = "FSUI_Sorter_" + i;
                 int k = i;
                 sortBtnInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
                 {
                     sortBtnInstance = ClickedBtn;
                     if (NeedSortTo(k))
                     {
-                        SortOperator<int>(delegate (int a, int b)
-                        {
-                            return !(a <= b);
-                        }, delegate (OperatorDef def)
-                        {
-                            return def.SortedSkills[k].level;
-                        });
+                        SortOperator(k);
                     }
                     DrawOperatorListContent();
                 });
@@ -501,13 +492,15 @@ namespace AK_DLL
              
                 if (NeedSortTo((int)OperatorSortType.Dps))
                 {
-                    SortOperator<double>(delegate (double a, double b)
+                    SortOperator((int)OperatorSortType.Dps);
+                    /*SortOperator<double>(delegate (double a, double b)
+
                     {
                         return !(a <= b);
                     }, delegate (OperatorDef def)
                     {
                         return DPSCalculator(def);
-                    });
+                    });*/
                 }
                 DrawOperatorListContent();
             });
@@ -530,13 +523,14 @@ namespace AK_DLL
             {
                 if (NeedSortTo((int)OperatorSortType.Alphabet))
                 {
-                    SortOperator<string>(delegate (string a, string b)
+                    SortOperator((int)OperatorSortType.Alphabet);
+                    /*SortOperator<string>(delegate (string a, string b)
                     {
                         return string.Compare(a, b) <= 0;
                     }, delegate (OperatorDef def)
                     {
                         return AK_Tool.GetOperatorIDFrom(def.defName);
-                    });
+                    });*/
                 }
                 DrawOperatorListContent();
             });
@@ -633,27 +627,15 @@ namespace AK_DLL
         }
         private bool NeedSortTo(int newSortType, bool overrd = false)
         {
-            Vector3 tempV3;
             if (sortType == newSortType && !overrd)
             {
-                //tempV3 = sorterBtns[sortType].GetChild(3).eulerAngles;
-                //sorterBtns[sortType].GetChild(3).eulerAngles = new Vector3(tempV3.x, tempV3.y, (tempV3.z + 180) % 360);
                 sortReverseOrder = !sortReverseOrder;
                 return false;
             }
             else
             {
-                //先把之前的按钮改回去,3是被选中的白标,2是没选中的灰标
-                //sorterBtns[sortType].GetChild(3).gameObject.SetActive(false);
-                //sorterBtns[sortType].GetChild(2).gameObject.SetActive(true);
-                
                 sortReverseOrder = false;
                 sortType = newSortType;
-                //更改新按钮的标记
-                //sorterBtns[sortType].GetChild(3).gameObject.SetActive(true);
-                //sorterBtns[sortType].GetChild(2).gameObject.SetActive(false);
-                //因为其他按钮默认从大往小排，但字母序是小往大
-                //if (sortType == (int)OperatorSortType.Alphabet) sorterBtns[sortType].GetChild(3).eulerAngles = new Vector3(0, 0, 180);
                 return true;
             }
         }
@@ -724,17 +706,50 @@ namespace AK_DLL
 
         private void SortOperator(int sortType)
         {
-            switch(sortType)
+            if (sortType == (int)OperatorSortType.Alphabet)
             {
-                case 1:
-                    break;
-                default:
-                    break;
+                SortOperator<string>(delegate (string a, string b)
+                {
+                    return string.Compare(a, b) <= 0;
+                }, delegate (OperatorDef def)
+                {
+                    return AK_Tool.GetOperatorIDFrom(def.defName);
+                });
+            }
+            else if (sortType == (int)OperatorSortType.Dps)
+            {
+                SortOperator<double>(delegate (double a, double b)
+                {
+                    return !(a <= b);
+                }, delegate (OperatorDef def)
+                {
+                    return DPSCalculator(def);
+                });
+            }
+            else
+            {
+                SortOperator<int>(delegate (int a, int b)
+                {
+                    return !(a <= b);
+                }, delegate (OperatorDef def)
+                {
+                    return def.SortedSkills[sortType].level;
+                });
             }
         }
         #endregion
 
-        public static int series = -1;
+        public static int series
+        {
+            get => AK_ModSettings.lastViewedSeries;
+            set => AK_ModSettings.lastViewedSeries = value;
+        }
+
+        public static int operatorClass
+        {
+            get => AK_ModSettings.lastViewedClass;
+            set => AK_ModSettings.lastViewedClass = value;
+        }
 
         static List<Transform> sorterBtns = new List<Transform>();
 
@@ -743,7 +758,6 @@ namespace AK_DLL
         {
             get { return RIWindowHandler.recruitConsole; }
         }
-        public static int operatorClass = -1;
 
     }
 }

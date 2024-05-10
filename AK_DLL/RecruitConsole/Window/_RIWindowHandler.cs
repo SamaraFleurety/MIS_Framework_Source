@@ -99,6 +99,7 @@ namespace AK_DLL
         #endregion
 
         #region 初始化数据
+        //仅开始游戏时会调用一次
         public static void LoadOperatorSeries()
         {
             foreach (OperatorSeriesDef i in DefDatabase<OperatorSeriesDef>.AllDefs)
@@ -106,7 +107,18 @@ namespace AK_DLL
                 operatorSeries.Add(i);
                 i.includedClasses = new List<int>();
             }
-            if (operatorSeries.Count > 0) RIWindow_OperatorList.series = 0;
+            if (operatorSeries.Count > 0)
+            {
+                if (RIWindow_OperatorList.series < 0)
+                {
+                    RIWindow_OperatorList.series = 0;
+                }
+                else if (RIWindow_OperatorList.series > 0 && RIWindow_OperatorList.series >= operatorSeries.Count)       //可能是减少了mod数量
+                {
+                    RIWindow_OperatorList.series = 0;
+                }
+            }
+            else RIWindow_OperatorList.series = -1;
         }
         public static void AutoFillOperators()
         {
@@ -166,7 +178,17 @@ namespace AK_DLL
             }
             if (operatorClasses.Count >= 1)
             {
-                RIWindow_OperatorList.operatorClass = operatorClasses.First().Key;
+                if (operatorSeries.NullOrEmpty()) return;   //有职业但没系列 不该出现
+                int classIndex = RIWindow_OperatorList.operatorClass;
+                OperatorSeriesDef seriesDef = operatorSeries[RIWindow_OperatorList.series];
+                if (classIndex < 0 || !seriesDef.includedClasses.Contains(classIndex))
+                {
+                    classIndex = seriesDef.includedClasses.First();
+                }
+
+                RIWindow_OperatorList.operatorClass = classIndex;
+
+                //RIWindow_OperatorList.OperatorClass = operatorClasses.First().Key;
             }
         }
         #endregion

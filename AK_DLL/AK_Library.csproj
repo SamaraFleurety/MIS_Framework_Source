@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\不要动这是稳定版输出\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -34,19 +34,18 @@
   <ItemGroup>
     <Reference Include="0Harmony, Version=2.2.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Rely\0Harmony.dll</HintPath>
+      <HintPath>..\..\main_rely\0Harmony.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="AKA_Ability">
-      <HintPath>..\AKA_Ability\obj\Debug\AKA_Ability.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\AKA_Ability\bin\Debug\AKA_Ability.dll</HintPath>
     </Reference>
     <Reference Include="AKM_MusicPlayer">
-      <HintPath>..\AKM_MusicPlayer\obj\Debug\AKM_MusicPlayer.dll</HintPath>
+      <HintPath>..\AKM_MusicPlayer\bin\Debug\AKM_MusicPlayer.dll</HintPath>
     </Reference>
     <Reference Include="AlienRace, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Rely\AlienRace.dll</HintPath>
+      <HintPath>..\..\main_rely\AlienRace.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp, Version=1.4.8385.39127, Culture=neutral, processorArchitecture=MSIL">
@@ -55,20 +54,20 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="CubismRim">
-      <HintPath>..\..\Rely\CubismRim.dll</HintPath>
+      <HintPath>..\..\main_rely\CubismRim.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="FSUI, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>E:\SteamLibrary\steamapps\workshop\content\294100\2910194921\1.4\Assemblies\FSUI.dll</HintPath>
+      <HintPath>..\..\main_rely\FSUI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="HarmonyMod">
-      <HintPath>..\..\Rely\HarmonyMod.dll</HintPath>
+      <HintPath>..\..\main_rely\HarmonyMod.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="ISharpZipLib">
-      <HintPath>..\..\Rely\ISharpZipLib.dll</HintPath>
+      <HintPath>E:\SteamLibrary\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\ISharpZipLib.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="LitJSON, Version=0.18.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -76,11 +75,11 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Mono.Posix">
-      <HintPath>..\..\Rely\Mono.Posix.dll</HintPath>
+      <HintPath>E:\SteamLibrary\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Mono.Posix.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Mono.Security">
-      <HintPath>..\..\Rely\Mono.Security.dll</HintPath>
+      <HintPath>E:\SteamLibrary\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Mono.Security.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -97,7 +96,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Timeline">
-      <HintPath>..\..\Rely\Unity.Timeline.dll</HintPath>
+      <HintPath>..\..\main_rely\Unity.Timeline.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine">
@@ -345,8 +344,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Vanya_ShieldBelt">
-      <HintPath>..\..\Rely\Vanya_ShieldBelt.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\main_rely\Vanya_ShieldBelt.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

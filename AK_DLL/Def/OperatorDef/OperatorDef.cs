@@ -64,19 +64,21 @@ namespace AK_DLL
         //因为并不知道是否有某种立绘，所以用字典存。约定-1为头像，0是精0立绘，1是精2立绘，2-后面是换装
         //这里的V3，x和y是x轴和y轴的偏移，z其实是缩放
         public Dictionary<int, Vector3> standOffsets = new Dictionary<int, Vector3>();
+        [Obsolete]
         public Vector2 standOffset;
         public float standRatio = 3f;
-        public string headPortrait;//头像
+        public string headPortrait;         //IMGUI主界面选中时 左下角详情栏上面的头像
+        [Obsolete]
         public Vector2 headPortraitOffset;
 
         public ThoughtDef thoughtReceived = null;  //其他所有人都会给这个干员一个想法 当前是和弦独有
         public int TRStage = -1;  //全部丢进同一个想法 节省性能
 
-        public float ticketCost = 1f;
+        public float ticketCost = 1f;   //招募消耗 为了平衡所以可以是非整数票
 
         public XenotypeDef xenoType;
 
-        public AbilityDef operatorID = null;
+        public AbilityDef operatorID = null;    //干员身份证的容器 其他派系角色可以自定义个图标不同的这玩意
 
         #endregion
 
@@ -93,16 +95,16 @@ namespace AK_DLL
         {
             get { return AK_Tool.GetOperatorIDFrom(this.defName); }
         }
-        public List<SkillAndFire> Skills
+        /*public List<SkillAndFire> Skills
         {
             get
             {
                 /*string operatorName = AK_Tool.GetOperatorNameFromDefName(this.defName);
                 if (GameComp_OperatorDocumentation.operatorDocument.ContainsKey(operatorName)) return GameComp_OperatorDocumentation.operatorDocument[operatorName].skillAndFires;
-                else*/
+                else*//*
                 return skills;
             }
-        }
+        }*/
         public List<SkillAndFire> SortedSkills
         {
             get
@@ -124,20 +126,15 @@ namespace AK_DLL
                 return skills;
             }
         }
-        public Texture2D PreferredStand
+        public Texture2D PreferredStand(int preferredSkin)
         {
-            get
-            {
-                if (GameComp_OperatorDocumentation.opDocArchive.ContainsKey(this.OperatorID) == false)
-                {
-                    return ContentFinder<Texture2D>.Get(this.stand);
-                }
-                else
-                {
-                    return null;
-                }
-            }
+            Texture2D texture;
+            if (preferredSkin == 0) texture = ContentFinder<Texture2D>.Get(this.commonStand);
+            else if (preferredSkin == 1) texture = ContentFinder<Texture2D>.Get(this.stand);
+            else texture = ContentFinder<Texture2D>.Get(this.fashion[preferredSkin - 2]);
+            return texture;
         }
+
         #endregion
 
         //新换装写法 如果给定def就换，如果def是空的就换成原装
@@ -331,12 +328,6 @@ namespace AK_DLL
             //档案系统
             VAbility_Operator operatorID = Recruit_OperatorID(weapon);
             clothTemp.Clear();
-            /*operatorID.document = GameComp_OperatorDocumentation.opDocArchive[this.OperatorID];
-            operatorID.Document.voicePack = voicePackDef;*/
-
-            /*hediff.document = GameComp_OperatorDocumentation.opDocArchive[this.OperatorID];
-            hediff.document.voicePack = this.voicePackDef;
-            //hediff.document.operatorDef = this;*/
 
             Recruit_Ability(operatorID);
 
@@ -396,23 +387,6 @@ namespace AK_DLL
             {
                 return;
             }
-            //绑定干员技能
-            /*if (this.abilities != null && this.abilities.Count > 0)
-            {
-
-                foreach (OperatorAbilityDef i in this.abilities)
-                {
-                    HC_Ability HC = new HC_Ability(i);
-                    hediff.comps.Add(HC);
-                    HC.parent = hediff;
-                    if (i.grouped) hediff.document.groupedAbilities.Add(HC);
-                }
-            }
-            //禁用非第一个的可选技能
-            for (int i = 1; i < hediff.document.groupedAbilities.Count; ++i)
-            {
-                hediff.document.groupedAbilities[i].enabled = false;
-            }*/
             AKA_AbilityTracker tracker = vanillaAbility.AKATracker;
             if (this.AKAbilities != null && this.AKAbilities.Count > 0)
             {

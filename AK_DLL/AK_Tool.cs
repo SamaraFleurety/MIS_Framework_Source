@@ -20,15 +20,6 @@ namespace AK_DLL
         public static GameObject EVSystemInstance;
 
         private static List<ModContentPack> Mods => LoadedModManager.RunningMods.ToList();
-        /*public static void PrintfHairColor(this Pawn p)
-        {
-			Log.Message($"pawnHC: {p.story.HairColor.r}, {p.story.HairColor.g}, {p.story.HairColor.b},{p.story.HairColor.a}");
-		}
-
-		public static void PrinftSkinColor(this Pawn p)
-        {
-			Log.Message($"pawnSC: {p.story.SkinColor.r}, {p.story.SkinColor.g}, {p.story.SkinColor.b},{p.story.SkinColor.a}");
-		}*/
 
         static AK_Tool()
         {
@@ -141,12 +132,27 @@ namespace AK_DLL
             //if (p.health.hediffSet.GetFirstHediff<Hediff_Operator>() == null) return null;
             if (p == null) return null;
             if (p.abilities == null) return null;
+            if (!p.IsColonist) return null;
+            if (GameComp_OperatorDocumentation.cachedOperators.ContainsKey(p))
+            {
+                return GameComp_OperatorDocumentation.cachedOperators[p];
+            }
+            else if (GameComp_OperatorDocumentation.cachedNonOperators.Contains(p)) return null;
             VAbility_Operator va = null;
             foreach (Ability i in p.abilities.abilities)
             {
-                if (i is VAbility_Operator vab) va = vab;
+                if (i is VAbility_Operator vab)
+                {
+                    va = vab;
+                    GameComp_OperatorDocumentation.cachedOperators.Add(p, va.Document);
+                    break;
+                }
             }
-            if (va == null) return null;
+            if (va == null)
+            {
+                GameComp_OperatorDocumentation.cachedNonOperators.Add(p);
+                return null;
+            }
             OperatorDocument doc = va.Document;
             return doc;
         }
@@ -161,15 +167,16 @@ namespace AK_DLL
             if (p == null) return;
             OperatorDocument doc = AK_Tool.GetDoc(p);
             if (doc == null) return;
-            Widgets.DrawTextureFitted(new Rect(AK_ModSettings.xOffset * 5, AK_ModSettings.yOffset * 5, 408, 408), ContentFinder<Texture2D>.Get(AK_Tool.GetDoc(p).operatorDef.stand), (float)AK_ModSettings.ratio * 0.05f);
+            Texture2D texture = doc.operatorDef.PreferredStand(doc.preferedSkin);
+            Widgets.DrawTextureFitted(new Rect(AK_ModSettings.xOffset * 5, AK_ModSettings.yOffset * 5, 408, 408), texture, (float)AK_ModSettings.ratio * 0.05f);
         }
-        public static void DrawHighlightMouseOver(this Rect rect, Texture2D highlight)
+        /*public static void DrawHighlightMouseOver(this Rect rect, Texture2D highlight)
         {
             if (Mouse.IsOver(rect))
             {
                 GUI.DrawTexture(rect, highlight);
             }
-        }
+        }*/
         #endregion
 
         #region UGUI绘制立绘/L2D
@@ -179,11 +186,11 @@ namespace AK_DLL
             Transform containerLoc = OpStand.transform;
             containerLoc.localPosition = Vector3.zero;
             Image opStand = OpStand.GetComponent<Image>();
-            Texture2D tex;
+            Texture2D tex = def.PreferredStand(preferredSkin);
 
-            if (preferredSkin == 0) tex = ContentFinder<Texture2D>.Get(def.commonStand);
+            /*if (preferredSkin == 0) tex = ContentFinder<Texture2D>.Get(def.commonStand);
             else if (preferredSkin == 1) tex = ContentFinder<Texture2D>.Get(def.stand);
-            else tex = ContentFinder<Texture2D>.Get(def.fashion[preferredSkin - 2]);
+            else tex = ContentFinder<Texture2D>.Get(def.fashion[preferredSkin - 2]);*/
 
             opStand.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
 
@@ -200,37 +207,6 @@ namespace AK_DLL
 
         }
 
-        /*public static GameObject DrawLive2DOperatorStand(OperatorDef def, int l2dOrder, GameObject renderTarget, Vector3? offset = null)
-        {
-            if (ModLister.GetActiveModWithIdentifier("FS.LivelyRim") == null)
-            {
-                Log.Error("MIS. loading a live2d but FS.LivelyRim not found");
-                return null;
-            }
-            GameObject L2DInstance;
-            if (l2dOrder >= 1000) l2dOrder -= 1000;
-            if (l2dOrder > def.live2dModel.Count)
-            {
-                Log.Error("MIS. l2d skin out of array");
-                return null;
-            }
-            if (TypeDef.cachedLive2DModels.ContainsKey(def.live2dModel[l2dOrder].modelName))
-            {
-                L2DInstance = TypeDef.cachedLive2DModels[def.live2dModel[l2dOrder].modelName];
-                FS_Utilities.SetModelActive(L2DInstance, renderTarget);
-            }
-            else
-            {
-                LiveModelDef l2dDef = def.live2dModel[l2dOrder];
-                AssetBundle ab = FS_Tool.LoadAssetBundle(l2dDef.modID, l2dDef.assetBundle);
-                L2DInstance = FS_Tool.InstantiateLive2DModel(ab, l2dDef.modID, l2dDef.modelName, rigJsonPath: l2dDef.rigJsonPath, renderTarget: renderTarget, eyeFollowMouse : l2dDef.eyeFollowMouse);
-                if (true) //给mod设置预留
-                {
-                    TypeDef.cachedLive2DModels.Add(l2dDef.modelName, L2DInstance);
-                }
-            }
-            return L2DInstance;
-        }*/
 
         //我真的不知道为什么这个ev system过一会自己就会变null。
         public static void SetEV(bool value)

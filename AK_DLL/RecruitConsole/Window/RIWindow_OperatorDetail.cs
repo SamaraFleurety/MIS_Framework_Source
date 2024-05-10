@@ -295,11 +295,11 @@ namespace AK_DLL
             return int.Parse(clickedBtn.name.Substring(RIWindow_OperatorList.orderInName));
         }
 
-        private int btnOpAbilityAbsOrder(GameObject clickedBtn)
+        /*private int btnOpAbilityAbsOrder(GameObject clickedBtn)
         {
             // FSUI_OpAb_{i}_{logicOrder}
             return int.Parse(clickedBtn.name[10].ToString());
-        }
+        }*/
 
         private int PreferredAbility
         {
@@ -690,8 +690,8 @@ namespace AK_DLL
                     else AK_ModSettings.secretaryLoc = TypeDef.defaultSecLocLive;
 
                     //手动保存设置
-                    AK_ModSettings settings = LoadedModManager.GetMod<AK_Mod>().settings;
-                    settings.Write();
+                    //AK_ModSettings settings = LoadedModManager.GetMod<AK_Mod>().settings;
+                    AK_Mod.settings.Write();
 
                     this.Close(false);
                     RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
@@ -794,8 +794,6 @@ namespace AK_DLL
             {
                 OpL2D.SetActive(true);
                 FS_Tool.SetDefaultCanvas(false);
-                //GameObject renderTarget =  GameObject.Find("OpL2DRenderTargetName");
-                //L2DInstance =  AK_Tool.DrawLive2DOperatorStand(Def, preferredSkin, OpL2D);
                 L2DInstance = FS_Utilities.DrawModel(DisplayModelAt.RIWDetail, Def.live2dModel[preferredSkin - 1000], OpL2D);
             }
         }

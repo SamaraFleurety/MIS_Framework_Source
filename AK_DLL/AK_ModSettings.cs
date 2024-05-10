@@ -26,7 +26,8 @@ namespace AK_DLL
         public static int ratio = 20;  //实际效果是值/20
         #endregion
 
-        #region 招募UI主菜单
+        #region 招募UI UGUI
+        //主菜单
         public static string secretary = "Amiya";
         public static int secretarySkin = 1;
         public static Vector3 secretaryLoc = new Vector3(400, 0, 1); //(x坐标, y坐标, 缩放倍率)。坐标使用unity体系，即左下角是(0,0)，上右为正。
@@ -41,6 +42,10 @@ namespace AK_DLL
             }
             set { font = value.defName; }
         }
+
+        //记录上次选择的系列以及职业
+        public static int lastViewedSeries = -1;
+        public static int lastViewedClass = -1;
         #endregion
 
         //public List<Pawn> exampleListOfPawns = new List<Pawn>();
@@ -62,14 +67,15 @@ namespace AK_DLL
             Scribe_Values.Look(ref secretaryLoc, "secLoc", new Vector3(400, 0, 1), true);
             Scribe_Values.Look(ref secLocSensitive, "secSense", 1, true);
             Scribe_Values.Look(ref font, "font", "AK_Font_YouYuan", true);
+            Scribe_Values.Look(ref lastViewedClass, "lastClass", -1);
+            Scribe_Values.Look(ref lastViewedSeries, "lastSeries", -1);
             //Scribe_Collections.Look(ref exampleListOfPawns, "exampleListOfPawns", LookMode.Reference);
-            base.ExposeData();
         }
     }
 
     public class AK_Mod : Mod
     {
-        public AK_ModSettings settings;
+        public static AK_ModSettings settings;
 
         public AK_Mod(ModContentPack content) : base(content)
         {

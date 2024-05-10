@@ -41,8 +41,9 @@ namespace AK_DLL
             {
                 Log.Error($"[MIS] missing font. reset to YouYuan");
                 AK_ModSettings.Font = AKDefOf.AK_Font_YouYuan;
-                AK_ModSettings settings = LoadedModManager.GetMod<AK_Mod>().settings;
-                settings.Write();
+                /*AK_ModSettings settings = LoadedModManager.GetMod<AK_Mod>().settings;
+                settings.Write();*/
+                AK_Mod.settings.Write();
             }
             if (AK_ModSettings.Font == AKDefOf.AK_Font_YouYuan)
             {

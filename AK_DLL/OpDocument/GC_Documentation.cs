@@ -39,7 +39,6 @@ namespace AK_DLL
         public OperatorDocument()
         {
             this.skillLevel = new Dictionary<SkillDef, int>();
-            //groupedAbilities = new List<HC_Ability>();
         }
         public OperatorDocument(string defName, Pawn p, Thing weapon, OperatorDef operatorDef) : this()
         {
@@ -48,7 +47,6 @@ namespace AK_DLL
             this.currentExist = true;
             this.pawn = p;
             this.weapon = weapon;
-            //this.hediff = p.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("AK_Operator")) as Hediff_Operator;
             this.RecordSkills();
         }
 
@@ -133,6 +131,9 @@ namespace AK_DLL
     public class GameComp_OperatorDocumentation : GameComponent
     {
         public static Dictionary<string, OperatorDocument> opDocArchive;
+        //提升性能的缓存
+        public static Dictionary<Pawn, OperatorDocument> cachedOperators = new Dictionary<Pawn, OperatorDocument>();
+        public static HashSet<Pawn> cachedNonOperators = new HashSet<Pawn>();
 
         public GameComp_OperatorDocumentation(Game game)
         {
@@ -187,8 +188,8 @@ namespace AK_DLL
             catch
             {
                 Log.Error("没保存起");
-            }           
-            Scribe.mode = 0;
+            }
+            Scribe.mode = LoadSaveMode.Inactive;
             if (AK_ModSettings.debugOverride)
             {
                 foreach (KeyValuePair<string, OperatorDocument> node in opDocArchive)

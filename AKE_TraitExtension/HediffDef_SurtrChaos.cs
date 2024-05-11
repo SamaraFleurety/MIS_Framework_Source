@@ -39,6 +39,7 @@ namespace AKE_TraitExtension
                 //迷迭香也一起疯狂失忆
                 if (targetTraitDefName == "AK_Trait_Surtr" || targetTraitDefName == "AK_Trait_Rosmontis")
                 {
+                    //记得用AbilityEffect_AddHediff重写这部分。
                     //先加上一个空壳子Hediff
                     var HediffOnPawn = operator_Pawn?.health?.hediffSet?.GetFirstHediffOfDef(Def.HediffToAdd);
                     var randomSeverity = Rand.Range(0.15f, 0.30f);

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Verse;
 
-namespace AKE_OperatorExtension.HCP
+namespace AKE_OperatorExtension
 {
     /// <summary>
     /// 随机附加Hediff。<para></para>先判定豁免概率(优先使用函数，没有就使用固定概率)

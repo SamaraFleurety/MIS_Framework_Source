@@ -66,6 +66,8 @@
     <Compile Include="HarmonyPatch\PatchMain.cs" />
     <Compile Include="HCP\HCP_RandAddHediff.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TRP\HediffDef_SurtrChaos.cs" />
+    <Compile Include="TRP\OperatorHediffDef_SurtrChaos.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

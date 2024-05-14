@@ -66,6 +66,7 @@
     <Compile Include="Harmony\Patch_ObeliskAbductor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TCP_AddHediffWhileShieldActive.cs" />
+    <Compile Include="TCP_ShieldExtraRenderer.cs" />
     <Compile Include="TC_VanyaShieldExtension.cs" />
     <Compile Include="TypeDef.cs" />
   </ItemGroup>

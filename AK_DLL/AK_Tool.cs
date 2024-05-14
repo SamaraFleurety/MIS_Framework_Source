@@ -259,7 +259,7 @@ namespace AK_DLL
 
         public static int weightArrayRand(int[] arr)
         {
-            int rd = UnityEngine.Random.Range(1, arr.Last());
+            int rd = UnityEngine.Random.Range(1, arr.Last()); //值域是[min, max]
 
             return quickSearch(arr, 0, arr.Length - 1, rd, 2);
         }

@@ -38,11 +38,11 @@ namespace AKE_OperatorExtension
         private int tick_phase2 = 0;
         private int tick_phase3 = 0;
         private int tick_bingchilling = 0;
+        private static bool hasSkill = false;
         /*private List<HediffStat> HediffInateStats
         {
             get { return this.Props.hediffInatePlusMaxPro; }
         }*/
-        #endregion
         //检测条件为冰淇淋增益3天，一阶段混乱10天,二阶段15天，三阶段20天
         private int TimerInterval_Bingchilling
         {
@@ -61,6 +61,7 @@ namespace AKE_OperatorExtension
         {
             get { return 20 * (this.Props.interval) * (int)this.Props.intervalUnit; }
         }
+        #endregion
 
         private string GetID()
         {
@@ -92,16 +93,17 @@ namespace AKE_OperatorExtension
             if (base.parent.Severity >= 2.6f) ++tick_phase2;
             if (base.parent.Severity >= 6.6f) ++tick_phase3;
 
-            if (base.parent.Severity < 0.1f)
+            if (base.parent.Severity < 0.1f && hasSkill)
             {
                 ++tick_bingchilling;
-                if (tick_bingchilling >= TimerInterval_Bingchilling)
+                foreach (RandStatsDef skillDef in this.Randskills)
                 {
-                    foreach (RandStatsDef skillDef in this.Randskills)
-                    { SetSkill(skillDef, 20); }
-                    tick_bingchilling = 0;
+                    SetSkill(skillDef, 20);
                 }
+                hasSkill = true;
+                if (tick_bingchilling >= TimerInterval_Bingchilling) tick_bingchilling = 0;
             }
+
             if (tick >= TimerInterval_Phase1)
             {
                 tick = 0;

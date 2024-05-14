@@ -55,7 +55,7 @@ namespace AKE_OperatorExtension
         }
         private string GetID()
         {
-            return this.Pawn.GetDoc().operatorID;
+            return this.Pawn.GetDoc()?.operatorID;
         }
 
         private string GetTraitDef()

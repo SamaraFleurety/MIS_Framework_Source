@@ -15,7 +15,7 @@ namespace AKE_OperatorExtension
     {
         public int interval = 1;
         public TimeToTick intervalUnit = TimeToTick.day;
-        public List<HediffStat> hediffInatePlusMaxPro = new List<HediffStat>();
+        public List<Trait> traitInatePlusMaxPro = new List<Trait>();
 
         public HCP_RandStats()
         {
@@ -31,19 +31,21 @@ namespace AKE_OperatorExtension
         {
             get { return (HCP_RandStats)this.props; }
         }
-        //保存随机技能模板的List
+        //保存随机修正模板的特性List
+        private List<Trait> TraitStats
+        {
+            get { return this.Props.traitInatePlusMaxPro; }
+        }
         private List<RandStatsDef> Randskills;
         private int index = 0;
         private int tick = 0;
-        private int tick_phase2 = 0;
-        private int tick_phase3 = 0;
         private int tick_bingchilling = 0;
         private static bool hasSkill = false;
         /*private List<HediffStat> HediffInateStats
         {
             get { return this.Props.hediffInatePlusMaxPro; }
         }*/
-        //检测条件为冰淇淋增益3天，一阶段混乱10天,二阶段15天，三阶段20天
+        //检测条件，冰淇淋增益3天
         private int TimerInterval_Bingchilling
         {
             get { return 3 * this.Props.interval * (int)this.Props.intervalUnit; }
@@ -72,6 +74,17 @@ namespace AKE_OperatorExtension
         {
             return $"AK_Trait_{GetID()}";
         }
+
+        public void AddTrait()
+        {
+            foreach (Trait TraitDef in this.TraitStats)
+            {
+
+            }
+            for(int i=0;i<this.TraitStats.Count;i++)
+            this.Pawn.story.traits.GainTrait(TraitStats[i], false);
+        }
+
         //检查小人身上还有没有特定TraitDef
         public bool HasTrait(string XMLdefName)
         {
@@ -84,68 +97,24 @@ namespace AKE_OperatorExtension
             }
             return false;
         }
-        //一阶段修正(-5,15)二阶段(-5,10)三阶段(-5,5)
+
+        //特性修正(-6,16)
         public override void CompPostTick(ref float severityAdjustment)
         {
-            if (!HasTrait(GetTraitDef())) return;
-            base.parent.Severity = 0.1f;
-            if (base.parent.Severity <= 2.6f) ++tick;
-            if (base.parent.Severity >= 2.6f) ++tick_phase2;
-            if (base.parent.Severity >= 6.6f) ++tick_phase3;
-
-            if (base.parent.Severity < 0.1f && hasSkill)
-            {
-                ++tick_bingchilling;
-                foreach (RandStatsDef skillDef in this.Randskills)
-                {
-                    SetSkill(skillDef, 20);
-                }
-                hasSkill = true;
-                if (tick_bingchilling >= TimerInterval_Bingchilling) tick_bingchilling = 0;
-            }
-
+            ++tick;
             if (tick >= TimerInterval_Phase1)
             {
+                if (!HasTrait(GetTraitDef())) { parent.comps.Remove(this); return; }
                 tick = 0;
-                foreach (RandStatsDef skillDef in this.Randskills)
+                /*foreach (RandStatsDef skillDef in this.Randskills)
                 {
                     index++;
                     if (index == 7)
                     { SetSkill(skillDef, 16); continue; }
-                    RandSkill(skillDef, -6, 16);
-                }
+                    RandSkill(skillDef,-6,16);
+                }*/
                 index = 0;
-                base.parent.Severity += 0.5f;
                 string translatedMessage = TranslatorFormattedStringExtensions.Translate("Phase1_SuccessMessage");
-                MoteMaker.ThrowText(this.Pawn.PositionHeld.ToVector3(), this.Pawn.MapHeld, translatedMessage, 2f);
-            }
-            if (tick_phase2 >= TimerInterval_Phase2)
-            {
-                tick_phase2 = 0;
-                foreach (RandStatsDef skillDef in this.Randskills)
-                {
-                    index++;
-                    if (index == 7)
-                    { SetSkill(skillDef, 16); continue; }
-                    RandSkill(skillDef, -6, 11);
-                }
-                index = 0;
-                base.parent.Severity += 1f;
-                string translatedMessage = TranslatorFormattedStringExtensions.Translate("Phase2_SuccessMessage");
-                MoteMaker.ThrowText(this.Pawn.PositionHeld.ToVector3(), this.Pawn.MapHeld, translatedMessage, 2f);
-            }
-            if (tick_phase3 >= TimerInterval_Phase3)
-            {
-                tick_phase3 = 0;
-                foreach (RandStatsDef skillDef in this.Randskills)
-                {
-                    index++;
-                    if (index == 7)
-                    { SetSkill(skillDef, 16); continue; }
-                    RandSkill(skillDef, -6, 6);
-                }
-                index = 0;
-                string translatedMessage = TranslatorFormattedStringExtensions.Translate("Phase3_SuccessMessage");
                 MoteMaker.ThrowText(this.Pawn.PositionHeld.ToVector3(), this.Pawn.MapHeld, translatedMessage, 2f);
             }
         }

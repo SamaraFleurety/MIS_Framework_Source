@@ -7,28 +7,51 @@ using System.Threading.Tasks;
 using Verse;
 using AK_DLL;
 using UnityEngine;
+using KTrie;
 
 namespace AKE_OperatorExtension
 {
-    public class HCP_RandStats : HediffCompProperties
+    public class HCP_RandAddTrait : HediffCompProperties
     {
         public int interval = 10;
         public int positiveinterval = 3;
-        public TimeToTick intervalUnit = TimeToTick.day;
-        public List<TraitAndDegree> positiveTraitSets = new List<TraitAndDegree>();
-        public List<TraitAndDegree> TraitSets = new List<TraitAndDegree>();
-        public HCP_RandStats()
+        public List<TraitAndDegree> positiveTraitSets;
+        public List<TraitAndDegree> traitSets;
+        public HCP_RandAddTrait()
         {
-            this.compClass = typeof(HC_RandStats);
+            this.traitSets = new List<TraitAndDegree>();
+            this.positiveTraitSets = new List<TraitAndDegree>();
+            this.compClass = typeof(HC_RandAddTrait);
         }
     }
-    public class HC_RandStats : HediffComp
+
+    public class HC_RandAddTrait : HediffComp
     {
         #region
-        public HCP_RandStats Props => (HCP_RandStats)this.props;
+        public HCP_RandAddTrait Props => (HCP_RandAddTrait)base.props;
+        private HCP_RandAddTrait exactProps = new HCP_RandAddTrait();
         //保存随机修正模板 & 正面特性修正的List
-        public List<TraitAndDegree> TraitSets => this.Props.TraitSets;
-        public List<TraitAndDegree> PositiveTraitSets => this.Props.positiveTraitSets;
+        public List<TraitAndDegree> TraitSets
+        {
+            get { return this.exactProps.traitSets; }
+            set { this.exactProps.traitSets = value; }
+        }
+        public List<TraitAndDegree> PositiveTraitSets
+        {
+            get { return this.exactProps.positiveTraitSets; }
+            set { this.exactProps.positiveTraitSets = value; }
+        }
+        public int Interval
+        {
+            get { return this.exactProps.interval; }
+            set { this.exactProps.interval = value; }
+        }
+        public int PositiveInterval
+        {
+            get { return this.exactProps.positiveinterval; }
+            set { this.exactProps.positiveinterval = value; }
+        }
+        public TimeToTick intervalUnit = TimeToTick.day;
         //储存TraitSet的索引
         //private HashSet<int> UsedIndex = new HashSet<int>();
         private Dictionary<List<TraitAndDegree>, HashSet<int>> usedIndices = new Dictionary<List<TraitAndDegree>, HashSet<int>>();
@@ -36,8 +59,8 @@ namespace AKE_OperatorExtension
         private static int index = 0;
         private int tick = 0;
         //检测条件为多少天
-        private int TimerInterval_days => this.Props.interval * (int)this.Props.intervalUnit;
-        private int positiveTimerInterval_days => this.Props.positiveinterval * (int)this.Props.intervalUnit;
+        private int TimerInterval_days => this.Interval * (int)this.intervalUnit;
+        private int PositiveTimerInterval_days => this.PositiveInterval * (int)this.intervalUnit;
         //读取干员身份证，非空
         private string OperatorID => this.Pawn.GetDoc()?.operatorID;
         private string GetOperatorTraitDef => $"AK_Trait_{OperatorID}";
@@ -45,6 +68,14 @@ namespace AKE_OperatorExtension
         //检查小人身上还有没有特定TraitDef
         public static bool hascurrentTrait = false;
         public static bool haseatbingchilling = false;
+        public override void CompPostMake()
+        {
+            base.CompPostMake();
+            this.exactProps = this.Props;
+        }
+        public override void CompExposeData()
+        {
+        }
         private bool HasOperatorTraitDef(string XMLdefName)
         {
             for (int i = 0; i < this.Pawn.story.traits.allTraits.Count; i++)
@@ -115,7 +146,7 @@ namespace AKE_OperatorExtension
         public override void CompPostTick(ref float severityAdjustment)
         {
             ++tick;
-            /*给冰淇淋用if (tick >= positiveTimerInterval_day && bingchilling)
+            /*给冰淇淋用if (tick >= PositiveTimerInterval_day && bingchilling)
             {
                 if (!HasOperatorTraitDef(GetOperatorTraitDef)) { parent.comps.Remove(this); return; }
                 if (HC_GetCurrentTrait(PositiveTraitSets) == null) { tick = 0; return; }

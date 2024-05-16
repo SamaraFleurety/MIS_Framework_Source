@@ -12,13 +12,27 @@ namespace AK_DLL
     {
         public static HashSet<TC_TeleportTowerSuperior> superiorRecruitTowers = new HashSet<TC_TeleportTowerSuperior>();
 
+        public static GC_AKManager instance = null;
         public GC_AKManager(Game game)
         {
+            instance = this;
         }
 
         public override void ExposeData()
         {
             //Scribe_Collections.Look(ref superiorRecruitTowers, "portals", LookMode.Reference);
+        }
+
+        public override void FinalizeInit()
+        {
+
+        }
+
+        //在读档之前 清空所有全局数据
+        public void PreLoad()
+        {
+            superiorRecruitTowers.Clear();
+            superiorRecruitTowers = new HashSet<TC_TeleportTowerSuperior>();
         }
     }
 }

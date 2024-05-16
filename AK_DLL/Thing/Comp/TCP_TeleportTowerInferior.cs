@@ -40,11 +40,11 @@ namespace AK_DLL
             for (int i = 0; i < towers.Count; ++i)
             {
                 //不知道为啥这玩意经常不会被正确移除
-                if (towers[i] == null || towers[i].parent == null || towers[i].parent.Destroyed || towers[i].parent.Map == null)
+                /*if (towers[i] == null || towers[i].parent == null || towers[i].parent.Destroyed || towers[i].parent.Map == null)
                 {
                     AllTowers.Remove(towers[i]);
                     continue;
-                }
+                }*/
                 TC_TeleportTowerSuperior j = towers[i];
                 yield return new FloatMenuOption("AK_TeleportToTower".Translate() + j.Alias, delegate ()
                 {

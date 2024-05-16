@@ -16,7 +16,7 @@ namespace AK_DLL
         [HarmonyPrefix]
         public static void prefix()
         {
-            if(GC_AKManager.instance != new) GC_AKManager.instance.PreLoad();
+            if(GC_AKManager.instance != null) GC_AKManager.instance.PreLoad();
         }
     }
 }

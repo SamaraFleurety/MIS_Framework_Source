@@ -170,7 +170,7 @@ namespace AK_DLL
                 }
                 operator_Pawn.story.hairDef = hair ?? HairDefOf.Bald;
                 doc.voicePack = this.voicePackDef;
-                if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null)
+                if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null && ModLister.GetActiveModWithIdentifier("paluto22.ak.combatextended") == null)
                 {
                     return;
                 }
@@ -199,7 +199,7 @@ namespace AK_DLL
                 if (set.weapon != null)
                 {
                     if (doc.weapon != null && !doc.weapon.DestroyedOrNull()) doc.weapon.Destroy();
-                    if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null)
+                    if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null && ModLister.GetActiveModWithIdentifier("paluto22.ak.combatextended") == null)
                     {
                         return;
                     }
@@ -249,7 +249,7 @@ namespace AK_DLL
                 }
                 operator_Pawn.story.hairDef = hair ?? HairDefOf.Bald;
                 doc.voicePack = this.voicePackDef;
-                if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null)
+                if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null && ModLister.GetActiveModWithIdentifier("paluto22.ak.combatextended") == null)
                 {
                     return;
                 }
@@ -278,7 +278,7 @@ namespace AK_DLL
                 if (set.weapon != null)
                 {
                     if (doc.weapon != null && !doc.weapon.DestroyedOrNull()) doc.weapon.Destroy();
-                    if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null)
+                    if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null && ModLister.GetActiveModWithIdentifier("paluto22.ak.combatextended") == null)
                     {
                         return;
                     }
@@ -565,7 +565,7 @@ namespace AK_DLL
             ThingWithComps weapon = null;
             if (this.weapon != null)
             {
-                if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null)
+                if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null && ModLister.GetActiveModWithIdentifier("paluto22.ak.combatextended") == null)
                 {
                     return null;
                 }

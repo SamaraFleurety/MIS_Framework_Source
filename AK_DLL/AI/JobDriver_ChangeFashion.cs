@@ -21,8 +21,11 @@ namespace AK_DLL
                 OperatorDocument doc = pawn.GetDoc();
                 if (doc == null) return;
                 doc.operatorDef.ChangeFashion(doc.pendingFashionDef, pawn);
-                if (doc.pendingFashionDef.standIndex is int standIndexInt) doc.preferedSkin = standIndexInt;
+                //if (doc.pendingFashionDef.standIndex is int standIndexInt) doc.preferedSkin = standIndexInt;
+                if (doc.pendingFashionDef == null) doc.preferedSkin = 1;
+                else if (doc.pendingFashionDef.standIndex is int standIndexInt) doc.preferedSkin = standIndexInt;
             };
+            t.defaultCompleteMode = ToilCompleteMode.Instant;
             yield return t;
             yield break;
         }

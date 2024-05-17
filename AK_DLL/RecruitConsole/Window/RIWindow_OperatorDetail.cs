@@ -806,7 +806,11 @@ namespace AK_DLL
 
             if (doc != null)
             {
-                doc.preferedSkin = val;
+                //doc.preferedSkin = val;
+                if (val < 1000)
+                {
+                    doc.preferedSkin = val;
+                }
             }
             //禁用之前的换装按钮
             fBtn = fashionBtns[preferredSkin];

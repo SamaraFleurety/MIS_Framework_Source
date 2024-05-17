@@ -14,7 +14,7 @@ namespace AK_DLL
     //一个干员的档案
     public class OperatorDocument : IExposable , ILoadReferenceable
     {
-        internal string operatorID;
+        public string operatorID;
         public bool currentExist;
         public Pawn pawn;
         public Thing weapon;

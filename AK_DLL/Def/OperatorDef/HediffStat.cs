@@ -15,6 +15,11 @@ namespace AK_DLL
         public float serverity = 1f;  //这个是招募时给的状态的严重度，和矿石病随机无关
         //以下是矿石病增加hediff时的加权随机
         public int randWeight = 1;
+
+        public static implicit operator HediffStat(List<HediffStat> v)
+        {
+            throw new NotImplementedException();
+        }
         //public int randWorse = 1;
     }
 }

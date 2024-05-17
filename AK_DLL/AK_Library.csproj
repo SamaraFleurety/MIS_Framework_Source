@@ -358,6 +358,7 @@
     <Compile Include="Def\OperatorDef\OperatorFashionSetDef.cs" />
     <Compile Include="Def\OperatorDef\OperatorDef_Reserve.cs" />
     <Compile Include="GC_AKManager.cs" />
+    <Compile Include="HarmonyPatch\Patch_ClearGlobalDataOnLoad.cs" />
     <Compile Include="Hediff\Comps\HCP_AddTrait.cs" />
     <Compile Include="Hediff\Comps\HCP_RemoveMe.cs" />
     <Compile Include="Interaction\OperatorInteractionDef.cs" />

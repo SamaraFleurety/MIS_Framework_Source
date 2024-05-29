@@ -62,8 +62,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-    <Compile Include="HarmonyPatch\PatchMain.cs" />
+    <Compile Include="DefExtension\DefExt_SkillLossRate.cs" />
+    <Compile Include="HarmonyPatchs\PatchMain.cs" />
+    <Compile Include="HarmonyPatchs\Patch_SkillLoss.cs" />
     <Compile Include="HCP\HCP_RandAddHediff.cs" />
     <Compile Include="HCP\HCP_RandAddTrait.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -2,7 +2,7 @@
 using System.Reflection;
 using Verse;
 
-namespace AKE_OperatorExtension.HarmonyPatch
+namespace AKE_OperatorExtension.HarmonyPatchs
 {
     [StaticConstructorOnStartup]
     public class PatchMain

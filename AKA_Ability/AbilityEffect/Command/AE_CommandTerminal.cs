@@ -25,8 +25,10 @@ namespace AKA_Ability
         int TimeMultiplier = 1;
         int LevelUPInterval => TimeMultiplier * (int)IntervalUnit;
         #endregion
-        public override void DoEffect_IntVec(IntVec3 target, Map map, bool delayed, Pawn caster = null)
+        public override void DoEffect_IntVec(IntVec3 target, Map map, bool delayed, Pawn caster)
         {
+            string translatedMessage = TranslatorFormattedStringExtensions.Translate("AK_SuccessfulCallSupplyDropPod");
+            MoteMaker.ThrowText(caster.PositionHeld.ToVector3(), caster.MapHeld, translatedMessage, 5f);
             A_Counter++;
             if (!FindAllDefsListForReading)
             {
@@ -38,7 +40,6 @@ namespace AKA_Ability
             //为成长系统预留的坑位
             if (IsGrowthSys)
             {
-                phase++;
             }
             if (Isphase && !IsGrowthSys && (A_Counter % phaseCount == 0) && (phase < MaxPhaseLevel))
             {

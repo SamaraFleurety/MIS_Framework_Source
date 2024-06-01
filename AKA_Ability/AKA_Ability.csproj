@@ -80,7 +80,6 @@
     <Compile Include="AbilityEffect\Command\AECommand_Window.cs" />
     <Compile Include="AbilityEffect\Command\AE_CommandTerminal.cs" />
     <Compile Include="AbilityEffect\Command\AE_RewardDef.cs" />
-    <Compile Include="AbilityEffect\Command\AE_RewardInit.cs" />
     <Compile Include="AbilityEffect\Command\AE_RewardTool.cs" />
     <Compile Include="AbilityEffect\Effect\AE_ShootProjectile.cs" />
     <Compile Include="AbilityEffect\Effect\AbilityEffect_DisableAttack.cs" />

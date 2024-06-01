@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Runtime.Remoting.Messaging;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Verse;
@@ -13,20 +14,50 @@ namespace AKA_Ability
 {
     internal static class AE_RewardTool
     {
-        public static int PhaseCount = 0;
         public static int Setdelaytime = 142;
-        public static Dictionary<RewardCategory, List<RewardDef>> rewardsPerCat;
         //空投舱打开延迟时间
         public static int Delaytimer
         {
             get { return Setdelaytime; }
             set { Setdelaytime = value; }
         }
+        public static Dictionary<RewardCategory, List<RewardDef>> rewardsPerCat = new Dictionary<RewardCategory, List<RewardDef>>
+        {
+            {
+                RewardCategory.Poor,
+                new List<RewardDef>()
+            },
+            {
+                RewardCategory.Normal,
+                new List<RewardDef>()
+            },
+            {
+                RewardCategory.Good,
+                new List<RewardDef>()
+            },
+            {
+                RewardCategory.Excellent,
+                new List<RewardDef>()
+            },
+            {
+                RewardCategory.Legendary,
+                new List<RewardDef>()
+            }
+        };
+        public static void FindAllDefsListForReading(string OPID)
+        {
+            List<RewardDef> allDefsListForReading = DefDatabase<RewardDef>.AllDefsListForReading.FindAll((RewardDef r) => r.ID == OPID);
+            for (int i = 0; i < allDefsListForReading.Count; i++)
+            {
+                RewardDef rewardDef = allDefsListForReading[i];
+                rewardsPerCat[rewardDef.category].Add(rewardDef);
+            }
+        }
         public static void SendSupply(RewardDef reward, Map map, IntVec3 dropSpot)
         {
             if (reward.sendRewardOf > RewardCategory.Poor)
             {
-                RewardDef rewardDef = AE_RewardInit.rewardsPerCat[reward.sendRewardOf].RandomElement();
+                RewardDef rewardDef = rewardsPerCat[reward.sendRewardOf].RandomElement();
                 Messages.Message("AKA.RandRewardOutcome".Translate(rewardDef.LabelCap), MessageTypeDefOf.NeutralEvent);
                 SendSupply(rewardDef, map, dropSpot);
                 return;
@@ -66,7 +97,6 @@ namespace AKA_Ability
                 IntVec3 dropCenter = ((dropSpot != IntVec3.Invalid) ? dropSpot : DropCellFinder.TryFindSafeLandingSpotCloseToColony(map, ThingDefOf.DropPodIncoming.Size, map.ParentFaction));
                 DropPodUtility.DropThingsNear(dropCenter, map, thingsToSend, Delaytimer, canInstaDropDuringInit: false, leaveSlag: true, canRoofPunch: false, forbid: false);
                 //Log.Message("空投 成功");
-                PhaseCount++;
             }
         }
         private static void GenerateItems(RewardDef reward, ref List<Thing> thingsToSend)

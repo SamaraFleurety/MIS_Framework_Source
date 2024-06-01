@@ -12,19 +12,21 @@ namespace AKA_Ability
 {
     public class AECommand_Window : Window
     {
+        #region
         private readonly Map map;
         //private readonly int margin = 10;
         private int width = 750;
+        private readonly string OPID;
+        public IntVec3 spot = IntVec3.Invalid;
+        public override Vector2 InitialSize => new Vector2(850f, 400f);
+        public bool randomRewardMod = false;
         private List<RewardDef> rewards;
         private readonly List<RewardDef> rewardPool;
         internal RewardDef choosenReward;
         private readonly int rewardNumber = 4;
         private readonly RewardCategory dynamicPhase = RewardCategory.Poor;
-        public bool randomRewardMod = false;
-        public IntVec3 spot = IntVec3.Invalid;
-        public override Vector2 InitialSize => new Vector2(850f, 500f);
-
-        internal AECommand_Window(Map map, IntVec3 dropSpot, int phaseNumber)
+        #endregion
+        internal AECommand_Window(Map map, IntVec3 dropSpot, string ID, int phaseNumber)
         {
             dynamicPhase = CheckEnumInt(phaseNumber);
             forcePause = true;
@@ -38,7 +40,21 @@ namespace AKA_Ability
             drawShadow = false;
             this.map = map;
             spot = dropSpot;
-            rewardPool = DefDatabase<RewardDef>.AllDefsListForReading.ToList();
+            OPID = ID;
+            rewardPool = DefDatabase<RewardDef>.AllDefsListForReading.FindAll((RewardDef r) => r.ID == OPID).ToList();
+            //不清楚为什么构造函数内使用if语句会全部返回Empty(List)，暂无其他对ID的检查方式
+            /*if (OPID is null)
+            {
+                rewardPool = DefDatabase<RewardDef>.AllDefsListForReading.FindAll((RewardDef r) => r.ID == null).ToList();
+            }
+            else if (OPID == "All")
+            {
+                rewardPool = DefDatabase<RewardDef>.AllDefsListForReading.ToList();
+            }
+            else
+            {
+                rewardPool = DefDatabase<RewardDef>.AllDefsListForReading.FindAll((RewardDef r) => r.ID == OPID).ToList();
+            }*/
         }
         public override void DoWindowContents(Rect inRect)
         {

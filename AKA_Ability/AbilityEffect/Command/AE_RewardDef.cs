@@ -16,6 +16,7 @@ namespace AKA_Ability
     public class RewardDef : Def
     {
         public string texPath;
+        public string ID;
         public RewardCategory category;
         public RewardCategory sendRewardOf = RewardCategory.Poor;
         public List<ItemReward> items;

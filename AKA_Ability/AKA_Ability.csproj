@@ -59,6 +59,7 @@
     <Reference Include="UnityEngine.IMGUIModule">
       <HintPath>..\AK_DLL\bin\Debug\UnityEngine.IMGUIModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbilityEffect\AbilityEffectBase.cs" />

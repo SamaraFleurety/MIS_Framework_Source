@@ -13,11 +13,11 @@ namespace AKE_VanyaShield
         public GraphicData bubbleStaticOverlay = null;          //静态护盾贴图
         public TCP_ShieldExtraRenderer()
         {
-            compClass = typeof(TC_ShieldExtraRendered);
+            compClass = typeof(TC_ShieldExtraRenderer);
         }
     }
 
-    public class TC_ShieldExtraRendered : ThingComp
+    public class TC_ShieldExtraRenderer : ThingComp
     {
         TCP_ShieldExtraRenderer Props => props as TCP_ShieldExtraRenderer;
 

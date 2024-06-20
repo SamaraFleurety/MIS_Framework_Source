@@ -81,6 +81,7 @@ namespace AK_DLL
 
         public AbilityDef operatorID = null;    //干员身份证的容器 其他派系角色可以自定义个图标不同的这玩意
 
+        public List<Type> postEffects = new List<Type>();
         #endregion
 
         #region 快捷属性
@@ -313,7 +314,6 @@ namespace AK_DLL
 
             if (ModLister.GetActiveModWithIdentifier("mis.arkmusic") != null) Recruit_ArkSongExtension();
 
-
             GenSpawn.Spawn(operator_Pawn, intVec, map);
             CameraJumper.TryJump(new GlobalTargetInfo(intVec, map));
 
@@ -332,6 +332,15 @@ namespace AK_DLL
             clothTemp.Clear();
 
             Recruit_Ability(operatorID);
+
+            if (!postEffects.NullOrEmpty())
+            {
+                foreach (Type RPEW in postEffects)
+                {
+                    RecruitPostEffectWorker_Base worker = (RecruitPostEffectWorker_Base)Activator.CreateInstance(RPEW, this, operator_Pawn);
+                    worker?.RecruitPostEffect();
+                }
+            }
 
             currentlyGenerating = false;
         }

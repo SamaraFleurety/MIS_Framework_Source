@@ -26,7 +26,6 @@ namespace AK_DLL
 
         public Dictionary<SkillDef, int> skillLevel;
         public VoicePackDef voicePack;
-        //public List<HC_Ability> groupedAbilities;
         public int preferedAbility = 0;
         public OperatorDef operatorDef;
         public int oripathySeverity = 0;

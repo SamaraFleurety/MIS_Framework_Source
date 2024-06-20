@@ -501,7 +501,8 @@ namespace AK_DLL
                         return !(a <= b);
                     }, delegate (OperatorDef def)
                     {
-                        return DPSCalculator(def);
+                        return 
+                    lculator(def);
                     });*/
                 }
                 DrawOperatorListContent();
@@ -562,12 +563,12 @@ namespace AK_DLL
             return detail;
         }
 
-        //好像因为之前写了一半就跑了 反正现在有bug
+        //好像是没问题的
         private double DPSCalculator(OperatorDef def)
         {
             double meleeDPS = 0;
             double rangedDPS = 0;
-            double localDPS = 0;
+            double localDPS = 0;    //计算中间值
             ThingDef w = def.weapon;
             if (w != null)
             {
@@ -600,7 +601,7 @@ namespace AK_DLL
                     VerbProperties verb = w.Verbs[0];
                     ProjectileProperties bullet = verb.defaultProjectile.projectile;
                     if (bullet == null) goto LABEL_NoRanged;
-                    System.Reflection.FieldInfo damage = bullet.GetType().GetField("damageAmountBase", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                    FieldInfo damage = bullet.GetType().GetField("damageAmountBase", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
                     //单发伤害
                     rangedDPS = (int)damage.GetValue(bullet);
                     if (bullet.extraDamages != null) foreach (ExtraDamage l in bullet.extraDamages) rangedDPS += (l.amount * Math.Min(l.chance, 1.0));

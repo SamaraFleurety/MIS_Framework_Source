@@ -31,13 +31,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0Harmony, Version=2.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="0Harmony, Version=2.3.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DebugTweak\FS_SSR\bin\Debug\0Harmony.dll</HintPath>
+      <HintPath>..\..\SSR_Framework\Solar-System-Republic-Framework\FS_SSR\bin\Debug\0Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp, Version=1.4.8385.39127, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Assembly-CSharp, Version=1.5.8838.19357, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DebugTweak\FS_SSR\bin\Debug\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\SSR_Framework\Solar-System-Republic-Framework\FS_SSR\bin\Debug\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Generic.RedBlack, Version=1.3.4618.26633, Culture=neutral, processorArchitecture=MSIL">

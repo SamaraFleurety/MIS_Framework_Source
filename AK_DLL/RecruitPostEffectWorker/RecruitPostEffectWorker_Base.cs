@@ -10,8 +10,8 @@ namespace AK_DLL
 {
     public abstract class RecruitPostEffectWorker_Base
     {
-        OperatorDef def;
-        Pawn operatorPawn;
+        public OperatorDef def;
+        public Pawn operatorPawn;
 
         public RecruitPostEffectWorker_Base(OperatorDef def, Pawn operatorPawn)
         {

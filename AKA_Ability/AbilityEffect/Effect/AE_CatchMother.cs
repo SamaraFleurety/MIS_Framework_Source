@@ -11,11 +11,12 @@ namespace AKA_Ability
 {
     public class AE_CatchMother : AbilityEffectBase
     {
+        public int goodwillchange = 30;
         public override void DoEffect_Pawn(Pawn user, Thing target, bool delayed)
         {
             Pawn parent_mother;
             Map map = Find.CurrentMap;
-            List<Thing> thingsToSend = new List<Thing>();
+            IntVec3 dropCenter = DropCellFinder.TryFindSafeLandingSpotCloseToColony(map, ThingDefOf.DropPodIncoming.Size, map.ParentFaction);
 
             if (target == null || !(target is Pawn p))
             {
@@ -25,22 +26,34 @@ namespace AKA_Ability
             string translatedMessage = TranslatorFormattedStringExtensions.Translate("AKA_Successful_CaughtMother");
             MoteMaker.ThrowText(user.PositionHeld.ToVector3(), user.MapHeld, translatedMessage, 5f);
             Messages.Message(p.Name + "的妈妈  被抓来了!", MessageTypeDefOf.NeutralEvent);
+
             parent_mother = p.GetMother();
-            IntVec3 dropCenter = DropCellFinder.TryFindSafeLandingSpotCloseToColony(map, ThingDefOf.DropPodIncoming.Size, map.ParentFaction);
             if (parent_mother is null)
             {
                 PawnKindDef pawnkind = p.kindDef;
-                //Faction FactionOfPawn = p.Faction;
-                parent_mother = PawnGenerator.GeneratePawn(new PawnGenerationRequest(pawnkind, (Faction)null, PawnGenerationContext.NonPlayer, tile: -1, allowDowned: true, canGeneratePawnRelations: true, fixedGender: Gender.Female));
+                XenotypeDef xenotype = null;
+                if (ModLister.BiotechInstalled)
+                {
+                    xenotype = p.genes.Xenotype;
+                }
+                parent_mother = PawnGenerator.GeneratePawn(new PawnGenerationRequest(pawnkind, (Faction)null, PawnGenerationContext.NonPlayer, tile: -1, allowDowned: true, canGeneratePawnRelations: true, fixedGender: Gender.Female, forcedXenotype: xenotype));
                 p.SetMother(parent_mother);
-                thingsToSend.Add(parent_mother);
-                DropPodUtility.DropThingsNear(dropCenter, map, thingsToSend, 110, canInstaDropDuringInit: false, leaveSlag: false, canRoofPunch: false, forbid: false);
             }
-            else
+            if (parent_mother.Map == map)
             {
                 parent_mother.TeleportPawn(dropCenter);
             }
+            else
+            {
+                List<Thing> thingsToSend = new List<Thing>();
+                thingsToSend.Add(parent_mother);
+                DropPodUtility.DropThingsNear(dropCenter, map, thingsToSend, 110, canInstaDropDuringInit: false, leaveSlag: false, canRoofPunch: false, forbid: false);
+            }
             parent_mother.guest.SetGuestStatus(user.Faction, guestStatus: GuestStatus.Prisoner);
+            if (parent_mother.Faction != Faction.OfPlayer && parent_mother.Faction != null)
+            {
+                parent_mother.Faction.TryAffectGoodwillWith(Faction.OfPlayer, goodwillchange);
+            }
             CameraJumper.TryJump(new GlobalTargetInfo(dropCenter, map));
         }
     }
@@ -114,6 +127,7 @@ namespace AKA_Ability
                 Log.Error(ex.Message + "\n" + ex.StackTrace);
             }
         }
+        //微乎其微的ZombieLand兼容
         internal static bool IsZombie(this Faction f)
         {
             return !f.IsNullOrEmpty() && f.def.defName == "Zombies";

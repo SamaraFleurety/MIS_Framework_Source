@@ -22,10 +22,10 @@ namespace AKA_Ability
             {
                 return;
             }
-            //翻译xml文件写上:我要把你的马马抓走！
             string translatedMessage = TranslatorFormattedStringExtensions.Translate("AKA_Successful_CaughtMother");
             MoteMaker.ThrowText(user.PositionHeld.ToVector3(), user.MapHeld, translatedMessage, 5f);
-            Messages.Message(p.Name + "AKA_Message_CaughtMother".Translate(), MessageTypeDefOf.NeutralEvent);
+            string translatedMessage1 = TranslatorFormattedStringExtensions.Translate("AKA_Message_CaughtMother", p.Label);
+            Messages.Message(translatedMessage1, MessageTypeDefOf.NeutralEvent);
 
             parent_mother = p.GetMother();
             if (parent_mother is null)
@@ -75,7 +75,8 @@ namespace AKA_Ability
                 if (pawn.Dead)
                 {
                     pawn.Corpse.Position = pos;
-                    Messages.Message("不能抓走" + pawn.Name + "的妈妈，她已经死了!", MessageTypeDefOf.NeutralEvent);
+                    string translatedMessage2 = TranslatorFormattedStringExtensions.Translate("AKA_Failured_CatchMother", pawn.Label);
+                    Messages.Message(translatedMessage2, MessageTypeDefOf.NeutralEvent);
                     return;
                 }
                 pawn.Position = pos;

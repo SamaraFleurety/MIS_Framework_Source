@@ -25,7 +25,7 @@ namespace AKA_Ability
             //翻译xml文件写上:我要把你的马马抓走！
             string translatedMessage = TranslatorFormattedStringExtensions.Translate("AKA_Successful_CaughtMother");
             MoteMaker.ThrowText(user.PositionHeld.ToVector3(), user.MapHeld, translatedMessage, 5f);
-            Messages.Message(p.Name + "的妈妈  被抓来了!", MessageTypeDefOf.NeutralEvent);
+            Messages.Message(p.Name + "AKA_Message_CaughtMother".Translate(), MessageTypeDefOf.NeutralEvent);
 
             parent_mother = p.GetMother();
             if (parent_mother is null)

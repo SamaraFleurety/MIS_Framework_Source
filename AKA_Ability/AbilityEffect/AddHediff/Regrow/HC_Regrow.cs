@@ -131,6 +131,5 @@ namespace AKA_Ability
                 hediff_Injury.Heal(points);
             }*/
         }
-
     }
 }

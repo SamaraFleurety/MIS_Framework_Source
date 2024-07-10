@@ -49,16 +49,16 @@ namespace AK_DLL
         public HairDef hair;//头发类型
         public BeardDef beard;//胡须
 
-        public OperatorClassDef operatorType;//干员类型
+        public OperatorClassDef operatorType;//干员类型/职业
 
         public string stand;//精2立绘
         public string commonStand;  //精0立绘
-        public List<string> fashion; //换装
+        public List<string> fashion; //换装立绘的路径 和小人身上的衣服无关
 
         //换装后，体现在rw小人服装上的变化。key的int是换装在List<string> fashion中的下标+3。
         //按理说应该和上面的干员衣服整合一起，但现在已经几百个干员了，要整合工作量太大。立项的时候没考虑做换装。
-        [Obsolete]
-        public Dictionary<int, OperatorFashionSetDef> clothSet;
+        //[Obsolete]
+        //public Dictionary<int, OperatorFashionSetDef> clothSet;
         public List<OperatorFashionSetDef> clothSets = new List<OperatorFashionSetDef>();
         public List<LiveModelDef> live2dModel;
 
@@ -219,7 +219,7 @@ namespace AK_DLL
         }
 
         //换成fashion[index]的时装
-        [Obsolete]
+        /*[Obsolete]
         public void ChangeFashion(int index, Pawn p)
         {
             currentlyGenerating = true;
@@ -295,7 +295,7 @@ namespace AK_DLL
             doc.RegisterFashionSet(clothTemp);
             clothTemp.Clear();
             currentlyGenerating = false;
-        }
+        }*/
 
         public virtual void Recruit(IntVec3 intVec, Map map)
         {

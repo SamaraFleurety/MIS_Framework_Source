@@ -17,7 +17,10 @@ namespace AK_DLL
         //语音
         public static bool playOperatorVoice = true;
         public static int voiceIntervalTime = 2;
-
+        
+        //数值条
+        public static bool displayBarModel = true;
+        
         #region 环世界殖民地界面 左下角显示小人立绘
         public static bool displayBottomLeftPortrait = true;
         //显示立绘的偏移参数
@@ -56,6 +59,7 @@ namespace AK_DLL
         {
             //自动填充
             Scribe_Values.Look(ref playOperatorVoice, "playVoice");
+            Scribe_Values.Look(ref displayBarModel, "displayBar");
             Scribe_Values.Look(ref voiceIntervalTime, "voiceInterTime", 1);
             Scribe_Values.Look(ref displayBottomLeftPortrait, "displayP");
             Scribe_Values.Look(ref xOffset, "xOff");
@@ -88,6 +92,7 @@ namespace AK_DLL
             listingStandard.Begin(inRect);
             if (Prefs.DevMode) listingStandard.CheckboxLabeled("测试模式", ref AK_ModSettings.debugOverride, "开启明日方舟MOD的测试模式。如果您不是测试人员请勿勾选此选项。");
             listingStandard.CheckboxLabeled("AK_Option_Play".Translate(), ref AK_ModSettings.playOperatorVoice, "AK_Option_PlayD".Translate());
+            listingStandard.CheckboxLabeled("AK_Option_DisplayBar".Translate(), ref AK_ModSettings.displayBarModel, "AK_Option_DisplayBar".Translate());
             AK_ModSettings.voiceIntervalTime = (int)listingStandard.SliderLabeled("AK_Option_Interval".Translate() + $"{(float)AK_ModSettings.voiceIntervalTime / 2.0}", AK_ModSettings.voiceIntervalTime, 0, 60f);
 
             listingStandard.CheckboxLabeled("AK_Option_DisP".Translate(), ref AK_ModSettings.displayBottomLeftPortrait);

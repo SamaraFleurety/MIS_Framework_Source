@@ -15,7 +15,7 @@ namespace AK_DLL
         private float HealthPercent;
         Vector3 BottomMargin = Vector3.back * 1f;
         private static readonly Vector2 BarSize = new Vector2(1.5f, 0.075f);
-        private static readonly Material BarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(105, 180, 210, 255));
+        private static readonly Material BarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(105, 180, 210, 200));
         private static readonly Material BarUnfilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.15f, 0.15f, 0.15f, 0.75f));
         public override void PostDraw()
         {
@@ -24,6 +24,10 @@ namespace AK_DLL
             {
                 pawn = parent as Pawn;
                 if (!pawn.Drafted)
+                {
+                    return;
+                }
+                if (pawn.GetDoc() == null)
                 {
                     return;
                 }
@@ -37,7 +41,7 @@ namespace AK_DLL
                 fbr.filledMat = BarFilledMat;
                 fbr.unfilledMat = BarUnfilledMat;
                 //间距
-                fbr.margin = 0f;
+                fbr.margin = 0.001f;
                 fbr.rotation = Rot4.North;
                 GenDraw.DrawFillableBar(fbr);
             }

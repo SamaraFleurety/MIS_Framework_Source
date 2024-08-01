@@ -39,5 +39,19 @@ namespace AKE_OperatorExtension
         {
             return base.TransformLabel(label) + $"({skill.label})";
         }
+
+        public override bool AllowStackWith(Thing other)
+        {
+            if (!base.AllowStackWith(other))
+            {
+                return false;
+            }
+            TC_UseEffect_CombatRecord TC_useEffect_CombatRecord = other.TryGetComp<TC_UseEffect_CombatRecord>();
+            if (TC_useEffect_CombatRecord == null || TC_useEffect_CombatRecord.skill != skill)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

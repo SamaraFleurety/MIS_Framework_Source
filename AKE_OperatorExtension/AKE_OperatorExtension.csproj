@@ -62,6 +62,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CombatRecords\TCP_UseEffect_CombatRecord.cs" />
     <Compile Include="DefExtension\DefExt_SkillLossRate.cs" />
     <Compile Include="HarmonyPatchs\PatchMain.cs" />
     <Compile Include="HarmonyPatchs\Patch_SkillLoss.cs" />

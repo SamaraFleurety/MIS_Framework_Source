@@ -2,10 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Verse;
-using static HarmonyLib.Code;
 
 namespace AKE_OperatorExtension
 {
@@ -37,9 +34,11 @@ namespace AKE_OperatorExtension
 
         public override void DoEffect(Pawn user)//使用作战记录
         {
-            user.skills.Learn(skill, Props.xpGainAmount, direct: true);
             switch (Props.rank)
             {
+                case 0:
+                    user.skills.Learn(skill = DefDatabase<SkillDef>.GetRandom(), Props.xpGainAmount, true);
+                    return;
                 case 1://初级
                     break;
                 case 2://中级
@@ -56,10 +55,13 @@ namespace AKE_OperatorExtension
                     }
                     break;
             }
+
+            user.skills.Learn(skill, Props.xpGainAmount, direct: true);
         }
 
         public override string TransformLabel(string label)
         {
+            if (Props.rank == 0) return base.TransformLabel(label);
             return base.TransformLabel(label) + $"({skill.label})";
         }
 
@@ -70,7 +72,7 @@ namespace AKE_OperatorExtension
                 return false;
             }
             TC_UseEffect_CombatRecord TC_useEffect_CombatRecord = other.TryGetComp<TC_UseEffect_CombatRecord>();
-            if (TC_useEffect_CombatRecord == null || TC_useEffect_CombatRecord.skill != skill)
+            if (TC_useEffect_CombatRecord == null || TC_useEffect_CombatRecord.Props.rank == 0 || TC_useEffect_CombatRecord.skill != skill)
             {
                 return false;
             }

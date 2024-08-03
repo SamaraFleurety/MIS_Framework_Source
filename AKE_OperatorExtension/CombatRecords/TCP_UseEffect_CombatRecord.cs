@@ -34,6 +34,7 @@ namespace AKE_OperatorExtension
 
         public override void DoEffect(Pawn user)//使用作战记录
         {
+            string userName = user.Name.ToString();
             switch (Props.rank)
             {
                 case 0:
@@ -42,14 +43,15 @@ namespace AKE_OperatorExtension
                 case 1://初级
                     break;
                 case 2://中级
-                    if (user.skills.PassionCount <= 5 && user.skills.GetSkill(skill).passion == Passion.None)
+                    int numFireSkills = user.skills.skills.Count(skillRecord => skillRecord.passion >= Passion.Major && skillRecord.passion >= Passion.Minor);
+                    if ((user.skills.PassionCount <= 5 && user.skills.GetSkill(skill).passion == Passion.None) || userName.Contains("Jessica"))
                     {
                         user.skills.GetSkill(skill).passion = Passion.Minor;
                     }
                     break;
                 case 3://高级
                     int numMajorSkills = user.skills.skills.Count(skillRecord => skillRecord.passion >= Passion.Major);
-                    if (numMajorSkills <= 3 && (user.skills.GetSkill(skill).passion == Passion.None || user.skills.GetSkill(skill).passion == Passion.Minor))
+                    if ((numMajorSkills <= 3 && (user.skills.GetSkill(skill).passion == Passion.None || user.skills.GetSkill(skill).passion == Passion.Minor)) || userName.Contains("Jessica"))
                     {
                         user.skills.GetSkill(skill).passion = Passion.Major;
                     }

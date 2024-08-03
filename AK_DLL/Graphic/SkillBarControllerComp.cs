@@ -6,65 +6,186 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using TMPro;
 using Verse;
+
 
 namespace AK_DLL
 {
+
+    public class TCP_SkillBarControllerComp : CompProperties
+    {
+        public string BurstButtonTexPath = null;
+        public string RotateRingTexPath = null;
+        public TCP_SkillBarControllerComp()
+        {
+            compClass = typeof(SkillBarControllerComp);
+        }
+    }
     [StaticConstructorOnStartup]
     public class SkillBarControllerComp : ThingComp
     {
-        private Pawn pawn;
-        public AKAbility AKATracker;
-        public VAbility_Operator operatorID;
-        public bool noSkill = true;
+        TCP_SkillBarControllerComp Props => (TCP_SkillBarControllerComp)props;
+        private Pawn pawn => parent as Pawn;
+        private AKAbility ability;
+        private VAbility_Operator operatorID;
+        private bool IsGrouped = false;
         private float SkillPercent;
-        Vector3 BottomMargin = Vector3.back * 1.075f;
+        private static readonly Vector3 TopMargin = Vector3.forward * 1f;
+        private static readonly Vector3 BottomMargin = Vector3.back * 1.075f;
         private static readonly Vector2 BarSize = new Vector2(1.5f, 0.075f);
-        private static readonly Material BarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(160, 170, 60, 200));
-        private static readonly Material BarUnfilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.15f, 0.15f, 0.15f, 0.75f));
-        private float CooldownPercent(AKAbility a)
+        //绿色技能充能条 和 橙色技能消耗条；
+        private static readonly Material BarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(160, 170, 60, 180));
+        private static readonly Material BarConsumedMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(255, 165, 0, 180));
+        private static readonly Material BarUnfilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.15f, 0.15f, 0.15f, 0.50f));
+
+        private Material RotateRing = null;
+        private Material BurstButton = null;
+        //使用prefab可以避免new GameObject出来的object不能用Find方法找到；
+        GameObject PrefabTMP => AK_Tool.PAAsset.LoadAsset<GameObject>("PrefabTMPPopup");
+        GameObject PrefabTMPInstance;
+        public string ObjectName => (pawn.GetDoc()?.operatorID ?? pawn.Label) + ".objTMP";
+        private bool MatRefreshed = false;
+        private static bool IsClosed = true;
+        private float RotateAngle = 0;
+        //一个Pawn身上只带一个唯一的Object
+        private void InitObjectOnce()
         {
-            if (a.cooldown.charge == a.cooldown.maxCharge) return 1;
-            return 1f - (float)a.cooldown.CD / (float)a.cooldown.maxCD;
+            if (PrefabTMPInstance == null)
+            {
+                PrefabTMPInstance = GameObject.Instantiate(PrefabTMP);
+                PrefabTMPInstance.name = ObjectName;
+                TextMeshPro compTMP = PrefabTMPInstance.GetComponent<TextMeshPro>();
+                PrefabTMPInstance.layer = 2;
+                PrefabTMPInstance.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+                compTMP.font = AK_Tool4Unity.GetUGUIFont();
+                compTMP.material = AK_Tool4Unity.GetUGUIFont().material;
+                compTMP.renderer.material = compTMP.material;
+            }
+            else
+            {
+                if (pawn.Dead)
+                {
+                    GameObject.Destroy(GameObject.Find(ObjectName));
+                }
+                return;
+            }
+        }
+        private float CooldownPercent()
+        {
+            if (ability.cooldown.charge == ability.cooldown.maxCharge) return 1;
+            return 1f - (float)ability.cooldown.CD / (float)ability.cooldown.maxCD;
+        }
+        private void GenBurstButton()
+        {
+            if (Props.BurstButtonTexPath != null)
+            {
+                BurstButton = MaterialPool.MatFrom(Props.BurstButtonTexPath, ShaderDatabase.Transparent);
+            }
+        }
+        private void GenRotateRing()
+        {
+            if (Props.RotateRingTexPath != null)
+            {
+                RotateRing = MaterialPool.MatFrom(Props.RotateRingTexPath, ShaderDatabase.Transparent);
+            }
+        }
+        private void SetAct(bool value)
+        {
+            if (value)
+            {
+                PrefabTMPInstance?.SetActive(!IsClosed);
+            }
+            else
+            {
+                PrefabTMPInstance?.SetActive(IsClosed);
+            }
         }
         public override void PostDraw()
         {
             base.PostDraw();
             if (AK_ModSettings.displayBarModel)
             {
-                pawn = parent as Pawn;
-                if (!pawn.Drafted)
+                //征召显示开关
+                if (!pawn.Drafted || pawn.GetDoc() == null)
                 {
+                    IsClosed = true;
+                    SetAct(true);
+                    //GameObject.Find(ObjectName)?.SetActive(false);
                     return;
                 }
-                operatorID = pawn.abilities?.abilities.Find((Ability a) => a.def == AKDefOf.AK_VAbility_Operator) as VAbility_Operator;
-                if (operatorID != null) 
+                if (pawn.Drafted)
                 {
-                    AKATracker = operatorID?.AKATracker?.innateAbilities.Find((AKAbility a) => !a.def.grouped);
-                    if (AKATracker == null)
+                    IsClosed = false;
+                    SetAct(true);
+                }
+                GenDraw.FillableBarRequest fbr = default;
+                fbr.center = pawn.DrawPos + (Vector3.up * 5f) + BottomMargin;
+                fbr.size = BarSize;
+                fbr.filledMat = BarFilledMat;
+                fbr.unfilledMat = BarUnfilledMat;
+                fbr.margin = 0.001f;
+                fbr.rotation = Rot4.North;
+                operatorID = pawn.abilities?.abilities.Find((Ability a) => a.def == AKDefOf.AK_VAbility_Operator) as VAbility_Operator;
+                if (operatorID != null)
+                {
+                    ability = operatorID?.AKATracker?.innateAbilities.Find((AKAbility a) => !a.def.grouped);
+                    if (ability == null)
                     {
-                        AKATracker = operatorID?.AKATracker?.groupedAbilities.Find((AKAbility a) => a.def.grouped);
+                        ability = operatorID?.AKATracker?.groupedAbilities.Find((AKAbility a) => a.def.grouped);
+                        IsGrouped = true;
                     }
                 }
-                if (AKATracker != null)
+                //有AKA技能的Pawn才会显示技能CD进度，否则全为空
+                if (ability != null)
                 {
-                    GenDraw.FillableBarRequest fbr = default;
-                    fbr.center = pawn.DrawPos + (Vector3.up * 5f) + BottomMargin;
-                    fbr.size = BarSize;
-                    //填充比例
-                    SkillPercent = CooldownPercent(AKATracker);
-                    fbr.fillPercent = (SkillPercent < 0f) ? 0f : SkillPercent;
-                    //填充部分的颜色
-                    fbr.filledMat = BarFilledMat;
-                    fbr.unfilledMat = BarUnfilledMat;
-                    //间距
-                    fbr.margin = 0.001f;
-                    fbr.rotation = Rot4.North;
-                    GenDraw.DrawFillableBar(fbr);
+                    SkillPercent = CooldownPercent();
                 }
-                else 
+                else
                 {
-                    return;
+                    SkillPercent = 0f;
+                }
+                fbr.fillPercent = (SkillPercent < 0f) ? 0f : SkillPercent;
+                GenDraw.DrawFillableBar(fbr);
+                Vector3 OriginCenter = pawn.DrawPos + TopMargin + (Vector3.up * 5f);
+                Vector3 Scale = new Vector3(0.3f, 0.3f, 0.3f);
+                //自动回复技能
+                if (ability != null && ability.cooldown.charge == ability.cooldown.maxCharge && !IsGrouped && !MatRefreshed)
+                {
+                    GenBurstButton();
+                    if (BurstButton != null)
+                    {
+                        Matrix4x4 matrix = default;
+                        matrix.SetTRS(OriginCenter, Rot4.North.AsQuat, Scale);
+                        Graphics.DrawMesh(MeshPool.plane10, matrix, material: BurstButton, 2);
+                    }
+                }
+                //充能技能
+                if (ability != null && IsGrouped && !MatRefreshed)
+                {
+                    GenRotateRing();
+                    InitObjectOnce();
+                    if (RotateRing != null)
+                    {
+                        Matrix4x4 matrix2 = default;
+                        RotateAngle = (RotateAngle + 0.25f) % 360;
+                        matrix2.SetTRS(OriginCenter, Quaternion.AngleAxis(RotateAngle, Vector3.up), Scale);
+                        Graphics.DrawMesh(MeshPool.plane10, matrix2, material: RotateRing, 1);
+                    }
+                    GameObject Instance = GameObject.Find(ObjectName);
+                    if (Instance != null)
+                    {
+                        //删去了单独DrawTMP方法
+                        TextMeshPro tmp = Instance.GetComponent<TextMeshPro>();
+                        Vector3 scale = new Vector3(0.3f, 0.3f, 1f);
+                        int ChargeTimes = ability.cooldown.charge;
+                        tmp.transform.position = OriginCenter;
+                        tmp.transform.localScale = scale;
+                        tmp.fontSize = 6;
+                        tmp.SetText(ChargeTimes.ToString());
+                        Instance.SetActive(true);
+                        IsClosed = false;
+                    }
                 }
             }
         }

@@ -14,6 +14,7 @@ namespace AK_DLL
         public static bool disableIMGUI = false;
 
         public static AssetBundle FSAsset;
+        public static AssetBundle PAAsset;
         public static AssetBundle l2dAsset;
         private static GameObject EVSystem;
         public static GameObject EVSystemInstance;
@@ -65,6 +66,7 @@ namespace AK_DLL
                 {
                     Log.Message(Mods[i].RootDir);
                     FSAsset = AssetBundle.LoadFromFile(Mods[i].RootDir + "/Asset/fsassets");
+                    PAAsset = AssetBundle.LoadFromFile(Mods[i].RootDir + "/Asset/paassets");
                     break;
                 }
             }

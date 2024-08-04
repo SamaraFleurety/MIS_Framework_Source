@@ -13,10 +13,19 @@ namespace AK_DLL
     {
         private Pawn pawn => parent as Pawn;
         private float HealthPercent;
-        private static readonly Vector3 BottomMargin = Vector3.back * 1f;
-        private static readonly Vector2 BarSize = new Vector2(1.5f, 0.075f);
+        private Vector3 IconMargin => Vector3.back + Vector3.left * 0.8f;
+        private static Vector3 BottomMargin => Vector3.back * 1f;
+        private static Vector2 BarSize = new Vector2(1.5f, 0.075f);
         private static readonly Material BarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(105, 180, 210, 180));
         private static readonly Material BarUnfilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.15f, 0.15f, 0.15f, 0.75f));
+        private Material HP_Icon;
+        private void GenHPIcon()
+        {
+            if (HP_Icon == null)
+            {
+                HP_Icon = AK_BarUITool.HP_Icon;
+            }
+        }
         public override void PostDraw()
         {
             base.PostDraw();
@@ -36,6 +45,11 @@ namespace AK_DLL
                 fbr.margin = 0.001f;
                 fbr.rotation = Rot4.North;
                 GenDraw.DrawFillableBar(fbr);
+                GenHPIcon();
+                Matrix4x4 matrix = default;
+                Vector3 scale = new Vector3(0.25f, 1f, 0.25f);
+                matrix.SetTRS(pawn.DrawPos + IconMargin, Rot4.North.AsQuat, scale);
+                Graphics.DrawMesh(MeshPool.plane025, matrix, material: HP_Icon, 2);
             }
         }
     }

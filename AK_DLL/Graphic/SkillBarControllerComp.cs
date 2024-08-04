@@ -12,35 +12,26 @@ using Verse;
 
 namespace AK_DLL
 {
-
-    public class TCP_SkillBarControllerComp : CompProperties
-    {
-        public string BurstButtonTexPath = null;
-        public string RotateRingTexPath = null;
-        public TCP_SkillBarControllerComp()
-        {
-            compClass = typeof(SkillBarControllerComp);
-        }
-    }
     [StaticConstructorOnStartup]
     public class SkillBarControllerComp : ThingComp
     {
-        TCP_SkillBarControllerComp Props => (TCP_SkillBarControllerComp)props;
+        //TCP_SkillBarControllerComp Props => (TCP_SkillBarControllerComp)props;
         private Pawn pawn => parent as Pawn;
         private AKAbility ability;
         private VAbility_Operator operatorID;
         private bool IsGrouped = false;
         private float SkillPercent;
-        private static readonly Vector3 TopMargin = Vector3.forward * 1f;
-        private static readonly Vector3 BottomMargin = Vector3.back * 1.075f;
-        private static readonly Vector2 BarSize = new Vector2(1.5f, 0.075f);
+        private Vector3 IconMargin => Vector3.back * 1.0625f + Vector3.left * 0.8f;
+        private static Vector3 TopMargin => Vector3.forward * 1f;
+        private static Vector3 BottomMargin => Vector3.back * 1.075f;
+        private static Vector2 BarSize = new Vector2(1.5f, 0.075f);
         //绿色技能充能条 和 橙色技能消耗条；
         private static readonly Material BarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(160, 170, 60, 180));
         private static readonly Material BarConsumedMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(255, 165, 0, 180));
         private static readonly Material BarUnfilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.15f, 0.15f, 0.15f, 0.50f));
-
-        private Material RotateRing = null;
-        private Material BurstButton = null;
+        private Material Timer_Icon;
+        private Material RotateRing;
+        private Material BurstButton;
         //使用prefab可以避免new GameObject出来的object不能用Find方法找到；
         GameObject PrefabTMP => AK_Tool.PAAsset.LoadAsset<GameObject>("PrefabTMPPopup");
         GameObject PrefabTMPInstance;
@@ -58,15 +49,18 @@ namespace AK_DLL
                 TextMeshPro compTMP = PrefabTMPInstance.GetComponent<TextMeshPro>();
                 PrefabTMPInstance.layer = 2;
                 PrefabTMPInstance.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
-                compTMP.font = AK_Tool4Unity.GetUGUIFont();
-                compTMP.material = AK_Tool4Unity.GetUGUIFont().material;
-                compTMP.renderer.material = compTMP.material;
+                //compTMP.font = AK_Tool.PAAsset.LoadAsset<TMP_FontAsset>("NumFont Subset SDF");
+                //compTMP.material = compTMP.font.material;
+                //compTMP.renderer.material = compTMP.material;
             }
             else
             {
                 if (pawn.Dead)
                 {
-                    GameObject.Destroy(GameObject.Find(ObjectName));
+                    if (GameObject.Find(ObjectName))
+                    {
+                        GameObject.Destroy(GameObject.Find(ObjectName));
+                    }
                 }
                 return;
             }
@@ -78,16 +72,23 @@ namespace AK_DLL
         }
         private void GenBurstButton()
         {
-            if (Props.BurstButtonTexPath != null)
+            if (BurstButton == null)
             {
-                BurstButton = MaterialPool.MatFrom(Props.BurstButtonTexPath, ShaderDatabase.Transparent);
+                BurstButton = AK_BarUITool.BurstIcon;
             }
         }
         private void GenRotateRing()
         {
-            if (Props.RotateRingTexPath != null)
+            if (RotateRing == null)
             {
-                RotateRing = MaterialPool.MatFrom(Props.RotateRingTexPath, ShaderDatabase.Transparent);
+                RotateRing = AK_BarUITool.RotateRingIcon;
+            }
+        }
+        private void GenTimerIcon()
+        {
+            if (Timer_Icon == null)
+            {
+                Timer_Icon = AK_BarUITool.Timer_Icon;
             }
         }
         private void SetAct(bool value)
@@ -147,8 +148,12 @@ namespace AK_DLL
                 }
                 fbr.fillPercent = (SkillPercent < 0f) ? 0f : SkillPercent;
                 GenDraw.DrawFillableBar(fbr);
+                GenTimerIcon();
+                Matrix4x4 Imatrix = default;
+                Imatrix.SetTRS(pawn.DrawPos + IconMargin, Rot4.North.AsQuat, new Vector3(0.25f, 1f, 0.25f));
+                Graphics.DrawMesh(MeshPool.plane025, Imatrix, material: Timer_Icon, 2);
                 Vector3 OriginCenter = pawn.DrawPos + TopMargin + (Vector3.up * 5f);
-                Vector3 Scale = new Vector3(0.3f, 0.3f, 0.3f);
+                Vector3 Scale = new Vector3(0.3f, 1f, 0.3f);
                 //自动回复技能
                 if (ability != null && ability.cooldown.charge == ability.cooldown.maxCharge && !IsGrouped && !MatRefreshed)
                 {
@@ -177,7 +182,7 @@ namespace AK_DLL
                     {
                         //删去了单独DrawTMP方法
                         TextMeshPro tmp = Instance.GetComponent<TextMeshPro>();
-                        Vector3 scale = new Vector3(0.3f, 0.3f, 1f);
+                        Vector3 scale = new Vector3(0.25f, 0.25f, 1f);
                         int ChargeTimes = ability.cooldown.charge;
                         tmp.transform.position = OriginCenter;
                         tmp.transform.localScale = scale;

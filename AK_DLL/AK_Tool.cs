@@ -71,7 +71,7 @@ namespace AK_DLL
                 }
             }
             //FSAsset = AssetBundle.LoadFromFile(@"S:/Program Files (x86)/Steam/steamapps/common/RimWorld/Mods/Framework/Asset/fsassets");
-            if (FSAsset == null)
+            if (FSAsset == null || PAAsset == null)
             {
                 Log.Error("MIS. Critical Error: Missing Assets");
             }
@@ -274,6 +274,6 @@ namespace AK_DLL
             s = Regex.Replace(s, @"\{PAWN_possessive\}|\[PAWN_possessive\]", GenderUtility.GetPossessive(gender));
             return s;
         }
-#endregion
+        #endregion
     }
 }

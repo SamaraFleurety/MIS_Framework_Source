@@ -9,7 +9,6 @@ using UnityEngine;
 using TMPro;
 using Verse;
 
-
 namespace AK_DLL
 {
     [StaticConstructorOnStartup]
@@ -88,14 +87,6 @@ namespace AK_DLL
                 Timer_Icon = AK_BarUITool.Timer_Icon;
             }
         }
-        public override void Notify_Downed()
-        {
-            base.Notify_Downed();
-            if (PrefabTMPInstance == GameObject.Find(ObjectName))
-            {
-                GameObject.Destroy(PrefabTMPInstance);
-            }
-        }
         public override void PostDraw()
         {
             base.PostDraw();
@@ -103,8 +94,19 @@ namespace AK_DLL
             {
                 return;
             }
+            //倒地销毁TMP物件D
+            if (Pawn.Downed || Pawn.Dead)
+            {
+                if (PrefabTMPInstance == GameObject.Find(ObjectName))
+                {
+                    GameObject.Destroy(PrefabTMPInstance);
+                }
+            }
             //征召显示开关
-            PrefabTMPInstance?.SetActive(Pawn.Drafted);
+            if (PrefabTMPInstance != null)
+            {
+                PrefabTMPInstance?.SetActive(Pawn.Drafted || Pawn.Downed);
+            }
             if (!Pawn.Drafted)
             {
                 return;
@@ -113,7 +115,7 @@ namespace AK_DLL
             {
                 operatorID = Pawn.abilities?.abilities.Find((Ability a) => a.def == AKDefOf.AK_VAbility_Operator) as VAbility_Operator;
             }
-            if (operatorID != null)
+            if (operatorID != null && ability == null)
             {
                 ability = operatorID?.AKATracker?.innateAbilities.Find((AKAbility a) => !a.def.grouped);
                 if (ability == null)
@@ -159,6 +161,7 @@ namespace AK_DLL
                     BurstFlashFactor = (BurstFlashFactor + 0.025f) % 1.5f;
                     float factor = Mathf.Sqrt(BurstFlashFactor);
                     float transparency = 120 - (BurstFlashFactor / 1.2f * 70);
+                    //float transparency = Mathf.Lerp(150, 0, factor);
                     AK_BarUITool.SimpleRectBarRequest sbr = default;
                     sbr.center = OriginCenter + Vector3.down;
                     sbr.filledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(255, 255, 0, (byte)Mathf.Max(transparency, 20f))); ;

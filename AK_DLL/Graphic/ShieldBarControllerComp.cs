@@ -7,7 +7,6 @@ using UnityEngine;
 using Verse;
 using VanyaMod;
 using RimWorld;
-using Verse.Noise;
 
 namespace AK_DLL
 {

@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
-using static HarmonyLib.Code;
 
 namespace AK_DLL
 {
@@ -33,6 +32,24 @@ namespace AK_DLL
             {
                 Log.Error("MIS. Critical Error: Initialization fail");
             }
+        }
+        public struct SimpleRectBarRequest
+        {
+            public Vector3 center;
+
+            public Vector2 size;
+
+            public Material filledMat;
+
+            public Quaternion rotation;
+
+        }
+        public static void DrawSimpleRectBar(SimpleRectBarRequest r)
+        {
+            Vector3 s = new Vector3(r.size.x, 1f, r.size.y);
+            Matrix4x4 matrix = default;
+            matrix.SetTRS(r.center, r.rotation, s);
+            Graphics.DrawMesh(MeshPool.plane10, matrix, r.filledMat, 0);
         }
         private static void InitializeIcons()
         {

@@ -11,7 +11,7 @@ namespace AK_DLL
     [StaticConstructorOnStartup]
     public class HealthBarControllerComp : ThingComp
     {
-        private Pawn pawn => parent as Pawn;
+        private Pawn Pawn => parent as Pawn;
         private float HealthPercent;
         private Vector3 IconMargin => Vector3.back + Vector3.left * 0.8f;
         private static Vector3 BottomMargin => Vector3.back * 1f;
@@ -29,28 +29,25 @@ namespace AK_DLL
         public override void PostDraw()
         {
             base.PostDraw();
-            if (AK_ModSettings.displayBarModel)
+            if (!AK_ModSettings.displayBarModel || Pawn.GetDoc() == null || !Pawn.Drafted)
             {
-                if (!pawn.Drafted || pawn.GetDoc() == null)
-                {
-                    return;
-                }
-                GenDraw.FillableBarRequest fbr = default;
-                fbr.center = pawn.DrawPos + (Vector3.up * 5f) + BottomMargin;
-                fbr.size = BarSize;
-                HealthPercent = pawn.health?.summaryHealth?.SummaryHealthPercent ?? (-1f);
-                fbr.fillPercent = (HealthPercent < 0f) ? 0f : HealthPercent;
-                fbr.filledMat = BarFilledMat;
-                fbr.unfilledMat = BarUnfilledMat;
-                fbr.margin = 0.001f;
-                fbr.rotation = Rot4.North;
-                GenDraw.DrawFillableBar(fbr);
-                GenHPIcon();
-                Matrix4x4 matrix = default;
-                Vector3 scale = new Vector3(0.25f, 1f, 0.25f);
-                matrix.SetTRS(pawn.DrawPos + IconMargin, Rot4.North.AsQuat, scale);
-                Graphics.DrawMesh(MeshPool.plane025, matrix, material: HP_Icon, 2);
+                return;
             }
+            GenDraw.FillableBarRequest fbr = default;
+            fbr.center = Pawn.DrawPos + (Vector3.up * 5f) + BottomMargin;
+            fbr.size = BarSize;
+            HealthPercent = Pawn.health?.summaryHealth?.SummaryHealthPercent ?? (-1f);
+            fbr.fillPercent = (HealthPercent < 0f) ? 0f : HealthPercent;
+            fbr.filledMat = BarFilledMat;
+            fbr.unfilledMat = BarUnfilledMat;
+            fbr.margin = 0.001f;
+            fbr.rotation = Rot4.North;
+            GenDraw.DrawFillableBar(fbr);
+            GenHPIcon();
+            Matrix4x4 matrix = default;
+            Vector3 scale = new Vector3(0.25f, 1f, 0.25f);
+            matrix.SetTRS(Pawn.DrawPos + IconMargin, Rot4.North.AsQuat, scale);
+            Graphics.DrawMesh(MeshPool.plane025, matrix, material: HP_Icon, 2);
         }
     }
 }

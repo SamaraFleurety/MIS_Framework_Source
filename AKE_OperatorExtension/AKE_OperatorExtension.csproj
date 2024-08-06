@@ -62,7 +62,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="postfix.cs" />
+    <Compile Include="Harmony.cs" />
     <Compile Include="CombatRecords\TCP_UseEffect_CombatRecord.cs" />
     <Compile Include="DefExtension\DefExt_SkillLossRate.cs" />
     <Compile Include="HarmonyPatchs\PatchMain.cs" />

@@ -13,17 +13,18 @@ namespace AKE_OperatorExtension
 {
     [HarmonyPatch(typeof(PawnDiedOrDownedThoughtsUtility))]
     [HarmonyPatch("AppendThoughts_ForHumanlike")]
-    public static class PawnDiedOrDownedThoughtsUtility_AppendThoughts_ForHumanlike_Patch
+    public static class PawnDiedOrDownedThoughtsUtility_AppendThoughts_ForHumanlike_Patch  //在战斗中击杀敌人后，50%概率会产生一个灵感
     {
         private static void Postfix(Pawn victim, DamageInfo? dinfo, PawnDiedOrDownedThoughtsKind thoughtsKind, List<IndividualThoughtToAdd> outIndividualThoughts, List<ThoughtToAddToAll> outAllColonistsThoughts)
         {
-            if (victim.story.traits.HasTrait(TraitDef.Named("AK_Trait_SpecterUnchainedSecond")))
+            Pawn pawn = (Pawn)dinfo.Value.Instigator;
+            if (dinfo.HasValue && dinfo.Value.Instigator != null && pawn.story.traits.HasTrait(TraitDef.Named("AK_Trait_SpecterUnchainedSecond")))
             {
                 float inspirationChance = 0.5f;
-                if(Rand.Chance(inspirationChance))
+                if (Rand.Chance(inspirationChance))
                 {
                     InspirationDef randomInspiration = DefDatabase<InspirationDef>.AllDefsListForReading.RandomElement();
-                    victim.mindState.inspirationHandler.TryStartInspiration(randomInspiration);
+                    pawn.mindState.inspirationHandler.TryStartInspiration(randomInspiration);
                 }
             }
         }
@@ -31,31 +32,32 @@ namespace AKE_OperatorExtension
 
     [HarmonyPatch(typeof(InspirationHandler))]
     [HarmonyPatch("GetRandomAvailableInspirationDef")]
-    public static class InspirationHandler_GetRandomAvailableInspirationDef_Patch
+    public static class InspirationHandler_GetRandomAvailableInspirationDef_Patch  //只会产生创造灵感
     {
-        [HarmonyPostfix]
-        public static void Postfix(ref InspirationDef __result, Pawn pawn)
+        [HarmonyPrefix]
+        public static bool Prefix(ref InspirationDef __result, Pawn pawn)
         {
             if (pawn.story.traits.HasTrait(TraitDef.Named("AK_Trait_SpecterUnchainedThird")))
             {
                 __result = DefDatabase<InspirationDef>.AllDefsListForReading.Find(def => def == InspirationDefOf.Inspired_Creativity);
+                return false;
             }
+            return true;
         }
     }
 
     [HarmonyPatch(typeof(JobGiver_BingeDrug))]
-    [HarmonyPatch("GetChemical")]
-    public static class JobGiver_BingeDrug_GetChemical_Patch
+    [HarmonyPatch("IngestInterval")]
+    public static class JobGiver_BingeDrug_IngestInterval_Patch  //饮用酒精后获得灵感
     {
-        [HarmonyPostfix]
-        private static ChemicalDef Postfix(Pawn pawn)
+        [HarmonyPrefix]
+        private static void Prefix(JobGiver_BingeDrug __instance, Pawn pawn)
         {
-            if(((MentalState_BingingDrug)pawn.MentalState).chemical == ChemicalDefOf.Alcohol && pawn.story.traits.HasTrait(TraitDef.Named("AK_Trait_Blaze")))
+            if (((MentalState_BingingDrug)pawn.MentalState).chemical == ChemicalDefOf.Alcohol && pawn.story.traits.HasTrait(TraitDef.Named("AK_Trait_Blaze")))
             {
                 InspirationDef randomInspiration = DefDatabase<InspirationDef>.AllDefsListForReading.RandomElement();
                 pawn.mindState.inspirationHandler.TryStartInspiration(randomInspiration);
             }
-            return ((MentalState_BingingDrug)pawn.MentalState).chemical;
         }
     }
 }

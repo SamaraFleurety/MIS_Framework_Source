@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using AK_DLL;
+using HarmonyLib;
 using RimWorld;
 using RimWorld.BaseGen;
 using System;
@@ -23,8 +24,7 @@ namespace AKE_OperatorExtension
                 float inspirationChance = 0.5f;
                 if (Rand.Chance(inspirationChance))
                 {
-                    InspirationDef randomInspiration = DefDatabase<InspirationDef>.AllDefsListForReading.RandomElement();
-                    pawn.mindState.inspirationHandler.TryStartInspiration(randomInspiration);
+                    pawn.mindState.inspirationHandler.TryStartInspiration(InspirationDefOf.Inspired_Creativity);
                 }
             }
         }
@@ -35,25 +35,25 @@ namespace AKE_OperatorExtension
     public static class InspirationHandler_GetRandomAvailableInspirationDef_Patch  //只会产生创造灵感
     {
         [HarmonyPrefix]
-        public static bool Prefix(ref InspirationDef __result, Pawn pawn)
+        public static bool Prefix(ref InspirationDef __result, Pawn __instance)
         {
-            if (pawn.story.traits.HasTrait(TraitDef.Named("AK_Trait_SpecterUnchainedThird")))
+            if (__instance.story.traits.HasTrait(TraitDef.Named("AK_Trait_SpecterUnchainedThird")))
             {
                 __result = DefDatabase<InspirationDef>.AllDefsListForReading.Find(def => def == InspirationDefOf.Inspired_Creativity);
-                return false;
+                return HarmonyPrefixRet.skipOriginal;
             }
-            return true;
+            return HarmonyPrefixRet.keepOriginal;
         }
     }
 
-    [HarmonyPatch(typeof(JobGiver_BingeDrug))]
-    [HarmonyPatch("IngestInterval")]
-    public static class JobGiver_BingeDrug_IngestInterval_Patch  //饮用酒精后获得灵感
+    [HarmonyPatch(typeof(IngestionOutcomeDoer_GiveHediff))]
+    [HarmonyPatch("DoIngestionOutcomeSpecial")]
+    public static class IngestionOutcomeDoer_GiveHediff_DoIngestionOutcomeSpecial_Patch  //饮用酒精后获得灵感
     {
-        [HarmonyPrefix]
-        private static void Prefix(JobGiver_BingeDrug __instance, Pawn pawn)
+        [HarmonyPostfix]
+        public static void Postfix(Pawn pawn, Thing ingested)
         {
-            if (((MentalState_BingingDrug)pawn.MentalState).chemical == ChemicalDefOf.Alcohol && pawn.story.traits.HasTrait(TraitDef.Named("AK_Trait_Blaze")))
+            if (ingested.def.GetCompProperties<CompProperties_Drug>().chemical == ChemicalDefOf.Alcohol && pawn.story.traits.HasTrait(TraitDef.Named("AK_Trait_Blaze")))
             {
                 InspirationDef randomInspiration = DefDatabase<InspirationDef>.AllDefsListForReading.RandomElement();
                 pawn.mindState.inspirationHandler.TryStartInspiration(randomInspiration);

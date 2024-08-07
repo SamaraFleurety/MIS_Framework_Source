@@ -1,16 +1,12 @@
-﻿using System;
+﻿using RimWorld;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using Verse;
 using VanyaMod;
-using RimWorld;
+using Verse;
 
 namespace AK_DLL
 {
-    public class ShieldBarControllerComp : ThingComp
+    public class TC_ShieldBarControllerComp : ThingComp
     {
         private Pawn Pawn => parent as Pawn;
         private float SheildPercent;

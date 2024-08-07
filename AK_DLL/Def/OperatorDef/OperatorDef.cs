@@ -97,16 +97,6 @@ namespace AK_DLL
         {
             get { return AK_Tool.GetOperatorIDFrom(this.defName); }
         }
-        /*public List<SkillAndFire> Skills
-        {
-            get
-            {
-                /*string operatorName = AK_Tool.GetOperatorNameFromDefName(this.defName);
-                if (GameComp_OperatorDocumentation.operatorDocument.ContainsKey(operatorName)) return GameComp_OperatorDocumentation.operatorDocument[operatorName].skillAndFires;
-                else*//*
-                return skills;
-            }
-        }*/
         public List<SkillAndFire> SortedSkills
         {
             get
@@ -332,6 +322,8 @@ namespace AK_DLL
             clothTemp.Clear();
 
             Recruit_Ability(operatorID);
+
+            Recruit_BarUI(operator_Pawn);
 
             if (!postEffects.NullOrEmpty())
             {
@@ -622,6 +614,11 @@ namespace AK_DLL
                 ThingClass_MusicRecord t = Recruit_Inventory_Additem(recordDef, 1) as ThingClass_MusicRecord;
                 t.recordedSong = i;
             }
+        }
+
+        private void Recruit_BarUI(Pawn p)
+        {
+            AK_BarUITool.AddCompsToPawn(p);
         }
         #endregion
 

@@ -68,5 +68,28 @@ namespace AK_DLL
             }
 
         }
+
+        public static void AddCompsToPawn(Pawn p)
+        {
+            if (p == null || p.Dead) return;
+
+            bool hasHealthComp = false;
+            bool hasSkillComp = false;
+            bool hasShieldComp = false;
+
+            foreach (ThingComp comp in p.AllComps)
+            {
+                if (comp is TC_HealthBarControllerComp) hasHealthComp = true;
+                else if (comp is TC_SkillBarController) hasSkillComp = true;
+                else if (comp is TC_ShieldBarControllerComp) hasShieldComp = true;
+            }
+
+            if (ModLister.GetActiveModWithIdentifier("Mlie.VanyaShield") == null) hasShieldComp = false;
+
+            if (!hasHealthComp) p.AllComps.Add(new TC_HealthBarControllerComp() { parent = p });
+            if (!hasSkillComp) p.AllComps.Add(new TC_SkillBarController() { parent = p });
+            if (!hasShieldComp) p.AllComps.Add(new TC_ShieldBarControllerComp() { parent = p });
+
+        }
     }
 }

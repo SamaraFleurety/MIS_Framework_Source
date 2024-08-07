@@ -9,7 +9,7 @@ using Verse;
 namespace AK_DLL
 {
     [StaticConstructorOnStartup]
-    public class HealthBarControllerComp : ThingComp
+    public class TC_HealthBarControllerComp : ThingComp
     {
         private Pawn Pawn => parent as Pawn;
         private float HealthPercent;

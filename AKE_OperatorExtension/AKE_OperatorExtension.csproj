@@ -62,13 +62,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Harmony.cs" />
+    <Compile Include="AKE_Tools.cs" />
+    <Compile Include="HarmonyPatchs\Patch_Inspiration.cs" />
     <Compile Include="CombatRecords\TCP_UseEffect_CombatRecord.cs" />
     <Compile Include="DefExtension\DefExt_SkillLossRate.cs" />
     <Compile Include="HarmonyPatchs\PatchMain.cs" />
     <Compile Include="HarmonyPatchs\Patch_SkillLoss.cs" />
+    <Compile Include="HCP\HCP_GrowthSys.cs" />
     <Compile Include="HCP\HCP_RandAddHediff.cs" />
     <Compile Include="HCP\HCP_RandAddTrait.cs" />
+    <Compile Include="HCP\HCP_SkillUpbyTime.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

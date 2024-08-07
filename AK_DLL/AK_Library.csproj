@@ -289,9 +289,9 @@
     <Compile Include="Def\OperatorDef\OperatorDef_Reserve.cs" />
     <Compile Include="GC_AKManager.cs" />
     <Compile Include="Graphic\AK_BarUITool.cs" />
-    <Compile Include="Graphic\HealthBarControllerComp.cs" />
-    <Compile Include="Graphic\ShieldBarControllerComp.cs" />
-    <Compile Include="Graphic\SkillBarControllerComp.cs" />
+    <Compile Include="Graphic\TC_HealthBarControllerComp.cs" />
+    <Compile Include="Graphic\TC_ShieldBarControllerComp.cs" />
+    <Compile Include="Graphic\TC_SkillBarController.cs" />
     <Compile Include="HarmonyPatch\PatchTest.cs" />
     <Compile Include="HarmonyPatch\Patch_AlienWarning.cs" />
     <Compile Include="HarmonyPatch\Patch_ClearGlobalDataOnLoad.cs" />

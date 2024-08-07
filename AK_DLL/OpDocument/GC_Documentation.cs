@@ -12,7 +12,7 @@ namespace AK_DLL
 {
     //下面这个GameComponent使用了和原版不一样的存读档流程。除非真的知道你在干什么，不然别改。
     //一个干员的档案
-    public class OperatorDocument : IExposable , ILoadReferenceable
+    public class OperatorDocument : IExposable, ILoadReferenceable
     {
         //开放开盒干员的权限
         public string operatorID;
@@ -22,7 +22,7 @@ namespace AK_DLL
         //public Hediff_Operator hediff;
 
         public int preferredFashionSet = -1;
-        public List<Thing> apparel; 
+        public List<Thing> apparel;
 
         public Dictionary<SkillDef, int> skillLevel;
         public VoicePackDef voicePack;
@@ -55,7 +55,7 @@ namespace AK_DLL
         {
             DestroyFashionSet();
             if (apparel == null) apparel = new List<Thing>();
-            foreach(Thing i in fashionSet)
+            foreach (Thing i in fashionSet)
             {
                 apparel.Add(i);
             }
@@ -65,7 +65,7 @@ namespace AK_DLL
         public void DestroyFashionSet()
         {
             if (apparel == null || apparel.Count == 0) return;
-            foreach(Thing i in apparel)
+            foreach (Thing i in apparel)
             {
                 if (i != null && !i.Destroyed) i.Destroy(DestroyMode.Vanish);
             }
@@ -108,7 +108,7 @@ namespace AK_DLL
         public void RecordSkills()
         {
             if (this.pawn == null || this.pawn.skills == null) return;
-            foreach(SkillRecord i in this.pawn.skills.skills)
+            foreach (SkillRecord i in this.pawn.skills.skills)
             {
                 if (this.skillLevel.ContainsKey(i.def) == false)
                 {
@@ -157,6 +157,15 @@ namespace AK_DLL
             base.LoadedGame();
             VoicePlayer.LoadedGame();
             if (opDocArchive == null) opDocArchive = new Dictionary<string, OperatorDocument>();
+
+            foreach (string id in opDocArchive.Keys)
+            {
+                Pawn p = opDocArchive[id].pawn;
+                if (p != null && !p.Dead)
+                {
+                    AK_BarUITool.AddCompsToPawn(p);
+                }
+            }
         }
 
         public override void ExposeData()
@@ -188,7 +197,7 @@ namespace AK_DLL
             catch
             {
                 Log.Error("没保存起");
-            }           
+            }
             Scribe.mode = LoadSaveMode.Inactive;
             if (AK_ModSettings.debugOverride)
             {
@@ -200,12 +209,12 @@ namespace AK_DLL
             }
         }
 
-        public static void AddPawn(string defName, OperatorDef operatorDef , Pawn pawn, Thing weapon, List<Thing> fashionSet)
+        public static void AddPawn(string defName, OperatorDef operatorDef, Pawn pawn, Thing weapon, List<Thing> fashionSet)
         {
             OperatorDocument doc;
             if (opDocArchive.ContainsKey(defName) == false)
             {
-                doc  = new OperatorDocument(defName, pawn, weapon, operatorDef);
+                doc = new OperatorDocument(defName, pawn, weapon, operatorDef);
                 opDocArchive.Add(defName, doc);
             }
             else
@@ -222,13 +231,13 @@ namespace AK_DLL
             //base.GameComponentTick(); 感觉没用
         }
 
-        public static void DestroyHeritage (OperatorDocument doc)
+        public static void DestroyHeritage(OperatorDocument doc)
         {
             doc.currentExist = false;
             //doc.groupedAbilities.Clear();
             doc.preferedAbility = 0;
-            if (doc.pawn != null) 
-            { 
+            if (doc.pawn != null)
+            {
                 if (doc.pawn.Destroyed == false) doc.pawn.Destroy();
                 doc.pawn.Discard();
                 if (Find.WorldPawns.Contains(doc.pawn)) Find.WorldPawns.RemoveAndDiscardPawnViaGC(doc.pawn);
@@ -237,7 +246,7 @@ namespace AK_DLL
             //if (doc.hediff != null) Log.Error("人都没了但hediff还存在,请提交此bug至制作组FS");
         }
 
-        public static void ReRecruit (OperatorDocument doc, string defName, Pawn p, Thing weapon)
+        public static void ReRecruit(OperatorDocument doc, string defName, Pawn p, Thing weapon)
         {
             doc.pawn = p;
             doc.weapon = weapon;
@@ -245,4 +254,5 @@ namespace AK_DLL
             doc.currentExist = true;
         }
     }
+
 }

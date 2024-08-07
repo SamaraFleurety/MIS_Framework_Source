@@ -17,7 +17,7 @@ namespace AK_DLL
 		private static BoolGrid usedCells;
 		private static CellRect overRect;
 
-		[DebugAction("Fleurety's Actions", "Make colony (Operators)", false, false, false, false, 0, false, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+		[DebugAction("MIS-AK Actions", "Make colony (Operators)", false, false, false, false, 0, false, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 		public static void MakeColonyWeapon()
 		{
 			bool godMode = DebugSettings.godMode;
@@ -59,5 +59,16 @@ namespace AK_DLL
 			DebugSettings.godMode = godMode;
 			Thing.allowDestroyNonDestroyable = false;
 		}
-	}
+
+        [DebugAction("MIS-AK Actions", "Print Recruited Operators", false, false, false, false, 0, false, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+		public static void PrintOperators()
+		{
+			foreach (string id in GC_OperatorDocumentation.opDocArchive.Keys)
+			{
+				OperatorDocument doc = GC_OperatorDocumentation.opDocArchive[id];
+
+				Log.Message($"[AK] 已招募 {id} - {doc.operatorDef.nickname}, 存活:{!doc.pawn.Dead}");
+			}
+		}
+    }
 }

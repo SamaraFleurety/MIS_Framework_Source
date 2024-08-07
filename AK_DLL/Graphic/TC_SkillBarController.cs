@@ -12,7 +12,7 @@ using Verse;
 namespace AK_DLL
 {
     [StaticConstructorOnStartup]
-    public class SkillBarControllerComp : ThingComp
+    public class TC_SkillBarController : ThingComp
     {
         private Pawn Pawn => parent as Pawn;
         private AKAbility ability;

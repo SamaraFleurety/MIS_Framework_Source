@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using Verse;
 using Verse.AI;
 
-namespace AKE_OperatorExtension.HarmonyPatchs
+namespace AKE_OperatorExtension
 {
     [HarmonyPatch(typeof(PawnDiedOrDownedThoughtsUtility))]
     [HarmonyPatch("AppendThoughts_ForHumanlike")]
@@ -35,10 +35,9 @@ namespace AKE_OperatorExtension.HarmonyPatchs
     public static class InspirationHandler_GetRandomAvailableInspirationDef_Patch  //只会产生创造灵感
     {
         [HarmonyPrefix]
-        public static bool Prefix(ref InspirationDef __result, InspirationHandler __instance)
+        public static bool Prefix(ref InspirationDef __result, Pawn __instance)
         {
-            Pawn pawn = __instance.pawn;
-            if (pawn.story.traits.HasTrait(TraitDef.Named("AK_Trait_SpecterUnchainedThird")))
+            if (__instance.story.traits.HasTrait(TraitDef.Named("AK_Trait_SpecterUnchainedThird")))
             {
                 __result = DefDatabase<InspirationDef>.AllDefsListForReading.Find(def => def == InspirationDefOf.Inspired_Creativity);
                 return HarmonyPrefixRet.skipOriginal;

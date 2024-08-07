@@ -16,6 +16,7 @@ namespace AK_DLL
         public GC_AKManager(Game game)
         {
             instance = this;
+            superiorRecruitTowers = new HashSet<TC_TeleportTowerSuperior>();
         }
 
         public override void ExposeData()
@@ -26,13 +27,6 @@ namespace AK_DLL
         public override void FinalizeInit()
         {
 
-        }
-
-        //在读档之前 清空所有全局数据
-        public void PreLoad()
-        {
-            superiorRecruitTowers.Clear();
-            superiorRecruitTowers = new HashSet<TC_TeleportTowerSuperior>();
         }
     }
 }

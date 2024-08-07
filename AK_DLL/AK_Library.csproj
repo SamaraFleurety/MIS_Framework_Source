@@ -294,7 +294,6 @@
     <Compile Include="Graphic\TC_SkillBarController.cs" />
     <Compile Include="HarmonyPatch\PatchTest.cs" />
     <Compile Include="HarmonyPatch\Patch_AlienWarning.cs" />
-    <Compile Include="HarmonyPatch\Patch_ClearGlobalDataOnLoad.cs" />
     <Compile Include="HarmonyPatch\Patch_ObeliskCopyAbility.cs" />
     <Compile Include="Hediff\Comps\HCP_AddTrait.cs" />
     <Compile Include="Hediff\Comps\HCP_RemoveMe.cs" />

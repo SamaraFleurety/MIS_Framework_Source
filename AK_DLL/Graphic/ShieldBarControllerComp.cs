@@ -17,6 +17,8 @@ namespace AK_DLL
         private Vector3 IconMargin => Vector3.back * 1.125f + Vector3.left * 0.8f;
         private static Vector3 BottomMargin => Vector3.back * 1.125f;
         private static readonly Vector2 BarSize = new Vector2(1.5f, 0.025f);
+        private Material BarFilledMat;
+        private Material BarUnfilledMat;
         private Material Def_Icon;
         private List<Apparel> apparels = new List<Apparel>();
         private Vanya_ShieldBelt AKEShield;
@@ -51,11 +53,16 @@ namespace AK_DLL
             {
                 return;
             }
+            if (BarFilledMat == null || BarUnfilledMat == null) 
+            {
+                BarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(245, 245, 245, 180));
+                BarUnfilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.15f, 0.15f, 0.15f, 0.75f));
+            }
             GenDraw.FillableBarRequest fbr = default;
             fbr.center = Pawn.DrawPos + (Vector3.up * 3f) + BottomMargin;
             fbr.size = BarSize;
-            fbr.filledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(245, 245, 245, 180)); ;
-            fbr.unfilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.15f, 0.15f, 0.15f, 0.75f));
+            fbr.filledMat = BarFilledMat;
+            fbr.unfilledMat = BarUnfilledMat;
             fbr.margin = 0.001f;
             fbr.rotation = Rot4.North;
             fbr.fillPercent = SheildPercent;

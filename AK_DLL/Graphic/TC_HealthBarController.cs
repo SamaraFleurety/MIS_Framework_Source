@@ -1,15 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
 namespace AK_DLL
 {
     [StaticConstructorOnStartup]
-    public class TC_HealthBarControllerComp : ThingComp
+    public class TC_HealthBarController : ThingComp
     {
         private Pawn Pawn => parent as Pawn;
         private float HealthPercent;

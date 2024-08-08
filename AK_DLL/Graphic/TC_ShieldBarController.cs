@@ -1,12 +1,12 @@
-﻿using RimWorld;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using VanyaMod;
 using Verse;
+using VanyaMod;
+using RimWorld;
 
 namespace AK_DLL
 {
-    public class TC_ShieldBarControllerComp : ThingComp
+    public class TC_ShieldBarController : ThingComp
     {
         private Pawn Pawn => parent as Pawn;
         private float SheildPercent;
@@ -16,20 +16,17 @@ namespace AK_DLL
         private Material BarFilledMat;
         private Material BarUnfilledMat;
         private Material Def_Icon;
-        private List<Apparel> apparels = new List<Apparel>();
-        private Vanya_ShieldBelt AKEShield;
-        public bool HasVanyaShield()
+        private List<Apparel> Apparels => Pawn.apparel.WornApparel;
+        public Vanya_ShieldBelt GetVanyaShield()
         {
-            apparels= Pawn.apparel.WornApparel;
-            foreach(Apparel a in apparels)
+            foreach (Apparel a in Apparels)
             {
                 if (a is Vanya_ShieldBelt)
                 {
-                    AKEShield = a as Vanya_ShieldBelt;
-                    return true;
+                    return a as Vanya_ShieldBelt;
                 }
             }
-            return false;
+            return null;
         }
         private void GenDefendIcon()
         {
@@ -49,7 +46,7 @@ namespace AK_DLL
             {
                 return;
             }
-            if (BarFilledMat == null || BarUnfilledMat == null) 
+            if (BarFilledMat == null || BarUnfilledMat == null)
             {
                 BarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(245, 245, 245, 180));
                 BarUnfilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.15f, 0.15f, 0.15f, 0.75f));
@@ -62,9 +59,10 @@ namespace AK_DLL
             fbr.margin = 0.001f;
             fbr.rotation = Rot4.North;
             fbr.fillPercent = SheildPercent;
-            if (HasVanyaShield())
+            Vanya_ShieldBelt belt = GetVanyaShield();
+            if (belt != null)
             {
-                SheildPercent = AKEShield.Energy / Mathf.Max(1f, AKEShield.GetStatValue(StatDefOf.EnergyShieldEnergyMax));
+                SheildPercent = belt.Energy / Mathf.Max(1f, belt.GetStatValue(StatDefOf.EnergyShieldEnergyMax));
             }
             else
             {

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 using Verse;
 
 namespace AK_DLL
@@ -17,11 +12,11 @@ namespace AK_DLL
         public static Material BurstIcon;
         public static Material RotateRingIcon;
 
-        private static string HP_IconTexPath = "UI/Abilities/icon_sort_hp";
-        private static string DEF_IconTexPath = "UI/Abilities/icon_sort_def";
-        private static string Timer_IconTexPath = "UI/Abilities/icon_sort_respawn";
-        private static string BurstIconTexPath = "UI/Abilities/Burst";
-        private static string RotateRingIconTexPath = "UI/Abilities/RotateRing";
+        private static readonly string HP_IconTexPath = "UI/Abilities/icon_sort_hp";
+        private static readonly string DEF_IconTexPath = "UI/Abilities/icon_sort_def";
+        private static readonly string Timer_IconTexPath = "UI/Abilities/icon_sort_respawn";
+        private static readonly string BurstIconTexPath = "UI/Abilities/Burst";
+        private static readonly string RotateRingIconTexPath = "UI/Abilities/RotateRing";
         static AK_BarUITool()
         {
             try
@@ -79,16 +74,16 @@ namespace AK_DLL
 
             foreach (ThingComp comp in p.AllComps)
             {
-                if (comp is TC_HealthBarControllerComp) hasHealthComp = true;
+                if (comp is TC_HealthBarController) hasHealthComp = true;
                 else if (comp is TC_SkillBarController) hasSkillComp = true;
-                else if (comp is TC_ShieldBarControllerComp) hasShieldComp = true;
+                else if (comp is TC_ShieldBarController) hasShieldComp = true;
             }
 
-            if (ModLister.GetActiveModWithIdentifier("Mlie.VanyaShield") == null) hasShieldComp = false;
+            if (ModLister.GetActiveModWithIdentifier("Mlie.VanyaShield") == null) hasShieldComp = true;
 
-            if (!hasHealthComp) p.AllComps.Add(new TC_HealthBarControllerComp() { parent = p });
+            if (!hasHealthComp) p.AllComps.Add(new TC_HealthBarController() { parent = p });
             if (!hasSkillComp) p.AllComps.Add(new TC_SkillBarController() { parent = p });
-            if (!hasShieldComp) p.AllComps.Add(new TC_ShieldBarControllerComp() { parent = p });
+            if (!hasShieldComp) p.AllComps.Add(new TC_ShieldBarController() { parent = p });
 
         }
     }

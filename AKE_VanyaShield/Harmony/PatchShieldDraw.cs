@@ -18,6 +18,22 @@ namespace AKE_VanyaShield
     }
 
     [HarmonyPatch(typeof(Vanya_ShieldBelt), "DrawWornExtras")]
+    public class PatchBarUIDraw
+    {
+        [HarmonyPrefix]
+        public static bool prefix(Vanya_ShieldBelt __instance)
+        {
+            TC_ShieldBarUIExtension comp = __instance.GetComp<TC_ShieldBarUIExtension>();
+            if (comp != null)
+            {
+                comp.CompDrawWornExtras();
+                return true;
+            }
+            return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(Vanya_ShieldBelt), "DrawWornExtras")]
     public class PatchShieldDraw
     {
         [HarmonyPrefix]

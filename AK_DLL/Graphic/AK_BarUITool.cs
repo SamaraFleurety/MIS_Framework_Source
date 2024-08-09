@@ -70,20 +70,15 @@ namespace AK_DLL
 
             bool hasHealthComp = false;
             bool hasSkillComp = false;
-            bool hasShieldComp = false;
 
             foreach (ThingComp comp in p.AllComps)
             {
                 if (comp is TC_HealthBarController) hasHealthComp = true;
                 else if (comp is TC_SkillBarController) hasSkillComp = true;
-                else if (comp is TC_ShieldBarController) hasShieldComp = true;
             }
-
-            if (ModLister.GetActiveModWithIdentifier("Mlie.VanyaShield") == null) hasShieldComp = true;
 
             if (!hasHealthComp) p.AllComps.Add(new TC_HealthBarController() { parent = p });
             if (!hasSkillComp) p.AllComps.Add(new TC_SkillBarController() { parent = p });
-            if (!hasShieldComp) p.AllComps.Add(new TC_ShieldBarController() { parent = p });
 
         }
     }

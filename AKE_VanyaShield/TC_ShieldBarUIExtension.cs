@@ -1,14 +1,24 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using Verse;
-using VanyaMod;
+﻿using AK_DLL;
 using RimWorld;
+using UnityEngine;
+using VanyaMod;
+using Verse;
 
-namespace AK_DLL
+namespace AKE_VanyaShield
 {
-    public class TC_ShieldBarController : ThingComp
+    public class TCP_ShieldBarUIExtension : CompProperties
     {
-        private Pawn Pawn => parent as Pawn;
+        public TCP_ShieldBarUIExtension()
+        {
+            compClass = typeof(TC_ShieldBarUIExtension);
+        }
+    }
+    public class TC_ShieldBarUIExtension : ThingComp
+    {
+        TCP_ShieldBarUIExtension Props => (TCP_ShieldBarUIExtension)props;
+        protected Vanya_ShieldBelt Parent => (Vanya_ShieldBelt)parent;
+        protected Pawn Wearer => Parent.Wearer;
+
         private float SheildPercent;
         private Vector3 IconMargin => Vector3.back * 1.125f + Vector3.left * 0.8f;
         private static Vector3 BottomMargin => Vector3.back * 1.125f;
@@ -16,18 +26,6 @@ namespace AK_DLL
         private Material BarFilledMat;
         private Material BarUnfilledMat;
         private Material Def_Icon;
-        private List<Apparel> Apparels => Pawn.apparel.WornApparel;
-        public Vanya_ShieldBelt GetVanyaShield()
-        {
-            foreach (Apparel a in Apparels)
-            {
-                if (a is Vanya_ShieldBelt)
-                {
-                    return a as Vanya_ShieldBelt;
-                }
-            }
-            return null;
-        }
         private void GenDefendIcon()
         {
             if (Def_Icon == null)
@@ -35,14 +33,13 @@ namespace AK_DLL
                 Def_Icon = AK_BarUITool.DEF_Icon;
             }
         }
-        public override void PostDraw()
+        public override void CompDrawWornExtras()
         {
-            base.PostDraw();
             if (!AK_ModSettings.displayBarModel || ModLister.GetActiveModWithIdentifier("Mlie.VanyaShield") == null)
             {
                 return;
             }
-            if (!Pawn.Drafted || Pawn.GetDoc() == null)
+            if (Wearer == null || !Wearer.Drafted)
             {
                 return;
             }
@@ -51,18 +48,19 @@ namespace AK_DLL
                 BarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(245, 245, 245, 180));
                 BarUnfilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.15f, 0.15f, 0.15f, 0.75f));
             }
+            Log.Message("有盾");
             GenDraw.FillableBarRequest fbr = default;
-            fbr.center = Pawn.DrawPos + (Vector3.up * 3f) + BottomMargin;
+            fbr.center = Wearer.DrawPos + (Vector3.up * 3f) + BottomMargin;
             fbr.size = BarSize;
             fbr.filledMat = BarFilledMat;
             fbr.unfilledMat = BarUnfilledMat;
             fbr.margin = 0.001f;
             fbr.rotation = Rot4.North;
             fbr.fillPercent = SheildPercent;
-            Vanya_ShieldBelt belt = GetVanyaShield();
-            if (belt != null)
+            Vanya_ShieldBelt shield = Parent;
+            if (shield != null)
             {
-                SheildPercent = belt.Energy / Mathf.Max(1f, belt.GetStatValue(StatDefOf.EnergyShieldEnergyMax));
+                SheildPercent = shield.Energy / Mathf.Max(1f, shield.GetStatValue(StatDefOf.EnergyShieldEnergyMax));
             }
             else
             {
@@ -72,7 +70,7 @@ namespace AK_DLL
             GenDefendIcon();
             Matrix4x4 matrix = default;
             Vector3 scale = new Vector3(0.25f, 1f, 0.25f);
-            matrix.SetTRS(Pawn.DrawPos + IconMargin, Rot4.North.AsQuat, scale);
+            matrix.SetTRS(Wearer.DrawPos + IconMargin, Rot4.North.AsQuat, scale);
             Graphics.DrawMesh(MeshPool.plane025, matrix, material: Def_Icon, 2);
         }
     }

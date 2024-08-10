@@ -18,8 +18,13 @@ namespace AKE_OperatorExtension.HarmonyPatchs
     {
         private static void Postfix(Pawn victim, DamageInfo? dinfo, PawnDiedOrDownedThoughtsKind thoughtsKind, List<IndividualThoughtToAdd> outIndividualThoughts, List<ThoughtToAddToAll> outAllColonistsThoughts)
         {
+            if(dinfo == null || !dinfo.HasValue || dinfo.Value.Instigator == null) 
+            { 
+                return;
+            }
             Pawn pawn = (Pawn)dinfo.Value.Instigator;
-            if (dinfo.HasValue && dinfo.Value.Instigator != null && pawn.story.traits.HasTrait(TraitDef.Named("AK_Trait_SpecterUnchainedSecond")))
+            if(pawn == null) { return; }
+            if (pawn.story.traits.HasTrait(TraitDef.Named("AK_Trait_SpecterUnchainedSecond")))
             {
                 float inspirationChance = 0.5f;
                 if (Rand.Chance(inspirationChance))

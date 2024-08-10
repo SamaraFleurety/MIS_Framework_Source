@@ -47,8 +47,8 @@ namespace AKA_Ability
             Text.Font = GameFont.Small;
             Rect rectRightTopLabel = new Rect(rect.x + 250f, rect.y + 10f, rect.width / 2, 20f);
             Widgets.Label(rectRightTopLabel, "AKA.CopySkillTextUser".Translate() + User.Label);
-            Rect rect1 = new Rect(rect.x + 20f, rect.y + 40f, rect.width, rect.height);
-            Rect rect2 = new Rect(rect.x + 250f, rect.y + 40f, rect.width / 2, inRect.height);
+            Rect rect1 = new Rect(rect.x + 20f, rect.y + 40f, rect.width / 2, rect.height);
+            Rect rect2 = new Rect(rect.x + 250f, rect.y + 40f, rect.width / 2, rect.height);
             Widgets.BeginGroup(rect1);
             SkillUI.DrawSkillsOf(Target, offset: Vector2.zero, mode: (Current.ProgramState != ProgramState.Playing) ? SkillUI.SkillDrawMode.Menu : SkillUI.SkillDrawMode.Gameplay, container: rect1);
             Widgets.EndGroup();
@@ -69,9 +69,9 @@ namespace AKA_Ability
         }
         public override void PostClose()
         {
-            int index = User.skills.skills.FindIndex(skill => skill.def == ChoosenSkill.def);
             if (ChoosenSkill != null)
             {
+                int index = User.skills.skills.FindIndex(skill => skill.def == ChoosenSkill.def);
                 User.skills.skills[index] = ChoosenSkill;
                 Messages.Message(User.Label + "AKA.CopySkillMessage".Translate() + ChoosenSkill.def.label, MessageTypeDefOf.NeutralEvent);
             }

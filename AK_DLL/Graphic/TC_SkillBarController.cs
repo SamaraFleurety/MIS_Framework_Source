@@ -129,11 +129,11 @@ namespace AK_DLL
                 SkillPercent = 0f;
             }
             GenDraw.FillableBarRequest fbr = default;
-            fbr.center = Pawn.DrawPos + (Vector3.up * 5f) + BottomMargin;
+            fbr.center = Pawn.DrawPos + (Vector3.up * 3f) + BottomMargin;
             fbr.size = BarSize;
             fbr.filledMat = BarFilledMat;
             fbr.unfilledMat = BarUnfilledMat;
-            fbr.margin = 0.001f;
+            //fbr.margin = 0;
             fbr.rotation = Rot4.North;
             fbr.fillPercent = (SkillPercent < 0f) ? 0f : SkillPercent;
             GenDraw.DrawFillableBar(fbr);

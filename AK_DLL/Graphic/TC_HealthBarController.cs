@@ -12,7 +12,7 @@ namespace AK_DLL
         private static Vector3 BottomMargin => Vector3.back;
         private static Vector2 BarSize = new Vector2(1.5f, 0.075f);
         private static readonly Material BarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(105, 180, 210, 180));
-        private static readonly Material BarUnfilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.15f, 0.15f, 0.15f, 0.75f));
+        private static readonly Material BarUnfilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.15f, 0.15f, 0.15f, 0.50f));
         private Material HP_Icon;
         private void GenHPIcon()
         {
@@ -35,7 +35,7 @@ namespace AK_DLL
             fbr.fillPercent = (HealthPercent < 0f) ? 0f : HealthPercent;
             fbr.filledMat = BarFilledMat;
             fbr.unfilledMat = BarUnfilledMat;
-            fbr.margin = 0.001f;
+            //fbr.margin = 0;
             fbr.rotation = Rot4.North;
             GenDraw.DrawFillableBar(fbr);
             GenHPIcon();

@@ -14,13 +14,13 @@ namespace AK_DLL
         //开启一些正常游戏不会使用的测试功能
         public static bool debugOverride = false;
 
+        //数值条
+        public static bool displayBarModel = true;
+
         //语音
         public static bool playOperatorVoice = true;
         public static int voiceIntervalTime = 2;
-        
-        //数值条
-        public static bool displayBarModel = true;
-        
+
         #region 环世界殖民地界面 左下角显示小人立绘
         public static bool displayBottomLeftPortrait = true;
         //显示立绘的偏移参数
@@ -91,8 +91,8 @@ namespace AK_DLL
             Listing_Standard listingStandard = new Listing_Standard();
             listingStandard.Begin(inRect);
             if (Prefs.DevMode) listingStandard.CheckboxLabeled("测试模式", ref AK_ModSettings.debugOverride, "开启明日方舟MOD的测试模式。如果您不是测试人员请勿勾选此选项。");
-            listingStandard.CheckboxLabeled("AK_Option_Play".Translate(), ref AK_ModSettings.playOperatorVoice, "AK_Option_PlayD".Translate());
-            listingStandard.CheckboxLabeled("AK_Option_DisplayBar".Translate(), ref AK_ModSettings.displayBarModel, "AK_Option_DisplayBar".Translate());
+            listingStandard.CheckboxLabeled("AK_Option_DisplayBar".Translate(), ref AK_ModSettings.displayBarModel, "AK_Option_DisplayBarD".Translate());
+            listingStandard.CheckboxLabeled("AK_Option_Play".Translate(), ref AK_ModSettings.playOperatorVoice, "AK_Option_PlayD".Translate()); ;
             AK_ModSettings.voiceIntervalTime = (int)listingStandard.SliderLabeled("AK_Option_Interval".Translate() + $"{(float)AK_ModSettings.voiceIntervalTime / 2.0}", AK_ModSettings.voiceIntervalTime, 0, 60f);
 
             listingStandard.CheckboxLabeled("AK_Option_DisP".Translate(), ref AK_ModSettings.displayBottomLeftPortrait);
@@ -111,9 +111,9 @@ namespace AK_DLL
                 {
                     FontDef j = i;
                     list.Add(new FloatMenuOption(j.label.Translate(), delegate ()
-                     {
-                         AK_ModSettings.Font = j;
-                     }));
+                    {
+                        AK_ModSettings.Font = j;
+                    }));
                     Find.WindowStack.Add(new FloatMenu(list));
                 }
             }

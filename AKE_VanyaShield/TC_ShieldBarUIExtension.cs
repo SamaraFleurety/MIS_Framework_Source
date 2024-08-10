@@ -46,7 +46,7 @@ namespace AKE_VanyaShield
             if (BarFilledMat == null || BarUnfilledMat == null)
             {
                 BarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(245, 245, 245, 180));
-                BarUnfilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.15f, 0.15f, 0.15f, 0.75f));
+                BarUnfilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.15f, 0.15f, 0.15f, 0.50f));
             }
             Log.Message("有盾");
             GenDraw.FillableBarRequest fbr = default;
@@ -54,7 +54,7 @@ namespace AKE_VanyaShield
             fbr.size = BarSize;
             fbr.filledMat = BarFilledMat;
             fbr.unfilledMat = BarUnfilledMat;
-            fbr.margin = 0.001f;
+            //fbr.margin = 0;
             fbr.rotation = Rot4.North;
             fbr.fillPercent = SheildPercent;
             Vanya_ShieldBelt shield = Parent;

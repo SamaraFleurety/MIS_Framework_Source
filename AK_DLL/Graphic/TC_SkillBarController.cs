@@ -19,7 +19,7 @@ namespace AK_DLL
         private static Vector3 BottomMargin => Vector3.back * 1.075f;
         private static readonly Vector2 BarSize = new Vector2(1.5f, 0.075f);
         const float s = 1;
-        private static readonly Material BarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(160, 170, 60, 180));
+        private static readonly Material BarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(160, 170, 60, 190));
         private static readonly Material BarUnfilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.15f, 0.15f, 0.15f, 0.50f));
         private Material Timer_Icon;
         private Material RotateRing;

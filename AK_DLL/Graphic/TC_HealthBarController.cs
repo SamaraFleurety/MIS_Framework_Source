@@ -11,7 +11,7 @@ namespace AK_DLL
         private Vector3 IconMargin => Vector3.back + Vector3.left * 0.8f;
         private static Vector3 BottomMargin => Vector3.back;
         private static Vector2 BarSize = new Vector2(1.5f, 0.075f);
-        private static readonly Material BarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(105, 180, 210, 180));
+        private static readonly Material BarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(105, 180, 210, 190));
         private static readonly Material BarUnfilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.15f, 0.15f, 0.15f, 0.50f));
         private Material HP_Icon;
         private void GenHPIcon()

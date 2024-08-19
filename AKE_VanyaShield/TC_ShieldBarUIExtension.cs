@@ -45,7 +45,7 @@ namespace AKE_VanyaShield
             }
             if (BarFilledMat == null || BarUnfilledMat == null)
             {
-                BarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(245, 245, 245, 180));
+                BarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(245, 245, 245, 190));
                 BarUnfilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.15f, 0.15f, 0.15f, 0.50f));
             }
             Log.Message("有盾");

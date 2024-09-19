@@ -386,10 +386,10 @@ namespace AK_DLL
         protected static Pawn operator_Pawn;
         protected void Recruit_Ability(VAbility_Operator vanillaAbility)
         {
-            /*if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null)
+            if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null)
             {
                 return;
-            }*/
+            }
             AKA_AbilityTracker tracker = vanillaAbility.AKATracker;
             if (this.AKAbilities != null && this.AKAbilities.Count > 0)
             {

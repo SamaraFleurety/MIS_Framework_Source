@@ -84,6 +84,7 @@
     <Compile Include="AbilityEffect\Command\AE_RewardDef.cs" />
     <Compile Include="AbilityEffect\Command\AE_RewardTool.cs" />
     <Compile Include="AbilityEffect\Effect\AE_CatchMother.cs" />
+    <Compile Include="AbilityEffect\Effect\AE_FireExtinguisher.cs" />
     <Compile Include="AbilityEffect\Effect\AE_ShootProjectile.cs" />
     <Compile Include="AbilityEffect\Effect\AbilityEffect_DisableAttack.cs" />
     <Compile Include="AbilityEffect\Effect\AbilityEffect_Heal.cs" />

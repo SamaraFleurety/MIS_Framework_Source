@@ -323,8 +323,6 @@ namespace AK_DLL
 
             Recruit_Ability(operatorID);
 
-            Recruit_BarUI(operator_Pawn);
-
             if (!postEffects.NullOrEmpty())
             {
                 foreach (Type RPEW in postEffects)
@@ -614,11 +612,6 @@ namespace AK_DLL
                 ThingClass_MusicRecord t = Recruit_Inventory_Additem(recordDef, 1) as ThingClass_MusicRecord;
                 t.recordedSong = i;
             }
-        }
-
-        private void Recruit_BarUI(Pawn p)
-        {
-            AK_BarUITool.AddCompsToPawn(p);
         }
         #endregion
 

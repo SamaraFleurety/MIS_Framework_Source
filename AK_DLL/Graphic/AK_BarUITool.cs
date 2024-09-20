@@ -11,6 +11,9 @@ namespace AK_DLL
         public static Material Timer_Icon;
         public static Material BurstIcon;
         public static Material RotateRingIcon;
+        public static Material BarUnfilledMat;
+        public static Material HealthBarFilledMat;
+        public static Material SkillBarFilledMat;
 
         private static readonly string HP_IconTexPath = "UI/Abilities/icon_sort_hp";
         private static readonly string DEF_IconTexPath = "UI/Abilities/icon_sort_def";
@@ -53,32 +56,17 @@ namespace AK_DLL
             Timer_Icon = MaterialPool.MatFrom(Timer_IconTexPath, ShaderDatabase.Transparent);
             BurstIcon = MaterialPool.MatFrom(BurstIconTexPath, ShaderDatabase.Transparent);
             RotateRingIcon = MaterialPool.MatFrom(RotateRingIconTexPath, ShaderDatabase.Transparent);
-            Material[] checkList = { HP_Icon, DEF_Icon, Timer_Icon, BurstIcon, RotateRingIcon };
-            foreach (Material icon in checkList)
+            HealthBarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(105, 180, 210, 200));
+            SkillBarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(160, 170, 60, 200));
+            BarUnfilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.15f, 0.15f, 0.15f, 0.50f));
+            Material[] checkList = { HP_Icon, DEF_Icon, Timer_Icon, BurstIcon, RotateRingIcon, BarUnfilledMat, HealthBarFilledMat, SkillBarFilledMat };
+            foreach (Material mat in checkList)
             {
-                if (icon == null)
+                if (mat == null)
                 {
-                    Log.Error("MIS. Critical Error: Missing UI Texture in file path: UI/Abilities/" + icon.name);
+                    Log.Error("MIS. Critical Error: Missing UI Texture in file path: UI/Abilities/" + mat.name);
                 }
             }
-
-        }
-
-        public static void AddCompsToPawn(Pawn p)
-        {
-            if (p == null || p.Dead) return;
-
-            bool hasHealthComp = false;
-            bool hasSkillComp = false;
-
-            foreach (ThingComp comp in p.AllComps)
-            {
-                if (comp is TC_HealthBarController) hasHealthComp = true;
-                else if (comp is TC_SkillBarController) hasSkillComp = true;
-            }
-
-            if (!hasHealthComp) p.AllComps.Add(new TC_HealthBarController() { parent = p });
-            if (!hasSkillComp) p.AllComps.Add(new TC_SkillBarController() { parent = p });
 
         }
     }

@@ -157,15 +157,6 @@ namespace AK_DLL
             base.LoadedGame();
             VoicePlayer.LoadedGame();
             if (opDocArchive == null) opDocArchive = new Dictionary<string, OperatorDocument>();
-
-            foreach (string id in opDocArchive.Keys)
-            {
-                Pawn p = opDocArchive[id].pawn;
-                if (p != null && !p.Dead)
-                {
-                    AK_BarUITool.AddCompsToPawn(p);
-                }
-            }
         }
 
         public override void ExposeData()

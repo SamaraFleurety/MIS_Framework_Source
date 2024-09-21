@@ -4,17 +4,17 @@ namespace AK_DLL
 {
     //渲染节点的xmls属性字段接口，保持默认
     //如果节点需要渲染，GraphicFor和MeshSetFor是必须实现的
-    public class PawnRenderNodeProperties_AKHealthBar : PawnRenderNodeProperties
+    public class PawnRenderNodeProperties_AKSkillBar : PawnRenderNodeProperties
     {
-        public PawnRenderNodeProperties_AKHealthBar()
+        public PawnRenderNodeProperties_AKSkillBar()
         {
-            nodeClass = typeof(PawnRenderNode_AKHealthBar);
-            workerClass = typeof(PawnRenderNodeWorker_AKHealthBar);
+            nodeClass = typeof(PawnRenderNodeProperties_AKSkillBar);
+            workerClass = typeof(PawnRenderNodeWorker_AKSkillBar);
         }
     }
-    public class PawnRenderNode_AKHealthBar : PawnRenderNode
+    public class PawnRenderNode_AKSkillBar : PawnRenderNode
     {
-        public PawnRenderNode_AKHealthBar(Pawn pawn, PawnRenderNodeProperties props, PawnRenderTree tree) : base(pawn, props, tree)
+        public PawnRenderNode_AKSkillBar(Pawn pawn, PawnRenderNodeProperties props, PawnRenderTree tree) : base(pawn, props, tree)
         {
         }
         public override Graphic GraphicFor(Pawn pawn)

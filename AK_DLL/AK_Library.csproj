@@ -290,9 +290,9 @@
     <Compile Include="GC_AKManager.cs" />
     <Compile Include="Graphic\AK_BarUITool.cs" />
     <Compile Include="Graphic\PawnRenderNodeWorker_AKHealthBar.cs" />
+    <Compile Include="Graphic\PawnRenderNodeWorker_AKSkillBar.cs" />
     <Compile Include="Graphic\PawnRenderNode_AKHealthBar.cs" />
-    <Compile Include="Graphic\TC_HealthBarController.cs" />
-    <Compile Include="Graphic\TC_SkillBarController.cs" />
+    <Compile Include="Graphic\PawnRenderNode_AKSkillBar.cs" />
     <Compile Include="HarmonyPatch\PatchTest.cs" />
     <Compile Include="HarmonyPatch\Patch_AlienWarning.cs" />
     <Compile Include="HarmonyPatch\Patch_ObeliskCopyAbility.cs" />

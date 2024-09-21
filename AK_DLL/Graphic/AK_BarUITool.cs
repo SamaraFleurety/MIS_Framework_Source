@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using RimWorld;
+using UnityEngine;
 using Verse;
 
 namespace AK_DLL
@@ -13,6 +14,7 @@ namespace AK_DLL
         public static Material RotateRingIcon;
         public static Material BarUnfilledMat;
         public static Material HealthBarFilledMat;
+        public static Material EnemyHealthBarFilledMat;
         public static Material SkillBarFilledMat;
 
         private static readonly string HP_IconTexPath = "UI/Abilities/icon_sort_hp";
@@ -31,7 +33,19 @@ namespace AK_DLL
                 Log.Error("MIS. Critical Error: Initialization fail");
             }
         }
-        public struct SimpleRectBarRequest
+        internal static VAbility_Operator GetVAbility(this Pawn p)
+        {
+            if (p == null) return null;
+            if (p.abilities == null) return null;
+            VAbility_Operator va = null;
+            Ability ability = p?.abilities?.abilities.Find((Ability a) => a.def == AKDefOf.AK_VAbility_Operator);
+            if (ability != null)
+            {
+                va = ability as VAbility_Operator;
+            }
+            return va;
+        }
+        internal struct SimpleRectBarRequest
         {
             public Vector3 center;
 
@@ -42,7 +56,7 @@ namespace AK_DLL
             public Quaternion rotation;
 
         }
-        public static void DrawSimpleRectBar(SimpleRectBarRequest r)
+        internal static void DrawSimpleRectBar(SimpleRectBarRequest r)
         {
             Vector3 s = new Vector3(r.size.x, 1f, r.size.y);
             Matrix4x4 matrix = default;
@@ -57,9 +71,10 @@ namespace AK_DLL
             BurstIcon = MaterialPool.MatFrom(BurstIconTexPath, ShaderDatabase.Transparent);
             RotateRingIcon = MaterialPool.MatFrom(RotateRingIconTexPath, ShaderDatabase.Transparent);
             HealthBarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(105, 180, 210, 200));
+            EnemyHealthBarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(220, 40, 0, 200));
             SkillBarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(160, 170, 60, 200));
             BarUnfilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.15f, 0.15f, 0.15f, 0.50f));
-            Material[] checkList = { HP_Icon, DEF_Icon, Timer_Icon, BurstIcon, RotateRingIcon, BarUnfilledMat, HealthBarFilledMat, SkillBarFilledMat };
+            Material[] checkList = { HP_Icon, DEF_Icon, Timer_Icon, BurstIcon, RotateRingIcon, BarUnfilledMat, HealthBarFilledMat, EnemyHealthBarFilledMat, SkillBarFilledMat };
             foreach (Material mat in checkList)
             {
                 if (mat == null)

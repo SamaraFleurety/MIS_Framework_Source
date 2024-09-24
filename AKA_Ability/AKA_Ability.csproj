@@ -95,10 +95,12 @@
     <Compile Include="AbilityEffect\Effect\AE_ChangeHair.cs" />
     <Compile Include="AbilityEffect\Effect\AE_Jump.cs" />
     <Compile Include="AbilityEffect\Effect\AE_TeleportSelfToTarget.cs" />
+    <Compile Include="AKA_Algorithm.cs" />
     <Compile Include="AKA_Utilities.cs" />
     <Compile Include="AbilityEffect\DelayedEffects\DelayedEffectDef.cs" />
     <Compile Include="AbilityEffect\DelayedEffects\Effectors\DelayedEffectorBase.cs" />
     <Compile Include="AbilityEffect\DelayedEffects\Effectors\Effector_ShootProjectile.cs" />
+    <Compile Include="Framework\AbilityContainer\ACP_AbilityAddon.cs" />
     <Compile Include="Framework\AbilityContainer\TCP_TrackerContainer.cs" />
     <Compile Include="Framework\AbilityInstance\AKAbility.cs" />
     <Compile Include="Framework\AbilityInstance\AKAbility_SelfTarget.cs" />
@@ -106,8 +108,11 @@
     <Compile Include="Framework\AbilityInstance\AKAbility_Targetor.cs" />
     <Compile Include="Framework\AbilityContainer\AbilityTracker.cs" />
     <Compile Include="Framework\AbilityInstance\DelayedAbility.cs" />
-    <Compile Include="Framework\CoolDown.cs" />
+    <Compile Include="Framework\Cooldown\CD_Stricken.cs" />
+    <Compile Include="Framework\Cooldown\Cooldown_Regen.cs" />
     <Compile Include="Framework\AbilityContainer\VAbility_AKATrackerContainer.cs" />
+    <Compile Include="Framework\Cooldown\CD_Illustrious_Dilapidate.cs" />
+    <Compile Include="Framework\Cooldown\Patch_PawnStricken.cs" />
     <Compile Include="Framework\Gizmos\Gizmo_AbilityCast_Action.cs" />
     <Compile Include="Framework\Gizmos\Gizmo_AbilityCast_Targetor.cs" />
     <Compile Include="Framework\Gizmos\Gizmo_AbilityCast_Base.cs" />

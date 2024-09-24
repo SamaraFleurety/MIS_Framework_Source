@@ -53,11 +53,12 @@ namespace AK_DLL
         }
         private float CooldownPercent(AKAbility ability)
         {
-            if (ability.cooldown.charge == ability.cooldown.maxCharge)
+            return ability.cooldown.CooldownPercent() * -1;
+            /*if (ability.cooldown.charge == ability.cooldown.MaxCharge)
             {
                 return 1;
             }
-            return 1f - (float)ability.cooldown.CDCurrent / (float)ability.cooldown.CDPerCharge;
+            return 1f - (float)ability.cooldown.CDCurrent / (float)ability.cooldown.CDPerCharge;*/
         }
         public override bool CanDrawNow(PawnRenderNode node, PawnDrawParms parms)
         {
@@ -132,7 +133,7 @@ namespace AK_DLL
             Vector3 OriginCenter = pawn.DrawPos + TopMargin + (Vector3.up * 3f);
             Vector3 Scale = new Vector3(0.3f, 1f, 0.3f);
             //自动回复技能
-            if (ability != null && ability.cooldown.charge == ability.cooldown.maxCharge && !IsGrouped)
+            if (ability != null && ability.cooldown.charge == ability.cooldown.MaxCharge && !IsGrouped)
             {
                 if (BurstButton != null)
                 {

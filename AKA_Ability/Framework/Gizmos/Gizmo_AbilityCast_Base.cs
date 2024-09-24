@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using AKA_Ability.Cooldown;
+using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace AKA_Ability.Gizmos
     {
         public AKAbility parent;
 
-        private CoolDown Cooldown => parent.cooldown;
+        private Cooldown_Regen Cooldown => parent.cooldown;
 
         //private TargetMode TargetMode => ability.def.targetMode;
 
@@ -39,22 +40,17 @@ namespace AKA_Ability.Gizmos
             }
             Widgets.DrawTextureFitted(rect, badTex, this.iconDrawScale * 0.85f, this.iconProportions, this.iconTexCoords, this.iconAngle, null);
             //充能
-            Widgets.Label(rect, this.Cooldown.charge + "/" + this.Cooldown.maxCharge);
+            Widgets.Label(rect, this.Cooldown.charge + "/" + this.Cooldown.MaxCharge);
             //技能冷却
-            GUI.DrawTexture(new Rect(rect.x, rect.y + rect.height, rect.width, rect.height * CooldownPercent() * -1), ContentFinder<Texture2D>.Get("UI/Abilities/White"));
+            GUI.DrawTexture(new Rect(rect.x, rect.y + rect.height, rect.width, rect.height * Cooldown.CooldownPercent() * -1), ContentFinder<Texture2D>.Get("UI/Abilities/White"));
             GUI.color = Color.white;
-            //开关技能 右上角的勾叉
-            /*if (this.TargetMode == TargetMode.AutoEnemy)
-            {
-                GUI.DrawTexture(new Rect(rect.x + rect.width - 24f, rect.y, 24f, 24f), this.Toggled ? Widgets.CheckboxOnTex : Widgets.CheckboxOffTex);
-            }*/
         }
 
-        protected virtual float CooldownPercent()
+        /*protected virtual float CooldownBarFillPercent()
         {
             if (Cooldown.charge == Cooldown.maxCharge) return 0;
-            return 1.0f - (float)this.Cooldown.CDCurrent / (float)this.Cooldown.CDPerCharge;
-        }
+            return (float)this.Cooldown.CDCurrent / (float)this.Cooldown.CDPerCharge;
+        }*/
 
         public override void ProcessInput(Event ev)
         {

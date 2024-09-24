@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using AKA_Ability.Cooldown;
+using RimWorld;
 using System;
 using UnityEngine;
 using Verse;
@@ -11,15 +12,11 @@ namespace AKA_Ability
         //不能是空
         public AbilityTracker container;
 
-        public CoolDown cooldown = new CoolDown();
+        public Cooldown_Regen cooldown;
 
         public AKAbilityDef def;
 
         protected Command cachedGizmo = null;
-
-        /*public AKAbility()
-        {
-        }*/
 
         //存档时要用这个
         public AKAbility(AbilityTracker tracker) /*: this()*/
@@ -30,7 +27,7 @@ namespace AKA_Ability
         public AKAbility(AKAbilityDef def, AbilityTracker tracker) : this(tracker)
         {
             this.def = def;
-            cooldown = new CoolDown(def.maxCharge, def.CDPerCharge);
+            cooldown = (Cooldown_Regen)Activator.CreateInstance(def.cooldownProperty.cooldownClass, def.cooldownProperty, this);
         }
 
         public Pawn CasterPawn => container.owner;
@@ -59,7 +56,7 @@ namespace AKA_Ability
         public virtual void ExposeData()
         {
             Scribe_Defs.Look(ref def, "def");
-            Scribe_Deep.Look(ref cooldown, "CD");
+            Scribe_Deep.Look(ref cooldown, "CD", def.cooldownProperty, this);
         }
 
         public virtual void TryCastShot(LocalTargetInfo target)
@@ -92,6 +89,27 @@ namespace AKA_Ability
             float range = def.range;
             if (range <= 0) return;
             GenDraw.DrawRadiusRing(CasterPawn.Position, range, Color.white);
+        }
+
+        public virtual void SpawnSetup()
+        {
+            cooldown.SpawnSetup();
+        }
+
+        public virtual void PostDespawn()
+        {
+            cooldown.PostDespawn();
+        }
+
+        public virtual void Notify_OwnerStricken(ref DamageInfo dinfo)
+        {
+            cooldown.Notify_PawnStricken(ref dinfo);
+        }
+
+        //没做
+        public virtual void Notify_OwnerHitTarget(ref DamageInfo dinfo)
+        {
+            cooldown.Notify_PawnHitTarget(ref dinfo);
         }
     }
 }

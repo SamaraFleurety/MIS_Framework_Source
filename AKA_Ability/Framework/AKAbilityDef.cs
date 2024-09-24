@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using RimWorld;
 using AKA_Ability.DelayedEffects;
+using AKA_Ability.Cooldown;
 
 namespace AKA_Ability
 {
@@ -15,9 +16,7 @@ namespace AKA_Ability
     public class AKAbilityDef : Def
     {
         //cd
-        public int CDPerCharge = 1;
-        public int maxCharge = 1;
-        public TimeToTick CDUnit = TimeToTick.day;
+        public CooldownProperty cooldownProperty;
 
         //图像
         public string icon;

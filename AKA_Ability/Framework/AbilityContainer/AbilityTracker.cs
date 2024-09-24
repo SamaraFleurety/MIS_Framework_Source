@@ -10,6 +10,7 @@ using Verse.Sound;
 
 namespace AKA_Ability
 {
+    //不能保证一个pawn只有一个tracker。
     public class AbilityTracker : IExposable
     {
         public Pawn owner;
@@ -20,13 +21,21 @@ namespace AKA_Ability
 
         public List<AKAbility> groupedAbilities = new List<AKAbility>();
 
+        public AKAbility SelectedGroupedAbility
+        {
+            get
+            {
+                if (indexActiveGroupedAbility < 0 || groupedAbilities.Count <= indexActiveGroupedAbility) return null;
+                return groupedAbilities[indexActiveGroupedAbility];
+            }
+        }
 
         //用这个构造器需要手动绑定owner
         public AbilityTracker()
         {
         }
 
-        public AbilityTracker(Pawn p)
+        public AbilityTracker(Pawn p) : this() 
         {
             owner = p;
         }
@@ -65,10 +74,6 @@ namespace AKA_Ability
         {
             AKAbility ability = (AKAbility)Activator.CreateInstance(def.abilityClass, def, this);
 
-            //ability.container = this;
-            ability.cooldown = new CoolDown(def.maxCharge, def.CDPerCharge * (int)def.CDUnit);
-            //ability.def = def;
-
             if (def.grouped)
             {
                 this.groupedAbilities.Add(ability);
@@ -77,30 +82,9 @@ namespace AKA_Ability
             else this.innateAbilities.Add(ability);
 
             return ability;
-
-            /*Type AutoAbilityClass()
-            {
-                Type t = def.abilityClass;
-                if (t != null) return t;
-                switch (def.targetMode)
-                {
-                    case TargetMode.AutoEnemy:
-                        t = typeof(AKAbility_Toggle);
-                        break;
-                    case TargetMode.Self:
-                        t = typeof(AKAbility_SelfTarget);
-                        break;
-                    case TargetMode.VerbSingle:
-                        t = typeof(AKAbility_VerbTarget);
-                        break;
-                    default:
-                        Log.Error($"AKA invalid ability type for {def.defName}");
-                        break;
-                }
-                return t;
-            }*/
         }
 
+        //技能成功释放后调用 现在用来播放干员音效
         public virtual void Notify_AbilityCasted(AKAbility ability)
         {
 
@@ -117,8 +101,32 @@ namespace AKA_Ability
             {
                 foreach (AKAbility i in innateAbilities) i.container = this;
                 foreach (AKAbility j in groupedAbilities) j.container = this;
+
+                if (owner != null) SpawnSetup();
             }
         }
 
+        //技能被装载上了pawn调用这个
+        public virtual void SpawnSetup()
+        {
+            foreach (AKAbility ia in innateAbilities)
+            {
+                ia.SpawnSetup();
+            }
+            SelectedGroupedAbility.SpawnSetup();
+        }
+
+        //技能不再被绑定调用这个 va永远不被卸载，但是tcp上面的有可能会
+        public virtual void PostDespawn()
+        {
+            foreach (AKAbility ia in innateAbilities)
+            {
+                ia.PostDespawn();
+            }
+            foreach (AKAbility ga in groupedAbilities)
+            {
+                ga.PostDespawn();
+            }
+        }
     }
 }

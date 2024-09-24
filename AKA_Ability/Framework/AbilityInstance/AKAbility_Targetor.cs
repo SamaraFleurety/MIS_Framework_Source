@@ -86,6 +86,7 @@ namespace AKA_Ability
             }
         }
 
+        //不知道为啥GenDraw.DrawTargetHighlight放着只有点下左键那一瞬间才会画
         public void OnGUI(LocalTargetInfo target)
         {
             bool canhit = CanHitTarget(target);
@@ -95,7 +96,6 @@ namespace AKA_Ability
             GenUI.DrawMouseAttachment(icon);
 
             Widgets.MouseAttachedLabel(def.label);
-
         }
 
         //这是确认目标后执行功能

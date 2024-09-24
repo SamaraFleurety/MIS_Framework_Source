@@ -8,11 +8,32 @@ namespace AKA_Ability
 {
     public class AbilityEffect_AddHediff : AbilityEffectBase
     {
-        protected virtual void preProcess() { 
+        protected virtual void PreProcess() { 
         }
-        public override void DoEffect_Pawn(Pawn user, Thing target, bool delayed)
+
+        protected override bool DoEffect(AKAbility caster, LocalTargetInfo target)
         {
-            preProcess();
+            PreProcess();
+            if (target == null || target.GetType() != typeof(Pawn))
+            {
+                return false;
+            }
+            Pawn target_Pawn = target.Pawn;
+            if (target_Pawn != null && !target_Pawn.Dead)
+            {
+                Hediff hediff = AddHediff(target_Pawn, this.hediffDef, this.bodyPart, severity: this.severity);
+
+                if (hediff != null) postAddHediff(hediff);
+            }
+            else
+            {
+                Log.Warning("目标为空或已死亡.");
+            }
+            return base.DoEffect(caster, target);
+        }
+        /*public override void DoEffect_Pawn(Pawn user, Thing target, bool delayed)
+        {
+            PreProcess();
             if (onSelf) target = user;
             if (target == null || target.GetType() != typeof(Pawn))
             {
@@ -29,7 +50,7 @@ namespace AKA_Ability
             {
                 Log.Warning("目标为空或已死亡.");
             }
-        }
+        }*/
 
         protected virtual void postAddHediff (Hediff h)
         {
@@ -62,22 +83,12 @@ namespace AKA_Ability
                 if (partRecord == null) partRecord = GetBodyPartRecord(target, part);
                 if (partRecord == null) return null;
 
-                //hediff = target.health.hediffSet.GetFirstHediffOfDef(hediffDef);
                 hediff = GetMatchedHediff(target, hediffDef, partRecord);
                 if (hediff != null)
                 {
                     hediff.Severity += severity;
                     return hediff;
                 }
-                /*BodyPartRecord partRecord1 = null;
-                foreach (BodyPartRecord bodyPart in target.RaceProps.body.AllParts)
-                {
-                    if (bodyPart.def == part)
-                    {
-                        partRecord1 = bodyPart;
-                        break;
-                    }
-                }*/
                 if (severity <= 0) return null;
                 hediff = target.health.AddHediff(hediffDef, partRecord, null, null);
                 hediff.Severity = severity;
@@ -104,6 +115,7 @@ namespace AKA_Ability
             return candidate.RandomElement();
         }
 
+        [Obsolete]
         public bool onSelf = false;
         public HediffDef hediffDef;
         public float severity = 1f;

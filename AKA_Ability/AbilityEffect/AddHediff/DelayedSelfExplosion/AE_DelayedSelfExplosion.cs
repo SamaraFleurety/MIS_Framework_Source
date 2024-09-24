@@ -9,7 +9,7 @@ namespace AKA_Ability
 {
     public class AE_DelayedSelfExplosion : AbilityEffect_AddHediff
     {
-        protected override void preProcess()
+        protected override void PreProcess()
         {
             this.hediffDef = DefDatabase<HediffDef>.GetNamed("AK_Hediff_SelfExplosion");
         }

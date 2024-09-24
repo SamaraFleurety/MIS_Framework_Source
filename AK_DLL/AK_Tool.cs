@@ -5,6 +5,7 @@ using UnityEngine;
 using Verse;
 using UnityEngine.UI;
 using System.Text.RegularExpressions;
+using AKA_Ability;
 
 namespace AK_DLL
 {
@@ -39,23 +40,6 @@ namespace AK_DLL
             {
                 Log.Error("MIS. Critical Error: Initialization fail");
             }
-        }
-
-
-        //技能残留 早晚给删咯
-        public static List<IntVec3> GetSector(OperatorAbilityDef ability, Pawn caster)
-        {
-            List<IntVec3> result = new List<IntVec3>();
-            foreach (IntVec3 intVec3 in GenRadial.RadialCellsAround(caster.Position, ability.sectorRadius, false))
-            {
-                float mouseAngle = caster.Position.ToIntVec2.ToVector2().AngleTo(Event.current.mousePosition);
-                float curAngle = caster.Position.ToVector3().AngleToFlat(intVec3.ToVector3());
-                if (intVec3.InBounds(caster.Map) && curAngle > ability.minAngle + mouseAngle && curAngle < ability.maxAngle + mouseAngle)
-                {
-                    result.Add(intVec3);
-                }
-            }
-            return result;
         }
 
         private static void InitializeUI()

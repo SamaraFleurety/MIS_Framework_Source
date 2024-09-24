@@ -9,7 +9,7 @@ using AKA_Ability;
 
 namespace AK_DLL
 {
-    public class AK_AbilityTracker : AKA_AbilityTracker
+    public class AK_AbilityTracker : AbilityTracker
     {
         public OperatorDocument doc;
 
@@ -27,11 +27,19 @@ namespace AK_DLL
             Scribe_References.Look(ref doc, "doc");
         }
 
-        public override void PostPlayAbilitySound(AKAbility ability)
+        public override void Notify_AbilityCasted(AKAbility ability)
+        {
+            base.Notify_AbilityCasted(ability);
+
+            if (VoicePlayer.CanPlayNow()) return;
+            doc?.voicePack.abilitySounds?.RandomElement().PlaySound();
+        }
+
+        /*public override void AbilityPostEffect_PlayAbilitySound(AKAbility ability)
         {
             if (VoicePlayer.CanPlayNow()) return;
-            base.PostPlayAbilitySound(ability);
+            base.AbilityPostEffect_PlayAbilitySound(ability);
             if (doc != null) doc.voicePack.abilitySounds.RandomElement().PlaySound();
-        }
+        }*/
     }
 }

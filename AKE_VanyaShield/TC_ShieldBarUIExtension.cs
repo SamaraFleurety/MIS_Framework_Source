@@ -48,7 +48,7 @@ namespace AKE_VanyaShield
                 BarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(245, 245, 245, 190));
                 BarUnfilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.15f, 0.15f, 0.15f, 0.50f));
             }
-            Log.Message("有盾");
+            //Log.Message("有盾");
             GenDraw.FillableBarRequest fbr = default;
             fbr.center = Wearer.DrawPos + (Vector3.up * 3f) + BottomMargin;
             fbr.size = BarSize;

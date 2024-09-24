@@ -8,7 +8,7 @@ using Verse.Sound;
 
 namespace AK_DLL
 {
-    public class Verb_Ability : Verb_CastBase
+    /*public class Verb_Ability : Verb_CastBase
 	{
         protected override bool TryCastShot()
 		{
@@ -137,5 +137,5 @@ namespace AK_DLL
 		public OperatorAbilityDef ability;
 		public CDandCharge CDs;
 		public int i;
-    }
+    }*/
 }

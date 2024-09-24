@@ -61,6 +61,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExtraCharges\Patch_ShieldBreak.cs" />
+    <Compile Include="ExtraCharges\TCP_ShieldExtraCharges.cs" />
     <Compile Include="Harmony\PatchShieldDraw.cs" />
     <Compile Include="Harmony\PatchShieldReflection.cs" />
     <Compile Include="Harmony\Patch_ObeliskAbductor.cs" />

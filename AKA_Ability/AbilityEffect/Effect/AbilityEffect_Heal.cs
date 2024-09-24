@@ -9,16 +9,17 @@ namespace AKA_Ability
 {
     public class AbilityEffect_Heal : AbilityEffectBase
     {
-        public override void DoEffect_Pawn(Pawn user, Thing target, bool delayed)
+        protected override bool DoEffect(AKAbility caster, LocalTargetInfo target)
         {
-            if (target == null || !(target is Pawn t))
+            Pawn user = caster.CasterPawn;
+            Pawn targetPawn = target.Pawn;
+            if (targetPawn == null || !(targetPawn is Pawn t))
             {
-                return;
+                return false;
             }
-            //Pawn t = target as Pawn;
             if (!healNullFaction && t.Faction == null)
             {
-                return;
+                return false;
             }
 
             if (t.Faction is Faction faction && user.Faction is Faction faction1)
@@ -27,16 +28,17 @@ namespace AKA_Ability
                 {
                     if (!healHostile && faction.RelationKindWith(faction1) == FactionRelationKind.Hostile)
                     {
-                        return;
+                        return false;
                     }
                     if (!healNeutral && faction.RelationKindWith(faction1) == FactionRelationKind.Neutral)
                     {
-                        return;
+                        return false;
                     }
                 }
             }
 
             this.Heal(t);
+            return base.DoEffect(caster, target);
         }
 
         private void Heal(Pawn target)
@@ -60,20 +62,6 @@ namespace AKA_Ability
                     }
                 }
             }
-            /*foreach (Hediff_Injury injury in target.health.hediffSet.GetInjuriesTendable().ToList())
-            {
-                if (heal > injury.Severity)
-                {
-                    injury.Heal(injury.Severity);
-                    heal -= injury.Severity;
-                }
-                else
-                {
-                    injury.Heal(heal);
-                    heal -= heal;
-                    break;
-                }
-            }*/
         }
         public int healPoint;
         public bool healHostile;

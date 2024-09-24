@@ -23,8 +23,8 @@ namespace AK_DLL
         public BackstoryDef childHood;//童年背景故事
         public BackstoryDef adultHood;//成年背景故事
 
-        public List<OperatorAbilityDef> abilities = new List<OperatorAbilityDef>();//技能
-        public List<AKAbilityDef> AKAbilities = new List<AKAbilityDef>();
+        //public List<OperatorAbilityDef> abilities = new List<OperatorAbilityDef>();
+        public List<AKAbilityDef> AKAbilities = new List<AKAbilityDef>(); //技能
 
         public int age = 16;//年龄
         public int realAge = -1; //实际年龄
@@ -388,12 +388,13 @@ namespace AK_DLL
             {
                 return;
             }
-            AKA_AbilityTracker tracker = vanillaAbility.AKATracker;
+            AbilityTracker tracker = vanillaAbility.AKATracker;
             if (this.AKAbilities != null && this.AKAbilities.Count > 0)
             {
                 foreach (AKAbilityDef i in this.AKAbilities)
                 {
-                    AKAbilityMaker.MakeAKAbility(i, tracker);
+                    tracker.AddAbility(i);
+                    //AKAbilityMaker.MakeAKAbility(i, tracker);
                 }
             }
         }
@@ -420,7 +421,6 @@ namespace AK_DLL
             //干员身份证，改放在原版技能里了
             if (this.operatorID == null) operatorID = AKDefOf.AK_VAbility_Operator;
             VAbility_Operator vAbility = AbilityUtility.MakeAbility(operatorID, operator_Pawn) as VAbility_Operator;
-            //Log.Message($"va:{vAbility == null}");
             vAbility.AKATracker = new AK_AbilityTracker
             {
                 doc = document,

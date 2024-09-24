@@ -30,7 +30,7 @@ namespace AKA_Ability
             this.enhances = new List<toolEnhance>();
         }
 
-        protected override void preProcess()
+        protected override void PreProcess()
         {
             this.hediffDef = DefDatabase<HediffDef>.GetNamed("AK_Hediff_EnhancerMelee");
         }

@@ -10,13 +10,15 @@ namespace AKA_Ability
 {
     public class AE_ChangeHair : AbilityEffectBase
     {
-        public override void DoEffect_Pawn(Pawn user, Thing target, bool delayed)
+        protected override bool DoEffect(AKAbility caster, LocalTargetInfo target)
         {
-            if (!(target is Pawn p)) return;
-            if (p.story == null) return;
+            Pawn p = target.Pawn;
+            if (p == null) return false;
+            if (p.story == null) return false;
             p.story.hairDef = DefDatabase<HairDef>.GetRandom();
             p.style.Notify_StyleItemChanged();
             p.style.MakeHairFilth();
+            return base.DoEffect(caster, target);
         }
     }
 }

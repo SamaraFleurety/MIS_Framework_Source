@@ -71,11 +71,6 @@ namespace AKA_Ability
             {
                 pastRSec++;
                 this.tick = 0;
-                /*fixme:if (pastRSec < this.ProcedureCount) EnhanceTools(AK_Tool.GetDoc(base.Pawn).weapon.def.tools, this.Enhances);
-                else if (pastRSec >= this.EnhanceEndTime)
-                {
-                    this.EndEnhance();
-                }*/
             }
         }
 

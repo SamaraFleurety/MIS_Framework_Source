@@ -9,16 +9,16 @@ using Verse.AI;
 
 namespace AKA_Ability
 {
-    public class Verb_AbilityTargeting : Verb_CastBase
+    /*public class Verb_AbilityTargeting : Verb_CastBase
     {
         public AKAbility parent;
 
         protected override bool TryCastShot()
         {
-            parent.UseOneCharge();
+            parent.CostCharge();
             CasterPawn.jobs.EndCurrentJob(JobCondition.Succeeded);
             parent.def.CastEffects(CasterPawn, currentTarget.Cell, currentTarget.Thing, Caster.Map);
             return parent.def.allowPostEffect;
         }
-    }
+    }*/
 }

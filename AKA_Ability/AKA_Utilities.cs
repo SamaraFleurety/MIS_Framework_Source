@@ -15,13 +15,10 @@ namespace AKA_Ability
 
     public static class AKAbilityMaker
     {
-        public static AKAbility MakeAKAbility(AKAbilityDef def, AKA_AbilityTracker tracker)
+
+        /*private static AKAbility MakeAKAbility(AKAbilityDef def, AKA_AbilityTracker tracker)
         {
-
             AKAbility ability = (AKAbility)Activator.CreateInstance(AutoAbilityClass(def));
-
-            //Log.Message($"akab: {ability == null}");
-            //Log.Message($"order {ability.GetGizmo().Order}");
 
             ability.container = tracker;
             ability.cooldown = new CDandCharge(1, def.maxCharge, def.CD * (int)def.CDUnit);
@@ -35,9 +32,9 @@ namespace AKA_Ability
             else tracker.innateAbilities.Add(ability);
 
             return ability;
-        }
+        }*/
 
-        private static Type AutoAbilityClass(AKAbilityDef def)
+        /*private static Type AutoAbilityClass(AKAbilityDef def)
         {
             Type t = def.abilityClass;
             if (t != null) return t;
@@ -57,6 +54,6 @@ namespace AKA_Ability
                     break;
             }
             return t;
-        }
+        }*/
     }
 }

@@ -1,23 +1,25 @@
-﻿using System;
-using RimWorld;
+﻿using RimWorld;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
-using Unity;
 
-namespace AKA_Ability
+namespace AKA_Ability.Gizmos
 {
-    public class Command_AKAbility : Command_VerbTarget
+    public abstract class Gizmo_AbilityCast_Base : Command
     {
-        public AKAbility ability;
+        public AKAbility parent;
 
-        private CDandCharge Cooldown => ability.cooldown;
+        private CoolDown Cooldown => parent.cooldown;
 
-        private TargetMode TargetMode => ability.def.targetMode;
+        //private TargetMode TargetMode => ability.def.targetMode;
 
-        private bool Toggled => (ability as AKAbility_Toggle).AutoCast;
+        //private bool Toggled => (ability as AKAbility_Toggle).AutoCast;
 
-        public Action Action;
+        //public Action Action;
 
         public override void DrawIcon(Rect rect, Material buttonMat, GizmoRenderParms parms)
         {
@@ -38,50 +40,36 @@ namespace AKA_Ability
             Widgets.DrawTextureFitted(rect, badTex, this.iconDrawScale * 0.85f, this.iconProportions, this.iconTexCoords, this.iconAngle, null);
             //充能
             Widgets.Label(rect, this.Cooldown.charge + "/" + this.Cooldown.maxCharge);
-            //冷却
+            //技能冷却
             GUI.DrawTexture(new Rect(rect.x, rect.y + rect.height, rect.width, rect.height * CooldownPercent() * -1), ContentFinder<Texture2D>.Get("UI/Abilities/White"));
             GUI.color = Color.white;
             //开关技能 右上角的勾叉
-            if (this.TargetMode == TargetMode.AutoEnemy)
+            /*if (this.TargetMode == TargetMode.AutoEnemy)
             {
                 GUI.DrawTexture(new Rect(rect.x + rect.width - 24f, rect.y, 24f, 24f), this.Toggled ? Widgets.CheckboxOnTex : Widgets.CheckboxOffTex);
-            }
+            }*/
         }
-        private float CooldownPercent()
+
+        protected virtual float CooldownPercent()
         {
             if (Cooldown.charge == Cooldown.maxCharge) return 0;
-            return 1.0f - (float)this.Cooldown.CD / (float)this.Cooldown.maxCD;
+            return 1.0f - (float)this.Cooldown.CDCurrent / (float)this.Cooldown.CDPerCharge;
         }
 
         public override void ProcessInput(Event ev)
         {
-            switch (this.TargetMode)
-            {
-                case (TargetMode.VerbSingle):
-                    base.ProcessInput(ev);
-                    break;
-                //不需要Verb瞄准，直接结算目标
-                case TargetMode.Self:
-                case TargetMode.AutoEnemy:
-                    Action();
-                    break;
-                default:
-                    break;
-            }
+            base.ProcessInput(ev);
         }
 
-        public override Color IconDrawColor
-        {
-            get
-            {
-                return this.defaultIconColor;
-            }
-        }
+        public override Color IconDrawColor => defaultIconColor;
+
 
         public override void GizmoUpdateOnMouseover()
         {
-            if (TargetMode != TargetMode.VerbSingle) return;
+            //if (TargetMode != TargetMode.VerbSingle) return;
             base.GizmoUpdateOnMouseover();
+            parent.DrawAbilityRadiusRing();
         }
+
     }
 }

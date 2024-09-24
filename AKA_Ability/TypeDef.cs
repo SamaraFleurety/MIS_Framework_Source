@@ -10,15 +10,16 @@ namespace AKA_Ability
 {
     public static class TypeDef
     {
+        //public static SoundDef[] abilitySFX = new SoundDef[4] { AKADefOf.AK_SFX_Atkboost, AKADefOf.AK_SFX_Defboost, AKADefOf.AK_SFX_Healboost, AKADefOf.AK_SFX_Tactboost };
     }
 
     [DefOf]
     public static class AKADefOf
     {
-        public static SoundDef AK_SFX_Atkboost;
+        /*public static SoundDef AK_SFX_Atkboost;
         public static SoundDef AK_SFX_Defboost;
         public static SoundDef AK_SFX_Healboost;
-        public static SoundDef AK_SFX_Tactboost;
+        public static SoundDef AK_SFX_Tactboost;*/
 
     }
 
@@ -33,14 +34,14 @@ namespace AKA_Ability
         year = season * 4, //3.6M
         rSecond = 60       //现实中的1秒
     }
-    public enum SFXType : Byte
+    /*public enum SFXType : Byte
     {
         atk,
         def,
         heal,
         tact,
         none = 255
-    }
+    }*/
     public enum RegrowType : Byte
     {
         replace = 0, //覆盖模式，无条件覆盖
@@ -57,11 +58,11 @@ namespace AKA_Ability
         Reclaim//回收
     }
 
-    public enum TargetMode : Byte
+    /*public enum TargetMode : Byte
     {
         VerbSingle = 0,
         Self,
         AutoEnemy, //没做
         Multi //没做，别用
-    }
+    }*/
 }

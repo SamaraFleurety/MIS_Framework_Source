@@ -1,6 +1,7 @@
 ﻿using RimWorld;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using Verse.Sound;
 
 namespace AKA_Ability
 {
-    public class AKA_AbilityTracker : IExposable
+    public class AbilityTracker : IExposable
     {
         public Pawn owner;
 
@@ -19,14 +20,13 @@ namespace AKA_Ability
 
         public List<AKAbility> groupedAbilities = new List<AKAbility>();
 
-        public static SoundDef[] abilitySFX = new SoundDef[4] { AKADefOf.AK_SFX_Atkboost, AKADefOf.AK_SFX_Defboost, AKADefOf.AK_SFX_Healboost, AKADefOf.AK_SFX_Tactboost };
 
         //用这个构造器需要手动绑定owner
-        public AKA_AbilityTracker()
+        public AbilityTracker()
         {
         }
 
-        public AKA_AbilityTracker(Pawn p)
+        public AbilityTracker(Pawn p)
         {
             owner = p;
         }
@@ -61,13 +61,57 @@ namespace AKA_Ability
             }
         }
 
+        public virtual AKAbility AddAbility(AKAbilityDef def)
+        {
+            AKAbility ability = (AKAbility)Activator.CreateInstance(def.abilityClass, def, this);
+
+            //ability.container = this;
+            ability.cooldown = new CoolDown(def.maxCharge, def.CDPerCharge * (int)def.CDUnit);
+            //ability.def = def;
+
+            if (def.grouped)
+            {
+                this.groupedAbilities.Add(ability);
+                this.indexActiveGroupedAbility = 0;
+            }
+            else this.innateAbilities.Add(ability);
+
+            return ability;
+
+            /*Type AutoAbilityClass()
+            {
+                Type t = def.abilityClass;
+                if (t != null) return t;
+                switch (def.targetMode)
+                {
+                    case TargetMode.AutoEnemy:
+                        t = typeof(AKAbility_Toggle);
+                        break;
+                    case TargetMode.Self:
+                        t = typeof(AKAbility_SelfTarget);
+                        break;
+                    case TargetMode.VerbSingle:
+                        t = typeof(AKAbility_VerbTarget);
+                        break;
+                    default:
+                        Log.Error($"AKA invalid ability type for {def.defName}");
+                        break;
+                }
+                return t;
+            }*/
+        }
+
+        public virtual void Notify_AbilityCasted(AKAbility ability)
+        {
+
+        }
+
         public virtual void ExposeData()
         {
-            //Scribe_References.Look(ref owner, "p");
             Scribe_Values.Look(ref indexActiveGroupedAbility, "indexAGA");
 
-            Scribe_Collections.Look(ref innateAbilities, "iA", LookMode.Deep);
-            Scribe_Collections.Look(ref groupedAbilities, "gA", LookMode.Deep);
+            Scribe_Collections.Look(ref innateAbilities, "iA", LookMode.Deep, this);
+            Scribe_Collections.Look(ref groupedAbilities, "gA", LookMode.Deep, this);
 
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
@@ -76,18 +120,5 @@ namespace AKA_Ability
             }
         }
 
-        public virtual void PostPlayAbilitySound(AKAbility ability)
-        {
-            AKAbilityDef defAbility = ability.def;
-            SoundDef defSound = defAbility.useSound;
-            if (defSound != null)
-            {
-                defSound.PlayOneShotOnCamera();
-            }
-            if (defAbility.typeSFX != SFXType.none)
-            {
-                abilitySFX[(int)defAbility.typeSFX].PlayOneShot(null);
-            }
-        }
     }
 }

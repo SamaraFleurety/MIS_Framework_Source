@@ -83,10 +83,12 @@
     <Compile Include="AbilityEffect\Command\AE_CopySkill.cs" />
     <Compile Include="AbilityEffect\Command\AE_RewardDef.cs" />
     <Compile Include="AbilityEffect\Command\AE_RewardTool.cs" />
+    <Compile Include="AbilityEffect\CostCharges\AE_CostChargeStatic.cs" />
     <Compile Include="AbilityEffect\Effect\AE_CatchMother.cs" />
+    <Compile Include="AbilityEffect\DelayedEffects\AE_DelayedEffects.cs" />
     <Compile Include="AbilityEffect\Effect\AE_FireExtinguisher.cs" />
     <Compile Include="AbilityEffect\Effect\AE_ShootProjectile.cs" />
-    <Compile Include="AbilityEffect\Effect\AbilityEffect_DisableAttack.cs" />
+    <Compile Include="AbilityEffect\Effect\AE_GainTrait.cs" />
     <Compile Include="AbilityEffect\Effect\AbilityEffect_Heal.cs" />
     <Compile Include="AbilityEffect\Effect\AbilityEffect_Summon.cs" />
     <Compile Include="AbilityEffect\Effect\AbilityEffect_Trap.cs" />
@@ -94,22 +96,30 @@
     <Compile Include="AbilityEffect\Effect\AE_Jump.cs" />
     <Compile Include="AbilityEffect\Effect\AE_TeleportSelfToTarget.cs" />
     <Compile Include="AKA_Utilities.cs" />
-    <Compile Include="Framework\AbilityContainer\TCP_AKATrackerContainer.cs" />
+    <Compile Include="AbilityEffect\DelayedEffects\DelayedEffectDef.cs" />
+    <Compile Include="AbilityEffect\DelayedEffects\Effectors\DelayedEffectorBase.cs" />
+    <Compile Include="AbilityEffect\DelayedEffects\Effectors\Effector_ShootProjectile.cs" />
+    <Compile Include="Framework\AbilityContainer\TCP_TrackerContainer.cs" />
     <Compile Include="Framework\AbilityInstance\AKAbility.cs" />
     <Compile Include="Framework\AbilityInstance\AKAbility_SelfTarget.cs" />
-    <Compile Include="Framework\AbilityInstance\AKAbility_Toggle.cs" />
-    <Compile Include="Framework\AbilityInstance\AKAbility_VerbTarget.cs" />
-    <Compile Include="Framework\AbilityContainer\AKA_Tracker.cs" />
+    <Compile Include="Framework\AbilityInstance\AKAbility_Auto.cs" />
+    <Compile Include="Framework\AbilityInstance\AKAbility_Targetor.cs" />
+    <Compile Include="Framework\AbilityContainer\AbilityTracker.cs" />
     <Compile Include="Framework\AbilityInstance\DelayedAbility.cs" />
-    <Compile Include="Framework\CDandCharge.cs" />
+    <Compile Include="Framework\CoolDown.cs" />
     <Compile Include="Framework\AbilityContainer\VAbility_AKATrackerContainer.cs" />
-    <Compile Include="GC_DelayedAbilityManager.cs" />
+    <Compile Include="Framework\Gizmos\Gizmo_AbilityCast_Action.cs" />
+    <Compile Include="Framework\Gizmos\Gizmo_AbilityCast_Targetor.cs" />
+    <Compile Include="Framework\Gizmos\Gizmo_AbilityCast_Base.cs" />
+    <Compile Include="Framework\Gizmos\Gizmo_AbilityCast_Toggle.cs" />
+    <Compile Include="AbilityEffect\DelayedEffects\GC_DelayedAbilityManager.cs" />
     <Compile Include="Harmony\PatchMain.cs" />
-    <Compile Include="OpAbility\Gizmo\Gizmo_AKAGizmo.cs" />
-    <Compile Include="AKAbilityDef.cs" />
-    <Compile Include="OpAbility\Verb\Verb_AbilityTargeting.cs" />
+    <Compile Include="Framework\Gizmos\Gizmo_AKAbilityBase.cs" />
+    <Compile Include="Framework\AKAbilityDef.cs" />
+    <Compile Include="Framework\Verb\Verb_AbilityTargeting.cs" />
     <Compile Include="TypeDef.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

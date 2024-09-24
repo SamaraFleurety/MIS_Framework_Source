@@ -364,9 +364,7 @@
     <Compile Include="OpAbility\Comp\HCP_Ability.cs" />
     <Compile Include="OpAbility\AbilityEffect\AddHediff\AbilityEffect_AddHediff.cs" />
     <Compile Include="OpAbility\AbilityEffect\AbilityEffectBase.cs" />
-    <Compile Include="OpAbility\AbilityEffect\Effect\AbilityEffect_Heal.cs" />
     <Compile Include="OpAbility\AbilityEffect\Effect\AbilityEffect_Summon.cs" />
-    <Compile Include="OpAbility\AbilityEffect\Effect\AbilityEffect_Trap.cs" />
     <Compile Include="Thing\ThingWithComps\Summoned.cs" />
     <Compile Include="RecruitConsole\RecruitConsole.cs" />
     <Compile Include="Thing\ThingWithComps\Trap.cs" />

@@ -13,7 +13,7 @@ namespace AKA_Ability
     /// </summary>
     public class AE_DelayedBloodLoss : AbilityEffect_AddHediff
     {
-        protected override void preProcess()
+        protected override void PreProcess()
         {
             this.hediffDef = DefDatabase<HediffDef>.GetNamed("AK_Hediff_BloodLoss");
         }

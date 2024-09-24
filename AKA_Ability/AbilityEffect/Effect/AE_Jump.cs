@@ -1,9 +1,4 @@
 ﻿using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Verse;
 
 namespace AKA_Ability
@@ -11,9 +6,10 @@ namespace AKA_Ability
     public class AE_Jump : AbilityEffectBase
     {
         public VerbProperties verbJump;
-        public override void DoEffect_IntVec(IntVec3 target, Map map, bool delayed, Pawn caster = null)
+
+        protected override bool DoEffect(AKAbility caster, LocalTargetInfo target)
         {
-            JumpUtility.DoJump(caster, target, null, verbJump);
+            return JumpUtility.DoJump(caster.CasterPawn, target, null, verbJump);
         }
     }
 }

@@ -14,13 +14,19 @@ namespace AKA_Ability
         public int postExplosionSpawnThingCount = 0;
         public SoundDef explosionSound = null;
 
-        public override void DoEffect_IntVec(IntVec3 target, Map map, bool delayed, Pawn caster)
+        protected override bool DoEffect(AKAbility caster, LocalTargetInfo target)
         {
-            if (target == null || caster == null)
+            IntVec3 targetCell = target.Cell;
+            Pawn casterPawn = caster.CasterPawn;
+
+            if (targetCell == null || casterPawn == null || casterPawn.Map == null || !targetCell.InBounds(casterPawn.Map))
             {
-                return;
+                return false;
             }
-            GenExplosion.DoExplosion(target, caster.Map, explosiveRadius, DmgType, null, dmgAmount, dmgPenetration, explosionSound, null, null, null, postExplosionSpawnThingDef, postExplosionSpawnChance, postExplosionSpawnThingCount, null, applyDamageToExplosionCellsNeighbors: true, null, 0f, 0, 0f, false, null, null, null, true, 1f, 0f, true, null, screenShakeFactor: 1f);
+            GenExplosion.DoExplosion(targetCell, casterPawn.Map, explosiveRadius, DmgType, null, dmgAmount, dmgPenetration, explosionSound, null, null, null, postExplosionSpawnThingDef, postExplosionSpawnChance, postExplosionSpawnThingCount, null, applyDamageToExplosionCellsNeighbors: true, null, 0f, 0, 0f, false, null, null, null, true, 1f, 0f, true, null, screenShakeFactor: 1f);
+
+            return base.DoEffect(caster, target);
         }
+
     }
 }

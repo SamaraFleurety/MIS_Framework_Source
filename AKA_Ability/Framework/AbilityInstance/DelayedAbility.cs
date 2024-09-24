@@ -8,7 +8,7 @@ using Verse;
 
 namespace AKA_Ability
 {
-    public class DelayedAbility
+    /*public class DelayedAbility
     {
         public Pawn caster = null;
         public LocalTargetInfo targetInfo = null;
@@ -34,5 +34,5 @@ namespace AKA_Ability
             if (targetInfo != null) abilityEffect.DoEffect_All(caster, targetInfo, true);
             else abilityEffect.DoEffect_All(caster, target, cell, map, true);
         }
-    }
+    }*/
 }

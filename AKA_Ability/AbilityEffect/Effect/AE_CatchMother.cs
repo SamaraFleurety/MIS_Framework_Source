@@ -12,16 +12,22 @@ namespace AKA_Ability
     public class AE_CatchMother : AbilityEffectBase
     {
         public int goodwillchange = 30;
-        public override void DoEffect_Pawn(Pawn user, Thing target, bool delayed)
+
+        protected override bool DoEffect(AKAbility caster, LocalTargetInfo target)
         {
+            Pawn user = caster.CasterPawn;
+            Pawn targetPawn = target.Pawn;
+
+            if (targetPawn == null || !(targetPawn is Pawn p))
+            {
+                return false;
+            }
+
             Pawn parent_mother;
             Map map = Find.CurrentMap;
             IntVec3 dropCenter = DropCellFinder.TryFindSafeLandingSpotCloseToColony(map, ThingDefOf.DropPodIncoming.Size, map.ParentFaction);
 
-            if (target == null || !(target is Pawn p))
-            {
-                return;
-            }
+
             string translatedMessage = TranslatorFormattedStringExtensions.Translate("AKA_Successful_CaughtMother");
             MoteMaker.ThrowText(user.PositionHeld.ToVector3(), user.MapHeld, translatedMessage, 5f);
             string translatedMessage1 = TranslatorFormattedStringExtensions.Translate("AKA_Message_CaughtMother", p.Label);
@@ -55,6 +61,8 @@ namespace AKA_Ability
                 parent_mother.Faction.TryAffectGoodwillWith(Faction.OfPlayer, goodwillchange);
             }
             CameraJumper.TryJump(new GlobalTargetInfo(dropCenter, map));
+
+            return base.DoEffect(caster, target);
         }
     }
     public static class AE_CatchTool

@@ -117,19 +117,14 @@ namespace AKE_VanyaShield
 
         public override void PostPostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
         {
-            //Log.Message($"受到伤害{dinfo.Amount}:{totalDamageDealt}");
         }
-        /*public override void PostPreApplyDamage(DamageInfo dinfo, out bool absorbed)
-        {
-            base.PostPreApplyDamage(dinfo, out absorbed);
-        }*/
 
         private void RefreshBubbleMaterial()
         {
-            //if (Props.bubbleStaticTexPath != null) staticBubble = MaterialPool.MatFrom(Props.bubbleStaticTexPath, ShaderDatabase.Transparent);
             if (Props.bubbleRotateTexPath != null) rotateBubble = MaterialPool.MatFrom(Props.bubbleRotateTexPath, ShaderDatabase.Transparent);
         }
 
+        //绘制一层静态护盾
         public static void DrawStaticOverlay(GraphicData graphicData, Pawn wearer)
         {
             if (graphicData == null || wearer == null) return;

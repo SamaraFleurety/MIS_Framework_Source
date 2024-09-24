@@ -7,10 +7,15 @@ using Verse;
 
 namespace AKA_Ability
 {
-    public class AE_ShootProjectile : AbilityEffectBase
+   /* public class AE_ShootProjectile : AbilityEffectBase
     {
         public VerbProperties verb;
         private Verb_Shoot v = null;
+
+        protected override bool DoEffect(AKAbility caster, LocalTargetInfo target)
+        {
+            return base.DoEffect(caster, target);
+        }
 
         public override void DoEffect_Pawn(Pawn user, Thing target, bool delayed)
         {
@@ -47,5 +52,5 @@ namespace AKA_Ability
             //v.TryStartCastOn(new LocalTargetInfo(user), new LocalTargetInfo(target), false, true, false, false);
         }
 
-    }
+    }*/
 }

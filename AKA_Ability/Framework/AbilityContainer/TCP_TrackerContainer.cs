@@ -11,7 +11,7 @@ namespace AKA_Ability
     //放衣服上面的技能容器
     public class TCP_AKATracker : CompProperties
     {
-        public List<AKAbilityDef> AKAbilities = new List<AKAbilityDef>();
+        public List<AKAbilityDef> abilities = new List<AKAbilityDef>();
         public TCP_AKATracker()
         {
             compClass = typeof(TC_AKATracker);
@@ -20,10 +20,10 @@ namespace AKA_Ability
 
     public class TC_AKATracker : ThingComp
     {
-        public AKA_AbilityTracker AKATracker;
+        public AbilityTracker tracker;
 
         private TCP_AKATracker Props => props as TCP_AKATracker;
-        private List<AKAbilityDef> AKAbilities => Props.AKAbilities;
+        private List<AKAbilityDef> Abilities => Props.abilities;
 
         Apparel Parent => parent as Apparel;
 
@@ -43,43 +43,44 @@ namespace AKA_Ability
             {
                 return;
             }
-            AKATracker = new AKA_AbilityTracker();
-            if (this.AKAbilities != null && this.AKAbilities.Count > 0)
+            tracker = new AbilityTracker(Wearer);
+            if (this.Abilities != null && this.Abilities.Count > 0)
             {
-                foreach (AKAbilityDef i in this.AKAbilities)
+                foreach (AKAbilityDef i in this.Abilities)
                 {
-                    AKAbilityMaker.MakeAKAbility(i, AKATracker);
+                    tracker.AddAbility(i);
+                    //AKAbilityMaker.MakeAKAbility(i, AKATracker);
                 }
             }
         }
         public override void Notify_Equipped(Pawn pawn)
         {
-            AKATracker.owner = pawn;
+            tracker.owner = pawn;
         }
 
         public override void CompTick()
         {
-            AKATracker.Tick();
+            tracker.Tick();
             return;
         }
         public override void CompTickLong()
         {
-            AKATracker.Tick();
+            tracker.Tick();
             return;
         }
         public override void CompTickRare()
         {
-            AKATracker.Tick();
+            tracker.Tick();
             return;
         }
         public override IEnumerable<Gizmo> CompGetWornGizmosExtra()
         {
-            return AKATracker.GetGizmos();
+            return tracker.GetGizmos();
         }
         public override void PostExposeData()
         {
             base.PostExposeData();
-            Scribe_Deep.Look(ref AKATracker, "AKATracker", Wearer);
+            Scribe_Deep.Look(ref tracker, "AKATracker", Wearer);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace AKA_Ability
     //Vanilla Ability 容器
     public class VAbility_AKATrackerContainer : Ability
     {
-        public AKA_AbilityTracker AKATracker;
+        public AbilityTracker AKATracker;
 
         public VAbility_AKATrackerContainer(Pawn pawn)
             : base(pawn)

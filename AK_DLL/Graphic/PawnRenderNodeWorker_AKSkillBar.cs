@@ -57,7 +57,7 @@ namespace AK_DLL
             {
                 return 1;
             }
-            return 1f - (float)ability.cooldown.CD / (float)ability.cooldown.maxCD;
+            return 1f - (float)ability.cooldown.CDCurrent / (float)ability.cooldown.CDPerCharge;
         }
         public override bool CanDrawNow(PawnRenderNode node, PawnDrawParms parms)
         {

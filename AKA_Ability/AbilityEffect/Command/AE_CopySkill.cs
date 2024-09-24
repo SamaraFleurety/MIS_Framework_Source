@@ -7,14 +7,25 @@ namespace AKA_Ability
 {
     public class AE_CopySkill : AbilityEffectBase
     {
-        public override void DoEffect_Pawn(Pawn user, Thing target, bool delayed)
+        protected override bool DoEffect(AKAbility caster, LocalTargetInfo target)
+        {
+            Pawn targetPawn = target.Pawn;
+            if (targetPawn == null|| !targetPawn.RaceProps.Humanlike)
+            {
+                return false;
+            }
+            Find.WindowStack.Add(new Dialog_ChoseSkill(targetPawn, caster.CasterPawn));
+            return base.DoEffect(caster, target);
+        }
+
+        /*public override void DoEffect_Pawn(Pawn user, Thing target, bool delayed)
         {
             if (target == null || !(target is Pawn t) || !t.RaceProps.Humanlike)
             {
                 return;
             }
             Find.WindowStack.Add(new Dialog_ChoseSkill(t, user));
-        }
+        }*/
     }
     public class Dialog_ChoseSkill : Window
     {

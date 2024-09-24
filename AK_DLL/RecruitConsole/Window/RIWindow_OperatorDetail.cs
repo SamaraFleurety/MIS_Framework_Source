@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 using TMPro;
 using FSUI;
 using FS_LivelyRim;
+using AKA_Ability;
 
 namespace AK_DLL
 {
@@ -539,16 +540,15 @@ namespace AK_DLL
             {
                 case 1:
                     return "yellow";
-                    break;
+                    //break;
                 case 2:
                     return "red";
-                    break;
+                    //break;
                 default:
                     return "white";
-                    break;
+                    //break;
             }
 
-            return null;
         }
 
         //0和2是按钮，1和3是图表本身
@@ -706,7 +706,7 @@ namespace AK_DLL
         //FIXME:切换技能逻辑不对 需要大修
         private void DrawOperatorAbility()
         {
-            int skillCnt = Def.abilities.Count;
+            int skillCnt = Def.AKAbilities.Count;
             if (skillCnt == 0) return;
             else if (skillCnt >= 10)
             {
@@ -720,7 +720,7 @@ namespace AK_DLL
             int logicOrder = 0; //在技能组内，实际的顺序
             for (int i = 0; i < skillCnt; ++i)
             {
-                OperatorAbilityDef opAbilty = Def.abilities[i];
+                AKAbilityDef opAbilty = Def.AKAbilities[i];
                 opAbilityInstance = GameObject.Instantiate(opAbilityPrefab, opAbilityPanel);
                 Texture2D icon = opAbilty.Icon;
                 opAbilityInstance.GetComponent<Image>().sprite = Sprite.Create(icon, new Rect(0, 0, icon.width, icon.height), Vector3.zero);
@@ -744,7 +744,7 @@ namespace AK_DLL
                     });
                 }
 
-                InitializeEventTrigger(opAbilityInstance.GetComponentInChildren<EventTrigger>(), Def.abilities[i].description.Translate());
+                InitializeEventTrigger(opAbilityInstance.GetComponentInChildren<EventTrigger>(), Def.AKAbilities[i].description.Translate());
 
                 opAbilityInstance.SetActive(true);
             }
@@ -753,7 +753,7 @@ namespace AK_DLL
         private void SwitchGroupedSkillTo(int val)
         {
             Log.Message($"try s skills to {val}");
-            if (doc == null || doc.currentExist == false || Def.abilities.Count == 0) return;
+            if (doc == null || doc.currentExist == false || Def.AKAbilities.Count == 0) return;
             opSkills[PreferredAbility].transform.GetChild(1).gameObject.SetActive(false);
             PreferredAbility = val;
             opSkills[PreferredAbility].transform.GetChild(1).gameObject.SetActive(true);

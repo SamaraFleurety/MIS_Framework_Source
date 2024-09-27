@@ -87,14 +87,13 @@
     <Compile Include="AbilityEffect\Effect\AE_CatchMother.cs" />
     <Compile Include="AbilityEffect\DelayedEffects\AE_DelayedEffects.cs" />
     <Compile Include="AbilityEffect\Effect\AE_FireExtinguisher.cs" />
-    <Compile Include="AbilityEffect\Effect\AE_ShootProjectile.cs" />
     <Compile Include="AbilityEffect\Effect\AE_GainTrait.cs" />
     <Compile Include="AbilityEffect\Effect\AbilityEffect_Heal.cs" />
-    <Compile Include="AbilityEffect\Effect\AbilityEffect_Summon.cs" />
-    <Compile Include="AbilityEffect\Effect\AbilityEffect_Trap.cs" />
     <Compile Include="AbilityEffect\Effect\AE_ChangeHair.cs" />
     <Compile Include="AbilityEffect\Effect\AE_Jump.cs" />
     <Compile Include="AbilityEffect\Effect\AE_TeleportSelfToTarget.cs" />
+    <Compile Include="AbilityEffect\Effect\Mass\AbilityMassEffectBase.cs" />
+    <Compile Include="AbilityEffect\Effect\Mass\AME_Illustrious_RiseFall.cs" />
     <Compile Include="AKA_Algorithm.cs" />
     <Compile Include="AKA_Utilities.cs" />
     <Compile Include="AbilityEffect\DelayedEffects\DelayedEffectDef.cs" />

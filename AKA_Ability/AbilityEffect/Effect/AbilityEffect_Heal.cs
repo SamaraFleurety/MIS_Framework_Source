@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using RimWorld;
+﻿using RimWorld;
 using Verse;
 
 namespace AKA_Ability
@@ -13,16 +9,17 @@ namespace AKA_Ability
         {
             Pawn user = caster.CasterPawn;
             Pawn targetPawn = target.Pawn;
-            if (targetPawn == null || !(targetPawn is Pawn t))
+            if (targetPawn == null || targetPawn == null)
             {
                 return false;
             }
-            if (!healNullFaction && t.Faction == null)
+            //Log.Message($"[AK] {user.Name} try to heal {targetPawn.Name}");
+            if (!healNullFaction && targetPawn.Faction == null)
             {
                 return false;
             }
 
-            if (t.Faction is Faction faction && user.Faction is Faction faction1)
+            if (targetPawn.Faction is Faction faction && user.Faction is Faction faction1)
             {
                 if (faction != faction1)
                 {
@@ -37,16 +34,18 @@ namespace AKA_Ability
                 }
             }
 
-            this.Heal(t);
+            //Log.Message($"heal {targetPawn.Name} with {this.healPoint}");
+            Heal(targetPawn, this.healPoint);
             return base.DoEffect(caster, target);
         }
 
-        private void Heal(Pawn target)
+        public static void Heal(Pawn target, float healPoint)
         {
-            float heal = (float)this.healPoint;
+            float heal = healPoint;
             for (int i = 0; i < target.health.hediffSet.hediffs.Count; ++i)
             {
                 Hediff injury = target.health.hediffSet.hediffs[i];
+                //Log.Message($"injury {injury.def.defName} at {injury.Severity} - heal {heal}");
                 if (injury is Hediff_Injury)
                 {
                     if (heal > injury.Severity)
@@ -58,8 +57,10 @@ namespace AKA_Ability
                     {
                         injury.Heal(heal);
                         heal -= heal;
+                        //Log.Message($"ifin {injury.Severity}");
                         break;
                     }
+                    //Log.Message($"ifin {injury.Severity}");
                 }
             }
         }

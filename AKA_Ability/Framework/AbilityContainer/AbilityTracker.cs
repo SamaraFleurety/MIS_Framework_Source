@@ -113,7 +113,7 @@ namespace AKA_Ability
             {
                 ia.SpawnSetup();
             }
-            SelectedGroupedAbility.SpawnSetup();
+            SelectedGroupedAbility?.SpawnSetup();
         }
 
         //技能不再被绑定调用这个 va永远不被卸载，但是tcp上面的有可能会

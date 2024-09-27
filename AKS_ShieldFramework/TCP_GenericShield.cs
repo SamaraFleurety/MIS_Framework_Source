@@ -65,7 +65,7 @@ namespace AKS_Shield
 
         private Vector3 impactAngleVect;
 
-        public float EnergyPercent => energy / Props.energyMax;
+        public virtual float EnergyPercent => energy / Props.energyMax;
 
 
         #region 原版
@@ -73,7 +73,7 @@ namespace AKS_Shield
         {
             Tick(1);
         }
-        public void Tick(int amt)
+        public virtual void Tick(int amt)
         {
             if (energy > 0 && energy < Props.energyMax)
             {
@@ -119,6 +119,7 @@ namespace AKS_Shield
                 return;
             }
 
+            //判断闪避
             if (Props.meleeDodgeChanceFactor > 0 && Wearer != null && Rand.Chance(Wearer.GetStatValue(StatDefOf.MeleeDodgeChance) * Props.meleeDodgeChanceFactor))
             {
                 MoteMaker.ThrowText(Wearer.DrawPos, Wearer.Map, "TextMote_Dodge".Translate(), 1.9f);
@@ -160,7 +161,7 @@ namespace AKS_Shield
             }
             if (energy <= 0)
             {
-                Break(ref dinfo);
+                Break(ref dinfo);       //break后效在这里面
             }
             else
             {
@@ -214,12 +215,6 @@ namespace AKS_Shield
             {
                 return;
             }
-            /*if (BarFilledMat == null || BarUnfilledMat == null)
-            {
-                BarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(245, 245, 245, 190));
-                BarUnfilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.15f, 0.15f, 0.15f, 0.50f));
-            }*/
-            //Log.Message("有盾");
             GenDraw.FillableBarRequest fbr = default;
             fbr.center = Wearer.DrawPos + (Vector3.up * 3f) + BottomMargin;
             fbr.size = BarSize;
@@ -228,29 +223,15 @@ namespace AKS_Shield
             //fbr.margin = 0;
             fbr.rotation = Rot4.North;
             fbr.fillPercent = EnergyPercent;
-            /*Vanya_ShieldBelt shield = Parent;
-            if (shield != null)
-            {
-                SheildPercent = shield.Energy / Mathf.Max(1f, shield.GetStatValue(StatDefOf.EnergyShieldEnergyMax));
-            }
-            else
-            {
-                SheildPercent = 0f;
-            }*/
+
             GenDraw.DrawFillableBar(fbr);
-            //GenDefendIcon();
+
             Matrix4x4 matrix = default;
             Vector3 scale = new Vector3(0.25f, 1f, 0.25f);
             matrix.SetTRS(Wearer.DrawPos + IconMargin, Rot4.North.AsQuat, scale);
             Graphics.DrawMesh(MeshPool.plane025, matrix, material: IconDefend, 2);
         }
         #endregion
-        /*public override void PostDraw()
-        {
-            float angle = (DateTime.Now.Ticks / 10000 / 60) % 3600;
-            angle /= 10;
-            base.PostDraw();
-        }*/
         #endregion
         protected virtual void Break(ref DamageInfo dinfo)
         {
@@ -287,7 +268,7 @@ namespace AKS_Shield
             energy = Props.energyMax * Props.energyRatioOnReset;
         }
         //被攻击后特效 抄的
-        protected void HittedFleck(DamageInfo dinfo)
+        protected virtual void HittedFleck(DamageInfo dinfo)
         {
             if (Wearer.Map != null)
             {

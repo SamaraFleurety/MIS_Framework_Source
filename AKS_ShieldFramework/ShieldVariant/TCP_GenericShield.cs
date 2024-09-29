@@ -1,10 +1,8 @@
 ﻿using AKS_Shield.Effector;
+using AKS_Shield.Extension;
 using RimWorld;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
@@ -67,6 +65,7 @@ namespace AKS_Shield
 
         public virtual float EnergyPercent => energy / Props.energyMax;
 
+        public HashSet<TC_ShieldExtension_PostEffects_Base> registedCompEffectors = new();
 
         #region 原版
         public override void CompTick()
@@ -75,12 +74,15 @@ namespace AKS_Shield
         }
         public virtual void Tick(int amt)
         {
-            if (energy > 0 && energy < Props.energyMax)
+            if (energy > 0)
             {
-                energy += Props.energyRegenRate * amt;
-                if (!Props.allowEnergyOverflow)
+                if (energy < Props.energyMax)
                 {
-                    energy = Math.Min(energy, Props.energyMax);
+                    energy += Props.energyRegenRate * amt;
+                    if (!Props.allowEnergyOverflow)
+                    {
+                        energy = Math.Min(energy, Props.energyMax);
+                    }
                 }
             }
             else
@@ -127,6 +129,10 @@ namespace AKS_Shield
                 foreach (Type effector in Props.postAbsorbDmgEffects)
                 {
                     DoAbsorbDamageEffect(effector, Wearer, this, ref dinfo, dodged: true);
+                    foreach (TC_ShieldExtension_PostEffects_Base c in registedCompEffectors)
+                    {
+                        c.Notify_Absorb(dinfo, dodged: true);
+                    }
                 }
                 return;
             }
@@ -168,6 +174,10 @@ namespace AKS_Shield
                 HittedFleck(dinfo);
             }
 
+            foreach (TC_ShieldExtension_PostEffects_Base c in registedCompEffectors)
+            {
+                c.Notify_Absorb(dinfo);
+            }
             absorbed = true;
         }
 
@@ -254,6 +264,11 @@ namespace AKS_Shield
             {
                 DoAbsorbDamageEffect(effector, Wearer, this, ref dinfo);
             }
+
+            foreach (TC_ShieldExtension_PostEffects_Base c in registedCompEffectors)
+            {
+                c.Notify_Break(dinfo);
+            }
         }
 
         protected virtual void Reset()
@@ -266,6 +281,11 @@ namespace AKS_Shield
 
             ticksReset = 0;
             energy = Props.energyMax * Props.energyRatioOnReset;
+
+            foreach (TC_ShieldExtension_PostEffects_Base c in registedCompEffectors)
+            {
+                c.Notify_Reset();
+            }
         }
         //被攻击后特效 抄的
         protected virtual void HittedFleck(DamageInfo dinfo)

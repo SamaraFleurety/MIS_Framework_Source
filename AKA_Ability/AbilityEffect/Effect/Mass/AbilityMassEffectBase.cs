@@ -25,7 +25,15 @@ namespace AKA_Ability.AbilityEffect
             worker.DoEffect_AllTargets(caster, target);
             return true;
         }*/
-
+        public static IEnumerable<Pawn> AllPawnAliveInCell(AKAbility ab, IntVec3 cell)
+        {
+            //List<Pawn> res = new List<Pawn>();
+            foreach (Thing t in cell.GetThingList(ab.CasterPawn.Map))
+            {
+                if (t is Pawn p && !p.Dead && !p.Destroyed) yield return p;
+            }
+            //return res;
+        }
     }
 
     //啥比泰南的xml解析器不读泛型

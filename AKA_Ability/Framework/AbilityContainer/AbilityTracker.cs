@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Verse;
+using Verse.AI;
 using Verse.Sound;
 
 namespace AKA_Ability
@@ -67,6 +68,23 @@ namespace AKA_Ability
             {
                 c = groupedAbilities[indexActiveGroupedAbility].GetGizmo();
                 if (c != null) yield return c;
+            }
+            if (Prefs.DevMode)
+            {
+                yield return new Command_Action
+                {
+                    defaultLabel = "[AKA]立刻回复SP",
+                    defaultDesc = "desc",
+                    icon = BaseContent.BadTex,
+                    action = delegate ()
+                    {
+                        if (SelectedGroupedAbility != null) SelectedGroupedAbility.cooldown.charge = SelectedGroupedAbility.cooldown.MaxCharge;
+                        foreach (AKAbility ab in innateAbilities)
+                        {
+                            ab.cooldown.charge = ab.cooldown.MaxCharge;
+                        }
+                    }
+                };
             }
         }
 

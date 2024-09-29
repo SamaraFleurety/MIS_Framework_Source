@@ -8,17 +8,20 @@ using Verse;
 
 namespace AKA_Ability.AbilityEffect
 {
-    //黑光辉 星起星落
-    //对附近敌人造成伤害并治疗自身
-    public class AME_Illustrious_RiseFall : AbilityMassEffectBase
+    //黑光辉交织的祈愿
+    //光辉以自身为圆心吸取范围内敌人的移动速度和伤害，自身获得一定量加成，并获得生命吸取。范围内队友会承受一定效果并且不提供加成。
+    public class AME_Illustrious_Inory : AbilityMassEffectBase
     {
-        DamageDef damageDef;
-        const float DAMAGE_HEAL_PER_PAWN = 20;
         protected override bool DoEffect(AKAbility caster, LocalTargetInfo target)
         {
+            int enemyCnt = 0;
             AME_Worker<Pawn> worker = new AME_Worker<Pawn>(this, doEffect_SingleTarget: delegate (AKAbility ab, Pawn victim)
             {
-                if (victim.Destroyed) return;
+                /*if (victim.Destroyed) return;
+                if (victim.Faction != null && victim.Faction.HostileTo(Faction.OfPlayer))
+                {
+                    ++enemyCnt;
+                }
                 DamageInfo absDmgInfo = new DamageInfo(damageDef, DAMAGE_HEAL_PER_PAWN, 999, instigator: ab.CasterPawn, instigatorGuilty: false);
                 if (victim.def.useHitPoints)
                 {
@@ -31,7 +34,7 @@ namespace AKA_Ability.AbilityEffect
                 }
                 else absDmgInfo.Def.Worker.Apply(absDmgInfo, victim);
 
-                AbilityEffect_Heal.Heal(caster.CasterPawn, DAMAGE_HEAL_PER_PAWN);
+                AbilityEffect_Heal.Heal(caster.CasterPawn, DAMAGE_HEAL_PER_PAWN);*/
 
             }, AllPawnAliveInCell /*allPossibleTargetsInCell: delegate (AKAbility ab, IntVec3 cell)
             {

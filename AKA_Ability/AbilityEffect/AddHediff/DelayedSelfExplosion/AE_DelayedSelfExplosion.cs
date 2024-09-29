@@ -30,7 +30,7 @@ namespace AKA_Ability
         }
         public AE_DelayedSelfExplosion()
         {
-            this.onSelf = true;
+            //this.onSelf = true;
             this.severity = 1f;
         }
         public int afterCount = 1;  //多少单位后爆炸

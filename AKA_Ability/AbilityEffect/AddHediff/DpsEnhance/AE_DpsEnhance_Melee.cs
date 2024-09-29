@@ -25,7 +25,7 @@ namespace AKA_Ability
 
         public AE_DpsEnhance_Melee()
         {
-            this.onSelf = true;
+            //this.onSelf = true;
             this.severity = 1f;
             this.enhances = new List<toolEnhance>();
         }

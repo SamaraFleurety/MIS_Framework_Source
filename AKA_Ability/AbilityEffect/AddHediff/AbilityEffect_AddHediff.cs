@@ -115,10 +115,10 @@ namespace AKA_Ability
             return candidate.RandomElement();
         }
 
-        [Obsolete]
-        public bool onSelf = false;
+        //[Obsolete]
+        //public bool onSelf = false;
         public HediffDef hediffDef;
         public float severity = 1f;
-        public BodyPartDef bodyPart;
+        public BodyPartDef bodyPart = null;
     }
 }

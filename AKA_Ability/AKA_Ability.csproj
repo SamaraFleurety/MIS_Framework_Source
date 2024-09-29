@@ -93,6 +93,7 @@
     <Compile Include="AbilityEffect\Effect\AE_Jump.cs" />
     <Compile Include="AbilityEffect\Effect\AE_TeleportSelfToTarget.cs" />
     <Compile Include="AbilityEffect\Effect\Mass\AbilityMassEffectBase.cs" />
+    <Compile Include="AbilityEffect\Effect\Mass\AME_Illustrious_Inory.cs" />
     <Compile Include="AbilityEffect\Effect\Mass\AME_Illustrious_RiseFall.cs" />
     <Compile Include="AKA_Algorithm.cs" />
     <Compile Include="AKA_Utilities.cs" />

@@ -166,7 +166,7 @@ namespace AK_DLL
             Listing_Standard listingStandard = new Listing_Standard();
             listingStandard.Begin(inRect);
             if (Prefs.DevMode) listingStandard.CheckboxLabeled("测试模式", ref AK_ModSettings.debugOverride, "开启明日方舟MOD的测试模式。如果您不是测试人员请勿勾选此选项。");
-            if (listingStandard.ButtonText("方舟血条设置"))
+            if (listingStandard.ButtonTextLabeled("AK_GUIBar_Setting".Translate(), "Open".Translate()))
             {
                 Find.WindowStack.Add(new DoBarSetting_Window());
             }

@@ -289,6 +289,8 @@
     <Compile Include="Def\OperatorDef\OperatorDef_Reserve.cs" />
     <Compile Include="GC_AKManager.cs" />
     <Compile Include="Graphic\AK_BarUITool.cs" />
+    <Compile Include="Graphic\DoBarSetting_Window.cs" />
+    <Compile Include="Graphic\DrawGUIOverlayExtras.cs" />
     <Compile Include="Graphic\PawnRenderNodeWorker_AKHealthBar.cs" />
     <Compile Include="Graphic\PawnRenderNodeWorker_AKSkillBar.cs" />
     <Compile Include="Graphic\PawnRenderNode_AKHealthBar.cs" />
@@ -296,6 +298,7 @@
     <Compile Include="HarmonyPatch\PatchTest.cs" />
     <Compile Include="HarmonyPatch\Patch_AlienWarning.cs" />
     <Compile Include="HarmonyPatch\Patch_ObeliskCopyAbility.cs" />
+    <Compile Include="HarmonyPatch\Patch_PawnUIOverlay.cs" />
     <Compile Include="Hediff\Comps\HCP_AddTrait.cs" />
     <Compile Include="Hediff\Comps\HCP_RemoveMe.cs" />
     <Compile Include="Interaction\OperatorInteractionDef.cs" />

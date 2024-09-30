@@ -1,4 +1,5 @@
 ﻿using Verse;
+using UnityEngine;
 
 namespace AK_DLL
 {
@@ -17,13 +18,17 @@ namespace AK_DLL
         public PawnRenderNode_AKHealthBar(Pawn pawn, PawnRenderNodeProperties props, PawnRenderTree tree) : base(pawn, props, tree)
         {
         }
+        public override Mesh GetMesh(PawnDrawParms parms)
+        {
+            return base.GetMesh(parms);
+        }
         public override Graphic GraphicFor(Pawn pawn)
         {
             return new Graphic();
         }
         public override GraphicMeshSet MeshSetFor(Pawn pawn)
         {
-            return new GraphicMeshSet(MeshPool.plane025);
+            return new GraphicMeshSet(new Mesh());
         }
     }
 }

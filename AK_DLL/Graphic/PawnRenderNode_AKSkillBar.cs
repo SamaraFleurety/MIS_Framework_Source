@@ -1,4 +1,5 @@
-﻿using Verse;
+﻿using UnityEngine;
+using Verse;
 
 namespace AK_DLL
 {
@@ -23,7 +24,7 @@ namespace AK_DLL
         }
         public override GraphicMeshSet MeshSetFor(Pawn pawn)
         {
-            return new GraphicMeshSet(MeshPool.plane025);
+            return new GraphicMeshSet(new Mesh());
         }
     }
 }

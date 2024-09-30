@@ -7,7 +7,11 @@ namespace AK_DLL
     //泰南我草你妈 Draw方法是交替执行的 Worker还是唯一实例
     public class PawnRenderNodeWorker_AKHealthBar : PawnRenderNodeWorker
     {
+        private static bool CameraPlusModEnabled => AK_BarUITool.CameraPlusModEnabled;
+        private static bool SimpleCameraModEnabled => AK_BarUITool.SimpleCameraModEnabled;
+        private ProgramState CurrentProgramState => Current.ProgramState;
         //locOffset
+        private float ZoomRootSize => Find.CameraDriver.ZoomRootSize;
         private static Vector2 BarSize = new Vector2(1.5f, 0.075f);
         private static Vector3 BottomMargin = Vector3.back;
         private static Vector3 IconMargin = Vector3.back + Vector3.left * 0.8f;
@@ -16,46 +20,168 @@ namespace AK_DLL
         private static Material BarEnemyFilledMat => AK_BarUITool.EnemyHealthBarFilledMat;
         private static Material BarUnfilledMat => AK_BarUITool.BarUnfilledMat;
         private static Material HP_Icon => AK_BarUITool.HP_Icon;
-
+        private float GetZoomRatio()
+        {
+            if (AK_ModSettings.zoomWithCamera)
+            {
+                return Mathf.Max(ZoomRootSize, 11) / 11;
+            }
+            return 1f;
+        }
+        private void DrawHealthBar(Material mat, Pawn pawn)
+        {
+            Vector3 drawPos = pawn.DrawPos;
+            float percent = pawn.GetHealthPercent();
+            float zoomRatio = GetZoomRatio();
+            float zoomWidthRatio;
+            float zoomYRatio;
+            if (CameraPlusModEnabled || SimpleCameraModEnabled)
+            {
+                zoomWidthRatio = zoomRatio > 4.35f ? 4.35f : zoomRatio;
+                zoomYRatio = zoomRatio > 5f ? 5f : zoomRatio;
+            }
+            else
+            {
+                zoomWidthRatio = zoomRatio > 3.75f ? 3.75f : zoomRatio;
+                zoomYRatio = zoomRatio > 3f ? 3f : zoomRatio;
+            }
+            //
+            GenDraw.FillableBarRequest fbr = default;
+            if (CameraPlusModEnabled)
+            {
+                fbr.center = drawPos + (Vector3.up * 3f) + BottomMargin * (zoomYRatio > 1.75f ? zoomYRatio * 0.9f : zoomYRatio);
+                fbr.size = BarSize;
+                fbr.size.x *= zoomWidthRatio;
+                fbr.size.y *= zoomRatio > 1.75f ? zoomRatio * 1.5f : zoomRatio;
+            }
+            else if (SimpleCameraModEnabled)
+            {
+                fbr.center = drawPos + (Vector3.up * 3f) + BottomMargin * (zoomYRatio > 1.75f ? zoomYRatio * 0.75f : zoomYRatio);
+                fbr.size = BarSize;
+                fbr.size.x *= zoomWidthRatio;
+                fbr.size.y *= zoomRatio > 3f ? zoomRatio * 1.05f : zoomRatio;
+            }
+            else
+            {
+                fbr.center = drawPos + (Vector3.up * 3f) + BottomMargin * (zoomYRatio > 1.75f ? zoomYRatio * 0.75f : zoomYRatio);
+                fbr.size = BarSize;
+                fbr.size.x *= zoomWidthRatio;
+                fbr.size.y *= zoomRatio > 6.5f ? zoomRatio * 1.25f : zoomRatio;
+            }
+            fbr.fillPercent = (percent < 0f) ? 0f : percent;
+            fbr.filledMat = mat;
+            fbr.unfilledMat = BarUnfilledMat;
+            fbr.rotation = Rot4.North;
+            GenDraw.DrawFillableBar(fbr);
+            DrawIcon(fbr.center);
+            //Log.Message("现在的摄像机缩放" + Find.CameraDriver.ZoomRootSize.ToString());
+            //Log.Message("现在的GUI缩放" + (Find.Camera.WorldToScreenPoint(drawPos) / Prefs.UIScale).ToString());
+        }
+        private void DrawIcon(Vector3 pos)
+        {
+            Matrix4x4 matrix = default;
+            matrix.SetTRS(pos + IconMargin, Rot4.North.AsQuat, new Vector3(0.25f, 1f, 0.25f));
+            Graphics.DrawMesh(MeshPool.plane025, matrix, material: HP_Icon, 2);
+        }
         public override bool CanDrawNow(PawnRenderNode node, PawnDrawParms parms)
         {
-            return AK_ModSettings.displayBarModel;
+            Pawn pawn = parms.pawn;
+            if (!AK_ModSettings.displayBar || CurrentProgramState != ProgramState.Playing || pawn == null || pawn.Dead)
+            {
+                return false;
+            }
+            if (pawn.IsColonist)
+            {
+                if (AK_ModSettings.display_PlayerFaction && AK_ModSettings.display_Colonist)
+                {
+                    if (AK_ModSettings.display_Colonist_InjuryedOnly && pawn.GetHealthPercent() < 1f)
+                    {
+                        return true;
+                    }
+                    if (!AK_ModSettings.display_Colonist_InjuryedOnly && AK_ModSettings.display_OnDraftedOnly && pawn.Drafted)
+                    {
+                        return true;
+                    }
+                    if (!AK_ModSettings.display_Colonist_InjuryedOnly && !AK_ModSettings.display_OnDraftedOnly)
+                    {
+                        return true;
+                    }
+                }
+            }
+            if (pawn?.Faction == Faction.OfPlayer)
+            {
+                if (!AK_ModSettings.display_PlayerFaction)
+                {
+                    return false;
+                }
+                if (AK_ModSettings.display_ColonyAnimal && AK_ModSettings.display_ColonyAnimal_InjuryedOnly && pawn.RaceProps.Animal && pawn.GetHealthPercent() < 1f)
+                {
+                    return true;
+                }
+                if (AK_ModSettings.display_ColonyAnimal && !AK_ModSettings.display_ColonyAnimal_InjuryedOnly && pawn.RaceProps.Animal)
+                {
+                    return true;
+                }
+                if (AK_ModSettings.display_ColonyMech && AK_ModSettings.display_ColonyMech_InjuryedOnly && pawn.IsColonyMech && pawn.GetHealthPercent() < 1f)
+                {
+                    return true;
+                }
+                if (AK_ModSettings.display_ColonyMech && !AK_ModSettings.display_ColonyMech_InjuryedOnly && pawn.IsColonyMech)
+                {
+                    return true;
+                }
+            }
+            if (!pawn.HostileTo(Faction.OfPlayer))
+            {
+                if (AK_ModSettings.display_AllyFaction && AK_ModSettings.display_AllyFaction_InjuryedOnly && pawn.IsAlly() && pawn.GetHealthPercent() < 1f)
+                {
+                    return true;
+                }
+                if (AK_ModSettings.display_AllyFaction && !AK_ModSettings.display_AllyFaction_InjuryedOnly && pawn.IsAlly())
+                {
+                    return true;
+                }
+                if (AK_ModSettings.display_NeutralFaction && AK_ModSettings.display_NeutralFaction_InjuryedOnly && pawn.IsNeutral() && pawn.GetHealthPercent() < 1f)
+                {
+                    return true;
+                }
+                if (AK_ModSettings.display_NeutralFaction && !AK_ModSettings.display_NeutralFaction_InjuryedOnly && pawn.IsNeutral())
+                {
+                    return true;
+                }
+            }
+            if (AK_ModSettings.display_Enemy && pawn.HostileTo(Faction.OfPlayer))
+            {
+                if (pawn.IsEntity && pawn.InContainerEnclosed)
+                {
+                    return false;
+                }
+                if (!AK_ModSettings.display_Enemy_InjuryedOnly)
+                {
+                    return true;
+                }
+                if (AK_ModSettings.display_Enemy_InjuryedOnly && pawn.GetHealthPercent() < 1f)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
         public override void PostDraw(PawnRenderNode node, PawnDrawParms parms, Mesh mesh, Matrix4x4 matrix)
         {
+
             Pawn pawn = parms.pawn;
-            if (AK_ModSettings.displayEnemyBarModel || pawn.HostileTo(Faction.OfPlayer) || !pawn.Dead)
-            {
-                float eHealthPercent = pawn.health?.summaryHealth?.SummaryHealthPercent ?? (-1f);
-                GenDraw.FillableBarRequest efbr = default;
-                efbr.center = pawn.DrawPos + (Vector3.up * 3f) + BottomMargin;
-                efbr.size = BarSize;
-                efbr.fillPercent = (eHealthPercent < 0f) ? 0f : eHealthPercent;
-                efbr.filledMat = BarEnemyFilledMat;
-                efbr.unfilledMat = BarUnfilledMat;
-                efbr.rotation = Rot4.North;
-                GenDraw.DrawFillableBar(efbr);
-                return;
-            }
-            if (pawn.GetDoc() == null || !pawn.Drafted)
+            if (pawn.CarriedBy != null)
             {
                 return;
             }
-            float HealthPercent = pawn.health?.summaryHealth?.SummaryHealthPercent ?? (-1f);
-            GenDraw.FillableBarRequest fbr = default;
-            fbr.center = pawn.DrawPos + (Vector3.up * 3f) + BottomMargin;
-            fbr.size = BarSize;
-            fbr.fillPercent = (HealthPercent < 0f) ? 0f : HealthPercent;
-            fbr.filledMat = BarFilledMat;
-            fbr.unfilledMat = BarUnfilledMat;
-            //fbr.margin = 0;
-            fbr.rotation = Rot4.North;
-            GenDraw.DrawFillableBar(fbr);
-            //图标
-            Log.Message("当前地图缩放数值" + Find.CameraDriver.ZoomRootSize.ToString());
-            Matrix4x4 matrix1 = default;
-            matrix1.SetTRS(pawn.DrawPos + IconMargin, Rot4.North.AsQuat, new Vector3(0.25f, 1f, 0.25f));
-            Graphics.DrawMesh(MeshPool.plane025, matrix1, material: HP_Icon, 2);
+            if (pawn.HostileTo(Faction.OfPlayer))
+            {
+                DrawHealthBar(BarEnemyFilledMat, pawn);
+                return;
+            }
+            DrawHealthBar(BarFilledMat, pawn);
+            return;
         }
     }
 }

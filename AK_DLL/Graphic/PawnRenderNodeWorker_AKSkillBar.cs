@@ -10,8 +10,18 @@ namespace AK_DLL
     public class PawnRenderNodeWorker_AKSkillBar : PawnRenderNodeWorker
     {
         //locOffset
-        private static Vector2 BarSize = new Vector2(1.5f, 0.075f);
-        private static Vector3 BottomMargin = Vector3.back * 1.075f;
+        private static bool CameraPlusModEnabled => AK_BarUITool.CameraPlusModEnabled;
+        private static bool SimpleCameraModEnabled => AK_BarUITool.SimpleCameraModEnabled;
+        private ProgramState CurrentProgramState => Current.ProgramState;
+        private float ZoomRootSize => Find.CameraDriver.ZoomRootSize;
+        private static float Width => AK_ModSettings.barWidth * 0.01f;
+        private static float Height => AK_ModSettings.barHeight * 0.001f;
+        private static float Margin => AK_ModSettings.barMargin * 0.01f;
+        private static float skillMargin => Margin * 1.075f;
+        private static Vector2 BarSize => new Vector2(Width, Height);
+        private static Vector3 BottomMargin => new Vector3(0f, 0f, skillMargin);
+        //private static Vector2 BarSize = new Vector2(1.5f, 0.075f);
+        //private static Vector3 BottomMargin = Vector3.back * 1.075f;
         private static Vector3 TopMargin = Vector3.forward * 1f;
         private static Vector3 IconMargin = Vector3.back * 1.0625f + Vector3.left * 0.8f;
         //Mat
@@ -60,14 +70,86 @@ namespace AK_DLL
             }
             return 1f - (float)ability.cooldown.CDCurrent / (float)ability.cooldown.CDPerCharge;*/
         }
+        private void DrawIcon(Vector3 pos)
+        {
+            Matrix4x4 matrix = default;
+            matrix.SetTRS(pos + IconMargin, Rot4.North.AsQuat, new Vector3(0.25f, 1f, 0.25f));
+            Graphics.DrawMesh(MeshPool.plane025, matrix, material: Timer_Icon, 2);
+        }
+        private float GetZoomRatio()
+        {
+            if (AK_ModSettings.zoomWithCamera)
+            {
+                return Mathf.Max(ZoomRootSize, 11) / 11;
+            }
+            return 1f;
+        }
+        private void DrawSkillBar(Material mat, Pawn pawn)
+        {
+            Vector3 drawPos = pawn.DrawPos;
+            float percent = pawn.GetHealthPercent();
+            float zoomRatio = GetZoomRatio();
+            float zoomWidthRatio;
+            float zoomYRatio;
+            if (CameraPlusModEnabled || SimpleCameraModEnabled)
+            {
+                zoomWidthRatio = zoomRatio > 4.35f ? 4.35f : zoomRatio;
+                zoomYRatio = zoomRatio > 5f ? 5f : zoomRatio;
+            }
+            else
+            {
+                zoomWidthRatio = zoomRatio > 3.75f ? 3.75f : zoomRatio;
+                zoomYRatio = zoomRatio > 3f ? 3f : zoomRatio;
+            }
+            //
+            GenDraw.FillableBarRequest fbr = default;
+            if (CameraPlusModEnabled)
+            {
+                fbr.center = drawPos + (Vector3.up * 3f) + BottomMargin * (zoomYRatio > 1.75f ? zoomYRatio * 0.9f : zoomYRatio);
+                fbr.size = BarSize;
+                fbr.size.x *= zoomWidthRatio;
+                fbr.size.y *= zoomRatio > 1.75f ? zoomRatio * 1.5f : zoomRatio;
+            }
+            else if (SimpleCameraModEnabled)
+            {
+                fbr.center = drawPos + (Vector3.up * 3f) + BottomMargin * (zoomYRatio > 1.75f ? zoomYRatio * 0.75f : zoomYRatio);
+                fbr.size = BarSize;
+                fbr.size.x *= zoomWidthRatio;
+                fbr.size.y *= zoomRatio > 3f ? zoomRatio * 1.05f : zoomRatio;
+            }
+            else
+            {
+                fbr.center = drawPos + (Vector3.up * 3f) + BottomMargin * (zoomYRatio > 1.75f ? zoomYRatio * 0.75f : zoomYRatio);
+                fbr.size = BarSize;
+                fbr.size.x *= zoomWidthRatio;
+                fbr.size.y *= zoomRatio > 6.5f ? zoomRatio * 1.25f : zoomRatio;
+            }
+            fbr.fillPercent = (percent < 0f) ? 0f : percent;
+            fbr.filledMat = mat;
+            fbr.unfilledMat = BarUnfilledMat;
+            fbr.rotation = Rot4.North;
+            GenDraw.DrawFillableBar(fbr);
+            DrawIcon(fbr.center);
+            //Log.Message("现在的摄像机缩放" + Find.CameraDriver.ZoomRootSize.ToString());
+            //Log.Message("现在的GUI缩放" + (Find.Camera.WorldToScreenPoint(drawPos) / Prefs.UIScale).ToString());
+        }
         public override bool CanDrawNow(PawnRenderNode node, PawnDrawParms parms)
         {
-            return AK_ModSettings.displayBarModel;
+            Pawn pawn = parms.pawn;
+            if (!AK_ModSettings.displayBar || CurrentProgramState != ProgramState.Playing || pawn == null || pawn.Dead)
+            {
+                return false;
+            }
+            if (pawn.GetDoc() != null)
+            {
+                return true;
+            }
+            return false;
         }
         public override void PostDraw(PawnRenderNode node, PawnDrawParms parms, Mesh mesh, Matrix4x4 matrix)
         {
             Pawn pawn = parms.pawn;
-            if (!AK_ModSettings.displayBarModel || pawn.GetDoc() == null)
+            if (!AK_ModSettings.displayBar || pawn.GetDoc() == null)
             {
                 return;
             }
@@ -117,7 +199,8 @@ namespace AK_DLL
             {
                 SkillPercent = 0f;
             }
-            GenDraw.FillableBarRequest fbr = default;
+            DrawSkillBar(BarFilledMat, pawn);
+            /*GenDraw.FillableBarRequest fbr = default;
             fbr.center = pawn.DrawPos + (Vector3.up * 3f) + BottomMargin;
             fbr.size = BarSize;
             fbr.filledMat = BarFilledMat;
@@ -130,6 +213,7 @@ namespace AK_DLL
             Matrix4x4 matrix1 = default;
             matrix1.SetTRS(pawn.DrawPos + IconMargin, Rot4.North.AsQuat, new Vector3(0.25f, 1f, 0.25f));
             Graphics.DrawMesh(MeshPool.plane025, matrix1, material: Timer_Icon, 2);
+            */
             Vector3 OriginCenter = pawn.DrawPos + TopMargin + (Vector3.up * 3f);
             Vector3 Scale = new Vector3(0.3f, 1f, 0.3f);
             //自动回复技能

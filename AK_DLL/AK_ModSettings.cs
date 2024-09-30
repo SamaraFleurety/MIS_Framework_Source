@@ -5,6 +5,7 @@ using System.Text;
 using RimWorld;
 using UnityEngine;
 using Verse;
+using static AK_DLL.AK_BarUITool;
 
 namespace AK_DLL
 {
@@ -14,10 +15,47 @@ namespace AK_DLL
         //开启一些正常游戏不会使用的测试功能
         public static bool debugOverride = false;
 
-        //数值条
-        public static bool displayBarModel = true;
-        public static bool displayEnemyBarModel = true;
-
+        #region 舟血条
+        public static bool displayBar = true;
+        public static bool display_PlayerFaction = true;
+        public static bool display_AllyFaction = true;
+        public static bool display_AllyFaction_InjuryedOnly = true;
+        public static bool display_NeutralFaction = true;
+        public static bool display_NeutralFaction_InjuryedOnly = true;
+        public static bool display_Colonist = true;
+        public static bool display_Colonist_InjuryedOnly = false;
+        public static bool display_ColonyAnimal = false;
+        public static bool display_ColonyAnimal_InjuryedOnly = false;
+        public static bool display_ColonyMech = false;
+        public static bool display_ColonyMech_InjuryedOnly = false;
+        public static bool display_OnDraftedOnly = false;
+        public static bool display_Enemy = true;
+        public static bool display_Enemy_InjuryedOnly = true;
+        public static bool disable_displayPawnLabelHealth = true;
+        public static int display_PawnDeathIndicator_Option = 1;
+        public static bool display_Option_HHMMSS = true;
+        public static bool Option_BindingHealthBar = false;
+        public static bool Display_PawnDeathIndicator => display_PawnDeathIndicator_Option != 0;
+        public static bool Display_PawnDeathIndicator_DeathTimeOnly => display_PawnDeathIndicator_Option == 1;
+        public static bool Display_PawnDeathIndicator_BleedRateOnly => display_PawnDeathIndicator_Option == 2;
+        public static bool Display_PawnDeathIndicator_Both => display_PawnDeathIndicator_Option == 3;
+        //Offset
+        public static int barWidth = 150;
+        public static int barHeight = 75;
+        public static int barMargin = -100;
+        public static bool zoomWithCamera = true;
+        //RGB
+        public static Color32 Color_RGB => new Color32((byte)r, (byte)g, (byte)b, (byte)a);
+        public static int r = 105;
+        public static int g = 180;
+        public static int b = 210;
+        public static int a = 200;
+        public static Color32 Color_RGB_enemy => new Color32((byte)r_enemy, (byte)g_enemy, (byte)b_enemy, (byte)a_enemy);
+        public static int r_enemy = 220;
+        public static int g_enemy = 40;
+        public static int b_enemy = 0;
+        public static int a_enemy = 200;
+        #endregion
         //语音
         public static bool playOperatorVoice = true;
         public static int voiceIntervalTime = 2;
@@ -59,9 +97,37 @@ namespace AK_DLL
         public override void ExposeData()
         {
             //自动填充
+            Scribe_Values.Look(ref displayBar, "displayBar", defaultValue: true);
+            Scribe_Values.Look(ref display_PlayerFaction, "display_PlayerFaction", defaultValue: true);
+            Scribe_Values.Look(ref display_AllyFaction, "display_AllyFaction", defaultValue: false);
+            Scribe_Values.Look(ref display_AllyFaction_InjuryedOnly, "display_AllyFaction_InjuryedOnly", defaultValue: false);
+            Scribe_Values.Look(ref display_NeutralFaction, "display_NeturalFaction", defaultValue: false);
+            Scribe_Values.Look(ref display_NeutralFaction_InjuryedOnly, "display_NeutralFaction_InjuryedOnly", defaultValue: false);
+            Scribe_Values.Look(ref display_Colonist, "display_Colonist", defaultValue: true);
+            Scribe_Values.Look(ref display_Colonist_InjuryedOnly, "display_ColonistInjuryedOnly", defaultValue: false);
+            Scribe_Values.Look(ref display_ColonyAnimal, "display_Animal", defaultValue: false);
+            Scribe_Values.Look(ref display_ColonyAnimal_InjuryedOnly, "display_ColonyAnimalInjuryedOnly", defaultValue: false);
+            Scribe_Values.Look(ref display_ColonyMech, "display_Mech", defaultValue: false);
+            Scribe_Values.Look(ref display_ColonyMech_InjuryedOnly, "display_ColonyMechInjuryedOnly", defaultValue: false);
+            Scribe_Values.Look(ref display_OnDraftedOnly, "display_OnDraftedOnly", defaultValue: false);
+            Scribe_Values.Look(ref display_Enemy, "display_Enemy", defaultValue: true);
+            Scribe_Values.Look(ref display_Enemy_InjuryedOnly, "display_EnemyHurtOnly", defaultValue: true);
+            Scribe_Values.Look(ref disable_displayPawnLabelHealth, "disable_displayPawnLabelHealth", defaultValue: true);
+            Scribe_Values.Look(ref display_PawnDeathIndicator_Option, "display_PawnDeathIndicator_Option", defaultValue: 1);
+            Scribe_Values.Look(ref display_Option_HHMMSS, "display_Option_HHMMSS", defaultValue: true);
+            Scribe_Values.Look(ref barWidth, "barWidth", defaultValue: 150);
+            Scribe_Values.Look(ref barHeight, "barHeight", defaultValue: 75);
+            Scribe_Values.Look(ref barMargin, "barMargin", defaultValue: -100);
+            Scribe_Values.Look(ref r, "r", defaultValue: 105);
+            Scribe_Values.Look(ref g, "g", defaultValue: 180);
+            Scribe_Values.Look(ref b, "b", defaultValue: 210);
+            Scribe_Values.Look(ref a, "a", defaultValue: 200);
+            Scribe_Values.Look(ref r_enemy, "r_enemy", defaultValue: 220);
+            Scribe_Values.Look(ref g_enemy, "g_enemy", defaultValue: 40);
+            Scribe_Values.Look(ref b_enemy, "b_enemy", defaultValue: 20);
+            Scribe_Values.Look(ref a_enemy, "a_enemy", defaultValue: 200);
+            //
             Scribe_Values.Look(ref playOperatorVoice, "playVoice");
-            Scribe_Values.Look(ref displayBarModel, "displayBar");
-            Scribe_Values.Look(ref displayEnemyBarModel, "displayEnemyBar");
             Scribe_Values.Look(ref voiceIntervalTime, "voiceInterTime", 1);
             Scribe_Values.Look(ref displayBottomLeftPortrait, "displayP");
             Scribe_Values.Look(ref xOffset, "xOff");
@@ -82,19 +148,26 @@ namespace AK_DLL
     public class AK_Mod : Mod
     {
         public static AK_ModSettings settings;
-
+        public enum Option_TimeDisplay
+        {
+            None = 0,
+            DeathTimeOnly = 1,
+            BleedRateOnly = 2,
+            Both = 3
+        }
         public AK_Mod(ModContentPack content) : base(content)
         {
             settings = GetSettings<AK_ModSettings>();
         }
-
         public override void DoSettingsWindowContents(Rect inRect)
         {
             Listing_Standard listingStandard = new Listing_Standard();
             listingStandard.Begin(inRect);
             if (Prefs.DevMode) listingStandard.CheckboxLabeled("测试模式", ref AK_ModSettings.debugOverride, "开启明日方舟MOD的测试模式。如果您不是测试人员请勿勾选此选项。");
-            listingStandard.CheckboxLabeled("AK_Option_DisplayBar".Translate(), ref AK_ModSettings.displayBarModel, "AK_Option_DisplayBarD".Translate());
-            listingStandard.CheckboxLabeled("AK_Option_DisplayEnemyBar".Translate(), ref AK_ModSettings.displayEnemyBarModel, "AK_Option_DisplayEnemyBarD".Translate());
+            if (listingStandard.ButtonText("方舟血条设置"))
+            {
+                Find.WindowStack.Add(new DoBarSetting_Window());
+            }
             listingStandard.CheckboxLabeled("AK_Option_Play".Translate(), ref AK_ModSettings.playOperatorVoice, "AK_Option_PlayD".Translate()); ;
             AK_ModSettings.voiceIntervalTime = (int)listingStandard.SliderLabeled("AK_Option_Interval".Translate() + $"{(float)AK_ModSettings.voiceIntervalTime / 2.0}", AK_ModSettings.voiceIntervalTime, 0, 60f);
 

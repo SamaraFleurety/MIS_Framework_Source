@@ -7,14 +7,17 @@ namespace AK_DLL
     //泰南我草你妈 Draw方法是交替执行的 Worker还是唯一实例
     public class PawnRenderNodeWorker_AKHealthBar : PawnRenderNodeWorker
     {
+        private ProgramState CurrentProgramState => Current.ProgramState;
         private static bool CameraPlusModEnabled => AK_BarUITool.CameraPlusModEnabled;
         private static bool SimpleCameraModEnabled => AK_BarUITool.SimpleCameraModEnabled;
-        private ProgramState CurrentProgramState => Current.ProgramState;
         //locOffset
         private float ZoomRootSize => Find.CameraDriver.ZoomRootSize;
-        private static Vector2 BarSize = new Vector2(1.5f, 0.075f);
-        private static Vector3 BottomMargin = Vector3.back;
-        private static Vector3 IconMargin = Vector3.back + Vector3.left * 0.8f;
+        private static float Width => AK_ModSettings.barWidth * 0.01f;
+        private static float Height => AK_ModSettings.barHeight * 0.001f;
+        private static float Margin => AK_ModSettings.barMargin * 0.01f;
+        private static Vector2 BarSize => new Vector2(Width, Height);
+        private static Vector3 BottomMargin => new Vector3(0f, 0f, Margin);
+        //private static Vector3 IconMargin => BottomMargin + Vector3.left * 0.8f;
         //Mat
         private static Material BarFilledMat => AK_BarUITool.HealthBarFilledMat;
         private static Material BarEnemyFilledMat => AK_BarUITool.EnemyHealthBarFilledMat;
@@ -73,20 +76,19 @@ namespace AK_DLL
             fbr.unfilledMat = BarUnfilledMat;
             fbr.rotation = Rot4.North;
             GenDraw.DrawFillableBar(fbr);
-            DrawIcon(fbr.center);
-            //Log.Message("现在的摄像机缩放" + Find.CameraDriver.ZoomRootSize.ToString());
-            //Log.Message("现在的GUI缩放" + (Find.Camera.WorldToScreenPoint(drawPos) / Prefs.UIScale).ToString());
+            Vector3 iconPos = new Vector3(fbr.center.x - (fbr.size.x / 2) - 0.075f, fbr.center.y, fbr.center.z);
+            DrawIcon(iconPos);
         }
         private void DrawIcon(Vector3 pos)
         {
             Matrix4x4 matrix = default;
-            matrix.SetTRS(pos + IconMargin, Rot4.North.AsQuat, new Vector3(0.25f, 1f, 0.25f));
+            matrix.SetTRS(pos, Rot4.North.AsQuat, new Vector3(0.25f, 1f, 0.25f));
             Graphics.DrawMesh(MeshPool.plane025, matrix, material: HP_Icon, 2);
         }
         public override bool CanDrawNow(PawnRenderNode node, PawnDrawParms parms)
         {
             Pawn pawn = parms.pawn;
-            if (!AK_ModSettings.displayBar || CurrentProgramState != ProgramState.Playing || pawn == null || pawn.Dead)
+            if (!AK_ModSettings.enable_HealthBar || CurrentProgramState != ProgramState.Playing || pawn == null || pawn.Dead)
             {
                 return false;
             }

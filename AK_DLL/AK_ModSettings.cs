@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
 using Verse;
-using static AK_DLL.AK_BarUITool;
 
 namespace AK_DLL
 {
@@ -16,7 +12,7 @@ namespace AK_DLL
         public static bool debugOverride = false;
 
         #region 舟血条
-        public static bool displayBar = true;
+        public static bool enable_HealthBar = true;
         public static bool display_PlayerFaction = true;
         public static bool display_AllyFaction = true;
         public static bool display_AllyFaction_InjuryedOnly = true;
@@ -32,6 +28,10 @@ namespace AK_DLL
         public static bool display_Enemy = true;
         public static bool display_Enemy_InjuryedOnly = true;
         public static bool disable_displayPawnLabelHealth = true;
+        //
+        public static bool enable_Skillbar = true;
+        public static bool display_Skillbar_OnDraftedOnly = true;
+        //
         public static int display_PawnDeathIndicator_Option = 1;
         public static bool display_Option_HHMMSS = true;
         public static bool Option_BindingHealthBar = false;
@@ -97,7 +97,7 @@ namespace AK_DLL
         public override void ExposeData()
         {
             //自动填充
-            Scribe_Values.Look(ref displayBar, "displayBar", defaultValue: true);
+            Scribe_Values.Look(ref enable_HealthBar, "displayBar", defaultValue: true);
             Scribe_Values.Look(ref display_PlayerFaction, "display_PlayerFaction", defaultValue: true);
             Scribe_Values.Look(ref display_AllyFaction, "display_AllyFaction", defaultValue: false);
             Scribe_Values.Look(ref display_AllyFaction_InjuryedOnly, "display_AllyFaction_InjuryedOnly", defaultValue: false);
@@ -112,6 +112,8 @@ namespace AK_DLL
             Scribe_Values.Look(ref display_OnDraftedOnly, "display_OnDraftedOnly", defaultValue: false);
             Scribe_Values.Look(ref display_Enemy, "display_Enemy", defaultValue: true);
             Scribe_Values.Look(ref display_Enemy_InjuryedOnly, "display_EnemyHurtOnly", defaultValue: true);
+            Scribe_Values.Look(ref enable_Skillbar, "enable_Skillbar", defaultValue: true);
+            Scribe_Values.Look(ref display_Skillbar_OnDraftedOnly, "display_Skillbar_OnDraftedOnly", defaultValue: false);
             Scribe_Values.Look(ref disable_displayPawnLabelHealth, "disable_displayPawnLabelHealth", defaultValue: true);
             Scribe_Values.Look(ref display_PawnDeathIndicator_Option, "display_PawnDeathIndicator_Option", defaultValue: 1);
             Scribe_Values.Look(ref display_Option_HHMMSS, "display_Option_HHMMSS", defaultValue: true);

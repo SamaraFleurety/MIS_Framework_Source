@@ -10,20 +10,16 @@ namespace AK_DLL
     public class PawnRenderNodeWorker_AKSkillBar : PawnRenderNodeWorker
     {
         //locOffset
+        private ProgramState CurrentProgramState => Current.ProgramState;
         private static bool CameraPlusModEnabled => AK_BarUITool.CameraPlusModEnabled;
         private static bool SimpleCameraModEnabled => AK_BarUITool.SimpleCameraModEnabled;
-        private ProgramState CurrentProgramState => Current.ProgramState;
         private float ZoomRootSize => Find.CameraDriver.ZoomRootSize;
         private static float Width => AK_ModSettings.barWidth * 0.01f;
         private static float Height => AK_ModSettings.barHeight * 0.001f;
         private static float Margin => AK_ModSettings.barMargin * 0.01f;
-        private static float skillMargin => Margin * 1.075f;
         private static Vector2 BarSize => new Vector2(Width, Height);
-        private static Vector3 BottomMargin => new Vector3(0f, 0f, skillMargin);
-        //private static Vector2 BarSize = new Vector2(1.5f, 0.075f);
-        //private static Vector3 BottomMargin = Vector3.back * 1.075f;
-        private static Vector3 TopMargin = Vector3.forward * 1f;
-        private static Vector3 IconMargin = Vector3.back * 1.0625f + Vector3.left * 0.8f;
+        private static Vector3 BottomMargin => new Vector3(0f, 0f, Margin - Height);
+        private static Vector3 TopMargin => Vector3.forward * 1f;
         //Mat
         private static Material BarFilledMat => AK_BarUITool.SkillBarFilledMat;
         private static Material BarUnfilledMat => AK_BarUITool.BarUnfilledMat;
@@ -34,9 +30,7 @@ namespace AK_DLL
         private string ObjectName(Pawn p) => (p.GetDoc()?.operatorID ?? p.Label) + ".objTMP";
         private GameObject PrefabTMP => AK_Tool.PAAsset.LoadAsset<GameObject>("PrefabTMPPopup");
         //使用prefab可以避免new GameObject出来的object被回收不能用Find方法找到；
-        private Dictionary<string, GameObject> PrefabTMPInstancesDictionary = new Dictionary<string, GameObject>();
-        private Dictionary<string, float> RotateAngleDictionary = new Dictionary<string, float>();
-        private Dictionary<string, float> BurstFlashFactorDictionary = new Dictionary<string, float>();
+        private Dictionary<string, GameObject> PrefabTMPInstancesDictionary => AK_BarUITool.PrefabTMPInstancesDictionary;
         private void InitObjectOnce(Pawn p)
         {
             if (PrefabTMPInstancesDictionary.NullOrEmpty() || !PrefabTMPInstancesDictionary.ContainsKey(OperatorID(p)))
@@ -63,18 +57,13 @@ namespace AK_DLL
         }
         private float CooldownPercent(AKAbility ability)
         {
-            return ability.cooldown.CooldownPercent() * -1;
+            //Log.Message(ability.cooldown.CooldownPercent());
+            return ability.cooldown.CooldownPercent();
             /*if (ability.cooldown.charge == ability.cooldown.MaxCharge)
             {
                 return 1;
             }
             return 1f - (float)ability.cooldown.CDCurrent / (float)ability.cooldown.CDPerCharge;*/
-        }
-        private void DrawIcon(Vector3 pos)
-        {
-            Matrix4x4 matrix = default;
-            matrix.SetTRS(pos + IconMargin, Rot4.North.AsQuat, new Vector3(0.25f, 1f, 0.25f));
-            Graphics.DrawMesh(MeshPool.plane025, matrix, material: Timer_Icon, 2);
         }
         private float GetZoomRatio()
         {
@@ -84,10 +73,9 @@ namespace AK_DLL
             }
             return 1f;
         }
-        private void DrawSkillBar(Material mat, Pawn pawn)
+        private void DrawSkillBar(Material mat, Pawn pawn, float percent)
         {
             Vector3 drawPos = pawn.DrawPos;
-            float percent = pawn.GetHealthPercent();
             float zoomRatio = GetZoomRatio();
             float zoomWidthRatio;
             float zoomYRatio;
@@ -129,14 +117,25 @@ namespace AK_DLL
             fbr.unfilledMat = BarUnfilledMat;
             fbr.rotation = Rot4.North;
             GenDraw.DrawFillableBar(fbr);
-            DrawIcon(fbr.center);
-            //Log.Message("现在的摄像机缩放" + Find.CameraDriver.ZoomRootSize.ToString());
-            //Log.Message("现在的GUI缩放" + (Find.Camera.WorldToScreenPoint(drawPos) / Prefs.UIScale).ToString());
+            Vector3 iconPos = new Vector3(fbr.center.x - (fbr.size.x / 2) - 0.075f, fbr.center.y, fbr.center.z);
+            DrawIcon(iconPos, new Vector3(0.25f, 1f, 0.25f), Timer_Icon, MeshPool.plane025);
+        }
+        private void DrawIcon(Vector3 pos, Vector3 scale, Material icon, Mesh plane)
+        {
+            Matrix4x4 matrix = default;
+            matrix.SetTRS(pos, Rot4.North.AsQuat, scale);
+            Graphics.DrawMesh(plane, matrix, material: icon, 2);
+        }
+        private void DrawIcon(Vector3 pos, Vector3 scale, Quaternion quat, Material icon, Mesh plane, int layer)
+        {
+            Matrix4x4 matrix = default;
+            matrix.SetTRS(pos, quat, scale);
+            Graphics.DrawMesh(plane, matrix, material: icon, 2);
         }
         public override bool CanDrawNow(PawnRenderNode node, PawnDrawParms parms)
         {
             Pawn pawn = parms.pawn;
-            if (!AK_ModSettings.displayBar || CurrentProgramState != ProgramState.Playing || pawn == null || pawn.Dead)
+            if (CurrentProgramState != ProgramState.Playing || pawn == null)
             {
                 return false;
             }
@@ -149,13 +148,13 @@ namespace AK_DLL
         public override void PostDraw(PawnRenderNode node, PawnDrawParms parms, Mesh mesh, Matrix4x4 matrix)
         {
             Pawn pawn = parms.pawn;
-            if (!AK_ModSettings.displayBar || pawn.GetDoc() == null)
+            //倒地销毁TMP物件D
+            /*if (!AK_ModSettings.enable_Skillbar)
             {
                 return;
-            }
-            //倒地销毁TMP物件D
+            }*/
             GameObject PrefabTMPInstance = PrefabTMPInstancesDictionary.TryGetValue(OperatorID(pawn));
-            if (pawn.Downed || pawn.Dead)
+            if (pawn.Downed || pawn.Dead || !AK_ModSettings.enable_Skillbar || (AK_ModSettings.display_Skillbar_OnDraftedOnly && !pawn.Drafted))
             {
                 if (PrefabTMPInstance == GameObject.Find(ObjectName(pawn)))
                 {
@@ -166,9 +165,9 @@ namespace AK_DLL
             //征召显示开关
             if (PrefabTMPInstance != null)
             {
-                PrefabTMPInstance?.SetActive(pawn.Drafted || pawn.Downed);
+                PrefabTMPInstance?.SetActive(!AK_ModSettings.enable_Skillbar || pawn.Drafted || pawn.Downed);
             }
-            if (!pawn.Drafted)
+            if (!AK_ModSettings.enable_Skillbar || (AK_ModSettings.display_Skillbar_OnDraftedOnly && !pawn.Drafted))
             {
                 return;
             }
@@ -199,39 +198,21 @@ namespace AK_DLL
             {
                 SkillPercent = 0f;
             }
-            DrawSkillBar(BarFilledMat, pawn);
-            /*GenDraw.FillableBarRequest fbr = default;
-            fbr.center = pawn.DrawPos + (Vector3.up * 3f) + BottomMargin;
-            fbr.size = BarSize;
-            fbr.filledMat = BarFilledMat;
-            fbr.unfilledMat = BarUnfilledMat;
-            //fbr.margin = 0;
-            fbr.rotation = Rot4.North;
-            fbr.fillPercent = (SkillPercent < 0f) ? 0f : SkillPercent;
-            GenDraw.DrawFillableBar(fbr);
-            //图标
-            Matrix4x4 matrix1 = default;
-            matrix1.SetTRS(pawn.DrawPos + IconMargin, Rot4.North.AsQuat, new Vector3(0.25f, 1f, 0.25f));
-            Graphics.DrawMesh(MeshPool.plane025, matrix1, material: Timer_Icon, 2);
-            */
+            DrawSkillBar(BarFilledMat, pawn, SkillPercent);
             Vector3 OriginCenter = pawn.DrawPos + TopMargin + (Vector3.up * 3f);
             Vector3 Scale = new Vector3(0.3f, 1f, 0.3f);
             //自动回复技能
+            if (!AK_ModSettings.display_Skillbar_OnDraftedOnly && !pawn.Drafted)
+            {
+                return;
+            }
             if (ability != null && ability.cooldown.charge == ability.cooldown.MaxCharge && !IsGrouped)
             {
                 if (BurstButton != null)
                 {
-                    if (!BurstFlashFactorDictionary.ContainsKey(OperatorID(pawn)))
-                    {
-                        BurstFlashFactorDictionary.SetOrAdd(OperatorID(pawn), 0f);
-                    }
-                    Matrix4x4 matrix2 = default;
-                    matrix2.SetTRS(OriginCenter, Rot4.North.AsQuat, Scale);
-                    Graphics.DrawMesh(MeshPool.plane10, matrix2, material: BurstButton, 2);
+                    DrawIcon(OriginCenter, Scale, BurstButton, MeshPool.plane10);
                     //闪烁
-                    float BurstFlashFactor = BurstFlashFactorDictionary[OperatorID(pawn)];
-                    BurstFlashFactor = (BurstFlashFactor + 0.025f) % 1.5f;
-                    BurstFlashFactorDictionary[OperatorID(pawn)] = BurstFlashFactor;
+                    float BurstFlashFactor = GlobalFactor_Accumulator.BurstFlashFactor;
                     float factor = Mathf.Sqrt(BurstFlashFactor);
                     float transparency = 120 - (BurstFlashFactor / 1.2f * 70);
                     //float transparency = Mathf.Lerp(150, 0, factor);
@@ -249,16 +230,8 @@ namespace AK_DLL
                 InitObjectOnce(pawn);
                 if (RotateRing != null)
                 {
-                    if (!RotateAngleDictionary.ContainsKey(OperatorID(pawn)))
-                    {
-                        RotateAngleDictionary.SetOrAdd(OperatorID(pawn), 0f);
-                    }
-                    float RotateAngle = RotateAngleDictionary[OperatorID(pawn)];
-                    RotateAngle = (RotateAngle + 0.25f) % 360;
-                    RotateAngleDictionary[OperatorID(pawn)] = RotateAngle;
-                    Matrix4x4 matrix3 = default;
-                    matrix3.SetTRS(OriginCenter, Quaternion.AngleAxis(RotateAngle, Vector3.up), Scale);
-                    Graphics.DrawMesh(MeshPool.plane10, matrix3, material: RotateRing, 1);
+                    float RotateAngle = GlobalFactor_Accumulator.RotateAngle;
+                    DrawIcon(OriginCenter, Scale, Quaternion.AngleAxis(RotateAngle, Vector3.up), RotateRing, MeshPool.plane10, 1);
                 }
                 if (PrefabTMPInstance != null)
                 {

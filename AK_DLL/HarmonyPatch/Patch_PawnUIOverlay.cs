@@ -56,4 +56,13 @@ namespace AK_DLL
             return codes;
         }
     }
+    [HarmonyPatch(typeof(RealTime), "Update")]
+    internal static class Patch_Factor_Accumulator
+    {
+        [HarmonyPostfix]
+        public static void Postfix_UpdateTime()
+        {
+            GlobalFactor_Accumulator.Update();
+        }
+    }
 }

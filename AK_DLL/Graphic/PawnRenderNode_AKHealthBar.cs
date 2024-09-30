@@ -18,10 +18,6 @@ namespace AK_DLL
         public PawnRenderNode_AKHealthBar(Pawn pawn, PawnRenderNodeProperties props, PawnRenderTree tree) : base(pawn, props, tree)
         {
         }
-        public override Mesh GetMesh(PawnDrawParms parms)
-        {
-            return base.GetMesh(parms);
-        }
         public override Graphic GraphicFor(Pawn pawn)
         {
             return new Graphic();

@@ -83,7 +83,8 @@ namespace AKA_Ability.Cooldown
         //同时决定gizmo的白框。冷却越多白框填充越多
         public virtual float CooldownPercent()
         {
-            if (charge == MaxCharge) return 0;
+            if (MaxCharge == 0) return 0;
+            if (charge == MaxCharge) return 1f;
             return (float)this.SP / (float)this.MaxSP;
         }
 

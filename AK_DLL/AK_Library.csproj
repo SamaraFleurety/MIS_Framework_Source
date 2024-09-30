@@ -291,6 +291,7 @@
     <Compile Include="Graphic\AK_BarUITool.cs" />
     <Compile Include="Graphic\DoBarSetting_Window.cs" />
     <Compile Include="Graphic\DrawGUIOverlayExtras.cs" />
+    <Compile Include="Graphic\GlobalFactor_Accumulator.cs" />
     <Compile Include="Graphic\PawnRenderNodeWorker_AKHealthBar.cs" />
     <Compile Include="Graphic\PawnRenderNodeWorker_AKSkillBar.cs" />
     <Compile Include="Graphic\PawnRenderNode_AKHealthBar.cs" />

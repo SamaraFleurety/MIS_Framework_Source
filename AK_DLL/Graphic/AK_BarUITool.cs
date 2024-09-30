@@ -1,5 +1,6 @@
 ﻿using RimWorld;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
@@ -23,6 +24,8 @@ namespace AK_DLL
         public static Material HealthBarFilledMat => SolidColorMaterials.SimpleSolidColorMaterial(BarColor);
         public static Material EnemyHealthBarFilledMat => SolidColorMaterials.SimpleSolidColorMaterial(BarColor_enemy);
         public static Material SkillBarFilledMat;
+
+        internal static Dictionary<string, GameObject> PrefabTMPInstancesDictionary = new Dictionary<string, GameObject>();
 
         private static readonly string HP_IconTexPath = "UI/Abilities/icon_sort_hp";
         private static readonly string DEF_IconTexPath = "UI/Abilities/icon_sort_def";

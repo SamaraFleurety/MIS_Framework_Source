@@ -32,7 +32,7 @@ namespace AK_DLL
 		}
 
 		//随机播放技能语音
-		public static void PlaySound(this Pawn pawn, SFXType type)
+		public static void PlaySound(this Pawn pawn)
 		{
 			OperatorDocument doc = pawn.GetDoc();
 			if (doc != null) doc.voicePack.abilitySounds.RandomElement().PlaySound();

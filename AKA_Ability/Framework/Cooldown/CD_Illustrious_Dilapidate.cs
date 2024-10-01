@@ -4,7 +4,7 @@ using Verse;
 
 namespace AKA_Ability.Cooldown
 {
-    //极堕残光专用
+    //极堕残光专用 最后那个生僻字是遗弃的意思
     //充能会趋近于1。在不刚好为1的情况，每秒会减少当前总能量的1%或者增加充到1层的5%
     public class CD_Illustrious_Dilapidate : CD_Stricken
     {

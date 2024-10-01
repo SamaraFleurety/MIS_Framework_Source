@@ -1,4 +1,5 @@
 ﻿using AKA_Ability.Cooldown;
+using AKA_Ability.Range;
 using RimWorld;
 using System;
 using UnityEngine;
@@ -17,6 +18,17 @@ namespace AKA_Ability
         public AKAbilityDef def;
 
         protected Command cachedGizmo = null;
+
+        private RangeWorker_Base rangeWorker = null;
+        public virtual float Range
+        {
+            get
+            {
+                if (def.rangeWorker == null) return def.range;
+                rangeWorker ??= (RangeWorker_Base)Activator.CreateInstance(def.rangeWorker);
+                return rangeWorker.Range();
+            }
+        }
 
         //存档时要用这个
         public AKAbility(AbilityTracker tracker) /*: this()*/
@@ -86,7 +98,7 @@ namespace AKA_Ability
         //画技能范围
         public virtual void DrawAbilityRadiusRing()
         {
-            float range = def.range;
+            float range = Range;
             if (range <= 0) return;
             GenDraw.DrawRadiusRing(CasterPawn.Position, range, Color.white);
         }

@@ -32,6 +32,7 @@ namespace AKA_Ability
         //目标选择
         public TargetingParameters targetParams = TargetingParameters.ForPawns();
         public float range = 0;
+        public Type rangeWorker = null;         //可变射程 这个比上面的float优先
         public bool reqLineofSight = false;     //是否需要视线
 
         //释放技能后会播放的音效

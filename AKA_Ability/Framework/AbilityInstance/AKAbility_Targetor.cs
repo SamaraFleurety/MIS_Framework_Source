@@ -29,21 +29,6 @@ namespace AKA_Ability
                 icon = def.Icon,
                 parent = this
             };
-
-            /*cachedGizmo = new Command_AKAbility
-            {
-                defaultLabel = def.label,
-                defaultDesc = def.description,
-                icon = def.Icon,
-                verb = new Verb_AbilityTargeting
-                {
-                    verbProps = def.verb,
-                    caster = CasterPawn,
-                    verbTracker = new VerbTracker(CasterPawn),
-                    parent = this
-                },
-                ability = this
-            };*/
         }
 
         #region Targetor
@@ -71,7 +56,7 @@ namespace AKA_Ability
         public bool CanHitTarget(LocalTargetInfo target)
         {
             if (!target.IsValid) return false;
-            if (target.Cell.DistanceTo(CasterPawn.Position) > def.range) return false;
+            if (target.Cell.DistanceTo(CasterPawn.Position) > Range) return false;
             if (def.reqLineofSight && !GenSight.LineOfSight(CasterPawn.Position, target.Cell, CasterPawn.Map)) return false;
             return true;
         }

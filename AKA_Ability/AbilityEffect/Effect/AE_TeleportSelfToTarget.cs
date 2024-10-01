@@ -11,7 +11,6 @@ namespace AKA_Ability
             Pawn casterPawn = caster.CasterPawn;
             bool drafted = casterPawn.Drafted;
             Map map = casterPawn.Map;
-            //if (caster.Drafted) drafted = true;
             casterPawn.DeSpawn(DestroyMode.QuestLogic);
             GenSpawn.Spawn(casterPawn, target.Cell, map);
             if (drafted) casterPawn.drafter.Drafted = true;

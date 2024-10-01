@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <LangVersion>9.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>9.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>9.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony, Version=2.3.3.0, Culture=neutral, processorArchitecture=MSIL">
@@ -64,6 +67,9 @@
   <ItemGroup>
     <Compile Include="AbilityEffect\AbilityEffectBase.cs" />
     <Compile Include="AbilityEffect\AddHediff\AbilityEffect_AddHediff.cs" />
+    <Compile Include="AbilityEffect\AddHediff\AddStat\HediffStageProperty.cs" />
+    <Compile Include="AbilityEffect\AddHediff\AddStat\Hediff_DynamicStage.cs" />
+    <Compile Include="AbilityEffect\AddHediff\AddStat\Patch_BulletDmgFactor.cs" />
     <Compile Include="AbilityEffect\AddHediff\DelayedBloodLoss\AE_DelayedBloodLoss.cs" />
     <Compile Include="AbilityEffect\AddHediff\DelayedBloodLoss\HCP_BloodLoss.cs" />
     <Compile Include="AbilityEffect\AddHediff\DelayedBloodLoss\HC_BloodLoss.cs" />
@@ -90,6 +96,7 @@
     <Compile Include="AbilityEffect\Effect\AE_GainTrait.cs" />
     <Compile Include="AbilityEffect\Effect\AbilityEffect_Heal.cs" />
     <Compile Include="AbilityEffect\Effect\AE_ChangeHair.cs" />
+    <Compile Include="AbilityEffect\Effect\AE_Illustrious_Dilapidate.cs" />
     <Compile Include="AbilityEffect\Effect\AE_Jump.cs" />
     <Compile Include="AbilityEffect\Effect\AE_TeleportSelfToTarget.cs" />
     <Compile Include="AbilityEffect\Effect\Mass\AbilityMassEffectBase.cs" />
@@ -118,6 +125,8 @@
     <Compile Include="Framework\Gizmos\Gizmo_AbilityCast_Base.cs" />
     <Compile Include="Framework\Gizmos\Gizmo_AbilityCast_Toggle.cs" />
     <Compile Include="AbilityEffect\DelayedEffects\GC_DelayedAbilityManager.cs" />
+    <Compile Include="Framework\Range\RangeWorker_Base.cs" />
+    <Compile Include="Framework\Range\RangeWorker_Illustrious_Dilapidate.cs" />
     <Compile Include="Harmony\PatchMain.cs" />
     <Compile Include="Framework\Gizmos\Gizmo_AKAbilityBase.cs" />
     <Compile Include="Framework\AKAbilityDef.cs" />

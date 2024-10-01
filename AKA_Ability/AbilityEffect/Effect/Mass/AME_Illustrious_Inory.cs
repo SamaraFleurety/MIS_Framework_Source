@@ -12,40 +12,40 @@ namespace AKA_Ability.AbilityEffect
     //光辉以自身为圆心吸取范围内敌人的移动速度和伤害，自身获得一定量加成，并获得生命吸取。范围内队友会承受一定效果并且不提供加成。
     public class AME_Illustrious_Inory : AbilityMassEffectBase
     {
+        public HediffDef hediffOnFriend;
+        public HediffDef hediffOnEnemy;
+        public HediffDef hediffOnSelf;
+        public float duration = 96; //持续时间 单位是游戏内小时
         protected override bool DoEffect(AKAbility caster, LocalTargetInfo target)
         {
             int enemyCnt = 0;
             AME_Worker<Pawn> worker = new AME_Worker<Pawn>(this, doEffect_SingleTarget: delegate (AKAbility ab, Pawn victim)
             {
-                /*if (victim.Destroyed) return;
+                if (victim.Destroyed) return;
                 if (victim.Faction != null && victim.Faction.HostileTo(Faction.OfPlayer))
                 {
                     ++enemyCnt;
+                    AbilityEffect_AddHediff.AddHediff(victim, hediffOnEnemy, severity: duration);
                 }
-                DamageInfo absDmgInfo = new DamageInfo(damageDef, DAMAGE_HEAL_PER_PAWN, 999, instigator: ab.CasterPawn, instigatorGuilty: false);
-                if (victim.def.useHitPoints)
+                else
                 {
-                    victim.HitPoints -= (int)DAMAGE_HEAL_PER_PAWN;
-                    if (victim.HitPoints <= 0)
-                    {
-                        victim.HitPoints = 0;
-                        victim.Kill(absDmgInfo);
-                    }
+                    AbilityEffect_AddHediff.AddHediff(victim, hediffOnFriend, severity: duration);
                 }
-                else absDmgInfo.Def.Worker.Apply(absDmgInfo, victim);
 
-                AbilityEffect_Heal.Heal(caster.CasterPawn, DAMAGE_HEAL_PER_PAWN);*/
-
-            }, AllPawnAliveInCell /*allPossibleTargetsInCell: delegate (AKAbility ab, IntVec3 cell)
-            {
-                List<Pawn> res = new List<Pawn>();
-                foreach (Thing t in cell.GetThingList(ab.CasterPawn.Map))
-                {
-                    if (t is Pawn p && !p.Dead &&!p.Destroyed) res.Add(p);
-                }
-                return res;
-            }*/);
+            }, AllPawnAliveInCell);
             worker.DoEffect_AllTargets(caster, target);
+
+            //吸移速最多20层
+            if (enemyCnt > 20) enemyCnt = 20;
+            AbilityEffect_AddHediff.AddHediff(caster.CasterPawn, hediffOnSelf, severity: -100);
+            Hediff_DynamicStage onSelf = AbilityEffect_AddHediff.AddHediff(caster.CasterPawn, hediffOnSelf, severity: duration) as Hediff_DynamicStage;
+            onSelf.stageProperty.TryAddMergeStatModifier(StatDefOf.MoveSpeed, 0.1f * enemyCnt, false);
+
+            //增伤最多10层
+            if (enemyCnt > 10) enemyCnt = 10;
+            onSelf.stageProperty.TryAddMergeStatModifier(StatDefOf.MeleeDamageFactor, 0.1f * enemyCnt, false);
+            onSelf.stageProperty.TryAddMergeStatModifier(AKADefOf.AKA_Stat_RangedDamageFactor, 0.1f * enemyCnt, false);
+
             return true;
         }
     }

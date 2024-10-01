@@ -88,6 +88,7 @@ namespace AK_DLL
                 zoomWidthRatio = zoomRatio > 3.75f ? 3.75f : zoomRatio;
                 zoomYRatio = zoomRatio > 3f ? 3f : zoomRatio;
             }
+            //
             GenDraw.FillableBarRequest fbr = default;
             if (CameraPlusModEnabled)
             {
@@ -140,6 +141,10 @@ namespace AK_DLL
         public override void PostDraw(PawnRenderNode node, PawnDrawParms parms, Mesh mesh, Matrix4x4 matrix)
         {
             Pawn pawn = parms.pawn;
+            /*if (!AK_ModSettings.enable_Skillbar)
+            {
+                return;
+            }*/
             //倒地销毁TMP物件D
             GameObject PrefabTMPInstance = PrefabTMPInstancesDictionary.TryGetValue(OperatorID(pawn));
             if (!AK_ModSettings.enable_Skillbar || !pawn.IsColonist || pawn.Downed || pawn.Dead)
@@ -155,7 +160,7 @@ namespace AK_DLL
             {
                 PrefabTMPInstance?.SetActive(pawn.Drafted || pawn.Downed);
             }
-            if (!AK_ModSettings.enable_Skillbar || (AK_ModSettings.display_Skillbar_OnDraftedOnly && !pawn.Drafted))
+            if (!AK_ModSettings.enable_Skillbar || (AK_ModSettings.display_Skillbar_OnDraftedOnly && !pawn.Drafted) || (pawn.CurJob != null && pawn.jobs.curDriver.asleep))
             {
                 return;
             }
@@ -198,7 +203,9 @@ namespace AK_DLL
                 DrawIcon(OriginCenter, Scale, Rot4.North.AsQuat, BurstButton, MeshPool.plane10, 2);
                 //闪烁
                 float BurstFlashFactor = GlobalFactor_Accumulator.GetBurstFlashFactor;
+                //float factor = Mathf.Sqrt(BurstFlashFactor);
                 float transparency = 120 - (BurstFlashFactor / 1.2f * 70);
+                //float transparency = Mathf.Lerp(150, 0, factor);
                 AK_BarUITool.SimpleRectBarRequest sbr = default;
                 sbr.center = OriginCenter + Vector3.down;
                 sbr.filledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(255, 255, 0, (byte)Mathf.Max(transparency, 20f))); ;

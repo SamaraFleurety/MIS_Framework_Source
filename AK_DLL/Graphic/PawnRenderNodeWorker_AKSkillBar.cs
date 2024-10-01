@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using Verse;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AK_DLL
 {
@@ -43,7 +44,7 @@ namespace AK_DLL
             }
             else
             {
-                if (p.Dead)
+                if (p.Dead || !p.IsColonist)
                 {
                     GameObject PrefabTMPInstance = PrefabTMPInstancesDictionary.TryGetValue(OperatorID(p));
                     if (PrefabTMPInstance == GameObject.Find(ObjectName(p)))
@@ -57,13 +58,11 @@ namespace AK_DLL
         }
         private float CooldownPercent(AKAbility ability)
         {
-            //Log.Message(ability.cooldown.CooldownPercent());
-            return ability.cooldown.CooldownPercent();
-            /*if (ability.cooldown.charge == ability.cooldown.MaxCharge)
+            if (ability.cooldown.charge == ability.cooldown.MaxCharge)
             {
-                return 1;
+                return 1f;
             }
-            return 1f - (float)ability.cooldown.CDCurrent / (float)ability.cooldown.CDPerCharge;*/
+            return (float)ability.cooldown.SP / (float)ability.cooldown.MaxSP;
         }
         private float GetZoomRatio()
         {
@@ -89,7 +88,6 @@ namespace AK_DLL
                 zoomWidthRatio = zoomRatio > 3.75f ? 3.75f : zoomRatio;
                 zoomYRatio = zoomRatio > 3f ? 3f : zoomRatio;
             }
-            //
             GenDraw.FillableBarRequest fbr = default;
             if (CameraPlusModEnabled)
             {
@@ -118,19 +116,13 @@ namespace AK_DLL
             fbr.rotation = Rot4.North;
             GenDraw.DrawFillableBar(fbr);
             Vector3 iconPos = new Vector3(fbr.center.x - (fbr.size.x / 2) - 0.075f, fbr.center.y, fbr.center.z);
-            DrawIcon(iconPos, new Vector3(0.25f, 1f, 0.25f), Timer_Icon, MeshPool.plane025);
-        }
-        private void DrawIcon(Vector3 pos, Vector3 scale, Material icon, Mesh plane)
-        {
-            Matrix4x4 matrix = default;
-            matrix.SetTRS(pos, Rot4.North.AsQuat, scale);
-            Graphics.DrawMesh(plane, matrix, material: icon, 2);
+            DrawIcon(iconPos, new Vector3(0.25f, 1f, 0.25f), Rot4.North.AsQuat, Timer_Icon, MeshPool.plane025, 2);
         }
         private void DrawIcon(Vector3 pos, Vector3 scale, Quaternion quat, Material icon, Mesh plane, int layer)
         {
             Matrix4x4 matrix = default;
             matrix.SetTRS(pos, quat, scale);
-            Graphics.DrawMesh(plane, matrix, material: icon, 2);
+            Graphics.DrawMesh(plane, matrix, material: icon, layer);
         }
         public override bool CanDrawNow(PawnRenderNode node, PawnDrawParms parms)
         {
@@ -149,12 +141,8 @@ namespace AK_DLL
         {
             Pawn pawn = parms.pawn;
             //倒地销毁TMP物件D
-            /*if (!AK_ModSettings.enable_Skillbar)
-            {
-                return;
-            }*/
             GameObject PrefabTMPInstance = PrefabTMPInstancesDictionary.TryGetValue(OperatorID(pawn));
-            if (pawn.Downed || pawn.Dead || !AK_ModSettings.enable_Skillbar || (AK_ModSettings.display_Skillbar_OnDraftedOnly && !pawn.Drafted))
+            if (!AK_ModSettings.enable_Skillbar || !pawn.IsColonist || pawn.Downed || pawn.Dead)
             {
                 if (PrefabTMPInstance == GameObject.Find(ObjectName(pawn)))
                 {
@@ -162,34 +150,25 @@ namespace AK_DLL
                     PrefabTMPInstancesDictionary.Remove(OperatorID(pawn));
                 }
             }
-            //征召显示开关
+            //征召开关显示图标
             if (PrefabTMPInstance != null)
             {
-                PrefabTMPInstance?.SetActive(!AK_ModSettings.enable_Skillbar || pawn.Drafted || pawn.Downed);
+                PrefabTMPInstance?.SetActive(pawn.Drafted || pawn.Downed);
             }
             if (!AK_ModSettings.enable_Skillbar || (AK_ModSettings.display_Skillbar_OnDraftedOnly && !pawn.Drafted))
             {
                 return;
             }
-            float SkillPercent = 0f;
             bool IsGrouped = false;
-            VAbility_Operator operatorID = null;
-            AKAbility ability = null;
-            if (operatorID == null)
+            VAbility_Operator operatorID = pawn.GetVAbility();
+            AKAbility ability = operatorID?.AKATracker?.innateAbilities.FirstOrDefault();
+            if (ability == null)
             {
-                operatorID = pawn.GetVAbility();
-            }
-            if (operatorID != null && ability == null)
-            {
-                ability = operatorID?.AKATracker?.innateAbilities.Find((AKAbility a) => !a.def.grouped);
-                IsGrouped = false;
-                if (ability == null)
-                {
-                    ability = operatorID?.AKATracker?.groupedAbilities.Find((AKAbility a) => a.def.grouped);
-                    IsGrouped = true;
-                }
+                ability = operatorID?.AKATracker?.groupedAbilities.FirstOrDefault();
+                IsGrouped = true;
             }
             //有AKA技能的Pawn才会显示技能CD进度，否则全为空
+            float SkillPercent;
             if (ability != null)
             {
                 SkillPercent = CooldownPercent(ability);
@@ -206,33 +185,36 @@ namespace AK_DLL
             {
                 return;
             }
-            if (ability != null && ability.cooldown.charge == ability.cooldown.MaxCharge && !IsGrouped)
+            if (ability == null)
             {
-                if (BurstButton != null)
+                return;
+            }
+            if (!IsGrouped & ability.cooldown.charge == ability.cooldown.MaxCharge)
+            {
+                if (BurstButton == null)
                 {
-                    DrawIcon(OriginCenter, Scale, BurstButton, MeshPool.plane10);
-                    //闪烁
-                    float BurstFlashFactor = GlobalFactor_Accumulator.BurstFlashFactor;
-                    float factor = Mathf.Sqrt(BurstFlashFactor);
-                    float transparency = 120 - (BurstFlashFactor / 1.2f * 70);
-                    //float transparency = Mathf.Lerp(150, 0, factor);
-                    AK_BarUITool.SimpleRectBarRequest sbr = default;
-                    sbr.center = OriginCenter + Vector3.down;
-                    sbr.filledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(255, 255, 0, (byte)Mathf.Max(transparency, 20f))); ;
-                    sbr.rotation = Quaternion.AngleAxis(45f, Vector3.up);
-                    sbr.size = new Vector2(0.25f * BurstFlashFactor, 0.25f * BurstFlashFactor);
-                    AK_BarUITool.DrawSimpleRectBar(sbr);
+                    return;
                 }
+                DrawIcon(OriginCenter, Scale, Rot4.North.AsQuat, BurstButton, MeshPool.plane10, 2);
+                //闪烁
+                float BurstFlashFactor = GlobalFactor_Accumulator.GetBurstFlashFactor;
+                float transparency = 120 - (BurstFlashFactor / 1.2f * 70);
+                AK_BarUITool.SimpleRectBarRequest sbr = default;
+                sbr.center = OriginCenter + Vector3.down;
+                sbr.filledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(255, 255, 0, (byte)Mathf.Max(transparency, 20f))); ;
+                sbr.rotation = Quaternion.AngleAxis(45f, Vector3.up);
+                sbr.size = new Vector2(0.25f * BurstFlashFactor, 0.25f * BurstFlashFactor);
+                AK_BarUITool.DrawSimpleRectBar(sbr);
             }
             //充能技能
-            if (ability != null && IsGrouped)
+            if (IsGrouped)
             {
-                InitObjectOnce(pawn);
-                if (RotateRing != null)
+                if (RotateRing == null)
                 {
-                    float RotateAngle = GlobalFactor_Accumulator.RotateAngle;
-                    DrawIcon(OriginCenter, Scale, Quaternion.AngleAxis(RotateAngle, Vector3.up), RotateRing, MeshPool.plane10, 1);
+                    return;
                 }
+                DrawIcon(OriginCenter, Scale, Quaternion.AngleAxis(GlobalFactor_Accumulator.GetRotateAngle, Vector3.up), RotateRing, MeshPool.plane10, 1);
+                InitObjectOnce(pawn);
                 if (PrefabTMPInstance != null)
                 {
                     TextMeshPro tmp = PrefabTMPInstance.GetComponent<TextMeshPro>();

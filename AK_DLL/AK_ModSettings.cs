@@ -45,12 +45,12 @@ namespace AK_DLL
         public static int barMargin = -100;
         public static bool zoomWithCamera = true;
         //RGB
-        public static Color32 Color_RGB => new Color32((byte)r, (byte)g, (byte)b, (byte)a);
+        internal static Color32 Color_RGB => new Color32((byte)r, (byte)g, (byte)b, (byte)a);
         public static int r = 105;
         public static int g = 180;
         public static int b = 210;
         public static int a = 200;
-        public static Color32 Color_RGB_enemy => new Color32((byte)r_enemy, (byte)g_enemy, (byte)b_enemy, (byte)a_enemy);
+        internal static Color32 Color_RGB_enemy => new Color32((byte)r_enemy, (byte)g_enemy, (byte)b_enemy, (byte)a_enemy);
         public static int r_enemy = 220;
         public static int g_enemy = 40;
         public static int b_enemy = 0;
@@ -120,6 +120,7 @@ namespace AK_DLL
             Scribe_Values.Look(ref barWidth, "barWidth", defaultValue: 150);
             Scribe_Values.Look(ref barHeight, "barHeight", defaultValue: 75);
             Scribe_Values.Look(ref barMargin, "barMargin", defaultValue: -100);
+            Scribe_Values.Look(ref zoomWithCamera, "zoomWithCamera", defaultValue: true);
             Scribe_Values.Look(ref r, "r", defaultValue: 105);
             Scribe_Values.Look(ref g, "g", defaultValue: 180);
             Scribe_Values.Look(ref b, "b", defaultValue: 210);

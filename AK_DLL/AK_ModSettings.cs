@@ -43,7 +43,9 @@ namespace AK_DLL
         public static int barWidth = 150;
         public static int barHeight = 75;
         public static int barMargin = -100;
+
         public static bool zoomWithCamera = true;
+        public static bool drawOutOfCameraZoom = true;
         //RGB
         internal static Color32 Color_RGB => new Color32((byte)r, (byte)g, (byte)b, (byte)a);
         public static int r = 105;
@@ -121,6 +123,8 @@ namespace AK_DLL
             Scribe_Values.Look(ref barHeight, "barHeight", defaultValue: 75);
             Scribe_Values.Look(ref barMargin, "barMargin", defaultValue: -100);
             Scribe_Values.Look(ref zoomWithCamera, "zoomWithCamera", defaultValue: true);
+            Scribe_Values.Look(ref drawOutOfCameraZoom, "drawOutOfCameraZoom", defaultValue: true);
+
             Scribe_Values.Look(ref r, "r", defaultValue: 105);
             Scribe_Values.Look(ref g, "g", defaultValue: 180);
             Scribe_Values.Look(ref b, "b", defaultValue: 210);

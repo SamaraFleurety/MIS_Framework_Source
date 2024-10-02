@@ -65,4 +65,15 @@ namespace AK_DLL
             GlobalFactor_Accumulator.Update();
         }
     }
+    internal class Patch_PreRenderResults
+    {
+        public static bool Prefix_ParallelGetPreRenderResults(Pawn ___pawn, ref bool disableCache)
+        {
+            if (___pawn.RaceProps.Humanlike && AK_ModSettings.drawOutOfCameraZoom)
+            {
+                disableCache = true;
+            }
+            return true;
+        }
+    }
 }

@@ -8,7 +8,7 @@ namespace AK_DLL
     [StaticConstructorOnStartup]
     internal class DoBarSetting_Window : Window
     {
-        public override Vector2 InitialSize => new Vector2(800f, 650f);
+        public override Vector2 InitialSize => new(800f, 650f);
         private static string ValueSpacing => "  ";
         public enum Option_TimeDisplay
         {
@@ -167,6 +167,7 @@ namespace AK_DLL
             AK_ModSettings.barHeight = (int)list.SliderLabeled("AK_HealthBar_Option_barHeight".Translate() + ValueSpacing + $"{AK_ModSettings.barHeight * 0.1f}", AK_ModSettings.barHeight, 50, 200);
             AK_ModSettings.barMargin = (int)list.SliderLabeled("AK_HealthBar_Option_barMargin".Translate() + ValueSpacing + $"{AK_ModSettings.barMargin}", AK_ModSettings.barMargin, -150, 150);
             list.CheckboxLabeled("AK_HealthBar_Option_zoomWithCamera".Translate(), ref AK_ModSettings.zoomWithCamera, "AK_HealthBar_Option_zoomWithCameraD".Translate());
+            list.CheckboxLabeled("AK_HealthBar_Option_drawOutOfCameraZoom".Translate(), ref AK_ModSettings.drawOutOfCameraZoom, "AK_HealthBar_Option_drawOutOfCameraZoomD".Translate());
             list.Gap(12f);
             //SubTitle
             Text.Font = GameFont.Medium;

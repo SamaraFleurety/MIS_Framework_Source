@@ -35,10 +35,10 @@ namespace AKE_VanyaShield
         }
         public override void CompDrawWornExtras()
         {
-            if (!AK_ModSettings.displayBarModel || ModLister.GetActiveModWithIdentifier("Mlie.VanyaShield") == null)
+            /*if (!AK_ModSettings.displayBarModel || ModLister.GetActiveModWithIdentifier("Mlie.VanyaShield") == null)
             {
                 return;
-            }
+            }*/
             if (Wearer == null || !Wearer.Drafted)
             {
                 return;

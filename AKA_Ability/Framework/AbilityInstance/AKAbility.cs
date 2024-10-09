@@ -8,8 +8,9 @@ using Verse.Sound;
 
 namespace AKA_Ability
 {
-    public abstract class AKAbility : IExposable
+    public abstract class AKAbility : IExposable, ILoadReferenceable
     {
+        public int ID = -1;
         //不能是空
         public AbilityTracker container;
 
@@ -30,7 +31,7 @@ namespace AKA_Ability
             }
         }
 
-        //存档时要用这个
+        //仅读档时要用这个 -- 任何时候缺乏def会报错
         public AKAbility(AbilityTracker tracker) /*: this()*/
         {
             this.container = tracker;
@@ -38,6 +39,7 @@ namespace AKA_Ability
 
         public AKAbility(AKAbilityDef def, AbilityTracker tracker) : this(tracker)
         {
+            if (ID == -1) ID = Find.UniqueIDsManager.GetNextAbilityID();
             this.def = def;
             cooldown = (Cooldown_Regen)Activator.CreateInstance(def.cooldownProperty.cooldownClass, def.cooldownProperty, this);
         }
@@ -69,6 +71,7 @@ namespace AKA_Ability
         {
             Scribe_Defs.Look(ref def, "def");
             Scribe_Deep.Look(ref cooldown, "CD", def.cooldownProperty, this);
+            Scribe_Values.Look(ref ID, "id", -1);
         }
 
         public virtual void TryCastShot(LocalTargetInfo target)
@@ -122,6 +125,11 @@ namespace AKA_Ability
         public virtual void Notify_OwnerHitTarget(ref DamageInfo dinfo)
         {
             cooldown.Notify_PawnHitTarget(ref dinfo);
+        }
+
+        public string GetUniqueLoadID()
+        {
+            return "AKAbility" + ID;
         }
     }
 }

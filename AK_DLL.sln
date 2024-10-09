@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AKE_OperatorExtension", "AK
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AKS_ShieldFramework", "AKS_ShieldFramework\AKS_ShieldFramework.csproj", "{8C33EFD6-9006-4CF3-8C33-50CC0418238C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LMA_ShipExtension", "LMA_ShipExtension\LMA_ShipExtension.csproj", "{9927DC77-84CE-4C4D-8630-D690904C8395}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -227,6 +229,26 @@ Global
 		{8C33EFD6-9006-4CF3-8C33-50CC0418238C}.Release|x64.Build.0 = Release|Any CPU
 		{8C33EFD6-9006-4CF3-8C33-50CC0418238C}.Release|x86.ActiveCfg = Release|Any CPU
 		{8C33EFD6-9006-4CF3-8C33-50CC0418238C}.Release|x86.Build.0 = Release|Any CPU
+		{9927DC77-84CE-4C4D-8630-D690904C8395}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9927DC77-84CE-4C4D-8630-D690904C8395}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9927DC77-84CE-4C4D-8630-D690904C8395}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{9927DC77-84CE-4C4D-8630-D690904C8395}.Debug|ARM.Build.0 = Debug|Any CPU
+		{9927DC77-84CE-4C4D-8630-D690904C8395}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{9927DC77-84CE-4C4D-8630-D690904C8395}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{9927DC77-84CE-4C4D-8630-D690904C8395}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9927DC77-84CE-4C4D-8630-D690904C8395}.Debug|x64.Build.0 = Debug|Any CPU
+		{9927DC77-84CE-4C4D-8630-D690904C8395}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9927DC77-84CE-4C4D-8630-D690904C8395}.Debug|x86.Build.0 = Debug|Any CPU
+		{9927DC77-84CE-4C4D-8630-D690904C8395}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9927DC77-84CE-4C4D-8630-D690904C8395}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9927DC77-84CE-4C4D-8630-D690904C8395}.Release|ARM.ActiveCfg = Release|Any CPU
+		{9927DC77-84CE-4C4D-8630-D690904C8395}.Release|ARM.Build.0 = Release|Any CPU
+		{9927DC77-84CE-4C4D-8630-D690904C8395}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{9927DC77-84CE-4C4D-8630-D690904C8395}.Release|ARM64.Build.0 = Release|Any CPU
+		{9927DC77-84CE-4C4D-8630-D690904C8395}.Release|x64.ActiveCfg = Release|Any CPU
+		{9927DC77-84CE-4C4D-8630-D690904C8395}.Release|x64.Build.0 = Release|Any CPU
+		{9927DC77-84CE-4C4D-8630-D690904C8395}.Release|x86.ActiveCfg = Release|Any CPU
+		{9927DC77-84CE-4C4D-8630-D690904C8395}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

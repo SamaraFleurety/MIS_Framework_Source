@@ -6,6 +6,7 @@ namespace AKS_Shield.Extension
     {
         public int maxExtraCharges = 5;
         public int chargeInterval = 600;
+        public int chargesOnReset = 0;   //护盾重置时回复的充能量
         public TCP_ExtraCharges()
         {
             compClass = typeof(TC_ExtraCharges);
@@ -48,11 +49,11 @@ namespace AKS_Shield.Extension
             }
         }
 
-        //重置后 没有额外充能
+        //重置后
         public override void Notify_Reset()
         {
             charges = 0;
-            tick = 0;
+            tick = Prop.chargesOnReset;
         }
 
         public override void PostExposeData()

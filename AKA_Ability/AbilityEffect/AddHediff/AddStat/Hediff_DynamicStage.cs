@@ -8,7 +8,7 @@ using Verse;
 
 namespace AKA_Ability
 {
-    public class Hediff_DynamicStage : Hediff
+    public class Hediff_DynamicStage : HediffWithComps
     {
         public HediffStageProperty stageProperty;
 

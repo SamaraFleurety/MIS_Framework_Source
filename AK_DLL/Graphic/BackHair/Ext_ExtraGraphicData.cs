@@ -8,7 +8,8 @@ using Verse;
 
 namespace AK_DLL
 {
-    public class Ext_BackHair : Ext_ExtraGraphicData
+    public class Ext_ExtraGraphicData : DefModExtension
     {
+        public GraphicData graphicData;
     }
 }

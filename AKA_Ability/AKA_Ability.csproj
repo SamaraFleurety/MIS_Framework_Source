@@ -102,6 +102,7 @@
     <Compile Include="AbilityEffect\Effect\Mass\AbilityMassEffectBase.cs" />
     <Compile Include="AbilityEffect\Effect\Mass\AME_Illustrious_Inory.cs" />
     <Compile Include="AbilityEffect\Effect\Mass\AME_Illustrious_RiseFall.cs" />
+    <Compile Include="AbilityEffect\Summon\AE_SummonBase.cs" />
     <Compile Include="AKA_Algorithm.cs" />
     <Compile Include="AKA_Utilities.cs" />
     <Compile Include="AbilityEffect\DelayedEffects\DelayedEffectDef.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="Framework\AbilityInstance\AKAbility.cs" />
     <Compile Include="Framework\AbilityInstance\AKAbility_SelfTarget.cs" />
     <Compile Include="Framework\AbilityInstance\AKAbility_Auto.cs" />
+    <Compile Include="Framework\AbilityInstance\AKAbility_Summon.cs" />
     <Compile Include="Framework\AbilityInstance\AKAbility_Targetor.cs" />
     <Compile Include="Framework\AbilityContainer\AbilityTracker.cs" />
     <Compile Include="Framework\AbilityInstance\DelayedAbility.cs" />
@@ -128,12 +130,14 @@
     <Compile Include="Framework\Range\RangeWorker_Base.cs" />
     <Compile Include="Framework\Range\RangeWorker_Illustrious_Dilapidate.cs" />
     <Compile Include="Harmony\PatchMain.cs" />
-    <Compile Include="Framework\Gizmos\Gizmo_AKAbilityBase.cs" />
     <Compile Include="Framework\AKAbilityDef.cs" />
-    <Compile Include="Framework\Verb\Verb_AbilityTargeting.cs" />
+    <Compile Include="Summon\PawnClass_Summoned.cs" />
+    <Compile Include="Summon\TCP_SummonedProperties.cs" />
     <Compile Include="TypeDef.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Framework\Verb\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

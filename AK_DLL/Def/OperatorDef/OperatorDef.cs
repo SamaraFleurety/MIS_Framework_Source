@@ -140,11 +140,6 @@ namespace AK_DLL
                 Log.Error($"[AK] trying to change fashion for non-operator: {p.Name}");
                 return;
             }
-            /*if (index != -1 && !clothSet.ContainsKey(index))
-            {
-                Log.Error($"[AK] {p.Name} doesn't have fashion numbered {index}");
-                return;
-            }*/
 
             doc.DestroyFashionSet();
 
@@ -207,85 +202,6 @@ namespace AK_DLL
             clothTemp.Clear();
             currentlyGenerating = false;
         }
-
-        //换成fashion[index]的时装
-        /*[Obsolete]
-        public void ChangeFashion(int index, Pawn p)
-        {
-            currentlyGenerating = true;
-            OperatorDocument doc = p.GetDoc();
-            if (doc == null)
-            {
-                Log.Error($"[AK] trying to change fashion for non-operator: {p.Name}");
-                return;
-            }
-            if (index != -1 && !clothSet.ContainsKey(index))
-            {
-                Log.Error($"[AK] {p.Name} doesn't have fashion numbered {index}");
-                return;
-            }
-
-            doc.DestroyFashionSet();
-
-            operator_Pawn = p;
-            clothTemp = new List<Thing>();
-            if (index == -1)
-            {
-                if (apparels != null)
-                {
-                    foreach (ThingDef apparelDef in this.apparels)
-                    {
-                        Recruit_Inventory_Wear(apparelDef, operator_Pawn, true);
-                    }
-                }
-                operator_Pawn.story.hairDef = hair ?? HairDefOf.Bald;
-                doc.voicePack = this.voicePackDef;
-                if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null && ModLister.GetActiveModWithIdentifier("paluto22.ak.combatextended") == null)
-                {
-                    return;
-                }
-                else if (this.weapon != null)
-                {
-                    if (doc.weapon != null && !doc.weapon.DestroyedOrNull()) doc.weapon.Destroy();
-                    ThingWithComps weapon = (ThingWithComps)ThingMaker.MakeThing(this.weapon);
-                    CompBiocodable comp = weapon.GetComp<CompBiocodable>();
-                    if (comp != null) comp.CodeFor(operator_Pawn);
-                    operator_Pawn.equipment.AddEquipment(weapon);
-                    doc.weapon = weapon;
-                }
-            }
-            else
-            {
-                OperatorFashionSetDef set = clothSet[index];
-                foreach (ThingDef def in set.apparels)
-                {
-                    Recruit_Inventory_Wear(def, operator_Pawn, true);
-                }
-                if (set.hair != null) operator_Pawn.story.hairDef = set.hair;
-                if (set.voice != null)
-                {
-                    doc.voicePack = set.voice;
-                }
-                if (set.weapon != null)
-                {
-                    if (doc.weapon != null && !doc.weapon.DestroyedOrNull()) doc.weapon.Destroy();
-                    if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null && ModLister.GetActiveModWithIdentifier("paluto22.ak.combatextended") == null)
-                    {
-                        return;
-                    }
-                    ThingWithComps weapon = (ThingWithComps)ThingMaker.MakeThing(set.weapon);
-                    CompBiocodable comp = weapon.GetComp<CompBiocodable>();
-                    if (comp != null) comp.CodeFor(operator_Pawn);
-                    operator_Pawn.equipment.AddEquipment(weapon);
-                    doc.weapon = weapon;
-                }
-            }
-            operator_Pawn.style.Notify_StyleItemChanged();
-            operator_Pawn.style.MakeHairFilth();
-            doc.RegisterFashionSet(clothTemp);
-            clothTemp.Clear();
-            currentlyGenerating = false;
-        }*/
 
         public virtual void Recruit(IntVec3 intVec, Map map)
         {

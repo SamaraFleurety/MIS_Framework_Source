@@ -19,7 +19,7 @@ namespace AKS_Shield
 
         //破盾再启动
         public float energyRatioOnReset = 0.2f;  //百分制，0-1
-        public int ticksToReset = 2400;
+        public int ticksToReset = 3600;
 
         //吸收伤害
         public bool canAbsorbMeleeDmg = true;
@@ -68,6 +68,12 @@ namespace AKS_Shield
         public HashSet<TC_ShieldExtension_PostEffects_Base> registedCompEffectors = new();
 
         #region 原版
+
+        public override void PostPostMake()
+        {
+            base.PostPostMake();
+            energy = Props.energyMax;
+        }
         public override void CompTick()
         {
             Tick(1);
@@ -181,6 +187,8 @@ namespace AKS_Shield
             absorbed = true;
         }
 
+        #endregion
+
         #region 舟味护盾条
         private Material barFillMat = null;
         private Material BarFilledMat
@@ -242,7 +250,7 @@ namespace AKS_Shield
             Graphics.DrawMesh(MeshPool.plane025, matrix, material: IconDefend, 2);
         }
         #endregion
-        #endregion
+
         protected virtual void Break(ref DamageInfo dinfo)
         {
             energy = 0;

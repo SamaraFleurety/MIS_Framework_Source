@@ -8,7 +8,7 @@ using Verse;
 
 namespace AKA_Ability
 {
-    //放衣服上面的技能容器
+    //放Thing上面的技能容器。可能是放在衣服上需要穿戴，也可能放在pawn上面可以直接施法
     public class TCP_AKATracker : CompProperties
     {
         public List<AKAbilityDef> abilities = new List<AKAbilityDef>();
@@ -36,14 +36,25 @@ namespace AKA_Ability
             }
         }
 
+        Pawn CasterPawn
+        {
+            get
+            {
+                if (Wearer != null) return Wearer;
+                else if (parent is Pawn p) return p;
+                else return null;
+            }
+        }
+
         public override void PostPostMake()
         {
             base.PostPostMake(); 
+            //fixme:没做ce兼容
             if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null)
             {
                 return;
             }
-            tracker = new AbilityTracker(Wearer);
+            tracker = new AbilityTracker(CasterPawn);
             if (this.Abilities != null && this.Abilities.Count > 0)
             {
                 foreach (AKAbilityDef i in this.Abilities)
@@ -58,20 +69,34 @@ namespace AKA_Ability
             tracker.owner = pawn;
         }
 
+        public override void Notify_Unequipped(Pawn pawn)
+        {
+            tracker.owner = null;
+        }
+
         public override void CompTick()
         {
+            if (CasterPawn == null) return;
             tracker.Tick();
             return;
         }
         public override void CompTickLong()
         {
+            if (CasterPawn == null) return;
             tracker.Tick();
             return;
         }
         public override void CompTickRare()
         {
+            if (CasterPawn == null) return;
             tracker.Tick();
             return;
+        }
+
+        public override IEnumerable<Gizmo> CompGetGizmosExtra()
+        {
+            if (CasterPawn == null) return Enumerable.Empty<Gizmo>();
+            return tracker.GetGizmos();
         }
         public override IEnumerable<Gizmo> CompGetWornGizmosExtra()
         {

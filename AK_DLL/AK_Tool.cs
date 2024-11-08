@@ -114,7 +114,6 @@ namespace AK_DLL
         }
         public static OperatorDocument GetDoc(this Pawn p)
         {
-            //if (p.health.hediffSet.GetFirstHediff<Hediff_Operator>() == null) return null;
             if (p == null) return null;
             if (p.abilities == null) return null;
             if (!p.IsColonist) return null;

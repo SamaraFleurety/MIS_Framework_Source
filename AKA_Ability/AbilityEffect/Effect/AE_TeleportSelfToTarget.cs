@@ -2,7 +2,7 @@
 using RimWorld.Planet;
 using Verse;
 
-namespace AKA_Ability
+namespace AKA_Ability.AbilityEffect
 {
     public class AE_TeleportSelfToTarget : AbilityEffectBase
     {

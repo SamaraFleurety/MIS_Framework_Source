@@ -25,6 +25,7 @@ namespace AKA_Ability.AbilityEffect
             worker.DoEffect_AllTargets(caster, target);
             return true;
         }*/
+
         public static IEnumerable<Pawn> AllPawnAliveInCell(AKAbility ab, IntVec3 cell)
         {
             //List<Pawn> res = new List<Pawn>();

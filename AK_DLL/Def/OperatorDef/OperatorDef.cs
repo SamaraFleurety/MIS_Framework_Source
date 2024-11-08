@@ -82,6 +82,8 @@ namespace AK_DLL
         public AbilityDef operatorID = null;    //干员身份证的容器 其他派系角色可以自定义个图标不同的这玩意
 
         public List<Type> postEffects = new List<Type>();
+
+
         #endregion
 
         #region 快捷属性

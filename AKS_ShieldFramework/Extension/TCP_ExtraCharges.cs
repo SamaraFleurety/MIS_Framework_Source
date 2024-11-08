@@ -1,4 +1,8 @@
-﻿using Verse;
+﻿using RimWorld;
+using System.Collections.Generic;
+using UnityEngine;
+using Verse;
+using Verse.AI;
 
 namespace AKS_Shield.Extension
 {
@@ -7,6 +11,21 @@ namespace AKS_Shield.Extension
         public int maxExtraCharges = 5;
         public int chargeInterval = 600;
         public int chargesOnReset = 0;   //护盾重置时回复的充能量
+
+        public bool displayInfoGizmo = false;
+        public string infoGizmoLabel = "AKS_ExtraChargeInfoGizmoLabel";
+        public string infoGizmoDesc = "AKS_ExtraChargeInfoGizmoDesc";
+        public string infoGizmoIcon;
+
+        private Texture2D cachedGizmoIcon = null;
+        public Texture2D InfoGizmoIcon
+        {
+            get
+            {
+                cachedGizmoIcon ??= ContentFinder<Texture2D>.Get(infoGizmoIcon, reportFailure: false);
+                return cachedGizmoIcon;
+            }
+        }
         public TCP_ExtraCharges()
         {
             compClass = typeof(TC_ExtraCharges);
@@ -22,6 +41,22 @@ namespace AKS_Shield.Extension
         TCP_ExtraCharges Prop => props as TCP_ExtraCharges;
         int ChargeInterval => Prop.chargeInterval;
         int MaxCharge => Prop.maxExtraCharges;
+
+        public override IEnumerable<Gizmo> CompGetWornGizmosExtra()
+        {
+            if (!Prop.displayInfoGizmo || !CompShield.ShouldDisplay) yield break;
+            yield return new Command_Toggle
+            {
+                defaultLabel = Prop.infoGizmoLabel.Translate(),
+                defaultDesc = Prop.infoGizmoDesc.Translate(),
+                icon = Prop.InfoGizmoIcon,
+                toggleAction = delegate ()
+                {
+
+                },
+                isActive = () => charges > 0,
+            };
+        }
 
         public override void CompTick()
         {
@@ -47,13 +82,17 @@ namespace AKS_Shield.Extension
                 --charges;
                 CompShield.energy = CompShield.Props.energyMax;
             }
+            else
+            {
+                tick = 0;
+            }
         }
 
         //重置后
         public override void Notify_Reset()
         {
-            charges = 0;
-            tick = Prop.chargesOnReset;
+            charges = Prop.chargesOnReset;
+            tick = 0;
         }
 
         public override void PostExposeData()

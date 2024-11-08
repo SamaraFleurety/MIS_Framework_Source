@@ -32,23 +32,6 @@ namespace AKA_Ability
                     this.TryCastShot(CasterPawn);
                 }
             };
-
-            /*cachedGizmo = new Command_AKAbility
-            {
-                Action = delegate ()
-                {
-                    foreach (AbilityEffectBase compEffect in this.def.compEffectList)
-                    {
-                        compEffect.DoEffect_All(CasterPawn, CasterPawn, CasterPawn.Position, CasterPawn.Map);
-                    }
-                    CostCharge();
-                },
-                defaultLabel = def.label,
-                defaultDesc = def.description,
-                icon = def.Icon,
-                ability = this,
-                verb = new Verb_AbilityTargeting() //假的 不会使用 给VEF的MVCF功能留的兼容
-            };*/
         }
     }
 }

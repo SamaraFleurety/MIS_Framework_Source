@@ -1,10 +1,4 @@
-﻿using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Verse;
+﻿using Verse;
 
 namespace AKA_Ability.AbilityEffect
 {
@@ -19,6 +13,9 @@ namespace AKA_Ability.AbilityEffect
             AME_Worker<Pawn> worker = new AME_Worker<Pawn>(this, doEffect_SingleTarget: delegate (AKAbility ab, Pawn victim)
             {
                 if (victim.Destroyed) return;
+
+                if (victim.GetUniqueLoadID() == ab.CasterPawn.GetUniqueLoadID()) return;
+
                 DamageInfo absDmgInfo = new DamageInfo(damageDef, DAMAGE_HEAL_PER_PAWN, 999, instigator: ab.CasterPawn, instigatorGuilty: false);
                 if (victim.def.useHitPoints)
                 {
@@ -33,15 +30,7 @@ namespace AKA_Ability.AbilityEffect
 
                 AbilityEffect_Heal.Heal(caster.CasterPawn, DAMAGE_HEAL_PER_PAWN);
 
-            }, AllPawnAliveInCell /*allPossibleTargetsInCell: delegate (AKAbility ab, IntVec3 cell)
-            {
-                List<Pawn> res = new List<Pawn>();
-                foreach (Thing t in cell.GetThingList(ab.CasterPawn.Map))
-                {
-                    if (t is Pawn p && !p.Dead &&!p.Destroyed) res.Add(p);
-                }
-                return res;
-            }*/);
+            }, AllPawnAliveInCell);
             worker.DoEffect_AllTargets(caster, target);
             return true;
         }

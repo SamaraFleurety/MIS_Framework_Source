@@ -1,10 +1,4 @@
 ﻿using AKA_Ability.Gizmos;
-using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Verse;
 
 namespace AKA_Ability
@@ -26,12 +20,12 @@ namespace AKA_Ability
         public override void Tick()
         {
             base.Tick();
-            if (AutoCast && cooldown.charge >= 1 && Find.TickManager.TicksGame % 180 == 0)
+            string failReason = "";
+            if (AutoCast && Find.TickManager.TicksGame % 180 == 0 && CastableNow(ref failReason))
             {
-                if (!CasterPawn.Drafted || Target == null) return;
+                if (Target == null) return;
                 TryCastShot(Target);
             }
-
         }
 
         protected override void InitializeGizmo()
@@ -43,19 +37,11 @@ namespace AKA_Ability
                 icon = def.Icon,
                 parent = this,
             };
+        }
 
-            /*cachedGizmo = new Command_AKAbility
-            {
-                Action = delegate ()
-                {
-                    AutoCast = !AutoCast;
-                },
-                defaultLabel = def.label,
-                defaultDesc = def.description,
-                icon = def.Icon,
-                ability = this,
-                verb = new Verb_AbilityTargeting()  //假的 不会使用 给VEF的MVCF功能留的兼容
-            };*/
+        protected override void UpdateGizmo()
+        {
+            cachedGizmo.Disabled = false;
         }
 
         public override void ExposeData()

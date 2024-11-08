@@ -22,6 +22,12 @@ namespace AKA_Ability
 
         public List<AKAbility> groupedAbilities = new List<AKAbility>();
 
+        //fixme:没做完
+        public AKAbility barDisplayedAbility = null;   //舟味ui显示技能指示时 有多个技能则仅显示此技能。不允许是未被选中的分组技能。
+
+        //召唤技能列表，是技能的子集。存在这个是因为有时候需要调用召唤物
+        public List<AKAbility_Summon> summonAbilities = new();
+
         public AKAbility SelectedGroupedAbility
         {
             get
@@ -36,14 +42,14 @@ namespace AKA_Ability
         {
         }
 
-        public AbilityTracker(Pawn p) : this() 
+        public AbilityTracker(Pawn p) : this()
         {
             owner = p;
         }
 
         public void Tick()
         {
-            foreach(AKAbility i in innateAbilities)
+            foreach (AKAbility i in innateAbilities)
             {
                 i.Tick();
             }
@@ -115,6 +121,9 @@ namespace AKA_Ability
             Scribe_Collections.Look(ref innateAbilities, "iA", LookMode.Deep, this);
             Scribe_Collections.Look(ref groupedAbilities, "gA", LookMode.Deep, this);
 
+            Scribe_References.Look(ref barDisplayedAbility, "barA");
+            Scribe_Collections.Look(ref summonAbilities, "summonA", LookMode.Reference);
+
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 foreach (AKAbility i in innateAbilities) i.container = this;
@@ -144,6 +153,19 @@ namespace AKA_Ability
             foreach (AKAbility ga in groupedAbilities)
             {
                 ga.PostDespawn();
+            }
+        }
+
+        public IEnumerable<Thing> AllSummoneds()
+        {
+            foreach (AKAbility_Summon i in summonAbilities)
+            {
+                //还没想好召唤之后又切换技能怎么算
+                //if (i.def.grouped && SelectedGroupedAbility != i) continue;
+                foreach (Thing summoned in i.summoneds)
+                {
+                    yield return summoned;
+                }
             }
         }
     }

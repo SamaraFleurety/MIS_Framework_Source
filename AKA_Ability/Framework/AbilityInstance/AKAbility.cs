@@ -1,4 +1,5 @@
-﻿using AKA_Ability.Cooldown;
+﻿using AKA_Ability.CastConditioner;
+using AKA_Ability.Cooldown;
 using AKA_Ability.Range;
 using RimWorld;
 using System;
@@ -21,12 +22,16 @@ namespace AKA_Ability
         protected Command cachedGizmo = null;
 
         private RangeWorker_Base rangeWorker = null;
+
+        int JudgeInterval => def.castConditionJudgeInterval;
+
+        bool cachedCastableCondition = false;
         public virtual float Range
         {
             get
             {
                 if (def.rangeWorker == null) return def.range;
-                rangeWorker ??= (RangeWorker_Base)Activator.CreateInstance(def.rangeWorker);
+                rangeWorker ??= (RangeWorker_Base)Activator.CreateInstance(def.rangeWorker, this);
                 return rangeWorker.Range();
             }
         }
@@ -61,8 +66,30 @@ namespace AKA_Ability
 
         protected virtual void UpdateGizmo()
         {
+            string failReason = "";
+            bool castableNow = CastableNow(ref failReason);
+
             cachedGizmo.Disabled = false;
-            if (cooldown.charge == 0) cachedGizmo.Disable("AK_ChargeIsZero".Translate());
+            if (!castableNow) cachedGizmo.Disable(failReason.Translate());
+        }
+
+        //判定是否能发动技能
+        public virtual bool CastableNow(ref string failReason)
+        {
+            if (Find.TickManager.TicksGame % JudgeInterval == 0)
+            {
+                cachedCastableCondition = true;
+                foreach (CastConditioner_Base i in def.castConditions)
+                {
+                    if (!i.Castable(this))
+                    {
+                        cachedCastableCondition = false;
+                        failReason = i.failReason;
+                        break;
+                    }
+                }
+            }
+            return cachedCastableCondition;
         }
 
         protected abstract void InitializeGizmo();

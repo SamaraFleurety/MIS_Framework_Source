@@ -3,8 +3,8 @@ using Verse;
 using System.Collections.Generic;
 using UnityEngine;
 using RimWorld;
-using AKA_Ability.DelayedEffects;
 using AKA_Ability.Cooldown;
+using AKA_Ability.CastConditioner;
 
 namespace AKA_Ability
 {
@@ -37,6 +37,11 @@ namespace AKA_Ability
 
         //释放技能后会播放的音效
         public List<SoundDef> useSounds = new List<SoundDef>();
+
+        //每10tick判定一次技能是否可用
+        public int castConditionJudgeInterval = 10;
+        //要满足所有条件才可以释放
+        public List<CastConditioner_Base> castConditions = new();
 
         #region 非xml可填参数
         public Texture2D Icon => ContentFinder<Texture2D>.Get(icon);

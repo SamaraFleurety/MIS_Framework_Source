@@ -13,6 +13,12 @@ namespace AKA_Ability
         public HediffStageProperty stageProperty;
 
         private HediffStage cachedStage = null;
+
+        public Hediff_DynamicStage()
+        {
+            stageProperty = new HediffStageProperty(this);
+        }
+
         public override HediffStage CurStage
         {
             get
@@ -37,7 +43,13 @@ namespace AKA_Ability
         {
             if (cachedStage != null) return;
             cachedStage = new HediffStage();
+            cachedStage.statOffsets = new();
+            cachedStage.statFactors = new();
 
+            /*Log.Message("a");
+            Log.Message($"a1 {stageProperty == null}");
+            Log.Message($"a1 {stageProperty.statOffsets == null}");
+            Log.Message($"a1 {stageProperty.statOffsets.Keys.Count}");*/
             foreach (StatDef stat in stageProperty.statOffsets.Keys)
             {
                 cachedStage.statOffsets.Add(new StatModifier
@@ -55,6 +67,12 @@ namespace AKA_Ability
                     value = stageProperty.statFactors[stat]
                 });
             }
+        }
+
+        public void ForceRefreshStage()
+        {
+            cachedStage = null;
+            RefreshStage();
         }
     }
 }

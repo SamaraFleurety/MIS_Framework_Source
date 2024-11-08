@@ -8,13 +8,17 @@ using Verse;
 
 namespace AKA_Ability.AbilityEffect
 {
-    public class AE_SummonBase : AbilityEffectBase
+    //无论如何，一个召唤技能def该有且仅有一个summonbase
+    public abstract class AE_SummonBase : AbilityEffectBase
     {
-        public PawnKindDef summonedDef;  //召唤物
+        //同时存在上限
+        public int existLimits = 1;
+
+        protected abstract Thing GenerateSummoned(AKAbility source);
 
         protected override bool DoEffect(AKAbility caster, LocalTargetInfo target)
         {
-            Pawn summoned = PawnGenerator.GeneratePawn(summonedDef, caster.CasterPawn.Faction);
+            Thing summoned = GenerateSummoned(caster);
             GenSpawn.Spawn(summoned, target.Cell, caster.CasterPawn.Map);
             return base.DoEffect(caster, target);
         }

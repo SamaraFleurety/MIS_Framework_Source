@@ -43,7 +43,7 @@ namespace AKE_VanyaShield
             }
             if (!CompExt.shouldDrawNow) return;
 
-            TC_VanyaShieldExtension.DrawStaticOverlay(Props.bubbleStaticOverlay, apparel.Wearer);
+            TC_VanyaShieldExtension.DrawStaticOverlay(Props.bubbleStaticOverlay, apparel.Wearer, apparel);
         }
     }
 

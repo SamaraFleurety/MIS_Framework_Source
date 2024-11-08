@@ -15,11 +15,23 @@ namespace AKA_Ability.AbilityEffect
         public HediffDef hediffOnFriend;
         public HediffDef hediffOnEnemy;
         public HediffDef hediffOnSelf;
+        public HediffDef hediffOnSummon;
         public float duration = 96; //持续时间 单位是游戏内小时
+
+        int enemyCnt = 0;
+
+        const float Mov_Spd_Per_Enemy = 0.1f;
+        const float Dmg_Bonus_Per_Enemy = 0.1f;
         protected override bool DoEffect(AKAbility caster, LocalTargetInfo target)
         {
-            int enemyCnt = 0;
-            AME_Worker<Pawn> worker = new AME_Worker<Pawn>(this, doEffect_SingleTarget: delegate (AKAbility ab, Pawn victim)
+            enemyCnt = 0;
+            //改成直接作用全图了
+            foreach (Pawn p in caster.CasterPawn.Map.mapPawns.AllHumanlikeSpawned)
+            {
+                DoEffect_SinglePawn(caster, p);
+            }
+
+            /*AME_Worker<Pawn> worker = new AME_Worker<Pawn>(this, doEffect_SingleTarget: delegate (AKAbility ab, Pawn victim)
             {
                 if (victim.Destroyed) return;
                 if (victim.Faction != null && victim.Faction.HostileTo(Faction.OfPlayer))
@@ -33,20 +45,55 @@ namespace AKA_Ability.AbilityEffect
                 }
 
             }, AllPawnAliveInCell);
-            worker.DoEffect_AllTargets(caster, target);
+            worker.DoEffect_AllTargets(caster, target);*/
 
             //吸移速最多20层
-            if (enemyCnt > 20) enemyCnt = 20;
+            Log.Message($"illu inory with cnt {enemyCnt}");
+            int enemyCnt_MoveSpd = enemyCnt;
+            if (enemyCnt_MoveSpd > 20) enemyCnt_MoveSpd = 20;
             AbilityEffect_AddHediff.AddHediff(caster.CasterPawn, hediffOnSelf, severity: -100);
             Hediff_DynamicStage onSelf = AbilityEffect_AddHediff.AddHediff(caster.CasterPawn, hediffOnSelf, severity: duration) as Hediff_DynamicStage;
-            onSelf.stageProperty.TryAddMergeStatModifier(StatDefOf.MoveSpeed, 0.1f * enemyCnt, false);
+            onSelf.stageProperty.TryAddMergeStatModifier(StatDefOf.MoveSpeed, Mov_Spd_Per_Enemy * enemyCnt_MoveSpd, false);
 
             //增伤最多10层
-            if (enemyCnt > 10) enemyCnt = 10;
-            onSelf.stageProperty.TryAddMergeStatModifier(StatDefOf.MeleeDamageFactor, 0.1f * enemyCnt, false);
-            onSelf.stageProperty.TryAddMergeStatModifier(AKADefOf.AKA_Stat_RangedDamageFactor, 0.1f * enemyCnt, false);
+            int enemyCnt_Dmg = enemyCnt;
+            if (enemyCnt_Dmg > 10) enemyCnt_Dmg = 10;
+            onSelf.stageProperty.TryAddMergeStatModifier(StatDefOf.MeleeDamageFactor, Dmg_Bonus_Per_Enemy * enemyCnt_Dmg, false);
+            onSelf.stageProperty.TryAddMergeStatModifier(AKADefOf.AKA_Stat_RangedDamageFactor, Dmg_Bonus_Per_Enemy * enemyCnt_Dmg, false);
+
+            onSelf.ForceRefreshStage();
+
+            //召唤物享受一半效果
+            foreach (Thing summon in caster.container.AllSummoneds())
+            {
+                if (summon is Pawn summonedPawn)
+                {
+                    AbilityEffect_AddHediff.AddHediff(summonedPawn, hediffOnSummon, severity: -100);
+                    Hediff_DynamicStage onSummon = AbilityEffect_AddHediff.AddHediff(summonedPawn, hediffOnSummon, severity: duration) as Hediff_DynamicStage;
+
+                    onSummon.stageProperty.TryAddMergeStatModifier(StatDefOf.MoveSpeed, Mov_Spd_Per_Enemy * enemyCnt_MoveSpd / 2, false);
+
+                    onSummon.stageProperty.TryAddMergeStatModifier(StatDefOf.MeleeDamageFactor, Dmg_Bonus_Per_Enemy * enemyCnt_Dmg / 2, false);
+                    onSummon.stageProperty.TryAddMergeStatModifier(AKADefOf.AKA_Stat_RangedDamageFactor, Dmg_Bonus_Per_Enemy * enemyCnt_Dmg / 2, false);
+                }
+            }
 
             return true;
+        }
+
+        private void DoEffect_SinglePawn(AKAbility ab, Pawn victim)
+        {
+            if (victim.Destroyed) return;
+            if (victim.GetUniqueLoadID() == ab.CasterPawn.GetUniqueLoadID()) return;
+            if (victim.Faction != null && victim.Faction.HostileTo(Faction.OfPlayer))
+            {
+                ++enemyCnt;
+                AbilityEffect_AddHediff.AddHediff(victim, hediffOnEnemy, severity: duration);
+            }
+            else
+            {
+                AbilityEffect_AddHediff.AddHediff(victim, hediffOnFriend, severity: duration);
+            }
         }
     }
 }

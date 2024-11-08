@@ -13,7 +13,7 @@ namespace AKA_Ability.Range
     {
         public AKAbility parent;
 
-        protected RangeWorker_Base(AKAbility parent)
+        public RangeWorker_Base(AKAbility parent)
         {
             this.parent = parent;
         }

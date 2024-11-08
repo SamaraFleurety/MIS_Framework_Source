@@ -15,6 +15,7 @@ namespace AKA_Ability
 
         private AE_SummonBase effector = null;
 
+        //需要知道第一个aes来确定召唤物上限，来决定禁用gizmo与否
         public AE_SummonBase Effector
         {
             get
@@ -30,6 +31,10 @@ namespace AKA_Ability
                         }
                     }
                 }
+                if (effector == null)
+                {
+                    Log.Error($"[AKA]错误：{def.label}技能是召唤技能但是没有召唤效果。");
+                }
                 return effector;
             }
         }
@@ -39,6 +44,16 @@ namespace AKA_Ability
         }
         public AKAbility_Summon(AKAbilityDef def, AbilityTracker tracker) : base(def, tracker)
         {
+        }
+
+        public void Notify_SummonedSpawned(Thing summoned)
+        {
+            summoneds.Add(summoned);
+        }
+
+        public void Notify_SummonedVanished(Thing summoned)
+        {
+            if (summoneds.Contains(summoned)) { summoneds.Remove(summoned); }
         }
 
         public override void ExposeData()

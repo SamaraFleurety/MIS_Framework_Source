@@ -30,12 +30,15 @@ namespace AKA_Ability.Cooldown
         //需要多少sp才能到达index级充能
         static List<int> cumulativeSpAtCharge = null;
 
+        //SP是假的，sp是这个的因变量！这个cSP才是真的自变量
         int cumulativeSp = 0;
 
         //充能趋于的极限
         const int chargeLimit = 1;
         //sp的渐变极限
         static int SP_Limit => cumulativeSpAtCharge[chargeLimit];
+
+        public override int MaxSP => spToNextCharge[charge];
 
         public override void Tick(int amt)
         {
@@ -61,10 +64,10 @@ namespace AKA_Ability.Cooldown
             RefreshChargeAndSP();
         }
 
-        public override float CooldownPercent()
+        /*public override float CooldownPercent()
         {
             return SP / spToNextCharge[charge];
-        }
+        }*/
 
         //有特殊的cd机制 每层需求充能不一样
         public override void RefreshChargeAndSP()
@@ -118,7 +121,8 @@ namespace AKA_Ability.Cooldown
         {
             int amt = (int)dinfo.Amount;
             if (amt <= 0) amt = 1;
-            SP += amt;
+            Log.Message($"receive dmg {dinfo.Amount} at {parent.CasterPawn.Name}");
+            cumulativeSp += amt;
             RefreshChargeAndSP();
         }
     }

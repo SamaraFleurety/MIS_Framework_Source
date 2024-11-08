@@ -20,13 +20,13 @@ namespace AKS_Shield.Extension
         {
             if (!CompShield.ShouldDisplay) return;
 
-            DrawStaticOverlay(Props.bubbleStaticOverlay, Wearer);
+            DrawStaticOverlay(Props.bubbleStaticOverlay, Wearer, parent);
         }
 
-        public static void DrawStaticOverlay(GraphicData graphicData, Pawn wearer)
+        public static void DrawStaticOverlay(GraphicData graphicData, Pawn wearer, Thing colorParent)
         {
             if (graphicData == null || wearer == null) return;
-            Graphic graphic = graphicData.GraphicColoredFor(wearer);
+            Graphic graphic = graphicData.GraphicColoredFor(colorParent);
             if (graphic == null) return;
 
             Rot4 rot = wearer.Rotation;

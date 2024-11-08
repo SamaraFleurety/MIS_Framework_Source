@@ -8,7 +8,7 @@ using Verse;
 
 namespace AK_DLL
 {
-    public class RenderNode_BackHair : PawnRenderNode_Hair
+    public class RenderNode_BackHair : PawnRenderNode
     {
         public RenderNode_BackHair(Pawn pawn, PawnRenderNodeProperties props, PawnRenderTree tree) : base(pawn, props, tree)
         {

@@ -90,7 +90,7 @@ namespace AKE_VanyaShield
 
             if (Props.bubbleStaticOverlay != null && StaticBubbleGraphic != null && Wearer != null) StaticBubbleGraphic.Draw(loc, rot, Parent);*/
 
-            DrawStaticOverlay(Props.bubbleStaticOverlay, Wearer);
+            DrawStaticOverlay(Props.bubbleStaticOverlay, Wearer, parent);
 
             //旋转护盾
             var num = 2f;
@@ -125,12 +125,13 @@ namespace AKE_VanyaShield
         }
 
         //绘制一层静态护盾
-        public static void DrawStaticOverlay(GraphicData graphicData, Pawn wearer)
+        public static void DrawStaticOverlay(GraphicData graphicData, Pawn wearer, Thing parent)
         {
             if (graphicData == null || wearer == null) return;
-            Graphic graphic = graphicData.GraphicColoredFor(wearer);
+            Graphic graphic = graphicData.GraphicColoredFor(parent);
             if (graphic == null) return;
 
+            graphic.color = graphicData.color;
             Rot4 rot = wearer.Rotation;
             if (graphicData.graphicClass == typeof(Graphic_Single)) rot = Rot4.North;     //单图护盾不该旋转
 

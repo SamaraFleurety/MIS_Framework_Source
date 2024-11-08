@@ -20,6 +20,8 @@ namespace AKA_Ability
         public HediffStageProperty(Hediff_DynamicStage parent)
         {
             this.parent = parent;
+            statOffsets = new();
+            statFactors = new();
         }
 
         //最后那个bool可能不合理 不过应该没啥扩展需求，随便吧
@@ -33,12 +35,12 @@ namespace AKA_Ability
 
             if (dic[def] == 0)
             {
-                TryRemoveStatModifier(def, amount, isOffset);
+                TryRemoveStatModifier(def, isOffset);
             }
             else parent.Notify_StageDirty();
         }
 
-        public void TryRemoveStatModifier(StatDef def, float amount, bool isOffset = true)
+        public void TryRemoveStatModifier(StatDef def, bool isOffset = true)
         {
             Dictionary<StatDef, float> dic = statFactors;
             if (isOffset) dic = statOffsets;

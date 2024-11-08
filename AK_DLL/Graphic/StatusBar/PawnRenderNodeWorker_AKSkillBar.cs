@@ -58,11 +58,12 @@ namespace AK_DLL
         }
         private float CooldownPercent(AKAbility ability)
         {
-            if (ability.cooldown.charge == ability.cooldown.MaxCharge)
+            if (ability.cooldown.charge >= ability.cooldown.MaxCharge)
             {
                 return 1f;
             }
-            return (float)ability.cooldown.SP / (float)ability.cooldown.MaxSP;
+            return ability.cooldown.CooldownPercent();
+            //return (float)ability.cooldown.SP / (float)ability.cooldown.MaxSP;
         }
         private float GetZoomRatio()
         {

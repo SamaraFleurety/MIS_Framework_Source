@@ -83,12 +83,12 @@ namespace AKA_Ability
         }
 
         //这是确认目标后执行功能
-        public void OrderForceTarget(LocalTargetInfo target)
+        public virtual void OrderForceTarget(LocalTargetInfo target)
         {
             TryCastShot(target);
         }
 
-        public bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
+        public virtual bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
         {
             return CanHitTarget(target);
         }

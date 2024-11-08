@@ -12,7 +12,7 @@ namespace AKA_Ability.Summon
     public class TCP_SummonedProperties : CompProperties
     {
         public int timeExpire = -1;
-        public int summonCap = 1;        //最多同时存在多少个
+        //public int summonCap = 1;        //最多同时存在多少个
         public TCP_SummonedProperties()
         {
             compClass = typeof(TC_SummonedProperties);
@@ -29,7 +29,7 @@ namespace AKA_Ability.Summon
 
         public Pawn Parent_Summoner;
 
-        public AKAbility Parent_Ability;
+        public AKAbility_Summon Parent_Ability;
 
         public override void CompTick()
         {
@@ -50,7 +50,14 @@ namespace AKA_Ability.Summon
 
         public override void PostDestroy(DestroyMode mode, Map previousMap)
         {
+            Parent_Ability.Notify_SummonedVanished(parent);
             base.PostDestroy(mode, previousMap);
+        }
+
+        public override IEnumerable<Gizmo> CompGetGizmosExtra()
+        {
+            return base.CompGetGizmosExtra();
+            //fixme:手动取消召唤gizmo
         }
 
         public override void PostExposeData()
@@ -58,7 +65,8 @@ namespace AKA_Ability.Summon
             base.PostExposeData();
             Scribe_Values.Look(ref timeSpawned, "spawn");
             //Scribe_Values.Look(ref timeExpire, "expire", -1);
-            Scribe_References.Look(ref Parent_Summoner, "master");
+            Scribe_References.Look(ref Parent_Summoner, "p_master");
+            Scribe_References.Look(ref Parent_Ability, "p_ability");
         }
 
     }

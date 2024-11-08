@@ -60,6 +60,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShieldVariant\TCP_GenericShield.cs" />
     <Compile Include="Extension\TC_ShieldExtension_Base.cs" />
+    <Compile Include="ShieldVariant\TC_GenericShieldDirect.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

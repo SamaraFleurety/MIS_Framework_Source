@@ -26,7 +26,7 @@ namespace AKA_Ability.AbilityEffect
             return true;
         }*/
 
-        public static IEnumerable<Pawn> AllPawnAliveInCell(AKAbility ab, IntVec3 cell)
+        public static IEnumerable<Pawn> AllPawnAliveInCell(AKAbility_Base ab, IntVec3 cell)
         {
             //List<Pawn> res = new List<Pawn>();
             foreach (Thing t in cell.GetThingList(ab.CasterPawn.Map))
@@ -42,7 +42,7 @@ namespace AKA_Ability.AbilityEffect
     {
         public AbilityMassEffectBase prop;
 
-        public AME_Worker(AbilityMassEffectBase prop, Action<AKAbility, T> doEffect_SingleTarget, Func<AKAbility, IntVec3, IEnumerable<T>> allPossibleTargetsInCell)
+        public AME_Worker(AbilityMassEffectBase prop, Action<AKAbility_Base, T> doEffect_SingleTarget, Func<AKAbility_Base, IntVec3, IEnumerable<T>> allPossibleTargetsInCell)
         {
             this.prop = prop;
             //this.targetValidator = targetValidator;
@@ -53,11 +53,11 @@ namespace AKA_Ability.AbilityEffect
         //private Predicate<AKAbility, T> targetValidator;
 
         //对单个有效目标的效果
-        private Action<AKAbility, T> doEffect_SingleTarget;
+        private Action<AKAbility_Base, T> doEffect_SingleTarget;
 
 
         //基本就是全部效果 不直接写在上面的doeffect是对以后对有效目标有后效预留
-        public virtual List<T> DoEffect_AllTargets(AKAbility caster, LocalTargetInfo target)
+        public virtual List<T> DoEffect_AllTargets(AKAbility_Base caster, LocalTargetInfo target)
         {
             List<IntVec3> affectedCells = GenRadial.RadialCellsAround(target.Cell, prop.radius, true).ToList();
             List<T> affectedTargets = new List<T>();
@@ -86,6 +86,6 @@ namespace AKA_Ability.AbilityEffect
         }*/
 
         //每格中所有可能目标
-        private Func<AKAbility, IntVec3, IEnumerable<T>> validatedThingsAtCell;
+        private Func<AKAbility_Base, IntVec3, IEnumerable<T>> validatedThingsAtCell;
     }
 }

@@ -12,7 +12,7 @@ namespace AKA_Ability.Gizmos
 {
     public abstract class Gizmo_AbilityCast_Base : Command
     {
-        public AKAbility parent;
+        public AKAbility_Base parent;
 
         private Cooldown_Regen Cooldown => parent.cooldown;
 

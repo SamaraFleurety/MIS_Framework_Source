@@ -10,7 +10,7 @@ namespace AKA_Ability
 {
     public class AE_ChangeHair : AbilityEffectBase
     {
-        protected override bool DoEffect(AKAbility caster, LocalTargetInfo target)
+        protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
             Pawn p = target.Pawn;
             if (p == null) return false;

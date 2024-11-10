@@ -56,7 +56,7 @@ namespace AK_DLL
                 return;
             }
         }
-        private float CooldownPercent(AKAbility ability)
+        private float CooldownPercent(AKAbility_Base ability)
         {
             if (ability.cooldown.charge >= ability.cooldown.MaxCharge)
             {
@@ -167,7 +167,7 @@ namespace AK_DLL
             }
             bool IsGrouped = false;
             VAbility_Operator operatorID = pawn.GetVAbility();
-            AKAbility ability = operatorID?.AKATracker?.innateAbilities.FirstOrDefault();
+            AKAbility_Base ability = operatorID?.AKATracker?.innateAbilities.FirstOrDefault();
             if (ability == null)
             {
                 ability = operatorID?.AKATracker?.groupedAbilities.FirstOrDefault();

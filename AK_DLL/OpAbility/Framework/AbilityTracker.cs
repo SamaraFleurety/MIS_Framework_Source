@@ -27,7 +27,7 @@ namespace AK_DLL
             Scribe_References.Look(ref doc, "doc");
         }
 
-        public override void Notify_AbilityCasted(AKAbility ability)
+        public override void Notify_AbilityCasted(AKAbility_Base ability)
         {
             base.Notify_AbilityCasted(ability);
 

@@ -7,7 +7,7 @@ namespace AKA_Ability
     {
         public VerbProperties verbJump;
 
-        protected override bool DoEffect(AKAbility caster, LocalTargetInfo target)
+        protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
             return JumpUtility.DoJump(caster.CasterPawn, target, null, verbJump);
         }

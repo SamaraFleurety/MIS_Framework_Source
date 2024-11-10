@@ -67,4 +67,10 @@ namespace AKA_Ability
         AutoEnemy, //没做
         Multi //没做，别用
     }*/
+
+    public static class HarmonyPrefixRet
+    {
+        public static bool skipOriginal = false;
+        public static bool keepOriginal = true;
+    }
 }

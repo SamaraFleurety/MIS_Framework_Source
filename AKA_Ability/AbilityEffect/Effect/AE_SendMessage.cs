@@ -14,7 +14,7 @@ namespace AKA_Ability.AbilityEffect
     {
         public string content;
         public MessageTypeDef messageType = MessageTypeDefOf.CautionInput;
-        public override bool DoEffect(AKAbility caster, GlobalTargetInfo globalTargetInfo = default, LocalTargetInfo localTargetInfo = default)
+        public override bool DoEffect(AKAbility_Base caster, GlobalTargetInfo globalTargetInfo = default, LocalTargetInfo localTargetInfo = default)
         {
             Messages.Message(content, caster.CasterPawn, messageType);
             return true;

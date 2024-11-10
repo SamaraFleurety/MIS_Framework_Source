@@ -7,6 +7,7 @@ using Verse;
 
 namespace AKA_Ability
 {
+    [Obsolete]
     public class HCP_SelfExplosion : HediffCompProperties
     {
         public int afterTicks = 1;

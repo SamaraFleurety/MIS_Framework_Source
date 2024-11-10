@@ -1,10 +1,8 @@
 ﻿using AKA_Ability.AbilityEffect;
+using AKA_Ability.Gizmos;
 using RimWorld;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Verse;
 
 namespace AKA_Ability
@@ -45,6 +43,23 @@ namespace AKA_Ability
         public AKAbility_Summon(AKAbilityDef def, AbilityTracker tracker) : base(def, tracker)
         {
         }
+
+        public override IEnumerable<Command> GetGizmos()
+        {
+            foreach (Command c in base.GetGizmos())
+            {
+                yield return c;
+            }
+            //先随便整整 结构不好 日后悔过
+            yield return new Gizmo_SelectAllSummon
+            {
+                parent = this,
+                defaultLabel = "选中所有召唤物",
+                defaultDesc = "选中所有召唤物",
+                icon = def.Icon
+            };
+        }
+
 
         public void Notify_SummonedSpawned(Thing summoned)
         {

@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using AKA_Ability.AbilityEffect;
+using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -6,8 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Verse;
-using Verse.AI;
-using Verse.Sound;
 
 namespace AKA_Ability
 {
@@ -18,17 +17,17 @@ namespace AKA_Ability
 
         public int indexActiveGroupedAbility = -1;
 
-        public List<AKAbility> innateAbilities = new List<AKAbility>();
+        public List<AKAbility_Base> innateAbilities = new List<AKAbility_Base>();
 
-        public List<AKAbility> groupedAbilities = new List<AKAbility>();
+        public List<AKAbility_Base> groupedAbilities = new List<AKAbility_Base>();
 
         //fixme:没做完
-        public AKAbility barDisplayedAbility = null;   //舟味ui显示技能指示时 有多个技能则仅显示此技能。不允许是未被选中的分组技能。
+        public AKAbility_Base barDisplayedAbility = null;   //舟味ui显示技能指示时 有多个技能则仅显示此技能。不允许是未被选中的分组技能。
 
         //召唤技能列表，是技能的子集。存在这个是因为有时候需要调用召唤物
         public List<AKAbility_Summon> summonAbilities = new();
 
-        public AKAbility SelectedGroupedAbility
+        public AKAbility_Base SelectedGroupedAbility
         {
             get
             {
@@ -49,7 +48,7 @@ namespace AKA_Ability
 
         public void Tick()
         {
-            foreach (AKAbility i in innateAbilities)
+            foreach (AKAbility_Base i in innateAbilities)
             {
                 i.Tick();
             }
@@ -64,16 +63,24 @@ namespace AKA_Ability
 
             Command c;
             //固有的 不取决于分组的技能会一直显示
-            foreach (AKAbility i in innateAbilities)
+            foreach (AKAbility_Base i in innateAbilities)
             {
-                c = i.GetGizmo();
-                if (c != null) yield return c;
+                foreach (Command c1 in i.GetGizmos())
+                {
+                    yield return c1;
+                }
+                /*c = i.GetGizmos();
+                if (c != null) yield return c;*/
             }
             //分组技能 仅显示最多1个
             if (indexActiveGroupedAbility != -1 && groupedAbilities.Count > 0)
             {
-                c = groupedAbilities[indexActiveGroupedAbility].GetGizmo();
-                if (c != null) yield return c;
+                foreach (Command c2 in groupedAbilities[indexActiveGroupedAbility].GetGizmos())
+                {
+                    yield return c2;
+                }
+                /*c = groupedAbilities[indexActiveGroupedAbility].GetGizmos();
+                if (c != null) yield return c;*/
             }
             if (Prefs.DevMode)
             {
@@ -85,7 +92,7 @@ namespace AKA_Ability
                     action = delegate ()
                     {
                         if (SelectedGroupedAbility != null) SelectedGroupedAbility.cooldown.charge = SelectedGroupedAbility.cooldown.MaxCharge;
-                        foreach (AKAbility ab in innateAbilities)
+                        foreach (AKAbility_Base ab in innateAbilities)
                         {
                             ab.cooldown.charge = ab.cooldown.MaxCharge;
                         }
@@ -94,9 +101,9 @@ namespace AKA_Ability
             }
         }
 
-        public virtual AKAbility AddAbility(AKAbilityDef def)
+        public virtual AKAbility_Base AddAbility(AKAbilityDef def)
         {
-            AKAbility ability = (AKAbility)Activator.CreateInstance(def.abilityClass, def, this);
+            AKAbility_Base ability = (AKAbility_Base)Activator.CreateInstance(def.abilityClass, def, this);
 
             if (def.grouped)
             {
@@ -105,11 +112,16 @@ namespace AKA_Ability
             }
             else this.innateAbilities.Add(ability);
 
+            if (ability is AKAbility_Summon ab_summon)
+            {
+                summonAbilities.Add(ab_summon);
+            }
+
             return ability;
         }
 
         //技能成功释放后调用 现在用来播放干员音效
-        public virtual void Notify_AbilityCasted(AKAbility ability)
+        public virtual void Notify_AbilityCasted(AKAbility_Base ability)
         {
 
         }
@@ -126,8 +138,8 @@ namespace AKA_Ability
 
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
-                foreach (AKAbility i in innateAbilities) i.container = this;
-                foreach (AKAbility j in groupedAbilities) j.container = this;
+                foreach (AKAbility_Base i in innateAbilities) i.container = this;
+                foreach (AKAbility_Base j in groupedAbilities) j.container = this;
 
                 if (owner != null) SpawnSetup();
             }
@@ -136,7 +148,7 @@ namespace AKA_Ability
         //技能被装载上了pawn调用这个
         public virtual void SpawnSetup()
         {
-            foreach (AKAbility ia in innateAbilities)
+            foreach (AKAbility_Base ia in innateAbilities)
             {
                 ia.SpawnSetup();
             }
@@ -146,11 +158,11 @@ namespace AKA_Ability
         //技能不再被绑定调用这个 va永远不被卸载，但是tcp上面的有可能会
         public virtual void PostDespawn()
         {
-            foreach (AKAbility ia in innateAbilities)
+            foreach (AKAbility_Base ia in innateAbilities)
             {
                 ia.PostDespawn();
             }
-            foreach (AKAbility ga in groupedAbilities)
+            foreach (AKAbility_Base ga in groupedAbilities)
             {
                 ga.PostDespawn();
             }

@@ -9,7 +9,7 @@
             failReason = "AKA_ChargeIsZero";
         }
 
-        public override bool Castable(AKAbility instance)
+        public override bool Castable(AKAbility_Base instance)
         {
             return instance.cooldown.charge >= chargeRequire;
         }

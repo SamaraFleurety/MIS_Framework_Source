@@ -1,15 +1,17 @@
 ﻿using AKA_Ability.CastConditioner;
 using AKA_Ability.Cooldown;
+using AKA_Ability.Gizmos;
 using AKA_Ability.Range;
 using RimWorld;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
 
 namespace AKA_Ability
 {
-    public abstract class AKAbility : IExposable, ILoadReferenceable
+    public abstract class AKAbility_Base : IExposable, ILoadReferenceable
     {
         public int ID = -1;
         //不能是空
@@ -26,6 +28,8 @@ namespace AKA_Ability
         int JudgeInterval => def.castConditionJudgeInterval;
 
         bool cachedCastableCondition = false;
+
+        string lastFailReason = "";
         public virtual float Range
         {
             get
@@ -37,12 +41,12 @@ namespace AKA_Ability
         }
 
         //仅读档时要用这个 -- 任何时候缺乏def会报错
-        public AKAbility(AbilityTracker tracker) /*: this()*/
+        public AKAbility_Base(AbilityTracker tracker) /*: this()*/
         {
             this.container = tracker;
         }
 
-        public AKAbility(AKAbilityDef def, AbilityTracker tracker) : this(tracker)
+        public AKAbility_Base(AKAbilityDef def, AbilityTracker tracker) : this(tracker)
         {
             if (ID == -1) ID = Find.UniqueIDsManager.GetNextAbilityID();
             this.def = def;
@@ -56,25 +60,34 @@ namespace AKA_Ability
             cooldown.Tick(1);
         }
 
-        public virtual Command GetGizmo()
+        public virtual IEnumerable<Command> GetGizmos()
         {
-            if (!CasterPawn.Drafted && !def.displayGizmoUndraft) return null;
-            if (cachedGizmo == null) InitializeGizmo();
-            UpdateGizmo();
-            return cachedGizmo;
+            if (!CasterPawn.Drafted && !def.displayGizmoUndraft) yield break;
+            if (cachedGizmo == null) InitializeGizmoInnate();
+            UpdateGizmoInnate();
+
+            /*foreach (ExtraGizmoDrawer_Base EGD in def.extraGizmos)
+            {
+                EGD.UpdateExtraGizmo();
+                yield return EGD.GetExtraGizmo();
+            }*/
+            yield return cachedGizmo;
         }
 
-        protected virtual void UpdateGizmo()
+        protected virtual void UpdateGizmoInnate()
         {
-            string failReason = "";
-            bool castableNow = CastableNow(ref failReason);
+            //string failReason = "";
+            bool castableNow = CastableNow();
 
-            cachedGizmo.Disabled = false;
-            if (!castableNow) cachedGizmo.Disable(failReason.Translate());
+            if (!castableNow)
+            {
+                cachedGizmo.Disable(lastFailReason.Translate());
+            }
+            else cachedGizmo.Disabled = false;
         }
 
         //判定是否能发动技能
-        public virtual bool CastableNow(ref string failReason)
+        public virtual bool CastableNow()
         {
             if (Find.TickManager.TicksGame % JudgeInterval == 0)
             {
@@ -84,7 +97,7 @@ namespace AKA_Ability
                     if (!i.Castable(this))
                     {
                         cachedCastableCondition = false;
-                        failReason = i.failReason;
+                        lastFailReason = i.failReason;
                         break;
                     }
                 }
@@ -92,7 +105,7 @@ namespace AKA_Ability
             return cachedCastableCondition;
         }
 
-        protected abstract void InitializeGizmo();
+        protected abstract void InitializeGizmoInnate();
 
         public virtual void ExposeData()
         {

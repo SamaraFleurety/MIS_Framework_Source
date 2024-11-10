@@ -6,7 +6,7 @@ namespace AKA_Ability.AbilityEffect
 {
     public class AE_TeleportSelfToTarget : AbilityEffectBase
     {
-        protected override bool DoEffect(AKAbility caster, LocalTargetInfo target)
+        protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
             Pawn casterPawn = caster.CasterPawn;
             bool drafted = casterPawn.Drafted;
@@ -14,7 +14,7 @@ namespace AKA_Ability.AbilityEffect
             casterPawn.DeSpawn(DestroyMode.QuestLogic);
             GenSpawn.Spawn(casterPawn, target.Cell, map);
             if (drafted) casterPawn.drafter.Drafted = true;
-            CameraJumper.TryJump(new GlobalTargetInfo(target.Cell, casterPawn.Map));
+            CameraJumper.TryJump(new GlobalTargetInfo(target.Cell, map));
             return base.DoEffect(caster, target);
         }
 

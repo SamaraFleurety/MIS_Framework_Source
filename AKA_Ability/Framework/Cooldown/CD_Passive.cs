@@ -14,7 +14,7 @@ namespace AKA_Ability.Cooldown
         public int maxSP;
 
         public override int MaxSP => maxSP;
-        public CD_Passive(CooldownProperty property, AKAbility ability) : base(property, ability)
+        public CD_Passive(CooldownProperty property, AKAbility_Base ability) : base(property, ability)
         {
             maxSP = prop.SPPerCharge * (int)prop.SPUnit;
         }

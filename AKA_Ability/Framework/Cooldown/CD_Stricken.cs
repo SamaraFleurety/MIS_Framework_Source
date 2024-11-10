@@ -4,7 +4,7 @@ namespace AKA_Ability.Cooldown
 {
     public class CD_Stricken : Cooldown_Regen
     {
-        public CD_Stricken(CooldownProperty property, AKAbility ability) : base(property, ability)
+        public CD_Stricken(CooldownProperty property, AKAbility_Base ability) : base(property, ability)
         {
         }
 

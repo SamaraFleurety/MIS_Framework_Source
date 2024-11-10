@@ -10,7 +10,11 @@ namespace AKA_Ability.CastConditioner
 {
     public class CC_SummonLimit : CastConditioner_Base
     {
-        public override bool Castable(AKAbility instance)
+        public CC_SummonLimit()
+        {
+            this.failReason = "AKA_ExceedSummonLimit";
+        }
+        public override bool Castable(AKAbility_Base instance)
         {
             AKAbility_Summon ability = instance as AKAbility_Summon;
 

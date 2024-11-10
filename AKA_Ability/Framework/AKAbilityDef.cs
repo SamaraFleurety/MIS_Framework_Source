@@ -5,6 +5,7 @@ using UnityEngine;
 using RimWorld;
 using AKA_Ability.Cooldown;
 using AKA_Ability.CastConditioner;
+using AKA_Ability.Gizmos;
 
 namespace AKA_Ability
 {
@@ -43,6 +44,7 @@ namespace AKA_Ability
         //要满足所有条件才可以释放
         public List<CastConditioner_Base> castConditions = new();
 
+        //public List<ExtraGizmoDrawer_Base> extraGizmos = new();
         #region 非xml可填参数
         public Texture2D Icon => ContentFinder<Texture2D>.Get(icon);
         #endregion

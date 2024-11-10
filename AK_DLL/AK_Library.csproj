@@ -379,9 +379,7 @@
     <Compile Include="OpAbility\AbilityEffect\AddHediff\AbilityEffect_AddHediff.cs" />
     <Compile Include="OpAbility\AbilityEffect\AbilityEffectBase.cs" />
     <Compile Include="OpAbility\AbilityEffect\Effect\AbilityEffect_Summon.cs" />
-    <Compile Include="Thing\ThingWithComps\Summoned.cs" />
     <Compile Include="RecruitConsole\RecruitConsole.cs" />
-    <Compile Include="Thing\ThingWithComps\Trap.cs" />
     <Compile Include="Def\OperatorDef\TraitAndDegree.cs" />
     <Compile Include="Interaction\InteractionWorker_Operator.cs" />
     <Compile Include="TypeDef.cs" />

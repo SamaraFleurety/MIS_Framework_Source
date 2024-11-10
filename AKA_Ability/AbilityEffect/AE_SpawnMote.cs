@@ -12,7 +12,7 @@ namespace AKA_Ability.AbilityEffect
     public class AE_SpawnMote : AbilityEffectBase
     {
         ThingDef moteDef;
-        protected override bool DoEffect(AKAbility caster, LocalTargetInfo target)
+        protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
             /*Mote mote = (Mote)ThingMaker.MakeThing(moteDef);
             //mote.Attach(caster.CasterPawn);

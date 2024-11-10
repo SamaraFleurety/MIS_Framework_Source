@@ -10,13 +10,29 @@ using static Verse.DamageWorker;
 
 namespace AK_DLL
 {
-    /*[HarmonyPatch(typeof(Translator), "Translate", typeof(string))]
+    /*[HarmonyPatch(typeof(Pawn), "Drafted", MethodType.Getter)]
     public class PatchTest
     {
-        [HarmonyPrefix]
-        public static void prefix(string key)
+        [HarmonyPostfix]
+        public static void prefix(Pawn __instance, bool __result)
         {
-            if (key.Contains("Elegy") || key.Contains("ight")) Log.Message(key);
+            Log.Message($"checking drafted {__instance.Name}, {__result}");
+        }
+    }
+
+    /*[HarmonyPatch(typeof(Pawn), "GetGizmos")]
+    public class PatchTest2
+    {
+        [HarmonyPrefix]
+        public static void prefix(Pawn __instance)
+        {
+            Log.Message($"show draft gizmo out for {__instance.Name} : {__instance.IsColonistPlayerControlled} - {__instance.IsColonyMech} - {__instance.IsColonyMutantPlayerControlled} and drafter{__instance.drafter != null}");
+            Log.Message($"params: iscolonist{__instance.IsColonist} - mental{__instance.MentalStateDef == null}");
+            Log.Message($"parms2.1 {__instance.Faction != null}");
+            Log.Message($"params2.2 {__instance.Faction.IsPlayer}");
+            Log.Message($"params2.31 - {__instance.RaceProps != null}");
+            Log.Message($"params2.3 - {__instance.RaceProps.Humanlike}");
+            Log.Message($"params2.4 - {!__instance.IsSlave} - {!__instance.IsMutant}");
         }
     }*/
 }

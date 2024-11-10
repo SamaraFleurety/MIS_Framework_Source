@@ -22,7 +22,7 @@ namespace AKA_Ability.Cooldown
             300
         };
 
-        public CD_Illustrious_Dilapidate(CooldownProperty property, AKAbility ability) : base(property, ability)
+        public CD_Illustrious_Dilapidate(CooldownProperty property, AKAbility_Base ability) : base(property, ability)
         {
             Init();
         }
@@ -77,16 +77,17 @@ namespace AKA_Ability.Cooldown
             {
                 cumulativeSp = 0;
                 //SP = 0;
-                charge = 0;
+                //charge = 0;
             }
             else if (cumulativeSp >= cumulativeSpAtCharge[MaxCharge])   //已经达到了满级。但可能有过充 - 这是一般cd不允许的
             {
                 cumulativeSp = Math.Min(cumulativeSp, cumulativeSpAtCharge.GetLast());  //不允许连过充都溢出
-                charge = MaxCharge;
+                //charge = MaxCharge;
                 //SP = cumulativeSp - cumulativeSpAtCharge[MaxCharge];
             }
 
             charge = AKA_Algorithm.quickSearch(cumulativeSpAtCharge.ToArray(), 0, cumulativeSpAtCharge.Count - 1, cumulativeSp, 3);
+            if (charge > MaxCharge) charge = MaxCharge;
             SP = cumulativeSp - cumulativeSpAtCharge[charge];  //超过当前等级的sp
         }
 

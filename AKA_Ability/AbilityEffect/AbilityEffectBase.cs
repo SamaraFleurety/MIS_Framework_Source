@@ -9,7 +9,7 @@ namespace AKA_Ability
         //无视目标参数 永远指定自己为目标
         public bool forceTargetSelf = false;
 
-        public virtual bool DoEffect(AKAbility caster, GlobalTargetInfo globalTargetInfo = default(GlobalTargetInfo), LocalTargetInfo localTargetInfo = default(LocalTargetInfo))
+        public virtual bool DoEffect(AKAbility_Base caster, GlobalTargetInfo globalTargetInfo = default(GlobalTargetInfo), LocalTargetInfo localTargetInfo = default(LocalTargetInfo))
         {
             if (forceTargetSelf)
             {
@@ -23,9 +23,9 @@ namespace AKA_Ability
         }
 
         //返回是否成功执行
-        protected virtual bool DoEffect(AKAbility caster, LocalTargetInfo target) { return true; }
+        protected virtual bool DoEffect(AKAbility_Base caster, LocalTargetInfo target) { return true; }
 
-        protected virtual bool DoEffect(AKAbility caster, GlobalTargetInfo target) { return true; }
+        protected virtual bool DoEffect(AKAbility_Base caster, GlobalTargetInfo target) { return true; }
 
         /*public virtual void DoEffect_All(Pawn caster, LocalTargetInfo targetInfo, bool delayed = false)
         {

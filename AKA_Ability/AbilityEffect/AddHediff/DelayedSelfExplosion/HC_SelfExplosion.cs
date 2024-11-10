@@ -8,6 +8,7 @@ using Verse;
 
 namespace AKA_Ability
 {
+    [Obsolete]
     class HC_SelfExplosion : HediffComp
     {
         #region 属性 

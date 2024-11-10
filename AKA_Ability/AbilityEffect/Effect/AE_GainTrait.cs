@@ -11,7 +11,7 @@ namespace AKA_Ability
         public TraitDef trait;
         public int degree = 0;
 
-        protected override bool DoEffect(AKAbility caster, LocalTargetInfo target)
+        protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
             Pawn targetPawn = target.Pawn;
             if (targetPawn == null || targetPawn.story == null || targetPawn.story.traits == null) return false;

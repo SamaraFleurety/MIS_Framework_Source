@@ -28,7 +28,7 @@ namespace AKA_Ability
         #endregion
 
 
-        protected override bool DoEffect(AKAbility caster, LocalTargetInfo target)
+        protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
             string translatedMessage = TranslatorFormattedStringExtensions.Translate("AK_SuccessfulCallSupplyDropPod");
             Pawn casterPawn = caster.CasterPawn;

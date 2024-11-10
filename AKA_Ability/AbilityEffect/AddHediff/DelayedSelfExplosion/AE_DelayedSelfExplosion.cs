@@ -7,6 +7,8 @@ using Verse;
 
 namespace AKA_Ability
 {
+    //以后和explode合并
+    [Obsolete]
     public class AE_DelayedSelfExplosion : AbilityEffect_AddHediff
     {
         protected override void PreProcess()

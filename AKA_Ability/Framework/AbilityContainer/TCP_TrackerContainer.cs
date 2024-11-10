@@ -54,6 +54,8 @@ namespace AKA_Ability
             {
                 return;
             }
+            Log.Message($"caster pawn {CasterPawn == null}");
+            Log.Message($"caster pawn {CasterPawn.Name}");
             tracker = new AbilityTracker(CasterPawn);
             if (this.Abilities != null && this.Abilities.Count > 0)
             {
@@ -105,7 +107,8 @@ namespace AKA_Ability
         public override void PostExposeData()
         {
             base.PostExposeData();
-            Scribe_Deep.Look(ref tracker, "AKATracker", Wearer);
+            Log.Message("expose tcp tracker");
+            Scribe_Deep.Look(ref tracker, "AKATracker", CasterPawn);
         }
     }
 }

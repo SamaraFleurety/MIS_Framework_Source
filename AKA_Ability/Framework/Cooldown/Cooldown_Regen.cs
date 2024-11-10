@@ -34,7 +34,7 @@ namespace AKA_Ability.Cooldown
     //继承可能有点问题 没写基类 但是自回+1其实也挺基础的，随便吧
     public class Cooldown_Regen : IExposable
     {
-        public AKAbility parent;
+        public AKAbility_Base parent;
         public CooldownProperty prop;
 
         public int SP;   //当前sp 就是舟那种sp 越高越趋于增加充能
@@ -44,7 +44,7 @@ namespace AKA_Ability.Cooldown
         public virtual int MaxCharge => prop.maxCharge;
         public virtual int MaxSP => prop.SPPerCharge * (int)prop.SPUnit;
 
-        public Cooldown_Regen(CooldownProperty property, AKAbility ability)
+        public Cooldown_Regen(CooldownProperty property, AKAbility_Base ability)
         {
             parent = ability;
             prop = property;

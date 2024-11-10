@@ -8,12 +8,19 @@ using Verse;
 
 namespace AKA_Ability.AbilityEffect
 {
-    public class AE_CostChargeStatic : AbilityEffectBase
+    public class AE_KillTarget : AbilityEffectBase
     {
-        public int cost = 1;
+        public bool destroyCorpse = false;
         protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
-            caster.cooldown.CostCharge(cost);
+            Thing targetThing = target.Thing;
+            targetThing?.Kill();
+
+            if (destroyCorpse)
+            {
+                Pawn pawn = targetThing as Pawn;
+                pawn?.Corpse.Destroy();
+            }
             return base.DoEffect(caster, target);
         }
     }

@@ -11,7 +11,7 @@ namespace AKA_Ability
         protected virtual void PreProcess() { 
         }
 
-        protected override bool DoEffect(AKAbility caster, LocalTargetInfo target)
+        protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
             PreProcess();
             if (target == null || target.GetType() != typeof(Pawn))

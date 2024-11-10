@@ -8,9 +8,9 @@ namespace AKA_Ability.AbilityEffect
     {
         DamageDef damageDef;
         const float DAMAGE_HEAL_PER_PAWN = 20;
-        protected override bool DoEffect(AKAbility caster, LocalTargetInfo target)
+        protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
-            AME_Worker<Pawn> worker = new AME_Worker<Pawn>(this, doEffect_SingleTarget: delegate (AKAbility ab, Pawn victim)
+            AME_Worker<Pawn> worker = new AME_Worker<Pawn>(this, doEffect_SingleTarget: delegate (AKAbility_Base ab, Pawn victim)
             {
                 if (victim.Destroyed) return;
 

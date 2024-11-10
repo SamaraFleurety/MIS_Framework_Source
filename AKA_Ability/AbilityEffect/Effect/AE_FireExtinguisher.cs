@@ -14,7 +14,7 @@ namespace AKA_Ability
         public int postExplosionSpawnThingCount = 0;
         public SoundDef explosionSound = null;
 
-        protected override bool DoEffect(AKAbility caster, LocalTargetInfo target)
+        protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
             IntVec3 targetCell = target.Cell;
             Pawn casterPawn = caster.CasterPawn;

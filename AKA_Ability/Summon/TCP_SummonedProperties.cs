@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using Verse;
@@ -13,6 +15,8 @@ namespace AKA_Ability.Summon
     {
         public int timeExpire = -1;
         //public int summonCap = 1;        //最多同时存在多少个
+
+        public bool allowDraft = false;
         public TCP_SummonedProperties()
         {
             compClass = typeof(TC_SummonedProperties);
@@ -30,6 +34,28 @@ namespace AKA_Ability.Summon
         public Pawn Parent_Summoner;
 
         public AKAbility_Summon Parent_Ability;
+
+        //仅在make thing时会调用一次
+        public override void PostPostMake()
+        {
+            base.PostPostMake();
+            if (Props.allowDraft)
+            {
+                Pawn summonedPawn = parent as Pawn;
+                if(summonedPawn != null && summonedPawn.drafter == null) summonedPawn.drafter = new Pawn_DraftController(summonedPawn);
+            }
+        }
+
+        //每次spawn都会被调用。thing会被先make然后可能会也可能不会spawn。
+        public override void PostSpawnSetup(bool respawningAfterLoad)
+        {
+            base.PostSpawnSetup(respawningAfterLoad);
+            if (Props.allowDraft)
+            {
+                Pawn summonedPawn = parent as Pawn;
+                if (summonedPawn != null && summonedPawn.drafter == null) summonedPawn.drafter = new Pawn_DraftController(summonedPawn);
+            }
+        }
 
         public override void CompTick()
         {
@@ -54,9 +80,29 @@ namespace AKA_Ability.Summon
             base.PostDestroy(mode, previousMap);
         }
 
+        //让召唤物可以征召。
+        //原版机制中，需要智能是人类（但同时会导致一堆想法）或者是殖民地机械（需要有机械师控制）才能draft，直接改xml我没找到可行又方便的做法
+        //以下这玩意严重不可靠！利用了泰南drafter内部getgizmo缺乏检测iscolonist实现，很有可能随着更新失效
+        //如果哪天真失效 建议手写gizmo切换draft亦或者插入反射调用的函数的内部判定
         public override IEnumerable<Gizmo> CompGetGizmosExtra()
         {
-            return base.CompGetGizmosExtra();
+            Pawn summonedPawn = parent as Pawn;
+            if (Props.allowDraft)
+            {
+                //Log.Message("allow draft");
+                MethodInfo method = typeof(Pawn_DraftController).GetMethod("GetGizmos", BindingFlags.NonPublic | BindingFlags.Instance);
+                foreach (Gizmo i in (IEnumerable<Gizmo>)method.Invoke(summonedPawn.drafter, new object[] { }))
+                {
+                    yield return i;
+                }
+            }
+
+            foreach (Gizmo j in base.CompGetGizmosExtra())
+            {
+                yield return j;
+            }
+
+            //return base.CompGetGizmosExtra();
             //fixme:手动取消召唤gizmo
         }
 

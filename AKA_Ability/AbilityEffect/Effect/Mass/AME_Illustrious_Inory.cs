@@ -22,7 +22,7 @@ namespace AKA_Ability.AbilityEffect
 
         const float Mov_Spd_Per_Enemy = 0.1f;
         const float Dmg_Bonus_Per_Enemy = 0.1f;
-        protected override bool DoEffect(AKAbility caster, LocalTargetInfo target)
+        protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
             enemyCnt = 0;
             //改成直接作用全图了
@@ -81,7 +81,7 @@ namespace AKA_Ability.AbilityEffect
             return true;
         }
 
-        private void DoEffect_SinglePawn(AKAbility ab, Pawn victim)
+        private void DoEffect_SinglePawn(AKAbility_Base ab, Pawn victim)
         {
             if (victim.Destroyed) return;
             if (victim.GetUniqueLoadID() == ab.CasterPawn.GetUniqueLoadID()) return;

@@ -15,7 +15,7 @@ namespace AKA_Ability
         float healAmount = 10f; //每次治疗量
         RegrowType regrowType = RegrowType.compare;
 
-        protected override bool DoEffect(AKAbility caster, LocalTargetInfo target)
+        protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
             this.hediffDef = DefDatabase<HediffDef>.GetNamed("AK_Hediff_Regrow");
             this.severity = lastTime * 0.1f;

@@ -13,7 +13,7 @@ namespace AKA_Ability
     {
         public int goodwillchange = 30;
 
-        protected override bool DoEffect(AKAbility caster, LocalTargetInfo target)
+        protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
             Pawn user = caster.CasterPawn;
             Pawn targetPawn = target.Pawn;

@@ -12,7 +12,7 @@ namespace AKA_Ability.HarmonyPatchs
         {
             if (AKA_Utilities.pawn_NotifyStricken.ContainsKey(__instance))
             {
-                foreach (AKAbility a in AKA_Utilities.pawn_NotifyStricken[__instance])
+                foreach (AKAbility_Base a in AKA_Utilities.pawn_NotifyStricken[__instance])
                 {
                     a.Notify_OwnerStricken(ref  dinfo);
                 }

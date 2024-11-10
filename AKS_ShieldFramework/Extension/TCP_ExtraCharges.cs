@@ -47,7 +47,7 @@ namespace AKS_Shield.Extension
             if (!Prop.displayInfoGizmo || !CompShield.ShouldDisplay) yield break;
             yield return new Command_Toggle
             {
-                defaultLabel = Prop.infoGizmoLabel.Translate(),
+                defaultLabel = $"{Prop.infoGizmoLabel.Translate()} : {charges}",
                 defaultDesc = Prop.infoGizmoDesc.Translate(),
                 icon = Prop.InfoGizmoIcon,
                 toggleAction = delegate ()
@@ -77,8 +77,10 @@ namespace AKS_Shield.Extension
 
         public override void Notify_Break(DamageInfo dinfo)
         {
+            Log.Message($"notify extra charge break");
             if (charges > 0)
             {
+                Log.Message("reset");
                 --charges;
                 CompShield.energy = CompShield.Props.energyMax;
             }

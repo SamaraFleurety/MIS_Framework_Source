@@ -8,6 +8,7 @@ using Verse;
 
 namespace AKA_Ability.DelayedEffects
 {
+    //考虑以后改成直接使用ability effect base而不是每个都要重开一套。
     public abstract class DelayedEffectorBase : IExposable
     {
         public DelayedEffectDef effectDef;

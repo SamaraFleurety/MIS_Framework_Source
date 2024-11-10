@@ -12,13 +12,15 @@ namespace AKA_Ability.AbilityEffect
 
         public int burstInterval = 1;
 
-        protected override bool DoEffect(AKAbility caster, LocalTargetInfo target)
+        protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
             int delay = burstInterval;
 
             int burstLeft = burstCount;
 
+            //fixme:估计要改成activator
             Effector_ShootProjectile eff = new Effector_ShootProjectile(delayedEffect, caster.CasterPawn, target);
+
             while (burstLeft > 0)
             {
                 --burstLeft;

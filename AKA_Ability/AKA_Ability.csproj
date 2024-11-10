@@ -93,6 +93,7 @@
     <Compile Include="AbilityEffect\CostCharges\AE_CostChargeStatic.cs" />
     <Compile Include="AbilityEffect\Effect\AE_CatchMother.cs" />
     <Compile Include="AbilityEffect\DelayedEffects\AE_DelayedEffects.cs" />
+    <Compile Include="AbilityEffect\Effect\AE_Explode.cs" />
     <Compile Include="AbilityEffect\Effect\AE_FireExtinguisher.cs" />
     <Compile Include="AbilityEffect\Effect\AE_GainTrait.cs" />
     <Compile Include="AbilityEffect\Effect\AbilityEffect_Heal.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="AbilityEffect\Effect\AE_Jump.cs" />
     <Compile Include="AbilityEffect\Effect\AE_SendLetter.cs" />
     <Compile Include="AbilityEffect\Effect\AE_SendMessage.cs" />
+    <Compile Include="AbilityEffect\Effect\AE_Kill.cs" />
     <Compile Include="AbilityEffect\Effect\AE_TeleportSelfToTarget.cs" />
     <Compile Include="AbilityEffect\Effect\Mass\AbilityMassEffectBase.cs" />
     <Compile Include="AbilityEffect\Effect\Mass\AME_Illustrious_Inory.cs" />
@@ -108,6 +110,10 @@
     <Compile Include="AbilityEffect\Summon\AE_SummonBase.cs" />
     <Compile Include="AbilityEffect\Summon\AE_SummonPawn.cs" />
     <Compile Include="AbilityEffect\Summon\AE_SummonThing.cs" />
+    <Compile Include="Framework\Gizmos\ExtraGizmos\ExtraGizmoDrawer_Base.cs" />
+    <Compile Include="Framework\Gizmos\ExtraGizmos\EGD_SelectAllSummoned.cs" />
+    <Compile Include="Framework\Gizmos\Gizmo_SelectAllSummon.cs" />
+    <Compile Include="Summon\Patch_AllowTakeOrder.cs" />
     <Compile Include="AKA_Algorithm.cs" />
     <Compile Include="AKA_Utilities.cs" />
     <Compile Include="AbilityEffect\DelayedEffects\DelayedEffectDef.cs" />
@@ -115,7 +121,7 @@
     <Compile Include="AbilityEffect\DelayedEffects\Effectors\Effector_ShootProjectile.cs" />
     <Compile Include="Framework\AbilityContainer\ACP_AbilityAddon.cs" />
     <Compile Include="Framework\AbilityContainer\TCP_TrackerContainer.cs" />
-    <Compile Include="Framework\AbilityInstance\AKAbility.cs" />
+    <Compile Include="Framework\AbilityInstance\AKAbility_Base.cs" />
     <Compile Include="Framework\AbilityInstance\AKAbility_AutoSelf.cs" />
     <Compile Include="Framework\AbilityInstance\AKAbility_SelfTarget.cs" />
     <Compile Include="Framework\AbilityInstance\AKAbility_Auto.cs" />
@@ -127,6 +133,7 @@
     <Compile Include="Framework\CastConditioner\CC_Drafted.cs" />
     <Compile Include="Framework\CastConditioner\CC_HPThreshold.cs" />
     <Compile Include="Framework\CastConditioner\CC_NeedCharge.cs" />
+    <Compile Include="Framework\CastConditioner\CC_SummonLimit.cs" />
     <Compile Include="Framework\Cooldown\CD_Passive.cs" />
     <Compile Include="Framework\Cooldown\CD_Stricken.cs" />
     <Compile Include="Framework\Cooldown\Cooldown_Regen.cs" />

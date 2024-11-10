@@ -11,7 +11,7 @@ namespace AKA_Ability.AbilityEffect
         public string content;
         LetterDef letterDef;
 
-        public override bool DoEffect(AKAbility caster, GlobalTargetInfo globalTargetInfo = default, LocalTargetInfo localTargetInfo = default)
+        public override bool DoEffect(AKAbility_Base caster, GlobalTargetInfo globalTargetInfo = default, LocalTargetInfo localTargetInfo = default)
         {
             Find.LetterStack.ReceiveLetter(label, content, letterDef);
             return true;

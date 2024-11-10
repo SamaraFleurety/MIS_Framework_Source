@@ -12,7 +12,7 @@ namespace AKA_Ability.AbilityEffect
     {
         public PawnKindDef summonedDef;  //召唤物
 
-        protected override Thing GenerateSummoned(AKAbility source)
+        protected override Thing GenerateSummoned(AKAbility_Summon source)
         {
             return PawnGenerator.GeneratePawn(summonedDef, source.CasterPawn.Faction);
         }

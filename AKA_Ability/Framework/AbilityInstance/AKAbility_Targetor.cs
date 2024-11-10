@@ -10,7 +10,7 @@ using Verse;
 
 namespace AKA_Ability
 {
-    public class AKAbility_Targetor : AKAbility, ITargetingSource
+    public class AKAbility_Targetor : AKAbility_Base, ITargetingSource
     {
         public AKAbility_Targetor(AbilityTracker tracker) : base(tracker)
         {
@@ -19,7 +19,7 @@ namespace AKA_Ability
         {
         }
 
-        protected override void InitializeGizmo()
+        protected override void InitializeGizmoInnate()
         {
             cachedGizmo = new Gizmo_AbilityCast_Targetor
             {

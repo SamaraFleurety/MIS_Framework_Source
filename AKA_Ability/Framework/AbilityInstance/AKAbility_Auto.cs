@@ -3,7 +3,7 @@ using Verse;
 
 namespace AKA_Ability
 {
-    public class AKAbility_Auto : AKAbility
+    public class AKAbility_Auto : AKAbility_Base
     {
         public bool AutoCast = false;
 
@@ -20,15 +20,14 @@ namespace AKA_Ability
         public override void Tick()
         {
             base.Tick();
-            string failReason = "";
-            if (AutoCast && Find.TickManager.TicksGame % 180 == 0 && CastableNow(ref failReason))
+            if (AutoCast && Find.TickManager.TicksGame % 180 == 0 && CastableNow())
             {
                 if (Target == null) return;
                 TryCastShot(Target);
             }
         }
 
-        protected override void InitializeGizmo()
+        protected override void InitializeGizmoInnate()
         {
             cachedGizmo = new Gizmo_AbilityCast_Toggle
             {
@@ -39,7 +38,7 @@ namespace AKA_Ability
             };
         }
 
-        protected override void UpdateGizmo()
+        protected override void UpdateGizmoInnate()
         {
             cachedGizmo.Disabled = false;
         }

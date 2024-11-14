@@ -307,6 +307,8 @@
     <Compile Include="Graphic\StatusBar\PawnRenderNode_AKHealthBar.cs" />
     <Compile Include="Graphic\StatusBar\PawnRenderNode_AKSkillBar.cs" />
     <Compile Include="Graphic\FrontHair\Ext_FrontHair.cs" />
+    <Compile Include="Graphic\WeaponOffset\Ext_WeaponWieldGraphics.cs" />
+    <Compile Include="Graphic\WeaponOffset\Patch_AlterGraphics.cs" />
     <Compile Include="HarmonyPatch\PatchTest.cs" />
     <Compile Include="HarmonyPatch\Patch_AlienWarning.cs" />
     <Compile Include="HarmonyPatch\Patch_ObeliskCopyAbility.cs" />

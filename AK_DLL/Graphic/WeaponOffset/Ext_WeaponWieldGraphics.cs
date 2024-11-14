@@ -3,6 +3,8 @@ using Verse;
 
 namespace AK_DLL
 {
+    //手持武器时，贴图改变
+    //偏移一律仅使用drawOffsetSouth
     public class Ext_WeaponWieldGraphics : DefModExtension
     {
         public GraphicData alterGraphics;

@@ -14,7 +14,7 @@ namespace AK_DLL
         public override Vector3 OffsetFor(PawnRenderNode node, PawnDrawParms parms, out Vector3 pivot)
         {
             Vector3 offset = base.OffsetFor(node, parms, out pivot);
-            offset += parms.pawn.story.hairDef.GetModExtension<Ext_BackHair>().graphicData.DrawOffsetForRot(parms.pawn.Rotation);
+            offset += parms.pawn.story.hairDef.GetModExtension<Ext_BackHair>().graphicData.DrawOffsetForRot(parms.facing);
             return offset;
         }
 

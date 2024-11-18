@@ -83,7 +83,6 @@ namespace AK_DLL
 
         public List<Type> postEffects = new List<Type>();
 
-
         #endregion
 
         #region 快捷属性

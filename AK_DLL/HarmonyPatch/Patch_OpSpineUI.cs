@@ -7,6 +7,7 @@ using Verse;
 
 namespace AK_DLL
 {
+    //切换动态立绘显示的补丁
     [HarmonyPatch(typeof(Window), "WindowOnGUI")]
     public class Patch_OpSpineUI
     {
@@ -19,6 +20,10 @@ namespace AK_DLL
             Pawn OP = Find.Selector.SelectedPawns.First();
             //选中干员激活Object
             OperatorDocument doc = OP.GetDoc();
+            if (doc != null)
+            {
+                Log.Message(OP.Name + "的换装编号是" + doc.preferedSkin);
+            }
             if (GC_OperatorDocumentation.cachedOperators.ContainsKey(OP))
             {
                 if (GC_OperatorDocumentation.opUIStandData.Values.Count == 0) return;

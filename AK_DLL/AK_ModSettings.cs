@@ -64,7 +64,6 @@ namespace AK_DLL
 
         #region 环世界殖民地界面 左下角显示小人立绘
         public static bool displayBottomLeftPortrait = true;
-        public static bool displayDynStand = true;
         //显示立绘的偏移参数
         public static int xOffset = 0; //实际效果是值*5
         public static int yOffset = 0; //同上
@@ -138,7 +137,6 @@ namespace AK_DLL
             Scribe_Values.Look(ref playOperatorVoice, "playVoice");
             Scribe_Values.Look(ref voiceIntervalTime, "voiceInterTime", 1);
             Scribe_Values.Look(ref displayBottomLeftPortrait, "displayP");
-            Scribe_Values.Look(ref displayDynStand, "displayDynStand", defaultValue: true);
             Scribe_Values.Look(ref xOffset, "xOff");
             Scribe_Values.Look(ref yOffset, "yOff");
             Scribe_Values.Look(ref ratio, "ratio");
@@ -181,7 +179,6 @@ namespace AK_DLL
             AK_ModSettings.voiceIntervalTime = (int)listingStandard.SliderLabeled("AK_Option_Interval".Translate() + $"{(float)AK_ModSettings.voiceIntervalTime / 2.0}", AK_ModSettings.voiceIntervalTime, 0, 60f);
 
             listingStandard.CheckboxLabeled("AK_Option_DisP".Translate(), ref AK_ModSettings.displayBottomLeftPortrait);
-            listingStandard.CheckboxLabeled("AK_Option_DisplayDynStand".Translate(), ref AK_ModSettings.displayDynStand);
             AK_ModSettings.xOffset = (int)listingStandard.SliderLabeled("AK_Option_xOffset".Translate() + $"{AK_ModSettings.xOffset * 5}", AK_ModSettings.xOffset, 0, 600);
             AK_ModSettings.yOffset = (int)listingStandard.SliderLabeled("AK_Option_yOffset".Translate() + $"{AK_ModSettings.yOffset * 5}", AK_ModSettings.yOffset, 0, 600);
             AK_ModSettings.ratio = (int)listingStandard.SliderLabeled("AK_Option_ratio".Translate() + $"{(float)AK_ModSettings.ratio * 0.05f}", AK_ModSettings.ratio, 1, 40);

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Verse;
 using UnityEngine;
 using RimWorld;
-using SpriteEvo;
 
 
 namespace AK_DLL
@@ -134,13 +133,8 @@ namespace AK_DLL
         public static Dictionary<string, OperatorDocument> opDocArchive;
 
         //提升性能的缓存
-        public static Dictionary<Pawn, OperatorDocument> cachedOperators = new();
-        public static HashSet<Pawn> cachedNonOperators = new();
-
-        //动态立绘object的储存
-        //public static Dictionary<OperatorDocument, Animation38> opUIStandAnimationDataBase;
-        //public static Dictionary<OperatorDocument, GameObject> opUIStandDataBase;
-        public static Dictionary<OperatorDocument, Dictionary<int, GameObject>> opUIStandData;
+        public static Dictionary<Pawn, OperatorDocument> cachedOperators = new Dictionary<Pawn, OperatorDocument>();
+        public static HashSet<Pawn> cachedNonOperators = new HashSet<Pawn>();
         public GC_OperatorDocumentation(Game game)
         {
             opDocArchive = new Dictionary<string, OperatorDocument>();
@@ -153,9 +147,7 @@ namespace AK_DLL
             {
                 Find.LetterStack.ReceiveLetter(LetterMaker.MakeLetter(Translator.Translate("AK_StartLabel"), Translator.Translate("AK_StartDesc"), LetterDefOf.NeutralEvent, null, null));
             }
-            opDocArchive ??= new Dictionary<string, OperatorDocument>();
-            //opUIStandDataBase ??= new Dictionary<OperatorDocument, GameObject>();
-            opUIStandData ??= new Dictionary<OperatorDocument, Dictionary<int, GameObject>>();
+            if (opDocArchive == null) opDocArchive = new Dictionary<string, OperatorDocument>();
         }
 
 
@@ -164,9 +156,7 @@ namespace AK_DLL
         {
             base.LoadedGame();
             VoicePlayer.LoadedGame();
-            opDocArchive ??= new Dictionary<string, OperatorDocument>();
-            //opUIStandDataBase ??= new Dictionary<OperatorDocument, GameObject>();
-            opUIStandData ??= new Dictionary<OperatorDocument, Dictionary<int, GameObject>>();
+            if (opDocArchive == null) opDocArchive = new Dictionary<string, OperatorDocument>();
         }
 
         public override void ExposeData()
@@ -175,8 +165,8 @@ namespace AK_DLL
             //GC是先于entity加载的，所以在这里去指pawn一定是个空指针。去指丢进下面那个函数去做了。
             if (Scribe.mode != LoadSaveMode.ResolvingCrossRefs)
             {
-                List<string> key = new();
-                List<OperatorDocument> value = new();
+                List<string> key = new List<string>();
+                List<OperatorDocument> value = new List<OperatorDocument>();
                 try
                 {
                     Scribe_Collections.Look(ref opDocArchive, "operatorDocument", LookMode.Value, LookMode.Deep, ref key, ref value);
@@ -188,8 +178,8 @@ namespace AK_DLL
         //会在加载流程很后面加载。执行pawn的去指。
         public override void FinalizeInit()
         {
-            List<string> key = new();
-            List<OperatorDocument> value = new();
+            List<string> key = new List<string>();
+            List<OperatorDocument> value = new List<OperatorDocument>();
             Scribe.mode = LoadSaveMode.ResolvingCrossRefs;
             try
             {
@@ -243,7 +233,7 @@ namespace AK_DLL
                 doc.pawn.Discard();
                 if (Find.WorldPawns.Contains(doc.pawn)) Find.WorldPawns.RemoveAndDiscardPawnViaGC(doc.pawn);
             }
-            doc.weapon?.Destroy();
+            if (doc.weapon != null) doc.weapon.Destroy();
             //if (doc.hediff != null) Log.Error("人都没了但hediff还存在,请提交此bug至制作组FS");
         }
 

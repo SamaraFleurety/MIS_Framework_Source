@@ -78,9 +78,6 @@
     <Reference Include="Mono.Security">
       <HintPath>./packages/Mono.Security.dll</HintPath>
     </Reference>
-    <Reference Include="SpriteEvo">
-      <HintPath>D:\Code\C#\Git\PA_SpriteEvo\Source\PA_SpriteEvo\bin\Debug\SpriteEvo.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -315,7 +312,6 @@
     <Compile Include="HarmonyPatch\PatchTest.cs" />
     <Compile Include="HarmonyPatch\Patch_AlienWarning.cs" />
     <Compile Include="HarmonyPatch\Patch_ObeliskCopyAbility.cs" />
-    <Compile Include="HarmonyPatch\Patch_OpSpineUI.cs" />
     <Compile Include="HarmonyPatch\Patch_PawnUIOverlay.cs" />
     <Compile Include="Hediff\Comps\HCP_AddTrait.cs" />
     <Compile Include="Hediff\Comps\HCP_RemoveMe.cs" />
@@ -395,9 +391,7 @@
     <Compile Include="RecruitConsole\Window\RIWindow_OperatorList.cs" />
     <Compile Include="VoicePlayer\VoicePlayer.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Animation\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\LivelyRim\FS_LivelyRim.csproj">
       <Project>{CA2D2594-7051-4FC9-B1E1-EF077F439FCF}</Project>

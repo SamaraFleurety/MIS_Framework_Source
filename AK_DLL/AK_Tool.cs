@@ -6,7 +6,6 @@ using Verse;
 using UnityEngine.UI;
 using System.Text.RegularExpressions;
 using AKA_Ability;
-using SpriteEvo;
 
 namespace AK_DLL
 {
@@ -152,52 +151,6 @@ namespace AK_DLL
             if (p == null) return;
             OperatorDocument doc = AK_Tool.GetDoc(p);
             if (doc == null) return;
-            //动态立绘显示
-            if (AK_ModSettings.displayDynStand)
-            {
-                if ((doc.preferedSkin == 1) && (doc.operatorDef.standAnimation != null))
-                {
-                    if (!GC_OperatorDocumentation.opUIStandData.ContainsKey(doc))
-                    {
-                        GC_OperatorDocumentation.opUIStandData.Add(doc, new Dictionary<int, GameObject>());
-                    }
-                    GameObject ooa = GC_OperatorDocumentation.opUIStandData[doc].TryGetValue(1);
-                    if (ooa == null)
-                    {
-                        Vector3 pos = new(Random.Range(-999f, 999f), Random.Range(-999f, 999f), Random.Range(-999f, 999f));
-                        ooa = doc.operatorDef.standAnimation.Create_GameOnlyAnimationTextureInstance(pos, doc.operatorDef.standAnimation.defName, 2048, 2048);
-                        GC_OperatorDocumentation.opUIStandData[doc].Add(1, ooa);
-                    }
-                    else
-                    {
-                        if (ooa.activeInHierarchy)
-                            Widgets.DrawTextureFitted(new Rect(AK_ModSettings.xOffset * 5, AK_ModSettings.yOffset * 5, 408, 408), ooa.GetComponentInChildren<Camera>().targetTexture, AK_ModSettings.ratio * 0.05f);
-                    }
-                    return;
-                }
-                //这能给换出精二的立绘我也是服了
-                else if ((doc.preferedSkin > 1) && (doc.operatorDef.fashionAnimation.Count > doc.preferedSkin - 2))
-                {
-                    if (!GC_OperatorDocumentation.opUIStandData.ContainsKey(doc))
-                    {
-                        GC_OperatorDocumentation.opUIStandData.Add(doc, new Dictionary<int, GameObject>());
-                    }
-                    int skinIndex = doc.preferedSkin;
-                    GameObject oob = GC_OperatorDocumentation.opUIStandData[doc].TryGetValue(skinIndex);
-                    if (oob == null)
-                    {
-                        Vector3 pos = new(Random.Range(-999f, 999f), Random.Range(-999f, 999f), Random.Range(-999f, 999f));
-                        oob = doc.operatorDef.standAnimation.Create_GameOnlyAnimationTextureInstance(pos, doc.operatorDef.fashionAnimation[skinIndex - 2].defName, 2048, 2048);
-                        GC_OperatorDocumentation.opUIStandData[doc].Add(skinIndex, oob);
-                    }
-                    else
-                    {
-                        if (oob.activeInHierarchy)
-                            Widgets.DrawTextureFitted(new Rect(AK_ModSettings.xOffset * 5, AK_ModSettings.yOffset * 5, 408, 408), oob.GetComponentInChildren<Camera>().targetTexture, AK_ModSettings.ratio * 0.05f);
-                    }
-                    return;
-                }
-            }
             Texture2D texture = doc.operatorDef.PreferredStand(doc.preferedSkin);
             Widgets.DrawTextureFitted(new Rect(AK_ModSettings.xOffset * 5, AK_ModSettings.yOffset * 5, 408, 408), texture, (float)AK_ModSettings.ratio * 0.05f);
         }

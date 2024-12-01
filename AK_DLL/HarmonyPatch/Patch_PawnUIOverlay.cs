@@ -12,10 +12,15 @@ namespace AK_DLL
     [HarmonyPatch(typeof(GenMapUI), "DrawPawnLabel", new Type[] { typeof(Pawn), typeof(Rect), typeof(float), typeof(float), typeof(Dictionary<string, string>), typeof(GameFont), typeof(bool), typeof(bool) })]
     internal class Patch_PawnLabel
     {
+        public static bool DisablePawnLabel => !AK_ModSettings.disable_displayPawnLabelHealth;
         [HarmonyTranspiler]
         public static IEnumerable<CodeInstruction> Transpiler_PawnLabel(IEnumerable<CodeInstruction> instructions)
         {
             List<CodeInstruction> codes = instructions.ToList();
+            if (DisablePawnLabel)
+            {
+                return codes;
+            }
             //IL_0038: stloc.1
             int index = codes.FindIndex(code => code.opcode == OpCodes.Stloc_1);
             codes.RemoveRange(index + 1, 5);

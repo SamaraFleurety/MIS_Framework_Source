@@ -110,7 +110,7 @@ namespace AK_DLL
         Tail,
     }
 
-    public enum TimeToTick
+    /*public enum TimeToTick
     {
         tick = 1,          //游戏中
         tickRare = 250,
@@ -120,5 +120,5 @@ namespace AK_DLL
         season = day * 15, //0.9M
         year = season * 4, //3.6M
         rSecond = 60       //现实中的1秒
-    }
+    }*/
 }

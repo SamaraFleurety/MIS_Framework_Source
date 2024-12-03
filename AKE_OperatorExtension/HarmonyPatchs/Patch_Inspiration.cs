@@ -24,12 +24,12 @@ namespace AKE_OperatorExtension.HarmonyPatchs
             }
             Pawn pawn = (Pawn)dinfo.Value.Instigator;
             if (pawn == null) { return; }
-            if (pawn.story.traits.HasTrait(TraitDef.Named("AK_Trait_SpecterUnchainedSecond")))
+            if (pawn.story?.traits?.HasTrait(TraitDef.Named("AK_Trait_SpecterUnchainedSecond")) == true)
             {
                 float inspirationChance = 0.5f;
                 if (Rand.Chance(inspirationChance))
                 {
-                    pawn.mindState.inspirationHandler.TryStartInspiration(InspirationDefOf.Inspired_Creativity);
+                    pawn.mindState?.inspirationHandler?.TryStartInspiration(InspirationDefOf.Inspired_Creativity);
                 }
             }
         }

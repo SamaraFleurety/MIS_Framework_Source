@@ -8,6 +8,7 @@ using Verse;
 using AK_DLL;
 using UnityEngine;
 using KTrie;
+using AKA_Ability;
 
 namespace AKE_OperatorExtension
 {

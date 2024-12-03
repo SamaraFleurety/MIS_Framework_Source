@@ -6,6 +6,7 @@ using Verse;
 using RimWorld;
 using System.Reflection;
 using System.Reflection.Emit;
+using AKA_Ability;
 
 namespace AKE_OperatorExtension.HarmonyPatchs
 {

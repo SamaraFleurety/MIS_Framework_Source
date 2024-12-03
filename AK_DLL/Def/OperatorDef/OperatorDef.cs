@@ -83,6 +83,7 @@ namespace AK_DLL
 
         public List<Type> postEffects = new List<Type>();
 
+        public bool alwaysHidden = false;  //是否隐藏。被隐藏的干员不会在招募ui显示，仅能通过特殊手段出现。fixme:没做。
         #endregion
 
         #region 快捷属性

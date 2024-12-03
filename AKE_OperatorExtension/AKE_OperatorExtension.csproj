@@ -74,6 +74,11 @@
     <Compile Include="HCP\HCP_SkillUpbyTime.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\AKA_Ability\AKA_Ability.csproj">
+      <Project>{92CFB99E-4D93-47F2-A4AD-DD0668EFE739}</Project>
+      <Name>AKA_Ability</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -115,7 +115,13 @@ namespace AKA_Ability
             for (int i = 0; i < pawn.health.hediffSet.hediffs.Count; ++i)
             {
                 Hediff h = pawn.health.hediffSet.hediffs[i];
-                if (h is Hediff_Injury) h.Heal(points);
+                if (h is Hediff_Injury)
+                {
+                    float sever = h.Severity;
+                    points = Math.Max(points, sever);
+                    h.Heal(points);
+                    points -= sever;
+                }
             }
             /*if (pawn.health.hediffSet.GetInjuriesTendable() != null && pawn.health.hediffSet.GetInjuriesTendable().Count() > 0)
             {

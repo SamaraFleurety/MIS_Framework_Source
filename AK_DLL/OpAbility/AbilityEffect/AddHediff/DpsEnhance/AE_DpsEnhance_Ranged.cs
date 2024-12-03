@@ -8,7 +8,7 @@ using RimWorld;
 
 namespace AK_DLL
 {
-    public class RangedStat
+    /*public class RangedStat
     {
         public List<StatModifier> stats = new List<StatModifier>();
         /*public float accuTouch = 0;
@@ -16,7 +16,7 @@ namespace AK_DLL
         public float accuMed = 0;
         public float accuLong = 0;
         public float postCD = 0;*/  //包含在上面了
-
+    /*
         public float preCD = 0;
         public float range = 0;
         public float armorPenetrate = 0;
@@ -58,5 +58,5 @@ namespace AK_DLL
                 comp.StatOffset = this.statOffset;
             }
         }
-    }
+    }*/
 }

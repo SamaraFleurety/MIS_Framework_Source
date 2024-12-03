@@ -6,7 +6,7 @@ using Verse;
 
 namespace AK_DLL
 {
-    public class AbilityEffect_GainTraitSelf : AbilityEffectBase
+    /*public class AbilityEffect_GainTraitSelf : AbilityEffectBase
     {
         public override void DoEffect_Pawn(Pawn user, Thing target)
         {
@@ -15,5 +15,5 @@ namespace AK_DLL
         }
         public TraitDef trait;
         public int? degree;
-    }
+    }*/
 }

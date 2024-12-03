@@ -7,7 +7,7 @@ using Verse;
 
 namespace AK_DLL
 {
-    public class HC_DpsEnhance_Melee : HediffComp
+    /*public class HC_DpsEnhance_Melee : HediffComp
     {
 
         #region 属性
@@ -122,5 +122,5 @@ namespace AK_DLL
             enhance.shouldSkip = true;
             return null;
         }
-    }
+    }*/
 }

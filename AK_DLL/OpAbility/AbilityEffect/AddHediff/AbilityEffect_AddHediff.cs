@@ -6,7 +6,7 @@ using Verse;
 
 namespace AK_DLL
 {
-    public class AbilityEffect_AddHediff : AbilityEffectBase
+    /*public class AbilityEffect_AddHediff : AbilityEffectBase
     {
         protected virtual void preProcess() { 
         }
@@ -77,7 +77,7 @@ namespace AK_DLL
                         partRecord1 = bodyPart;
                         break;
                     }
-                }*/
+                }*//*
                 if (severity <= 0) return null;
                 hediff = target.health.AddHediff(hediffDef, partRecord, null, null);
                 hediff.Severity = severity;
@@ -113,5 +113,5 @@ namespace AK_DLL
         public HediffDef hediffDef;
         public float severity = 1f;
         public BodyPartDef bodyPart;
-    }
+    }*/
 }

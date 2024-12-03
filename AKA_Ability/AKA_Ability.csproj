@@ -110,6 +110,7 @@
     <Compile Include="AbilityEffect\Summon\AE_SummonBase.cs" />
     <Compile Include="AbilityEffect\Summon\AE_SummonPawn.cs" />
     <Compile Include="AbilityEffect\Summon\AE_SummonThing.cs" />
+    <Compile Include="Framework\AbilityContainer\HCP_TrackerContainer.cs" />
     <Compile Include="Framework\Gizmos\ExtraGizmos\ExtraGizmoDrawer_Base.cs" />
     <Compile Include="Framework\Gizmos\ExtraGizmos\EGD_SelectAllSummoned.cs" />
     <Compile Include="Framework\Gizmos\Gizmo_SelectAllSummon.cs" />

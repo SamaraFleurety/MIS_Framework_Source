@@ -7,7 +7,7 @@ using Verse;
 
 namespace AK_DLL
 {
-    public class AE_DelayedSelfExplosion : AbilityEffect_AddHediff
+    /*public class AE_DelayedSelfExplosion : AbilityEffect_AddHediff
     {
         protected override void preProcess()
         {
@@ -37,5 +37,5 @@ namespace AK_DLL
         public TimeToTick unit = TimeToTick.hour; //单位
         public float radius = 2.2f;  //爆炸半径
         public int damage = 10;      //爆炸伤害
-    }
+    }*/
 }

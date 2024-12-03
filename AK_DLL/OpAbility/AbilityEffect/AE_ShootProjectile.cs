@@ -7,7 +7,7 @@ using Verse;
 
 namespace AK_DLL
 {
-    public class AE_ShootProjectile : AbilityEffectBase
+    /*public class AE_ShootProjectile : AbilityEffectBase
     {
         public VerbProperties verb;
         private Verb_Shoot v = null;
@@ -30,5 +30,5 @@ namespace AK_DLL
             //v.TryStartCastOn(new LocalTargetInfo(user), new LocalTargetInfo(target), false, true, false, false);
         }
 
-    }
+    }*/
 }

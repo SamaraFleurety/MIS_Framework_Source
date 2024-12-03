@@ -8,7 +8,7 @@ using RimWorld;
 
 namespace AK_DLL
 {
-    public class HC_DpsEnhance_Ranged : HediffComp
+    /*public class HC_DpsEnhance_Ranged : HediffComp
     {
         #region 属性
         private HCP_DpsEnhance_Ranged exactProps = new HCP_DpsEnhance_Ranged();
@@ -168,5 +168,5 @@ namespace AK_DLL
                 }
             }
         }
-    }
+    }*/
 }

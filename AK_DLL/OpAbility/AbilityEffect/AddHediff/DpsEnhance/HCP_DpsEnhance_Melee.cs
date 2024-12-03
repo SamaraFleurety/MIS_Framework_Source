@@ -7,7 +7,7 @@ using Verse;
 
 namespace AK_DLL { 
 
-    public class HCP_DpsEnhance_Melee : HediffCompProperties
+   /* public class HCP_DpsEnhance_Melee : HediffCompProperties
     {
         public List<toolEnhance> enhances;
 
@@ -19,5 +19,5 @@ namespace AK_DLL {
             this.enhances = new List<toolEnhance>();
             this.compClass = typeof(HC_DpsEnhance_Melee);
         }
-    }
+    }*/
 }

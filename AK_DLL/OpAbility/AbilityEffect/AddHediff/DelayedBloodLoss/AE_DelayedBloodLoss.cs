@@ -11,7 +11,7 @@ namespace AK_DLL
     /// 往目标身上加一个Hediff
     /// 效果为：delay * 单位时间后，每单位时间减少lossAmount的血，直到duration结束
     /// </summary>
-    public class AE_DelayedBloodLoss : AbilityEffect_AddHediff
+    /*public class AE_DelayedBloodLoss : AbilityEffect_AddHediff
     {
         protected override void preProcess()
         {
@@ -31,5 +31,5 @@ namespace AK_DLL
         public TimeToTick unit = TimeToTick.hour; //unit
         public int duration = 10;
         public float lossAmount = 0.05f;
-    }
+    }*/
 }

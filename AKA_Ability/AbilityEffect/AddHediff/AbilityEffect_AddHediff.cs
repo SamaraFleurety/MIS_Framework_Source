@@ -67,7 +67,7 @@ namespace AKA_Ability
         ///             -如果严重度小于等于0(即减少严重度)，那就ret空 (减少不存在的hediff没有意义)
         ///             -否则就增加此Hediff并调整严重度。
         /// </summary>
-        public static Hediff AddHediff (Pawn target, HediffDef hediffDef, BodyPartDef part = null, BodyPartRecord partRecord = null, float severity = 1)
+        public static Hediff AddHediff (Pawn target, HediffDef hediffDef, BodyPartDef part = null, BodyPartRecord partRecord = null, float severity = 1, string customLabel = null)
         {
             if (target == null) return null;
 
@@ -80,7 +80,7 @@ namespace AKA_Ability
             }
             else
             {
-                if (partRecord == null) partRecord = GetBodyPartRecord(target, part);
+                if (partRecord == null) partRecord = GetBodyPartRecord(target, part, customLabel);
                 if (partRecord == null) return null;
 
                 hediff = GetMatchedHediff(target, hediffDef, partRecord);
@@ -96,12 +96,17 @@ namespace AKA_Ability
             return hediff;
         }
 
-        public static BodyPartRecord GetBodyPartRecord(Pawn p, BodyPartDef partDef)
+        public static BodyPartRecord GetBodyPartRecord(Pawn p, BodyPartDef partDef, string customLabel = null)
         {
             if (p == null || p.Dead || partDef == null) return null;
             IEnumerable<BodyPartRecord> candidate = p.health.hediffSet.GetNotMissingParts();
             candidate = candidate.Where((BodyPartRecord record) => record.def == partDef);
+
             if (candidate == null || candidate.Count() == 0) return null;
+
+            if (customLabel != null) candidate = candidate.Where((BodyPartRecord record) => record.untranslatedCustomLabel == customLabel);
+            if (candidate == null || candidate.Count() == 0) return null;
+
             BodyPartRecord r = candidate.RandomElement();
             return r;
         }

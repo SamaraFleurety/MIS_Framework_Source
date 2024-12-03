@@ -7,7 +7,7 @@ using Verse;
 
 namespace AK_DLL
 {
-    public class toolEnhance
+    /*public class toolEnhance
     {
         public float originalPower;            //必须提供工具的原始攻击力来定位工具
         public float originalCD;               //也必须提供原始cd
@@ -51,5 +51,5 @@ namespace AK_DLL
                 comp.EnhanceEndTime = this.enhanceEndTime;
             }
         }
-    }
+    }*/
 }

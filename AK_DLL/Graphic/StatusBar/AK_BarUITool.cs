@@ -9,8 +9,8 @@ namespace AK_DLL
     [StaticConstructorOnStartup]
     public static class AK_BarUITool
     {
-        internal static bool CameraPlusModEnabled = false;
-        internal static bool SimpleCameraModEnabled = false;
+        public static bool CameraPlusModEnabled = false;
+        public static bool SimpleCameraModEnabled = false;
         public static Color32 BarColor => AK_ModSettings.Color_RGB;
         public static Color32 BarColor_enemy => AK_ModSettings.Color_RGB_enemy;
 

@@ -54,6 +54,7 @@ namespace AK_DLL
         public string stand;//精2立绘
         public string commonStand;  //精0立绘
         public List<string> fashion; //换装立绘的路径 和小人身上的衣服无关
+        public string standAnimation; //动态立绘的defName
 
         //换装后，体现在rw小人服装上的变化。key的int是换装在List<string> fashion中的下标+3。
         //按理说应该和上面的干员衣服整合一起，但现在已经几百个干员了，要整合工作量太大。立项的时候没考虑做换装。

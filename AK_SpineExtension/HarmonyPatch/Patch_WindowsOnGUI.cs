@@ -26,7 +26,7 @@ namespace AK_SpineExtention
             if (doc == null) return false;
             //动态立绘显示
             int fashion = doc.preferedSkin;
-            if ((fashion == 1) && (doc.operatorDef.standAnimation != null))
+            if ((fashion == 1) && (doc.operatorDef.fashionAnimation.Count > fashion - 1))
             {
                 if (!GC_OpAnimationDocument.cachedOpSkinAnimation.ContainsKey(doc))
                 {
@@ -35,23 +35,39 @@ namespace AK_SpineExtention
                 GameObject ooa = GC_OpAnimationDocument.cachedOpSkinAnimation[doc].TryGetValue(fashion);
                 if (ooa == null)
                 {
-                    Vector3 pos = new(Random.Range(-999f, 999f), Random.Range(-999f, 999f), Random.Range(-999f, 999f));
-                    SpriteEvo.AnimationDef def = doc.operatorDef.standAnimation.FindDef();
-                    if (def != null)
-                    {
-                        ooa = def.InstantiateAnimationInGameOnly(key: def.defName);
-                        if (ooa == null) return true;
-                        ooa.SetPosition(pos);
-                        //ooa.RenderCamera().ResizeRenderTexture(2048, 2048);
-                        GC_OpAnimationDocument.cachedOpSkinAnimation[doc].Add(fashion, ooa);
-                    }
-                    else
-                        return true;
+                    SpriteEvo.AnimationDef def = doc.operatorDef.fashionAnimation?[fashion - 1]?.FindDef();
+                    if (def == null) return true;
+                    ooa = def.InstantiateAnimationInGameOnly(key: def.defName);
+                    if (ooa == null) return true;
+                    GC_OpAnimationDocument.cachedOpSkinAnimation[doc].Add(fashion, ooa);
                 }
                 else
                 {
                     if (ooa.activeInHierarchy)
                         Widgets.DrawTextureFitted(new Rect(AK_ModSettings.xOffset * 5, AK_ModSettings.yOffset * 5, 408, 408), ooa.AnimationTexture(), AK_ModSettings.ratio * 0.05f);
+                }
+                return false;
+            }
+            //皮肤切换
+            else if ((fashion > 1) && (doc.operatorDef.fashionAnimation.Count > fashion - 2))
+            {
+                if (!GC_OpAnimationDocument.cachedOpSkinAnimation.ContainsKey(doc))
+                {
+                    GC_OpAnimationDocument.cachedOpSkinAnimation.Add(doc, new Dictionary<int, GameObject>());
+                }
+                GameObject oob = GC_OpAnimationDocument.cachedOpSkinAnimation[doc].TryGetValue(fashion);
+                if (oob == null)
+                {
+                    SpriteEvo.AnimationDef def = doc.operatorDef.fashionAnimation?[fashion - 1]?.FindDef();
+                    if (def == null) return true;
+                    oob = def.InstantiateAnimationInGameOnly(key: def.defName);
+                    if (oob == null) return true;
+                    GC_OpAnimationDocument.cachedOpSkinAnimation[doc].Add(fashion, oob);
+                }
+                else
+                {
+                    if (oob.activeInHierarchy)
+                        Widgets.DrawTextureFitted(new Rect(AK_ModSettings.xOffset * 5, AK_ModSettings.yOffset * 5, 408, 408), oob.AnimationTexture(), AK_ModSettings.ratio * 0.05f);
                 }
                 return false;
             }
@@ -85,22 +101,22 @@ namespace AK_SpineExtention
                     foreach (GameObject ooa in map.Values)
                     {
                         //在这里实现切换皮肤功能
-                        if (fashion == 1 && doc.operatorDef.standAnimation?.FindDef() != null)
+                        if (fashion == 1 && doc.operatorDef.fashionAnimation?.Count > fashion - 1)
                         {
                             if (ooa == GC_OpAnimationDocument.cachedOpSkinAnimation[doc][fashion])
-                            {
-                                ooa?.SetActive(CanDrawNow);
-                                continue;
-                            }
-                        }
-                        /*else if (doc.preferedSkin > 1 && doc.operatorDef.fashionAnimation.Count > doc.preferedSkin - 2)
-                        {
-                            if (ooa == GC_OperatorDocumentation.opUIStandData[doc][doc.preferedSkin])
                             {
                                 ooa?.SetActive(true);
                                 continue;
                             }
-                        }*/
+                        }
+                        else if (fashion > 1 && doc.operatorDef.fashionAnimation?.Count > fashion - 1)
+                        {
+                            if (ooa == GC_OpAnimationDocument.cachedOpSkinAnimation[doc][fashion])
+                            {
+                                ooa?.SetActive(true);
+                                continue;
+                            }
+                        }
                         ooa?.SetActive(false);
                     }
                 }

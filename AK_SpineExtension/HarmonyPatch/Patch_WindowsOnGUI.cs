@@ -103,6 +103,7 @@ namespace AK_SpineExtention
                         //在这里实现切换皮肤功能
                         if (fashion == 1 && doc.operatorDef.fashionAnimation?.Count > fashion - 1)
                         {
+                            if (!GC_OpAnimationDocument.cachedOpSkinAnimation[doc].ContainsKey(fashion)) return;
                             if (ooa == GC_OpAnimationDocument.cachedOpSkinAnimation[doc][fashion])
                             {
                                 ooa?.SetActive(true);

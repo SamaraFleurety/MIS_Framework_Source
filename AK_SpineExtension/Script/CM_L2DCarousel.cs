@@ -55,7 +55,6 @@ namespace AK_SpineExtention
             if (skeletonAnimation == null) return;
             if (props == null) return;
 
-            skeletonAnimation.AnimationState.ClearTracks();
             TrackEntry track0 = skeletonAnimation.AnimationState.SetAnimation(0, Idle, false);
             track0.Complete += delegate { IdleTimes++; };
 

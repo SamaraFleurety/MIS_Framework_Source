@@ -206,7 +206,7 @@ namespace AK_DLL
             currentlyGenerating = false;
         }
 
-        public virtual void Recruit(IntVec3 intVec, Map map)
+        public virtual Pawn Recruit(IntVec3 intVec, Map map)
         {
             currentlyGenerating = true;
 
@@ -252,20 +252,25 @@ namespace AK_DLL
             }
 
             currentlyGenerating = false;
+
+            return operator_Pawn;
         }
 
-        public virtual void Recruit(Map map)
+        public virtual Pawn Recruit(Map map)
         {
+            Pawn result = null;
             currentlyGenerating = true;
             IntVec3 intVec;
             if (map != null)
             {
                 if (RCellFinder.TryFindRandomPawnEntryCell(out intVec, map, 0.2f, false, null))
                 {
-                    Recruit(intVec, map);
+                    result = Recruit(intVec, map);
                 }
             }
             currentlyGenerating = false;
+
+            return result;
         }
 
         public virtual void AutoFill()

@@ -12,7 +12,7 @@ namespace AKA_Ability
     {
         public HediffStageProperty stageProperty;
 
-        private HediffStage cachedStage = null;
+        protected HediffStage cachedStage = null;
 
         public Hediff_DynamicStage()
         {
@@ -39,17 +39,13 @@ namespace AKA_Ability
             cachedStage = null;
         }
 
-        private void RefreshStage()
+        protected virtual void RefreshStage()
         {
             if (cachedStage != null) return;
             cachedStage = new HediffStage();
             cachedStage.statOffsets = new();
             cachedStage.statFactors = new();
 
-            /*Log.Message("a");
-            Log.Message($"a1 {stageProperty == null}");
-            Log.Message($"a1 {stageProperty.statOffsets == null}");
-            Log.Message($"a1 {stageProperty.statOffsets.Keys.Count}");*/
             foreach (StatDef stat in stageProperty.statOffsets.Keys)
             {
                 cachedStage.statOffsets.Add(new StatModifier
@@ -66,6 +62,11 @@ namespace AKA_Ability
                     stat = stat,
                     value = stageProperty.statFactors[stat]
                 });
+            }
+
+            foreach (PawnCapacityModifier modifier in stageProperty.capacities.Values)
+            {
+                cachedStage.capMods.Add(modifier);
             }
         }
 

@@ -200,19 +200,19 @@ namespace AK_DLL
             }
         }
 
-        public static void AddPawn(string defName, OperatorDef operatorDef, Pawn pawn, Thing weapon, List<Thing> fashionSet)
+        public static void AddPawn(string ID, OperatorDef operatorDef, Pawn pawn, Thing weapon, List<Thing> fashionSet)
         {
             OperatorDocument doc;
-            if (opDocArchive.ContainsKey(defName) == false)
+            if (opDocArchive.ContainsKey(ID) == false)
             {
-                doc = new OperatorDocument(defName, pawn, weapon, operatorDef);
-                opDocArchive.Add(defName, doc);
+                doc = new OperatorDocument(ID, pawn, weapon, operatorDef);
+                opDocArchive.Add(ID, doc);
             }
             else
             {
-                doc = opDocArchive[defName];
+                doc = opDocArchive[ID];
                 DestroyHeritage(doc);
-                ReRecruit(doc, defName, pawn, weapon);
+                ReRecruit(doc, ID, pawn, weapon);
             }
             doc.RegisterFashionSet(fashionSet);
         }

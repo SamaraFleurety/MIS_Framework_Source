@@ -63,7 +63,11 @@ namespace AKS_Shield
 
         private Vector3 impactAngleVect;
 
-        public virtual float EnergyPercent => energy / Props.energyMax;
+        public virtual float EnergyMax => Props.energyMax;
+
+        public virtual float EnergyPercent => energy / EnergyMax;
+
+        public virtual float EnergyRegenRate => Props.energyRegenRate / 60;
 
         public HashSet<TC_ShieldExtension_PostEffects_Base> registedCompEffectors = new();
 
@@ -84,7 +88,7 @@ namespace AKS_Shield
             {
                 if (energy < Props.energyMax)
                 {
-                    energy += Props.energyRegenRate * amt;
+                    energy += EnergyRegenRate * amt;
                     if (!Props.allowEnergyOverflow)
                     {
                         energy = Math.Min(energy, Props.energyMax);

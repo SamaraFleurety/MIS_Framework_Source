@@ -16,7 +16,7 @@ namespace AK_DLL
         {
             OperatorDocument doc = __instance.GetDoc();
             if (doc == null) return;
-            __instance.Corpse.Destroy();
+            __instance.Corpse?.Destroy();
             doc.voicePack.diedSound.PlayOneShot(null);
             doc.currentExist = false;
         }
@@ -30,8 +30,8 @@ namespace AK_DLL
             if (doc == null) return;
 
             doc.currentExist = false;
-            if (__instance.Corpse == null) return;
-            __instance.Corpse.Destroy();
+            //if (__instance.Corpse == null) return;
+            __instance.Corpse?.Destroy();
             doc.voicePack.diedSound.PlayOneShot(null);
         }
     }

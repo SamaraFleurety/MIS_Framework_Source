@@ -112,6 +112,25 @@ namespace AK_DLL
             }
             return null;
         }
+
+        public static OperatorDocument GetDoc(this OperatorDef def)
+        {
+            if (GC_OperatorDocumentation.opDocArchive == null) return null;
+            OperatorDocument doc;
+            GC_OperatorDocumentation.opDocArchive.TryGetValue(def.OperatorID, out doc);
+
+            return doc;
+        }
+
+        public static OperatorDocument GetDoc(string ID)
+        {
+            if (GC_OperatorDocumentation.opDocArchive == null) return null;
+            OperatorDocument doc;
+            GC_OperatorDocumentation.opDocArchive.TryGetValue(ID, out doc);
+
+            return doc;
+        }
+
         public static OperatorDocument GetDoc(this Pawn p)
         {
             if (p == null) return null;
@@ -121,7 +140,10 @@ namespace AK_DLL
             {
                 return GC_OperatorDocumentation.cachedOperators[p];
             }
-            else if (GC_OperatorDocumentation.cachedNonOperators.Contains(p)) return null;
+            else if (GC_OperatorDocumentation.cachedNonOperators.Contains(p))
+            {
+                return null;
+            }
             VAbility_Operator va = null;
             foreach (Ability i in p.abilities.abilities)
             {

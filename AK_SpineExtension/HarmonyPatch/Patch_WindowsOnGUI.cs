@@ -90,6 +90,7 @@ namespace AK_SpineExtention
             if (GC_OperatorDocumentation.cachedOperators.NullOrEmpty()) return;
             Pawn OP = Find.Selector.SelectedPawns.First();
             //选中干员激活Object
+            //可能可以找个地方存所有开着的obj，避免遍历
             OperatorDocument doc = OP.GetDoc();
             if (GC_OperatorDocumentation.cachedOperators.ContainsKey(OP))
             {

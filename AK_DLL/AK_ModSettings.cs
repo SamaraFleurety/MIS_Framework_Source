@@ -66,6 +66,7 @@ namespace AK_DLL
         public static bool displayBottomLeftPortrait = true;
         public static bool displayAnimationLeftPortrait = true;
         //显示立绘的偏移参数
+        //fixme:改成属性
         public static int xOffset = 0; //实际效果是值*5
         public static int yOffset = 0; //同上
         public static int ratio = 20;  //实际效果是值/20

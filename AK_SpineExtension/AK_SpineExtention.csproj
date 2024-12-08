@@ -35,16 +35,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>..\Rely\0Harmony.dll</HintPath>
+      <HintPath>..\..\SSR_Framework\Solar-System-Republic-Framework\FS_TransWeapon\bin\Debug\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="AK_DLL">
       <HintPath>..\AK_DLL\bin\Debug\AK_DLL.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\Rely\Assembly-CSharp.dll</HintPath>
+      <HintPath>D:\Docu\Tencent Files\1610207132\FileRecv\输出\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="SpriteEvo">
-      <HintPath>..\..\Git\PA_SpriteEvo\Source\PA_SpriteEvo\bin\Debug\SpriteEvo.dll</HintPath>
+      <HintPath>..\..\..\..\Downloads\SpriteEvo.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -55,7 +55,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\Rely\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\AK_DLL\bin\Debug\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

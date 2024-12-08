@@ -43,6 +43,9 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>D:\Docu\Tencent Files\1610207132\FileRecv\输出\Assembly-CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="Spine38">
+      <HintPath>D:\Code\C#\Git\PA_SpriteEvo\Source\PA_SpriteEvo\bin\Debug\Spine38.dll</HintPath>
+    </Reference>
     <Reference Include="SpriteEvo">
       <HintPath>..\..\..\..\Downloads\SpriteEvo.dll</HintPath>
     </Reference>
@@ -57,12 +60,16 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\AK_DLL\bin\Debug\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>E:\SteamLibrary\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GC_OpAnimationDocument.cs" />
     <Compile Include="HarmonyPatch\Patch_Main.cs" />
     <Compile Include="HarmonyPatch\Patch_WindowsOnGUI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Script\CM_L2DCarousel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

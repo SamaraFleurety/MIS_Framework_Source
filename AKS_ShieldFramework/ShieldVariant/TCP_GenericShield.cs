@@ -195,8 +195,36 @@ namespace AKS_Shield
         #endregion
 
         #region 舟味护盾条
-        private static bool CameraPlusModEnabled => AK_BarUITool.CameraPlusModEnabled;
-        private static bool SimpleCameraModEnabled => AK_BarUITool.SimpleCameraModEnabled;
+        private static bool? cachedAKLibActiveStatue = null;
+        private static bool AKLibActived
+        {
+            get
+            {
+                cachedAKLibActiveStatue ??= ModLister.GetActiveModWithIdentifier("MIS.Framework") != null;
+                return (bool)cachedAKLibActiveStatue;
+            }
+        }
+
+        private static bool? cachedCameraPlusModActiveStatue = null;
+        private static bool CameraPlusModEnabled
+        {
+            get
+            {
+                if (AKLibActived) return AK_BarUITool.CameraPlusModEnabled;
+                cachedCameraPlusModActiveStatue ??= ModLister.GetActiveModWithIdentifier("brrainz.cameraplus") != null;
+                return (bool)cachedCameraPlusModActiveStatue;
+            }
+        }
+        private static bool? cachedSimpleCameraModActiveStatue = null;
+        private static bool SimpleCameraModEnabled
+        {
+            get
+            {
+                if (AKLibActived) return AK_BarUITool.SimpleCameraModEnabled;
+                cachedSimpleCameraModActiveStatue ??= ModLister.GetActiveModWithIdentifier("ray1203.SimpleCameraSetting") != null;
+                return (bool)cachedSimpleCameraModActiveStatue;
+            }
+        }
 
         private Material barFillMat = null;
         private Material BarFilledMat
@@ -220,15 +248,35 @@ namespace AKS_Shield
         private float ZoomRootSize => Find.CameraDriver.ZoomRootSize;
         private float GetZoomRatio()
         {
-            if (AK_ModSettings.zoomWithCamera)
+            if (AKLibActived && AK_ModSettings.zoomWithCamera)
             {
                 return Mathf.Max(ZoomRootSize, 11) / 11;
             }
             return 1f;
         }
-        private static float Width => AK_ModSettings.barWidth * 0.01f;
-        private static float Height => AK_ModSettings.barHeight * 0.001f;
-        private static float Margin => AK_ModSettings.barMargin * 0.01f;
+        private static float Width
+        {
+            get
+            {
+                if (AKLibActived) return AK_ModSettings.barWidth * 0.01f;
+                return 150 * 0.01f;
+            }
+        }
+        private static float Height
+        {
+            get
+            {
+                if (AKLibActived) return AK_ModSettings.barHeight * 0.001f;
+                return 75 * 0.01f;
+            }
+        }
+        private static float Margin {
+            get
+            {
+                if (AKLibActived) return AK_ModSettings.barMargin * 0.01f;
+                return -100 * 0.01f;
+            }
+        }
         private static Vector2 BarSize => new(Width, Height);
         private static Vector3 BottomMargin => new(0f, 0f, Margin - Height * 2);
 

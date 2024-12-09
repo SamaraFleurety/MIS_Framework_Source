@@ -44,10 +44,11 @@
       <HintPath>D:\Docu\Tencent Files\1610207132\FileRecv\输出\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Spine38">
-      <HintPath>D:\Code\C#\Git\PA_SpriteEvo\Source\PA_SpriteEvo\bin\Debug\Spine38.dll</HintPath>
+      <HintPath>S:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\SpriteEvo\Assemblies\Spine38.dll</HintPath>
     </Reference>
-    <Reference Include="SpriteEvo">
-      <HintPath>..\..\..\..\Downloads\SpriteEvo.dll</HintPath>
+    <Reference Include="SpriteEvo, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>S:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\SpriteEvo\1.5\Assemblies\SpriteEvo.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

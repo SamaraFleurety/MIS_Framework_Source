@@ -62,5 +62,11 @@
     <Compile Include="Extension\TC_ShieldExtension_Base.cs" />
     <Compile Include="ShieldVariant\TC_GenericShieldDirect.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AK_DLL\AK_Library.csproj">
+      <Project>{25A323A4-A832-487C-9AB2-32E14C56E148}</Project>
+      <Name>AK_Library</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

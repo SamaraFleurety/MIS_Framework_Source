@@ -1,4 +1,5 @@
-﻿using AKS_Shield.Effector;
+﻿using AK_DLL;
+using AKS_Shield.Effector;
 using AKS_Shield.Extension;
 using RimWorld;
 using System;
@@ -194,6 +195,9 @@ namespace AKS_Shield
         #endregion
 
         #region 舟味护盾条
+        private static bool CameraPlusModEnabled => AK_BarUITool.CameraPlusModEnabled;
+        private static bool SimpleCameraModEnabled => AK_BarUITool.SimpleCameraModEnabled;
+
         private Material barFillMat = null;
         private Material BarFilledMat
         {
@@ -213,9 +217,20 @@ namespace AKS_Shield
                 return barUnfilledMat;
             }
         }
-        private Vector3 IconMargin => Vector3.back * 1.125f + Vector3.left * 0.8f;
-        private static Vector3 BottomMargin => Vector3.back * 1.125f;
-        private static readonly Vector2 BarSize = new Vector2(1.5f, 0.025f);
+        private float ZoomRootSize => Find.CameraDriver.ZoomRootSize;
+        private float GetZoomRatio()
+        {
+            if (AK_ModSettings.zoomWithCamera)
+            {
+                return Mathf.Max(ZoomRootSize, 11) / 11;
+            }
+            return 1f;
+        }
+        private static float Width => AK_ModSettings.barWidth * 0.01f;
+        private static float Height => AK_ModSettings.barHeight * 0.001f;
+        private static float Margin => AK_ModSettings.barMargin * 0.01f;
+        private static Vector2 BarSize => new(Width, Height);
+        private static Vector3 BottomMargin => new(0f, 0f, Margin - Height * 2);
 
         const string DEF_IconTexPath = "UI/Abilities/icon_sort_def";
         private Material iconDefend = null;
@@ -229,28 +244,59 @@ namespace AKS_Shield
         }
         public override void CompDrawWornExtras()
         {
-            if (false)
+            /*if (false)
             {
                 return;
-            }
+            }*/
             if (!ShouldDisplay)
             {
                 return;
             }
+            Vector3 drawPos = Wearer.DrawPos;
+            float zoomRatio = GetZoomRatio();
+            float zoomWidthRatio;
+            float zoomYRatio;
+            if (CameraPlusModEnabled || SimpleCameraModEnabled)
+            {
+                zoomWidthRatio = zoomRatio > 4.35f ? 4.35f : zoomRatio;
+                zoomYRatio = zoomRatio > 5f ? 5f : zoomRatio;
+            }
+            else
+            {
+                zoomWidthRatio = zoomRatio > 3.75f ? 3.75f : zoomRatio;
+                zoomYRatio = zoomRatio > 3f ? 3f : zoomRatio;
+            }
             GenDraw.FillableBarRequest fbr = default;
-            fbr.center = Wearer.DrawPos + (Vector3.up * 3f) + BottomMargin;
-            fbr.size = BarSize;
+            if (CameraPlusModEnabled)
+            {
+                fbr.center = drawPos + (Vector3.up * 3f) + BottomMargin * (zoomYRatio > 1.75f ? zoomYRatio * 0.9f : zoomYRatio);
+                fbr.size = BarSize;
+                fbr.size.x *= zoomWidthRatio;
+                fbr.size.y *= zoomRatio > 1.75f ? zoomRatio * 1.5f : zoomRatio;
+            }
+            else if (SimpleCameraModEnabled)
+            {
+                fbr.center = drawPos + (Vector3.up * 3f) + BottomMargin * (zoomYRatio > 1.75f ? zoomYRatio * 0.75f : zoomYRatio);
+                fbr.size = BarSize;
+                fbr.size.x *= zoomWidthRatio;
+                fbr.size.y *= zoomRatio > 3f ? zoomRatio * 1.05f : zoomRatio;
+            }
+            else
+            {
+                fbr.center = drawPos + (Vector3.up * 3f) + BottomMargin * (zoomYRatio > 1.75f ? zoomYRatio * 0.75f : zoomYRatio);
+                fbr.size = BarSize;
+                fbr.size.x *= zoomWidthRatio;
+                fbr.size.y *= zoomRatio > 6.5f ? zoomRatio * 1.25f : zoomRatio;
+            }
             fbr.filledMat = BarFilledMat;
             fbr.unfilledMat = BarUnfilledMat;
-            //fbr.margin = 0;
             fbr.rotation = Rot4.North;
             fbr.fillPercent = EnergyPercent;
-
             GenDraw.DrawFillableBar(fbr);
-
             Matrix4x4 matrix = default;
-            Vector3 scale = new Vector3(0.25f, 1f, 0.25f);
-            matrix.SetTRS(Wearer.DrawPos + IconMargin, Rot4.North.AsQuat, scale);
+            Vector3 scale = new(0.25f, 1f, 0.25f);
+            Vector3 iconPos = new(fbr.center.x - (fbr.size.x / 2) - 0.075f, fbr.center.y, fbr.center.z);
+            matrix.SetTRS(iconPos, Rot4.North.AsQuat, scale);
             Graphics.DrawMesh(MeshPool.plane025, matrix, material: IconDefend, 2);
         }
         #endregion

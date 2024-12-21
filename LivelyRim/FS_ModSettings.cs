@@ -13,8 +13,8 @@ namespace FS_LivelyRim
     {
         public static bool debugOverride = false;
 
-        public static bool merchantSideLive = true;  //商人右移，并展示L2D
-        public static bool mainMenuLive = true;
+        public static bool merchantSideLive = false;  //商人右移，并展示L2D
+        public static bool mainMenuLive = false;
 
         //在商店，主菜单等地方画的l2d的def
         public static LiveModelDef l2dDef = null;
@@ -25,9 +25,9 @@ namespace FS_LivelyRim
         public override void ExposeData()
         {
             Scribe_Values.Look(ref debugOverride, "dOverride", false);
-            Scribe_Values.Look(ref merchantSideLive, "merchantSide", true);
+            Scribe_Values.Look(ref merchantSideLive, "merchantSide", false);
             Scribe_Values.Look(ref autofillCubismCoreLib, "fillCore", true, true);
-            Scribe_Values.Look(ref mainMenuLive, "menuLive", true);
+            Scribe_Values.Look(ref mainMenuLive, "menuLive", false);
             Scribe_Values.Look(ref l2dDefname, "l2dDef", "AZ_Live_Janus", true);
             base.ExposeData();
         }

@@ -82,7 +82,7 @@ namespace AKS_Shield.Extension
             {
                 Log.Message("reset");
                 --charges;
-                CompShield.energy = CompShield.Props.energyMax;
+                CompShield.energy = CompShield.EnergyMax;
             }
             else
             {

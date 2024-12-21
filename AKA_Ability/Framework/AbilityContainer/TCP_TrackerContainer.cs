@@ -97,11 +97,12 @@ namespace AKA_Ability
 
         public override IEnumerable<Gizmo> CompGetGizmosExtra()
         {
-            if (CasterPawn == null) return Enumerable.Empty<Gizmo>();
+            if (CasterPawn == null || CasterPawn.Faction != Faction.OfPlayer) return Enumerable.Empty<Gizmo>();
             return tracker.GetGizmos();
         }
         public override IEnumerable<Gizmo> CompGetWornGizmosExtra()
         {
+            if (CasterPawn == null || CasterPawn.Faction != Faction.OfPlayer) return Enumerable.Empty<Gizmo>();
             return tracker.GetGizmos();
         }
         public override void PostExposeData()

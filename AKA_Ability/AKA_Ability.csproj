@@ -85,12 +85,14 @@
     <Compile Include="AbilityEffect\AddHediff\Regrow\AE_Regrow.cs" />
     <Compile Include="AbilityEffect\AddHediff\Regrow\HC_Regrow.cs" />
     <Compile Include="AbilityEffect\AE_SpawnMote.cs" />
+    <Compile Include="AbilityEffect\AssignJob\JobDriver_AbilityAssignedJob.cs" />
     <Compile Include="AbilityEffect\Command\AECommand_Window.cs" />
     <Compile Include="AbilityEffect\Command\AE_CommandTerminal.cs" />
     <Compile Include="AbilityEffect\Command\AE_CopySkill.cs" />
     <Compile Include="AbilityEffect\Command\AE_RewardDef.cs" />
     <Compile Include="AbilityEffect\Command\AE_RewardTool.cs" />
     <Compile Include="AbilityEffect\CostCharges\AE_CostChargeStatic.cs" />
+    <Compile Include="AbilityEffect\AssignJob\AE_AssignJob.cs" />
     <Compile Include="AbilityEffect\Effect\AE_CatchMother.cs" />
     <Compile Include="AbilityEffect\DelayedEffects\AE_DelayedEffects.cs" />
     <Compile Include="AbilityEffect\Effect\AE_Explode.cs" />

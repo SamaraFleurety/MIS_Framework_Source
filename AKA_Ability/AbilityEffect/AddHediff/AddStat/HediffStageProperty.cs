@@ -28,6 +28,8 @@ namespace AKA_Ability
 
         public Dictionary<PawnCapacityDef, PawnCapacityModifier_Exposable> capacities;
 
+        public float regeneration = 0;
+
         public HediffStageProperty(Hediff_DynamicStage parent)
         {
             this.parent = parent;
@@ -97,6 +99,7 @@ namespace AKA_Ability
             Scribe_Collections.Look(ref statOffsets, "statOffset", LookMode.Def, LookMode.Value);
             Scribe_Collections.Look(ref statFactors, "statFactor", LookMode.Def, LookMode.Value);
             Scribe_Collections.Look(ref capacities, "capMod", LookMode.Def, LookMode.Deep);
+            Scribe_Values.Look(ref regeneration, "regen", 0);
         }
     }
 }

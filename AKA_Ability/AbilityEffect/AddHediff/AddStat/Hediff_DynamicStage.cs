@@ -1,9 +1,4 @@
 ﻿using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Verse;
 
 namespace AKA_Ability
@@ -68,6 +63,12 @@ namespace AKA_Ability
             {
                 cachedStage.capMods.Add(modifier);
             }
+
+            cachedStage.regeneration = stageProperty.regeneration;
+
+            //刷新
+            pawn.health.hediffSet.DirtyCache();
+            pawn.health.Notify_HediffChanged(this);
         }
 
         public void ForceRefreshStage()

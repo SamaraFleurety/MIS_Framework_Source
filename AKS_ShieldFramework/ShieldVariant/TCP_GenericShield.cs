@@ -77,7 +77,7 @@ namespace AKS_Shield
         public override void PostPostMake()
         {
             base.PostPostMake();
-            energy = Props.energyMax;
+            energy = EnergyMax;
         }
         public override void CompTick()
         {
@@ -87,12 +87,12 @@ namespace AKS_Shield
         {
             if (energy > 0)
             {
-                if (energy < Props.energyMax)
+                if (energy < EnergyMax)
                 {
                     energy += EnergyRegenRate * amt;
                     if (!Props.allowEnergyOverflow)
                     {
-                        energy = Math.Min(energy, Props.energyMax);
+                        energy = Math.Min(energy, EnergyMax);
                     }
                 }
             }
@@ -386,7 +386,7 @@ namespace AKS_Shield
             }
 
             ticksReset = 0;
-            energy = Props.energyMax * Props.energyRatioOnReset;
+            energy = EnergyMax * Props.energyRatioOnReset;
 
             foreach (TC_ShieldExtension_PostEffects_Base c in registedCompEffectors)
             {
@@ -427,5 +427,11 @@ namespace AKS_Shield
             return effector;
         }
         #endregion
+
+
+        /*public override string CompInspectStringExtra()
+        {
+            return $""
+        }*/
     }
 }

@@ -6,7 +6,7 @@ using Verse;
 
 namespace AK_DLL
 {
-    public abstract class AbilityEffectBase
+    /*public abstract class AbilityEffectBase
     {
         public virtual void DoEffect_All(Pawn caster, LocalTargetInfo targetInfo)
         {
@@ -29,5 +29,5 @@ namespace AK_DLL
         {
         
         }
-    }
+    }*/
 }

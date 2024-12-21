@@ -173,8 +173,13 @@ namespace AK_DLL
             if (p == null) return;
             OperatorDocument doc = AK_Tool.GetDoc(p);
             if (doc == null) return;
+
+            Color color = GUI.color;
+            GUI.color = new Color(1f, 1f, 1f, AK_ModSettings.opacity / 100f);
             Texture2D texture = doc.operatorDef.PreferredStand(doc.preferedSkin);
             Widgets.DrawTextureFitted(new Rect(AK_ModSettings.xOffset * 5, AK_ModSettings.yOffset * 5, 408, 408), texture, (float)AK_ModSettings.ratio * 0.05f);
+
+            GUI.color = color;
         }
         /*public static void DrawHighlightMouseOver(this Rect rect, Texture2D highlight)
         {

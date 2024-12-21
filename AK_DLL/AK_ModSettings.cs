@@ -70,6 +70,9 @@ namespace AK_DLL
         public static int xOffset = 0; //实际效果是值*5
         public static int yOffset = 0; //同上
         public static int ratio = 20;  //实际效果是值/20
+
+        //不透明度 0-100，100就是完全不透，0就是完全透明
+        public static int opacity = 100;
         #endregion
 
         #region 招募UI UGUI
@@ -143,6 +146,7 @@ namespace AK_DLL
             Scribe_Values.Look(ref xOffset, "xOff");
             Scribe_Values.Look(ref yOffset, "yOff");
             Scribe_Values.Look(ref ratio, "ratio");
+            Scribe_Values.Look(ref opacity, "opacity", 100);
             Scribe_Values.Look(ref debugOverride, "dOverride", false);
             Scribe_Values.Look(ref secretary, "secretary", "Amiya", true);
             Scribe_Values.Look(ref secretarySkin, "secSkin", 1);
@@ -186,6 +190,7 @@ namespace AK_DLL
             AK_ModSettings.xOffset = (int)listingStandard.SliderLabeled("AK_Option_xOffset".Translate() + $"{AK_ModSettings.xOffset * 5}", AK_ModSettings.xOffset, 0, 600);
             AK_ModSettings.yOffset = (int)listingStandard.SliderLabeled("AK_Option_yOffset".Translate() + $"{AK_ModSettings.yOffset * 5}", AK_ModSettings.yOffset, 0, 600);
             AK_ModSettings.ratio = (int)listingStandard.SliderLabeled("AK_Option_ratio".Translate() + $"{(float)AK_ModSettings.ratio * 0.05f}", AK_ModSettings.ratio, 1, 40);
+            AK_ModSettings.opacity = (int)listingStandard.SliderLabeled("AK_Option_opacity".Translate(AK_ModSettings.opacity), AK_ModSettings.opacity, 0, 100); 
 
             AK_ModSettings.secLocSensitive = (int)listingStandard.SliderLabeled("AK_Option_SecSensetive".Translate() + $"{(float)AK_ModSettings.secLocSensitive * 10}", AK_ModSettings.secLocSensitive, 1, 10);
 

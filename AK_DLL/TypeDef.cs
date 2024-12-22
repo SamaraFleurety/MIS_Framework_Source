@@ -11,7 +11,7 @@ namespace AK_DLL
 {
     public static class TypeDef
     {
-        public static string[] operatorTypeStiring = new string[] { "Caster", "Defender", "Guard", "Vanguard", "Specialist", "Supporter", "Medic", "Sniper" };
+        //public static string[] operatorTypeStiring = new string[] { "Caster", "Defender", "Guard", "Vanguard", "Specialist", "Supporter", "Medic", "Sniper" };
         public static string[] romanNumber = new string[] { "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI" };
         //如果增加了要自动绑定的服装种类，只需要往这个字符串数组增加。
         public static string[] apparelType = new string[] { "Apparel", "Hat" };
@@ -61,11 +61,7 @@ namespace AK_DLL
         public static FontDef AK_Font_YouYuan;
     }
 
-    public static class HarmonyPrefixRet
-    {
-        public static bool skipOriginal = false;
-        public static bool keepOriginal = true;
-    }
+
 
     public enum OpDetailType : byte
     {

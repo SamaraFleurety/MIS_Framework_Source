@@ -25,25 +25,6 @@ namespace AKA_Ability
 
     }
 
-    public enum TimeToTick
-    {
-        tick = 1,          //游戏中
-        tickRare = 250,
-        tickLong = 2000,
-        hour = 2500,
-        day = hour * 24,   //60k
-        season = day * 15, //0.9M
-        year = season * 4, //3.6M
-        rSecond = 60       //现实中的1秒
-    }
-    /*public enum SFXType : Byte
-    {
-        atk,
-        def,
-        heal,
-        tact,
-        none = 255
-    }*/
     public enum RegrowType : Byte
     {
         replace = 0, //覆盖模式，无条件覆盖
@@ -68,9 +49,4 @@ namespace AKA_Ability
         Multi //没做，别用
     }*/
 
-    public static class HarmonyPrefixRet
-    {
-        public static bool skipOriginal = false;
-        public static bool keepOriginal = true;
-    }
 }

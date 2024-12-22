@@ -38,6 +38,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\SSR_Framework\Solar-System-Republic-Framework\FS_SSR\bin\Debug\0Harmony.dll</HintPath>
     </Reference>
+    <Reference Include="1AK_TypeDef">
+      <HintPath>..\AK_TypeDef\bin\Debug\1AK_TypeDef.dll</HintPath>
+    </Reference>
     <Reference Include="Assembly-CSharp, Version=1.5.8838.19357, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\SSR_Framework\Solar-System-Republic-Framework\FS_SSR\bin\Debug\Assembly-CSharp.dll</HintPath>

@@ -5,12 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Verse;
-using AKA_Ability;
 
 namespace AK_DLL
 {
-    /*public class OpAbilityDef : AKAbilityDef
+    public class ItemOnSpawn
     {
-        //public SFXType typeSFX = SFXType.tact;
-    }*/
+        public ThingDef item;
+        public ThingDef stuff = null;
+        public QualityCategory? quality;
+        public int amount = 1;
+    }
 }

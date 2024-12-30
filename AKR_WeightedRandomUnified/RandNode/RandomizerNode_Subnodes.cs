@@ -13,10 +13,9 @@ namespace AKR_Random
     {
         protected List<RandomizerNode_Base> subnodes = new();
         public override IEnumerable<IWeightedRandomable> Candidates => subnodes;
-        public override IEnumerable<object> TryIssueGachaResult(IntVec3 cell = default, Map map = null, Pawn gambler = null)
+        public override IEnumerable<object> TryIssueGachaResult(IntVec3 cell = default, Map map = null, Pawn gambler = null, float point = 0)
         {
-            base.TryIssueGachaResult(cell, map, gambler);
-            return subnodes[Algorithm.WeightArrayRand(weightCached)].TryIssueGachaResult(cell, map, gambler);
+            return subnodes[this.RandRewardIndex()].TryIssueGachaResult(cell, map, gambler);
         }
     }
 }

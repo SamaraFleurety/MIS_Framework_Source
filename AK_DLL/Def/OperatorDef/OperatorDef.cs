@@ -66,12 +66,12 @@ namespace AK_DLL
         //因为并不知道是否有某种立绘，所以用字典存。约定-1为头像，0是精0立绘，1是精2立绘，2-后面是换装
         //这里的V3，x和y是x轴和y轴的偏移，z其实是缩放
         public Dictionary<int, Vector3> standOffsets = new Dictionary<int, Vector3>();
-        [Obsolete]
-        public Vector2 standOffset;
+        /*[Obsolete]
+        public Vector2 standOffset;*/
         public float standRatio = 3f;
         public string headPortrait;         //IMGUI主界面选中时 左下角详情栏上面的头像
-        [Obsolete]
-        public Vector2 headPortraitOffset;
+        /*[Obsolete]
+        public Vector2 headPortraitOffset;*/
 
         public ThoughtDef thoughtReceived = null;  //其他所有人都会给这个干员一个想法 当前是和弦独有
         public int TRStage = -1;  //全部丢进同一个想法 节省性能
@@ -85,6 +85,8 @@ namespace AK_DLL
         public List<Type> postEffects = new List<Type>();
 
         public bool alwaysHidden = false;  //是否隐藏。被隐藏的干员不会在招募ui显示，仅能通过特殊手段出现。fixme:没做。
+
+        public Type documentType = typeof(OperatorDocument);   //写了碧蓝之后发现档案甚至都可以扩充
         #endregion
 
         #region 快捷属性
@@ -131,6 +133,14 @@ namespace AK_DLL
             return texture;
         }
 
+        public bool CurrentRecruited
+        {
+            get
+            {
+                OperatorDocument doc = GC_OperatorDocumentation.opDocArchive[this.OperatorID];
+                return doc == null || !doc.currentExist;
+            }
+        }
         #endregion
 
         //新换装写法 如果给定def就换，如果def是空的就换成原装

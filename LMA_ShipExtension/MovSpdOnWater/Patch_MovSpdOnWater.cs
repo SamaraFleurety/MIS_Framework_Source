@@ -14,7 +14,7 @@ namespace LMA_Lib.HarmonyPatchs
         [HarmonyPostfix]
         public static void postfix(ref float __result, Pawn __instance, bool diagonal)
         {
-            if (LMAConfigDef.ConfigDef.waterList.Contains(__instance.Map.terrainGrid.TerrainAt(__instance.Position)))
+            if (LMAConfigDef.ConfigDef.WaterList.Contains(__instance.Map.terrainGrid.TerrainAt(__instance.Position)))
             {
                 __result /= GetMoveSpeedOnWaterFor(__instance);
                 __result = Mathf.Clamp(__result, 1f, 450f);

@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AKR_Random</RootNamespace>
-    <AssemblyName>AKR_WeightedRandomUnified</AssemblyName>
+    <AssemblyName>2AKR_WeightedRandomUnified</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -57,12 +57,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algorithm.cs" />
+    <Compile Include="Def\RandomizerDef.cs" />
     <Compile Include="Interface\IRandomizer.cs" />
     <Compile Include="Interface\IWeightedRandomable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandNode\RandomizerNode_Base.cs" />
+    <Compile Include="RandNode\RandomizerNode_Def.cs" />
     <Compile Include="RandNode\RandomizerNode_Subnodes.cs" />
-    <Compile Include="RandNode\RandomizerNode_Reward.cs" />
+    <Compile Include="RandNode\RandomizerNode_Rewards.cs" />
     <Compile Include="RewardSet\RewardSet_Base.cs" />
     <Compile Include="RewardSet\Rewards_Nothing.cs" />
     <Compile Include="RewardSet\Rewards_Things.cs" />

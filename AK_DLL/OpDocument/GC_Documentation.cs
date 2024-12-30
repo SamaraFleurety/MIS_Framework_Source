@@ -99,9 +99,7 @@ namespace AK_DLL
             Scribe_Values.Look<int>(ref this.oripathySeverity, "oriSev", 0, true);
             Scribe_Values.Look<int>(ref this.preferedSkin, "skin");
 
-            //Scribe_Values.Look(ref pendingFashion, "fashion");
             Scribe_Defs.Look(ref this.pendingFashionDef, "fashionDef");
-            //if (this.pawn == null) { return; }
         }
 
         //记录当前干员所有技能
@@ -120,12 +118,6 @@ namespace AK_DLL
                 }
             }
         }
-
-        public void Tick()
-        {
-            if (!this.currentExist) return;
-        }
-
     }
 
     public class GC_OperatorDocumentation : GameComponent

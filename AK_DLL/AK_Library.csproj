@@ -61,18 +61,19 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>S:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\com.rlabrecque.steamworks.net.dll</HintPath>
     </Reference>
-    <Reference Include="CubismRim">
-      <HintPath>S:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\Framework\Assemblies\CubismRim.dll</HintPath>
-    </Reference>
     <Reference Include="FSUI, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>S:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\Framework\Assemblies\FSUI.dll</HintPath>
     </Reference>
+    <Reference Include="FS_UGUIFramework">
+      <HintPath>..\..\SSR_Framework\Solar-System-Republic-Framework\FS_UGUIFramework\bin\Debug\FS_UGUIFramework.dll</HintPath>
+    </Reference>
     <Reference Include="HarmonyMod">
       <HintPath>./packages/HarmonyMod.dll</HintPath>
     </Reference>
-    <Reference Include="LitJSON, Version=0.18.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\LitJson.0.18.0\lib\net45\LitJSON.dll</HintPath>
+    <Reference Include="LivelyRim, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>S:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\LivelyRim\Assemblies\LivelyRim.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -132,7 +133,6 @@
     <Compile Include="AK_Algorithm.cs" />
     <Compile Include="AK_Tool4Unity.cs" />
     <Compile Include="DebugTools.cs" />
-    <Compile Include="Def\FontDef.cs" />
     <Compile Include="Def\OperatorClassDef.cs" />
     <Compile Include="Def\OperatorDef\HediffStat.cs" />
     <Compile Include="Def\OperatorDef\OperatorFashionSetDef.cs" />
@@ -191,10 +191,6 @@
     <Compile Include="Misc\ThoughtWorker\ThoughtWorker_OpinionToTrait.cs" />
     <Compile Include="RecruitConsole\Window\RIWindow.cs" />
     <Compile Include="RecruitConsole\Window\RIWindow_MainMenu.cs" />
-    <Compile Include="RecruitConsole\Window\RIWindow_Option.cs" />
-    <Compile Include="RecruitConsole\Window\RIWindow_Quest.cs" />
-    <Compile Include="RecruitConsole\Window\RIWindow_Store.cs" />
-    <Compile Include="RecruitConsole\Window\RIWindow_Support.cs" />
     <Compile Include="RecruitConsole\Window\_RIWindowHandler.cs" />
     <Compile Include="Thing\Comp\TCP_RemoveMe.cs" />
     <Compile Include="OpDocument\VAbility_Operator.cs" />
@@ -214,16 +210,11 @@
     <Compile Include="VoicePlayer\VoicePlayer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="S:\Program Files %28x86%29\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Plugins\x86_64\steam_api64.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AKR_WeightedRandomUnified\AKR_WeightedRandomUnified.csproj">
       <Project>{CE31C711-E3F1-43D2-AD6A-216097EE20AB}</Project>
       <Name>AKR_WeightedRandomUnified</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LivelyRim\FS_LivelyRim.csproj">
-      <Project>{CA2D2594-7051-4FC9-B1E1-EF077F439FCF}</Project>
-      <Name>FS_LivelyRim</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

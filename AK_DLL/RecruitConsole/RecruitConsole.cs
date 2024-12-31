@@ -66,7 +66,13 @@ namespace AK_DLL
                 {
                     selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AKDefOf.AK_Job_UseRecruitConsole, this));
                 }
-                ); yield break;
+                );
+                yield return new FloatMenuOption("AK_RecruitContinuous".Translate(), delegate
+                {
+                    selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AKDefOf.AK_Job_UseRecruitConsole, this, this));  //用target B做标记，要是不为null就是连续招募模式
+                });
+
+                yield break;
             }
             else
             {

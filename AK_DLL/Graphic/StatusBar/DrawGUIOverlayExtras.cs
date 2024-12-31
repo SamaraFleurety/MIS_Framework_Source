@@ -43,7 +43,7 @@ namespace AK_DLL
             Vector3 drawPos = thing.DrawPos;
             drawPos.z += worldOffsetZ;
             Vector2 result = Find.Camera.WorldToScreenPoint(drawPos) / Prefs.UIScale;
-            result.y = (float)UI.screenHeight - result.y;
+            result.y = (float)Verse.UI.screenHeight - result.y;
             if (thing is Pawn pawn)
             {
                 if (!pawn.RaceProps.Humanlike)

@@ -6,8 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
+using FS_UGUIFramework;
+using FS_UGUIFramework.UI;
 
-namespace AK_DLL
+namespace AK_DLL.UI
 {
     //RI: Rhodes Island 也许会叫罗德岛通用信息终端啥的;不是 riw window的意思。
     //调用之前记得关闭现有的window
@@ -15,9 +17,13 @@ namespace AK_DLL
     public static class RIWindowHandler
     {
         public static RIWindowType window = RIWindowType.MainMenu;
-        public static Thing recruitConsole;
+        public static Thing RecruitConsole => UGUIHandler.console;
         public static OperatorDef def;
         public static RIWindow actualRIWindow;
+
+        //连续招募，招募干员之后不是退出UI而是返回花名册
+        public static bool continuousRecruit = false;
+
 
         //<干员职业数字序， <干员ID, 干员Def> >
         public static Dictionary<int, Dictionary<string, OperatorDef>> operatorDefs = new Dictionary<int, Dictionary<string, OperatorDef>>();
@@ -28,9 +34,8 @@ namespace AK_DLL
         //包含所有系列 这个想不到有什么离散检索的需求。系列内有写包含职业。
         public static List<OperatorSeriesDef> operatorSeries = new List<OperatorSeriesDef>();
 
-
         #region 方舟信息窗口
-        public static void OpenRIWindow()
+        /*public static void OpenRIWindow()
         {
             if (AK_Tool.FSAsset == null)
             {
@@ -44,8 +49,6 @@ namespace AK_DLL
                     actualRIWindow = new RIWindow_MainMenu();
                     actualRIWindow.DrawUI("yccMainMenu");
 
-                    /*RIWindow_MainMenu window_MainMenu = new RIWindow_MainMenu(new DiaNode(new TaggedString()), true);
-                    Find.WindowStack.Add(window_MainMenu);*/
                     break;
                 case RIWindowType.Op_Series:
                 //break;  //可能不再会做，而是整合进opList
@@ -64,37 +67,48 @@ namespace AK_DLL
                     Log.ErrorOnce("MIS. Invaild RIWindow Type", 1);
                     break;
             }
-        }
+        }*/
 
-        public static void OpenRIWindow(RIWindowType windowType)
-        {
-            window = windowType;
-            OpenRIWindow();
-        }
 
-        public static void OpenRIWindow(RIWindowType windowType, Thing console)
+        public static void OpenRIWindow(UIPrefabDef prefab, Thing console = null, Pawn pawn = null, OpDetailType purpose = OpDetailType.Recruit)
         {
-            recruitConsole = console;
-            OpenRIWindow(windowType);
+            RIWindow_OperatorDetail.windowPurpose = purpose;
+
+            if (console != null)
+            {
+                if (pawn != null)
+                {
+                    UGUIHandler.OpenUIWindow(prefab, console, pawn);
+                }
+                else
+                {
+                    UGUIHandler.OpenUIWindow(prefab, console);
+                }
+            }
+            else
+            {
+                UGUIHandler.OpenUIWindow(prefab);
+            }
+            //OpenRIWindow(windowType);
         }
 
         //打开干员详情界面时，必须输入干员def
-        public static void OpenRIWindow_OpDetail(OperatorDef operatorDef)
+        public static void OpenRIWindow_OpDetail(UIPrefabDef prefab, OperatorDef operatorDef)
         {
-            window = RIWindowType.Op_Detail;
+            //window = RIWindowType.Op_Detail;
             def = operatorDef;
-            OpenRIWindow();
+            //OpenRIWindow();
+            UGUIHandler.OpenUIWindow(prefab);
         }
 
         //打开干员详情界面，但是因为换装
-        public static void OpenRIWindow_OpDetail(Pawn p, Thing Console)
+        /*public static void OpenRIWindow_OpDetail(Pawn p, Thing Console)
         {
-            recruitConsole = Console;
             window = RIWindowType.Op_Detail;
             def = p.GetDoc().operatorDef;
             RIWindow_OperatorDetail.windowPurpose = OpDetailType.Fashion;
             OpenRIWindow();
-        }
+        }*/
 
         #endregion
 

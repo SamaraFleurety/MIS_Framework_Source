@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using RimWorld;
 using Verse.AI;
 using Verse;
+using AK_DLL.UI;
 
 namespace AK_DLL
 {
@@ -19,8 +19,9 @@ namespace AK_DLL
             t.initAction = delegate
             {
                 Find.TickManager.Pause();
-                RIWindow_OperatorDetail.windowPurpose = OpDetailType.Recruit;
-                RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu,TargetThingA);
+                //RIWindow_OperatorDetail.windowPurpose = OpDetailType.Recruit;
+                RIWindowHandler.continuousRecruit = TargetThingB == null ? false : true;    //用target B做标记，要是不为null就是连续招募模式
+                UI.RIWindowHandler.OpenRIWindow(AKDefOf.AK_Prefab_yccMainMenu, TargetThingA, pawn, OpDetailType.Recruit /*RIWindowType.MainMenu,TargetThingA*/);
             };
             yield return t;
             yield break;

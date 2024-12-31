@@ -13,7 +13,7 @@ using UnityEngine.EventSystems;
 //记得给干员页面写下拉 series
 //sortOperator可能封装一下更好 特别是按字母排序
 //有没有可能按钮效果不用委托而是封装好一点呢
-namespace AK_DLL
+namespace AK_DLL.UI
 {
     #region legacy
     /*public class RIWindow_OperatorList : Dialog_NodeTree
@@ -200,8 +200,8 @@ namespace AK_DLL
 
         public override void ReturnToParent(bool closeEV = true)
         {
-            RIWindow_OperatorDetail.windowPurpose = OpDetailType.Recruit;
-            RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
+            //RIWindow_OperatorDetail.windowPurpose = OpDetailType.Recruit;
+            RIWindowHandler.OpenRIWindow(AKDefOf.AK_Prefab_yccMainMenu, purpose : OpDetailType.Recruit /*RIWindowType.MainMenu*/);
             base.ReturnToParent(closeEV);
         }
 
@@ -228,7 +228,7 @@ namespace AK_DLL
             }
             else classColumn = GameObject.Find("btnClassColumn").transform;
             GameObject classBtnInstance;
-            AK_Tool4Unity.ClearAllChild(classColumn); //直接清空所有老的职业图标 懒得复用了，感觉占不到几个性能
+            Utilities_Unity.ClearAllChild(classColumn); //直接清空所有老的职业图标 懒得复用了，感觉占不到几个性能
             int i = 0; //FIXME：晚点给删了
             foreach(int node in ActiveClasses)
             {
@@ -276,7 +276,7 @@ namespace AK_DLL
             if (AllSeries.Count == 0) return;
 
             GameObject btnCurrentSeries = GameObject.Find("btnSeries");
-            btnCurrentSeries.GetComponent<Image>().sprite = AK_Tool4Unity.Image2Spirit(AllSeries[Series].Icon);
+            btnCurrentSeries.GetComponent<Image>().sprite = Utilities_Unity.Image2Spirit(AllSeries[Series].Icon);
             btnCurrentSeries.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
                 choosingSeries = !choosingSeries;
@@ -308,12 +308,12 @@ namespace AK_DLL
             GameObject classBtnPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("btnClassTemplate");
             Transform seriesColumn = GameObject.Find("seriesSelectPanel").transform;
             GameObject seriesBtnInstance;
-            AK_Tool4Unity.ClearAllChild(seriesColumn);           
+            Utilities_Unity.ClearAllChild(seriesColumn);           
             for (int i = 0; i < AllSeries.Count; ++i)
             {
                 seriesBtnInstance = GameObject.Instantiate(classBtnPrefab, seriesColumn);
                 DrawOneClassBtn(seriesBtnInstance, AllSeries[i].Icon, AllSeries[i].label);
-                seriesBtnInstance.GetComponent<Image>().sprite = AK_Tool4Unity.Image2Spirit(AllSeries[i].Icon);
+                seriesBtnInstance.GetComponent<Image>().sprite = Utilities_Unity.Image2Spirit(AllSeries[i].Icon);
 
                 int j = i;
                 seriesBtnInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
@@ -427,7 +427,7 @@ namespace AK_DLL
             opPortraitInstance.GetComponentInChildren<Button>().onClick.RemoveAllListeners();
             opPortraitInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
-                RIWindowHandler.OpenRIWindow_OpDetail(cachedOperatorList[k]);
+                RIWindowHandler.OpenRIWindow_OpDetail(AKDefOf.AK_Prefab_OpDetail, cachedOperatorList[k]);
                 this.Close(false);
             });
             //设定名字中 以后检索干员def时用的数字序
@@ -759,7 +759,7 @@ namespace AK_DLL
         static List<OperatorDef> cachedOperatorList = new List<OperatorDef>();
         public Thing RecruitConsole
         {
-            get { return RIWindowHandler.recruitConsole; }
+            get { return RIWindowHandler.RecruitConsole; }
         }
 
     }

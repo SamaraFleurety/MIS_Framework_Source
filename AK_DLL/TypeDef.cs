@@ -59,9 +59,11 @@ namespace AK_DLL
         public static JobDef AK_Job_OperatorChangeFashion;
 
         public static FontDef AK_Font_YouYuan;
+
+        public static UIPrefabDef AK_Prefab_yccMainMenu;
+        public static UIPrefabDef AK_Prefab_yccOpList;
+        public static UIPrefabDef AK_Prefab_OpDetail;
     }
-
-
 
     public enum OpDetailType : byte
     {

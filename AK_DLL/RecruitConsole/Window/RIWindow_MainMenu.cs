@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using FS_LivelyRim;
 
-namespace AK_DLL
+namespace AK_DLL.UI
 {
     /* legacy
      * [HotSwappable]
@@ -246,7 +246,7 @@ namespace AK_DLL
         {
             base.Initialize();
 
-            FS_Tool.SetDefaultCanvas(false);
+            if (AK_Tool.Live2DActivated) FS_Tool.SetDefaultCanvas(false);
             OpStand = GameObject.Find("OpStand");
             OpL2D = GameObject.Find("L2DRenderTarget");
         }
@@ -277,8 +277,8 @@ namespace AK_DLL
         {
             GameObject.Find("MBtn_Recruit").GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
-                RIWindow_OperatorDetail.windowPurpose = OpDetailType.Recruit;
-                RIWindowHandler.OpenRIWindow(RIWindowType.Op_List);
+                //RIWindow_OperatorDetail.windowPurpose = OpDetailType.Recruit;
+                RIWindowHandler.OpenRIWindow(AKDefOf.AK_Prefab_yccOpList, purpose : OpDetailType.Recruit);
                 this.Close(false);
             });
 
@@ -296,8 +296,9 @@ namespace AK_DLL
             GameObject temp;
             GameObject.Find("SBtn_ChangeSecretary").GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
-                RIWindow_OperatorDetail.windowPurpose = OpDetailType.Secretary;
-                RIWindowHandler.OpenRIWindow(RIWindowType.Op_List);
+                //RIWindow_OperatorDetail.windowPurpose = OpDetailType.Secretary;
+                //RIWindowHandler.OpenRIWindow(RIWindowType.Op_List);
+                RIWindowHandler.OpenRIWindow(AKDefOf.AK_Prefab_yccOpList, purpose: OpDetailType.Secretary);
                 this.Close(false);
             });
 

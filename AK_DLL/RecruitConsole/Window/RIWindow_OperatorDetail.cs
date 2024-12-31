@@ -9,7 +9,7 @@ using FSUI;
 using FS_LivelyRim;
 using AKA_Ability;
 
-namespace AK_DLL
+namespace AK_DLL.UI
 {
     #region legacy 
     /*
@@ -273,7 +273,7 @@ namespace AK_DLL
         }
         public Thing RecruitConsole
         {
-            get { return RIWindowHandler.recruitConsole; }
+            get { return RIWindowHandler.RecruitConsole; }
         }
         private GameObject ClickedBtn
         {
@@ -313,7 +313,7 @@ namespace AK_DLL
         public override void DoContent()
         {
             DrawNavBtn();
-            Initialize();
+            //Initialize();
             DrawFashionBtn();
             ChangeStandTo(preferredSkin, true);
 
@@ -637,7 +637,7 @@ namespace AK_DLL
             {
                 this.Close(false);
                 RIWindow_OperatorDetail.windowPurpose = OpDetailType.Recruit;
-                RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
+                RIWindowHandler.OpenRIWindow(AKDefOf.AK_Prefab_yccMainMenu, purpose : OpDetailType.Recruit/* RIWindowType.MainMenu*/);
             });
             //取消
             navBtn = GameObject.Find("BtnCancel");
@@ -664,9 +664,9 @@ namespace AK_DLL
                         this.Close(true);
                         RecruitConsole.TryGetComp<CompRefuelable>().ConsumeFuel(Def.ticketCost);
                         Def.Recruit(RecruitConsole.Map);
-                        if (false)
+                        if (RIWindowHandler.continuousRecruit) //连续招募
                         {
-                            RIWindowHandler.OpenRIWindow(RIWindowType.Op_List);
+                            RIWindowHandler.OpenRIWindow(AKDefOf.AK_Prefab_yccOpList /*RIWindowType.Op_List*/);
                         }
                         /*RIWindow_OperatorList window = new RIWindow_OperatorList(new DiaNode(new TaggedString()), true);
                         window.soundAmbient = SoundDefOf.RadioComms_Ambience;
@@ -694,7 +694,7 @@ namespace AK_DLL
                     AK_Mod.settings.Write();
 
                     this.Close(false);
-                    RIWindowHandler.OpenRIWindow(RIWindowType.MainMenu);
+                    RIWindowHandler.OpenRIWindow(AKDefOf.AK_Prefab_yccMainMenu /*RIWindowType.MainMenu*/);
                 });
             }
             else if (windowPurpose == OpDetailType.Fashion)
@@ -752,7 +752,7 @@ namespace AK_DLL
 
         private void SwitchGroupedSkillTo(int val)
         {
-            Log.Message($"try s skills to {val}");
+            if (AK_ModSettings.debugOverride) Log.Message($"try switch skills to {val}");
             if (doc == null || doc.currentExist == false || Def.AKAbilities.Count == 0) return;
             opSkills[PreferredAbility].transform.GetChild(1).gameObject.SetActive(false);
             PreferredAbility = val;
@@ -863,7 +863,7 @@ namespace AK_DLL
 
         public override void ReturnToParent(bool closeEV = true)
         {
-            RIWindowHandler.OpenRIWindow(RIWindowType.Op_List);
+            RIWindowHandler.OpenRIWindow(AKDefOf.AK_Prefab_yccOpList/* RIWindowType.Op_List*/);
             base.ReturnToParent(closeEV);
         }
 

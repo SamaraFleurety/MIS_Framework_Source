@@ -51,6 +51,7 @@ namespace AK_DLL
 
         public OperatorClassDef operatorType;//干员类型/职业
 
+        [MayRequireBiotech]
         public string stand;//精2立绘
         public string commonStand;  //精0立绘
         public List<string> fashion; //换装立绘的路径 和小人身上的衣服无关
@@ -67,8 +68,8 @@ namespace AK_DLL
         //这里的V3，x和y是x轴和y轴的偏移，z其实是缩放
         public Dictionary<int, Vector3> standOffsets = new Dictionary<int, Vector3>();
         /*[Obsolete]
-        public Vector2 standOffset;*/
-        public float standRatio = 3f;
+        public Vector2 standOffset;
+        public float standRatio = 3f;*/
         public string headPortrait;         //IMGUI主界面选中时 左下角详情栏上面的头像
         /*[Obsolete]
         public Vector2 headPortraitOffset;*/
@@ -90,6 +91,7 @@ namespace AK_DLL
         #endregion
 
         #region 快捷属性
+
         public static bool currentlyGenerating = false;
 
         //缓存 招募时给的衣服。这个时候有可能还没生成doc

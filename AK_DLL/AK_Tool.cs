@@ -6,6 +6,7 @@ using Verse;
 using UnityEngine.UI;
 using System.Text.RegularExpressions;
 using AKA_Ability;
+using AK_DLL.UI;
 
 namespace AK_DLL
 {
@@ -14,11 +15,13 @@ namespace AK_DLL
     {
         public static bool disableIMGUI = false;
 
-        public static AssetBundle FSAsset;
+        public static AssetBundle FSAsset => Utilities_Unity.LoadAssetBundle(AKDefOf.AK_Prefab_yccMainMenu);
         public static AssetBundle PAAsset;
         public static AssetBundle l2dAsset;
         private static GameObject EVSystem;
         public static GameObject EVSystemInstance;
+
+        public static bool Live2DActivated => ModLister.GetActiveModWithIdentifier("FS.LivelyRim") != null;
 
         private static List<ModContentPack> Mods => LoadedModManager.RunningMods.ToList();
 
@@ -26,8 +29,9 @@ namespace AK_DLL
         {
             try
             {
-                if (AK_ModSettings.debugOverride) Log.Message("AK loading series");
+                if (AK_ModSettings.debugOverride) Log.Message("[AK] loading");
                 RIWindowHandler.LoadOperatorSeries();
+                if (AK_ModSettings.debugOverride) Log.Message($"AK loaded {RIWindowHandler.operatorSeries.Count} series");
                 if (AK_ModSettings.debugOverride) Log.Message("AK loading classes");
                 RIWindowHandler.LoadOperatorClasses();
                 if (AK_ModSettings.debugOverride) Log.Message("AK loading operators");
@@ -49,7 +53,7 @@ namespace AK_DLL
                 if (/*Mods[i].Name == "M.I.S. - Framework" ||*/ Mods[i].PackageId == TypeDef.ModID.ToLower())
                 {
                     Log.Message(Mods[i].RootDir);
-                    FSAsset = AssetBundle.LoadFromFile(Mods[i].RootDir + "/Asset/fsassets");
+                    //FSAsset = AssetBundle.LoadFromFile(Mods[i].RootDir + "/Asset/fsassets");
                     PAAsset = AssetBundle.LoadFromFile(Mods[i].RootDir + "/Asset/paassets");
                     break;
                 }

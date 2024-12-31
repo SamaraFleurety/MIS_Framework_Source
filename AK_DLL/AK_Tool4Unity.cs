@@ -11,7 +11,7 @@ using Verse;
 
 namespace AK_DLL
 {
-    public static class AK_Tool4Unity
+    /*public static class AK_Tool4Unity
     {
         public static void ClearAllChild(GameObject obj)
         {
@@ -42,7 +42,7 @@ namespace AK_DLL
                 Log.Error($"[MIS] missing font. reset to YouYuan");
                 AK_ModSettings.Font = AKDefOf.AK_Font_YouYuan;
                 /*AK_ModSettings settings = LoadedModManager.GetMod<AK_Mod>().settings;
-                settings.Write();*/
+                settings.Write();*//*
                 AK_Mod.settings.Write();
             }
             if (AK_ModSettings.Font == AKDefOf.AK_Font_YouYuan)
@@ -59,5 +59,5 @@ namespace AK_DLL
             Debug.Log("get font stdefret");
             return AB.LoadAsset<TMP_FontAsset>(def.modelName);
         }
-    }
+    }*/
 }

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using RimWorld;
 using Verse;
 
-namespace AK_TypeDef
+namespace AK_DLL
 {
     [StaticConstructorOnStartup]
-    public static class TypeDef
+    public static class GenericTypeDef
     {
     }
 }

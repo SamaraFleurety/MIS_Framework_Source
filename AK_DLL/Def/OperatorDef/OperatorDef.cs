@@ -62,7 +62,7 @@ namespace AK_DLL
         //[Obsolete]
         //public Dictionary<int, OperatorFashionSetDef> clothSet;
         public List<OperatorFashionSetDef> clothSets = new List<OperatorFashionSetDef>();
-        public List<LiveModelDef> live2dModel;
+        public List<string> live2dModel = new();
 
         //因为并不知道是否有某种立绘，所以用字典存。约定-1为头像，0是精0立绘，1是精2立绘，2-后面是换装
         //这里的V3，x和y是x轴和y轴的偏移，z其实是缩放
@@ -91,6 +91,11 @@ namespace AK_DLL
         #endregion
 
         #region 快捷属性
+        //为了兼容性 这玩意不好写成static
+        public LiveModelDef Live2DModelDef(string live2dModel)
+        {
+            return DefDatabase<LiveModelDef>.GetNamed(live2dModel);
+        }
 
         public static bool currentlyGenerating = false;
 
@@ -637,41 +642,35 @@ namespace AK_DLL
                 temp = standPath + TypeDef.romanNumber[i];
                 if (ContentFinder<Texture2D>.Get(temp, false) != null) this.fashion.Add(temp);
             }
-            AutoFill_Live2D();
+            if (AK_Tool.Live2DActivated) AutoFill_Live2D();
         }
 
         private void AutoFill_Live2D()
         {
             //检查live2D的格式。
-            if (ModLister.GetActiveModWithIdentifier("FS.LivelyRim") != null)
+            //List<string> modelNames = new List<string>();
+            foreach (string j in live2dModel)
             {
-                List<string> modelNames = new List<string>();
-                if (live2dModel == null)
+                LiveModelDef i = Live2DModelDef(j);
+                if (ModLister.GetActiveModWithIdentifier(i.modID) == null)
                 {
-                    live2dModel = new List<LiveModelDef>();
-                    return;
+                    Log.Error($"FS.L2D. error with {nickname}'s live2d named {i} : missing mod with ID {i.modID}");
+                    continue;
                 }
-                foreach (LiveModelDef i in live2dModel)
+                AssetBundle ab = FS_Tool.LoadAssetBundle(i.modID, i.assetBundle);
+                if (ab == null)
                 {
-                    if (ModLister.GetActiveModWithIdentifier(i.modID) == null)
-                    {
-                        Log.Error($"FS.L2D. error with {nickname}'s live2d named {i} : missing mod with ID {i.modID}");
-                        continue;
-                    }
-                    AssetBundle ab = FS_Tool.LoadAssetBundle(i.modID, i.assetBundle);
-                    if (ab == null)
-                    {
-                        Log.Error($"FS.L2D. error with {nickname}'s live2d named {i} : missing assetbundle named {i.assetBundle}");
-                        continue;
-                    }
-                    GameObject modelPrefab = ab.LoadAsset<GameObject>(i.modelName);
-                    if (modelPrefab == null)
-                    {
-                        Log.Error($"FS.L2D. error with {nickname}'s live2d named {i} : missing model named {i.modelName}");
-                        continue;
-                    }
+                    Log.Error($"FS.L2D. error with {nickname}'s live2d named {i} : missing assetbundle named {i.assetBundle}");
+                    continue;
+                }
+                GameObject modelPrefab = ab.LoadAsset<GameObject>(i.modelName);
+                if (modelPrefab == null)
+                {
+                    Log.Error($"FS.L2D. error with {nickname}'s live2d named {i} : missing model named {i.modelName}");
+                    continue;
                 }
             }
+
         }
 
         private void AutoFill_Apparel()

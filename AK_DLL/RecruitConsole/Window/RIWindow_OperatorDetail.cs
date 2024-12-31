@@ -793,8 +793,10 @@ namespace AK_DLL.UI
             else
             {
                 OpL2D.SetActive(true);
-                FS_Tool.SetDefaultCanvas(false);
-                L2DInstance = FS_Utilities.DrawModel(DisplayModelAt.RIWDetail, Def.live2dModel[preferredSkin - 1000], OpL2D);
+                RIWindow_MainMenu.SetLive2dDefaultCanvas(false);
+                //FS_Tool.SetDefaultCanvas(false); //ui有canvas
+                //L2DInstance = FS_Utilities.DrawModel(DisplayModelAt.RIWDetail, RIWindowHandler.def.Live2DModelDef(Def.live2dModel[preferredSkin - 1000]), OpL2D);
+                L2DInstance = RIWindow_MainMenu.DrawLive2DModel(Def, 4/*DisplayModelAt.RIWDetail*/, Def.live2dModel[preferredSkin - 1000], OpL2D);
             }
         }
 

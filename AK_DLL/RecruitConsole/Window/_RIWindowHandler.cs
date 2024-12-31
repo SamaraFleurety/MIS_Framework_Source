@@ -146,18 +146,18 @@ namespace AK_DLL.UI
                 {
                     i.AutoFill();
                 }
-                catch
+                catch (Exception ex) 
                 {
-                    Log.Error("MIS. 自动补全失败:" + i.nickname);
+                    Log.Error("MIS. 自动补全失败:" + i.nickname + $"at { ex.ToString()}\n{ex.StackTrace}");
                 }
 
                 try
                 {
                     operatorDefs[i.operatorType.sortingOrder].Add(AK_Tool.GetOperatorIDFrom(i.defName), i);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    Log.Error("MIS. 没加起" + i.nickname);
+                    Log.Error("MIS. 没加起" + i.nickname + $"at {ex.ToString()}\n{ex.StackTrace}");
                 }
             }
         }

@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using FS_LivelyRim;
+using System.Reflection;
 
 namespace AK_DLL.UI
 {
@@ -246,9 +247,17 @@ namespace AK_DLL.UI
         {
             base.Initialize();
 
-            if (AK_Tool.Live2DActivated) FS_Tool.SetDefaultCanvas(false);
+            if (AK_Tool.Live2DActivated) SetLive2dDefaultCanvas(false);
             OpStand = GameObject.Find("OpStand");
             OpL2D = GameObject.Find("L2DRenderTarget");
+        }
+
+        public static void SetLive2dDefaultCanvas(bool active = true)
+        {
+            MethodInfo method = typeof(FS_Tool).GetMethod("SetDefaultCanvas", BindingFlags.Static | BindingFlags.Public);
+            method.Invoke(null, new object[] { active });
+
+            //FS_Tool.SetDefaultCanvas(active);
         }
 
         public override void DoContent()
@@ -404,10 +413,19 @@ namespace AK_DLL.UI
             {
                 OpL2D.SetActive(true);
                 //L2DInstance =  AK_Tool.DrawLive2DOperatorStand(SecretaryDef, preferredSkin, OpL2D);
-                L2DInstance = FS_Utilities.DrawModel(DisplayModelAt.RIWMain, SecretaryDef.live2dModel[preferredSkin - 1000], OpL2D);
+                //L2DInstance = FS_Utilities.DrawModel(DisplayModelAt.RIWMain, RIWindowHandler.def.Live2DModelDef(SecretaryDef.live2dModel[preferredSkin - 1000]), OpL2D);
+                L2DInstance = DrawLive2DModel(SecretaryDef, 3/*DisplayModelAt.RIWMain*/, SecretaryDef.live2dModel[preferredSkin - 1000], OpL2D);
                 L2DInstance.transform.position = SecretaryLoc;
             }
         }
+
+        public static GameObject DrawLive2DModel(OperatorDef def, int drawAt, string l2dDefname, GameObject renderTarget = null)
+        {
+            MethodInfo method = typeof(FS_Utilities).GetMethod("DrawModel", BindingFlags.Public | BindingFlags.Static);
+            return (GameObject)method.Invoke(null, new object[] { drawAt, def.Live2DModelDef(l2dDefname), renderTarget });
+            //return FS_Utilities.DrawModel(drawAt, RIWindowHandler.def.Live2DModelDef(l2dDefname), renderTarget);
+        }
+
         //FIXME 没做
         private void DrawResoureHeader()
         {

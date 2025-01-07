@@ -16,7 +16,7 @@ namespace AKR_Random
         public bool inheritCandidatesWeight = false;
 
         //这是*本节点*被随机到权重 权重必须>=1，不然会被随机选到甚至报错。仅在不继承权重时填入才会被使用。
-        public int weight = 1;  
+        public int weight = 1;
 
         #region xml不能填
         public virtual int Weight
@@ -38,7 +38,7 @@ namespace AKR_Random
         protected bool arrayCached = false;
         #endregion
 
-        public abstract IEnumerable<IWeightedRandomable> Candidates {get; }
+        public abstract IEnumerable<IWeightedRandomable> Candidates { get; }
 
 
         public abstract IEnumerable<object> TryIssueGachaResult(IntVec3 cell = default, Map map = null, Pawn gambler = null, float point = 0);

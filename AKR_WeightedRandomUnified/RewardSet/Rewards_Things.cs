@@ -43,7 +43,5 @@ namespace AKR_Random.Rewards
                 yield return item.SpawnThing(cell, map);
             }
         }
-
-        
     }
 }

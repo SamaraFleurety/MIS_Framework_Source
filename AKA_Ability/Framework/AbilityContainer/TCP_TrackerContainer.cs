@@ -54,8 +54,8 @@ namespace AKA_Ability
             {
                 return;
             }
-            Log.Message($"caster pawn {CasterPawn == null}");
-            Log.Message($"caster pawn {CasterPawn.Name}");
+            //Log.Message($"caster pawn {CasterPawn == null}");
+            //Log.Message($"caster pawn {CasterPawn.Name}");
             tracker = new AbilityTracker(CasterPawn);
             if (this.Abilities != null && this.Abilities.Count > 0)
             {

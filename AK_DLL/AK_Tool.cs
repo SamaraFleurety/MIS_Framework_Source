@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using System.Text.RegularExpressions;
 using AKA_Ability;
 using AK_DLL.UI;
+using HarmonyLib;
 
 namespace AK_DLL
 {
@@ -137,6 +138,7 @@ namespace AK_DLL
 
         public static OperatorDocument GetDoc(this Pawn p)
         {
+            if (OperatorDef.currentlyGenerating) return null;
             if (p == null) return null;
             if (p.abilities == null) return null;
             if (!p.IsColonist) return null;

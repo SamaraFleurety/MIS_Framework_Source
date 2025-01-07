@@ -228,6 +228,7 @@ namespace AK_DLL
             currentlyGenerating = true;
 
             operator_Pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(PawnKindDefOf.Colonist, Faction.OfPlayer, forcedXenotype: xenoType));
+
             Recruit_Hediff();
 
             Recruit_PersonalStat();
@@ -240,8 +241,7 @@ namespace AK_DLL
 
             if (ModLister.GetActiveModWithIdentifier("mis.arkmusic") != null) Recruit_ArkSongExtension();
 
-            GenSpawn.Spawn(operator_Pawn, intVec, map);
-            CameraJumper.TryJump(new GlobalTargetInfo(intVec, map));
+            
 
             //基因
             if (ModLister.BiotechInstalled)
@@ -267,6 +267,12 @@ namespace AK_DLL
                     worker?.RecruitPostEffect();
                 }
             }
+
+            GC_OperatorDocumentation.cachedOperators.Add(operator_Pawn, operatorID.Document);
+
+            GenSpawn.Spawn(operator_Pawn, intVec, map);
+            CameraJumper.TryJump(new GlobalTargetInfo(intVec, map));
+
 
             currentlyGenerating = false;
 

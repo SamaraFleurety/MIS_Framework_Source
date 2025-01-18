@@ -54,15 +54,5 @@ namespace AK_DLL.HarmonyPatchs
             if (p.GetDoc() == null) return factorOriginal;
             return 1;
         }
-
-        /*[HarmonyPrefix]
-        public static bool fix(PawnRenderer __instance, ref Vector3 __result, Pawn ___pawn)
-        {
-            OperatorDocument doc = ___pawn.GetDoc();
-            if (doc == null) return HarmonyPrefixRet.keepOriginal;
-            
-            __result = Vector3.zero;
-            return HarmonyPrefixRet.skipOriginal;
-        }*/
     }
 }

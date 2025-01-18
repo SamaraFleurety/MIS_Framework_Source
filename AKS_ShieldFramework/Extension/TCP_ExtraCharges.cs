@@ -65,7 +65,7 @@ namespace AKS_Shield.Extension
 
         public override void Tick(int amt)
         {
-            if (charges >= MaxCharge || CompShield.energy == 0) return;
+            if (charges >= MaxCharge || CompShield.Energy == 0) return;
             tick += amt;
 
             while (tick >= ChargeInterval && charges < MaxCharge)
@@ -82,7 +82,7 @@ namespace AKS_Shield.Extension
             {
                 Log.Message("reset");
                 --charges;
-                CompShield.energy = CompShield.EnergyMax;
+                CompShield.Energy = CompShield.EnergyMax;
             }
             else
             {

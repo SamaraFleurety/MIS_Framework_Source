@@ -22,7 +22,7 @@ namespace AKS_Shield.Extension
             }
         }
 
-        protected bool HasEnergyLeft => CompShield.energy > 0;
+        protected bool HasEnergyLeft => CompShield.Energy > 0;
 
         protected bool ShouldDraw => CompShield.ShouldDisplay;
 

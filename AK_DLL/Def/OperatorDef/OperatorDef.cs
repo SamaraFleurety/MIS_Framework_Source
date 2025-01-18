@@ -241,7 +241,6 @@ namespace AK_DLL
 
             if (ModLister.GetActiveModWithIdentifier("mis.arkmusic") != null) Recruit_ArkSongExtension();
 
-            
 
             //基因
             if (ModLister.BiotechInstalled)
@@ -527,7 +526,7 @@ namespace AK_DLL
         {
             Apparel apparel = (Apparel)ThingMaker.MakeThing(apparelDef);
             CompBiocodable comp = apparel.GetComp<CompBiocodable>();
-            if (comp != null) comp.CodeFor(p);
+            comp?.CodeFor(p);
             p.apparel.Wear(apparel, true, false);
             p.outfits.forcedHandler.SetForced(apparel, true);
             if (isFashion)

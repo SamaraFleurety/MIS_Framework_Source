@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Verse;
-
+/*
 namespace AKA_Ability.DelayedEffects
 {
     public class DelayedEffectDef : Def
@@ -14,4 +14,4 @@ namespace AKA_Ability.DelayedEffects
 
         public ThingDef projectile;
     }
-}
+}*/

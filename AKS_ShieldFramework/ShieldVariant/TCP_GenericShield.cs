@@ -45,7 +45,14 @@ namespace AKS_Shield
         private readonly SoundDef EnergyShield_Broken = SoundDef.Named("EnergyShield_Broken");
         public TCP_GenericShield Props => props as TCP_GenericShield;
 
-        public float energy = 0;
+        protected float energy = 0;
+
+        public virtual float Energy
+        {
+            get { return energy; }
+
+            set { energy = value; }
+        }
 
         protected int ticksReset = 0;
 
@@ -57,7 +64,7 @@ namespace AKS_Shield
             get
             {
                 Pawn wearer = Wearer;
-                return wearer != null && wearer.Spawned && !wearer.Destroyed && !wearer.Dead && !wearer.Downed && energy > 0 && wearer.Drafted;
+                return wearer != null && wearer.Spawned && !wearer.Destroyed && !wearer.Dead && !wearer.Downed && Energy > 0 && wearer.Drafted;
             }
         }
 
@@ -66,7 +73,7 @@ namespace AKS_Shield
 
         public virtual float EnergyMax => Props.energyMax;
 
-        public virtual float EnergyPercent => energy / EnergyMax;
+        public virtual float EnergyPercent => Energy / EnergyMax;
 
         public virtual float EnergyRegenRate => Props.energyRegenRate / 60;
 
@@ -77,7 +84,7 @@ namespace AKS_Shield
         public override void PostPostMake()
         {
             base.PostPostMake();
-            energy = EnergyMax;
+            Energy = EnergyMax;
         }
         public override void CompTick()
         {
@@ -85,14 +92,14 @@ namespace AKS_Shield
         }
         public virtual void Tick(int amt)
         {
-            if (energy > 0)
+            if (Energy > 0)
             {
-                if (energy < EnergyMax)
+                if (Energy < EnergyMax)
                 {
-                    energy += EnergyRegenRate * amt;
+                    Energy += EnergyRegenRate * amt;
                     if (!Props.allowEnergyOverflow)
                     {
-                        energy = Math.Min(energy, EnergyMax);
+                        Energy = Math.Min(Energy, EnergyMax);
                     }
                 }
             }
@@ -116,7 +123,7 @@ namespace AKS_Shield
         public override void PostPreApplyDamage(ref DamageInfo dinfo, out bool absorbed)
         {
             Wearer.Drawer.renderer.renderTree.SetDirty();
-            if (energy <= 0)
+            if (Energy <= 0)
             {
                 absorbed = false;
                 return;
@@ -159,16 +166,16 @@ namespace AKS_Shield
                         return;
                     }
 
-                    energy -= dinfo.Amount * Props.energyLostPerDmg * Props.meleeAbsorbFactor;
+                    Energy -= dinfo.Amount * Props.energyLostPerDmg * Props.meleeAbsorbFactor;
                 }
                 else
                 {
-                    energy -= dinfo.Amount * Props.energyLostPerDmg * Props.rangedAbsorbFactor;
+                    Energy -= dinfo.Amount * Props.energyLostPerDmg * Props.rangedAbsorbFactor;
                 }
             }
             else
             {
-                energy -= dinfo.Amount * Props.energyLostPerDmg;
+                Energy -= dinfo.Amount * Props.energyLostPerDmg;
             }
 
             //吸收了伤害 执行后效
@@ -176,7 +183,7 @@ namespace AKS_Shield
             {
                 DoAbsorbDamageEffect(effector, Wearer, this, ref dinfo);
             }
-            if (energy <= 0)
+            if (Energy <= 0)
             {
                 Break(ref dinfo);       //break后效在这里面
             }
@@ -270,7 +277,8 @@ namespace AKS_Shield
                 return 75 * 0.01f;
             }
         }
-        private static float Margin {
+        private static float Margin
+        {
             get
             {
                 if (AKLibActived) return AK_ModSettings.barMargin * 0.01f;
@@ -292,10 +300,6 @@ namespace AKS_Shield
         }
         public override void CompDrawWornExtras()
         {
-            /*if (false)
-            {
-                return;
-            }*/
             if (!ShouldDisplay)
             {
                 return;
@@ -351,7 +355,7 @@ namespace AKS_Shield
 
         protected virtual void Break(ref DamageInfo dinfo)
         {
-            energy = 0;
+            Energy = 0;
             ticksReset = 0;
 
             if (Wearer.Map != null)
@@ -386,7 +390,7 @@ namespace AKS_Shield
             }
 
             ticksReset = 0;
-            energy = EnergyMax * Props.energyRatioOnReset;
+            Energy = EnergyMax * Props.energyRatioOnReset;
 
             foreach (TC_ShieldExtension_PostEffects_Base c in registedCompEffectors)
             {

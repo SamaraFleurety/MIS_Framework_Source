@@ -1,34 +1,45 @@
 ﻿using AKA_Ability.DelayedEffects;
+using RimWorld.Planet;
+using System;
 using Verse;
+using static UnityEngine.GraphicsBuffer;
 
 namespace AKA_Ability.AbilityEffect
 {
     //delay no more
     public class AE_DelayedEffects : AbilityEffectBase
     {
-        public DelayedEffectDef delayedEffect;
+        public AbilityEffectsDef delayedEffect;
 
         public int burstCount = 1;
 
         public int burstInterval = 1;
 
-        protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
-        {
-            int delay = burstInterval;
+        public Type effectorType = typeof(DelayedEffectorBase);
 
+        public bool delayFirstEffect = false; //第一次发效果是瞬发还是也有延迟
+
+        public override bool DoEffect(AKAbility_Base caster, GlobalTargetInfo globalTargetInfo = default, LocalTargetInfo localTargetInfo = default)
+        {
+            if (forceTargetSelf) localTargetInfo = new LocalTargetInfo(caster.CasterPawn);
+
+            int delay = 1;
+            if (delayFirstEffect) delay = burstInterval;
             int burstLeft = burstCount;
 
-            //fixme:估计要改成activator
-            Effector_ShootProjectile eff = new Effector_ShootProjectile(delayedEffect, caster.CasterPawn, target);
+            Log.Message("do effect a");
+            DelayedEffectorBase effector = (DelayedEffectorBase)Activator.CreateInstance(effectorType, delayedEffect, caster, localTargetInfo, globalTargetInfo);
 
             while (burstLeft > 0)
             {
                 --burstLeft;
                 delay += burstInterval;
-                GC_DelayedAbilityManager.AddDelayedAbilities(delay, eff);
+                GC_DelayedAbilityManager.AddDelayedAbilities(delay, effector);
             }
 
-            return base.DoEffect(caster, target);
+            return true;
         }
+
+
     }
 }

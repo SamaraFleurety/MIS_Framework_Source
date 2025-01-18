@@ -34,9 +34,16 @@ namespace AKA_Ability
             cachedStage = null;
         }
 
+        protected virtual void RefreshStageProperty()
+        {
+        }
+
         protected virtual void RefreshStage()
         {
             if (cachedStage != null) return;
+
+            RefreshStageProperty();
+
             cachedStage = new HediffStage();
             cachedStage.statOffsets = new();
             cachedStage.statFactors = new();

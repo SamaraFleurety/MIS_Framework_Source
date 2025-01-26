@@ -34,11 +34,16 @@ namespace AKA_Ability.Gizmos
             {
                 GUI.color = this.IconDrawColor;
             }
+            else
+            {
+                GUI.color = IconDrawColor.SaturationChanged(0f);
+            }
             if (parms.lowLight)
             {
                 GUI.color = GUI.color.ToTransparent(0.6f);
             }
-            Widgets.DrawTextureFitted(rect, badTex, this.iconDrawScale * 0.85f, this.iconProportions, this.iconTexCoords, this.iconAngle, null);
+            //if (!parent.CastableNow()) GUI.color = new Color(0.3f, 0.59f, 0.11f, 1);
+            Widgets.DrawTextureFitted(rect, badTex, this.iconDrawScale * 0.85f, this.iconProportions, this.iconTexCoords, this.iconAngle, buttonMat);
             //充能
             Widgets.Label(rect, this.Cooldown.charge + "/" + this.Cooldown.MaxCharge);
             //技能冷却
@@ -57,7 +62,7 @@ namespace AKA_Ability.Gizmos
             base.ProcessInput(ev);
         }
 
-        public override Color IconDrawColor => defaultIconColor;
+        //public override Color IconDrawColor => defaultIconColor;
 
 
         public override void GizmoUpdateOnMouseover()

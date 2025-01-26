@@ -27,14 +27,14 @@ namespace AKA_Ability.AbilityEffect
             if (delayFirstEffect) delay = burstInterval;
             int burstLeft = burstCount;
 
-            Log.Message("do effect a");
+            //Log.Message("do effect a");
             DelayedEffectorBase effector = (DelayedEffectorBase)Activator.CreateInstance(effectorType, delayedEffect, caster, localTargetInfo, globalTargetInfo);
 
             while (burstLeft > 0)
             {
                 --burstLeft;
-                delay += burstInterval;
                 GC_DelayedAbilityManager.AddDelayedAbilities(delay, effector);
+                delay += burstInterval;
             }
 
             return true;

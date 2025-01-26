@@ -105,11 +105,13 @@
     <Compile Include="AbilityEffect\Effect\AE_ChangeHair.cs" />
     <Compile Include="AbilityEffect\Effect\AE_Illustrious_Dilapidate.cs" />
     <Compile Include="AbilityEffect\Effect\AE_Jump.cs" />
+    <Compile Include="AbilityEffect\Effect\AE_MentalBreak.cs" />
     <Compile Include="AbilityEffect\Effect\AE_SendLetter.cs" />
     <Compile Include="AbilityEffect\Effect\AE_SendMessage.cs" />
     <Compile Include="AbilityEffect\Effect\AE_Kill.cs" />
     <Compile Include="AbilityEffect\Effect\AE_ShootProjectile.cs" />
     <Compile Include="AbilityEffect\Effect\AE_TeleportSelfToTarget.cs" />
+    <Compile Include="AbilityEffect\Effect\AE_VanillaEffecterMaintain.cs" />
     <Compile Include="AbilityEffect\Effect\Mass\AbilityMassEffectBase.cs" />
     <Compile Include="AbilityEffect\Effect\Mass\AME_Illustrious_Inory.cs" />
     <Compile Include="AbilityEffect\Effect\Mass\AME_Illustrious_RiseFall.cs" />
@@ -119,6 +121,7 @@
     <Compile Include="AbilityEffect\Summon\AE_SummonThings_Radius.cs" />
     <Compile Include="Framework\AbilityContainer\HCP_TrackerContainer.cs" />
     <Compile Include="Framework\AbilityEffectsDef.cs" />
+    <Compile Include="Framework\ActiveConditioner\ActiveConditioner_Base.cs" />
     <Compile Include="Framework\Gizmos\ExtraGizmos\ExtraGizmoDrawer_Base.cs" />
     <Compile Include="Framework\Gizmos\ExtraGizmos\EGD_SelectAllSummoned.cs" />
     <Compile Include="Framework\Gizmos\Gizmo_SelectAllSummon.cs" />

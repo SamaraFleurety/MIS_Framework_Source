@@ -1,4 +1,5 @@
-﻿using AKA_Ability.Gizmos;
+﻿using AKA_Ability.CastConditioner;
+using AKA_Ability.Gizmos;
 using Verse;
 
 namespace AKA_Ability
@@ -25,6 +26,25 @@ namespace AKA_Ability
                 if (Target == null) return;
                 TryCastShot(Target);
             }
+        }
+
+        public override bool CastableNow()
+        {
+            if (Find.TickManager.TicksGame % JudgeInterval == 0)
+            {
+                cachedCastableCondition = true;
+                foreach (CastConditioner_Base i in def.castConditions)
+                {
+                    if (i.ignoredByAuto) continue;
+                    if (!i.Castable(this))
+                    {
+                        cachedCastableCondition = false;
+                        lastFailReason = i.failReason;
+                        break;
+                    }
+                }
+            }
+            return cachedCastableCondition;
         }
 
         protected override void InitializeGizmoInnate()

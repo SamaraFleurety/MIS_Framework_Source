@@ -70,14 +70,18 @@ namespace AKA_Ability
             Dictionary<StatDef, float> dic = statFactors;
             if (isOffset) dic = statOffsets;
 
-            if (dic.ContainsKey(def)) dic[def] += amount;
+            if (dic.ContainsKey(def))
+            {
+                if (isOffset) dic[def] += amount;
+                else dic[def] *= amount;
+            }
             else dic.Add(def, amount);
 
-            if (dic[def] == 0)
+            if ((isOffset && dic[def] == 0) || (!isOffset && dic[def] == 1))
             {
                 TryRemoveStatModifier(def, isOffset);
             }
-            else parent.Notify_StageDirty();
+            parent.Notify_StageDirty();
         }
 
         public void TryRemoveStatModifier(StatDef def, bool isOffset = true)

@@ -25,11 +25,11 @@ namespace AKA_Ability
 
         private RangeWorker_Base rangeWorker = null;
 
-        int JudgeInterval => def.castConditionJudgeInterval;
+        protected int JudgeInterval => def.castConditionJudgeInterval;
 
-        bool cachedCastableCondition = false;
+        protected bool cachedCastableCondition = false;
 
-        string lastFailReason = "";
+        protected string lastFailReason = "";
         public virtual float Range
         {
             get
@@ -121,6 +121,7 @@ namespace AKA_Ability
                 Log.Error($"[AK] 释放技能{def.label} 时目标非法");
                 return;
             }
+            cachedCastableCondition = false;
             foreach (AbilityEffectBase effect in def.compEffectList)
             {
                 bool success = effect.DoEffect(this, localTargetInfo: target);

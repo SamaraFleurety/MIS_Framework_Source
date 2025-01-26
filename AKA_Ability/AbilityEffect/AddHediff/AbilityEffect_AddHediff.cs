@@ -14,11 +14,11 @@ namespace AKA_Ability
         protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
             PreProcess();
-            if (target == null || target.GetType() != typeof(Pawn))
+            if (target == null || target.Pawn is not Pawn target_Pawn)
             {
                 return false;
             }
-            Pawn target_Pawn = target.Pawn;
+            //Pawn target_Pawn = target.Pawn;
             if (target_Pawn != null && !target_Pawn.Dead)
             {
                 Hediff hediff = AddHediff(target_Pawn, this.hediffDef, this.bodyPart, severity: this.severity);

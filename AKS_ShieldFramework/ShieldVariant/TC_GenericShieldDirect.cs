@@ -12,5 +12,10 @@ namespace AKS_Shield
     public class TC_GenericShieldDirect : TC_GenericShield
     {
         public override Pawn Wearer => parent as Pawn;
+
+        public override IEnumerable<Gizmo> CompGetGizmosExtra()
+        {
+            foreach (var gizmo in GetGizmos()) yield return gizmo;
+        }
     }
 }

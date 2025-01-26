@@ -27,6 +27,8 @@ namespace AKA_Ability
         //召唤技能列表，是技能的子集。存在这个是因为有时候需要调用召唤物
         public List<AKAbility_Summon> summonAbilities = new();
 
+        public bool shouldRefreshActiveStatus = true;
+
         public AKAbility_Base SelectedGroupedAbility
         {
             get
@@ -105,17 +107,38 @@ namespace AKA_Ability
         {
             AKAbility_Base ability = (AKAbility_Base)Activator.CreateInstance(def.abilityClass, def, this);
 
+            List<AKAbility_Base> allAbilities = this.innateAbilities;
             if (def.grouped)
             {
-                this.groupedAbilities.Add(ability);
+                allAbilities = this.groupedAbilities;
                 this.indexActiveGroupedAbility = 0;
             }
-            else this.innateAbilities.Add(ability);
 
             if (ability is AKAbility_Summon ab_summon)
             {
                 summonAbilities.Add(ab_summon);
             }
+
+            //fixme:临时的 以后优化
+            for (int i = 0; i < allAbilities.Count; ++i)
+            {
+                AKAbility_Base ab = allAbilities[i]; 
+                if (ab.def.sortOrder >= def.sortOrder)
+                {
+                    allAbilities.Insert(i, ability);
+                    return ability;
+                }
+            }
+
+            allAbilities.Add(ability);
+
+            /*if (def.grouped)
+            {
+                //this.groupedAbilities.Add(ability);
+            }*/
+            //else this.innateAbilities.Add(ability);
+
+
 
             return ability;
         }

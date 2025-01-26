@@ -16,6 +16,13 @@ namespace AKS_Shield.Extension
     {
         TCP_ExtraRenderStatic Props => props as TCP_ExtraRenderStatic;
 
+        public override void PostDraw()
+        {
+            if (!CompShield.ShouldDisplay) return;
+
+            DrawStaticOverlay(Props.bubbleStaticOverlay, Wearer, parent);
+        }
+
         public override void CompDrawWornExtras()
         {
             if (!CompShield.ShouldDisplay) return;

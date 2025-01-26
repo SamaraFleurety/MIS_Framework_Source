@@ -14,7 +14,8 @@
 
         public string failReason = "AKA_Disabled";
 
-        public abstract bool Castable(AKAbility_Base instance);
+        public bool ignoredByAuto = false;
 
+        public abstract bool Castable(AKAbility_Base instance);
     }
 }

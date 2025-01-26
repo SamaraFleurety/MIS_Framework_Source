@@ -24,11 +24,12 @@ namespace AKA_Ability
         public bool displayGizmoUndraft = false;  //不征召时是否显示按钮
 
         public bool grouped = false;        //技能分组 分组的技能同时只准带一个
+        //public List<>
 
         public Type abilityClass;           //技能class 目标选择逻辑和gizmo都在里面
 
         public List<AbilityEffectBase> compEffectList;
-        public bool allowInterrupt = false;   //如果是true 那会跟游戏王一样依次执行ae效果直到返回第一个false为止
+        public bool allowInterrupt = false;   //是否允许技能效果执行时中断 如果是true 那会跟游戏王一样依次执行ae效果直到返回第一个false为止
 
         //目标选择
         public TargetingParameters targetParams = TargetingParameters.ForPawns();
@@ -43,6 +44,8 @@ namespace AKA_Ability
         public int castConditionJudgeInterval = 10;
         //要满足所有条件才可以释放
         public List<CastConditioner_Base> castConditions = new();
+
+        public int sortOrder = 999; //自动排序，值越小越前
 
         //public List<ExtraGizmoDrawer_Base> extraGizmos = new();
         #region 非xml可填参数

@@ -199,6 +199,25 @@ namespace AKS_Shield
             absorbed = true;
         }
 
+        public override IEnumerable<Gizmo> CompGetWornGizmosExtra()
+        {
+            if (Wearer == null || Wearer.Faction.HostileTo(Faction.OfPlayer)) yield break;
+            foreach (var gizmo in GetGizmos()) yield return gizmo;
+        }
+
+        public virtual IEnumerable<Gizmo> GetGizmos()
+        {
+            yield return new Gizmo_ShieldStatus()
+            {
+                shield = this
+            };
+        }
+        #endregion
+
+        #region 原版护盾gizmo
+
+        public virtual string VanillaGizmoLabel => parent.LabelCap;
+        public virtual string VanillaGizmoDesc => parent.def.description;
         #endregion
 
         #region 舟味护盾条

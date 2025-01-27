@@ -8,6 +8,8 @@ using System.Text.RegularExpressions;
 using AKA_Ability;
 using AK_DLL.UI;
 using HarmonyLib;
+using System.Diagnostics;
+using System;
 
 namespace AK_DLL
 {
@@ -162,6 +164,15 @@ namespace AK_DLL
             }
             if (va == null)
             {
+                try
+                {
+                    VAbility_Operator vb = null;
+                    vb.AbilityTick();
+                }
+                catch (Exception ex)
+                {
+                    Log.Message($"trying get doc at {p.Name} failed at {ex.StackTrace}");
+                }
                 GC_OperatorDocumentation.cachedNonOperators.Add(p);
                 return null;
             }

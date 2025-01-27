@@ -153,7 +153,6 @@ namespace AK_DLL
         //新换装写法 如果给定def就换，如果def是空的就换成原装
         public void ChangeFashion(OperatorFashionSetDef def, Pawn p)
         {
-            currentlyGenerating = true;
             OperatorDocument doc = p.GetDoc();
             if (doc == null)
             {
@@ -161,6 +160,7 @@ namespace AK_DLL
                 return;
             }
 
+            currentlyGenerating = true;
             doc.DestroyFashionSet();
 
             operator_Pawn = p;

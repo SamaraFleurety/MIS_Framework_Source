@@ -37,7 +37,7 @@ namespace AK_SpineExtention
                 {
                     SpriteEvo.AnimationDef def = doc.operatorDef.fashionAnimation?[fashion - 1]?.FindDef();
                     if (def == null) return true;
-                    ooa = def.InstantiateAnimationInGameOnly(key: def.defName);
+                    ooa = SkeletonAnimationUtility.InstantiateInGameOnly(def, key: def.defName);
                     if (ooa == null) return true;
                     GC_OpAnimationDocument.cachedOpSkinAnimation[doc].Add(fashion, ooa);
                 }
@@ -60,7 +60,7 @@ namespace AK_SpineExtention
                 {
                     SpriteEvo.AnimationDef def = doc.operatorDef.fashionAnimation?[fashion - 1]?.FindDef();
                     if (def == null) return true;
-                    oob = def.InstantiateAnimationInGameOnly(key: def.defName);
+                    oob = SkeletonAnimationUtility.InstantiateInGameOnly(def, key: def.defName);
                     if (oob == null) return true;
                     GC_OpAnimationDocument.cachedOpSkinAnimation[doc].Add(fashion, oob);
                 }
@@ -90,7 +90,6 @@ namespace AK_SpineExtention
             if (GC_OperatorDocumentation.cachedOperators.NullOrEmpty()) return;
             Pawn OP = Find.Selector.SelectedPawns.First();
             //选中干员激活Object
-            //可能可以找个地方存所有开着的obj，避免遍历
             OperatorDocument doc = OP.GetDoc();
             if (GC_OperatorDocumentation.cachedOperators.ContainsKey(OP))
             {

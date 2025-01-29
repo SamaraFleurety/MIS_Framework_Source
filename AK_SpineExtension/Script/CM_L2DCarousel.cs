@@ -13,7 +13,7 @@ using Verse;
 namespace AK_SpineExtention
 {
     //通用的动态立绘切换脚本
-    public class CMP_L2DCarousel : CompatibleMonoBehaviourProperties
+    public class CMP_L2DCarousel : ScriptProperties
     {
         public string Idle = "Idle";
         public string Interact = "Interact";
@@ -26,7 +26,7 @@ namespace AK_SpineExtention
             scriptClass = typeof(CM_L2DCarousel);
         }
     }
-    public class CM_L2DCarousel : CompatibleMonoBehaviour
+    public class CM_L2DCarousel : ScriptBase
     {
         #region Inspector
         private CMP_L2DCarousel Props => props as CMP_L2DCarousel;

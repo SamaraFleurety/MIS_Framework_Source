@@ -14,7 +14,7 @@ namespace AK_SpineExtention
     public class GC_OpAnimationDocument : GameComponent
     {
         //干员皮肤对应动态立绘动画的缓存信息,每次存读档都必须清理重置，储存方式:,<K,KV>
-        public static Dictionary<OperatorDocument, Dictionary<int, GameObject>> cachedOpSkinAnimation;
+        public static Dictionary<OperatorDocument, Dictionary<int, GameObject>> cachedOpSkinAnimation = new();
 
         public GC_OpAnimationDocument(Game game)
         {

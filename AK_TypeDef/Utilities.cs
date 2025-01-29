@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using AK_DLL.Document;
+using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,19 @@ namespace AK_TypeDef
     [StaticConstructorOnStartup]
     public static class GenericUtilities
     {
+        #region 文档系统
+        public static T TryGetDoc<T>(this Thing t, string id = null) where T : DocumentBase
+        {
+            GC_Generic.Instance.documents.TryGetValue(t, out DocumentManager manager);
+            if (manager == null) return default;
+
+            id ??= typeof(T).FullName;
+
+            manager.documentTracker.TryGetValue(id, out DocumentBase res);
+            return res as T;
+        }
+        #endregion
+
         #region 检索Hediff
         /// <summary>
         /// 分支:

@@ -43,12 +43,13 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>D:\Docu\Tencent Files\1610207132\FileRecv\输出\Assembly-CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Spine38">
-      <HintPath>S:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\SpriteEvo\Assemblies\Spine38.dll</HintPath>
+    <Reference Include="Spine38, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Rely\Spine38.dll</HintPath>
     </Reference>
     <Reference Include="SpriteEvo, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>S:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\SpriteEvo\1.5\Assemblies\SpriteEvo.dll</HintPath>
+      <HintPath>..\Rely\SpriteEvo.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -71,6 +72,12 @@
     <Compile Include="HarmonyPatch\Patch_WindowsOnGUI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Script\CM_L2DCarousel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AK_TypeDef\1AK_TypeDef.csproj">
+      <Project>{ff2ece8f-73b3-49f0-82e6-bc15c45e33a6}</Project>
+      <Name>1AK_TypeDef</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -11,19 +11,19 @@ using SpriteEvo;
 namespace AK_SpineExtention
 {
     #region 左上角动态立绘
-    [HarmonyPatch(typeof(AK_Tool), "DrawBottomLeftPortrait")]
+    [HarmonyPatch(typeof(PatchWindowOnGUI), "DrawBottomLeftPortrait")]
     public class Patch_DrawBottomLeftPortrait
     {
         public static bool CanDrawNow => AK_ModSettings.displayAnimationLeftPortrait;
         [HarmonyPrefix]
         public static bool DrawAnimationtLeftPortrait()
         {
-            if (!CanDrawNow) return true;
-            if (Find.World == null || Find.CurrentMap == null || Find.Selector == null || Find.Selector.AnyPawnSelected == false || Find.Selector.SelectedPawns.Count == 0) return false;
+            if (!CanDrawNow) return HarmonyPrefixRet.keepOriginal;
+            if (Find.World == null || Find.CurrentMap == null || Find.Selector == null || Find.Selector.AnyPawnSelected == false || Find.Selector.SelectedPawns.Count == 0) return HarmonyPrefixRet.skipOriginal;
             Pawn p = Find.Selector.SelectedPawns.First();
-            if (p == null) return false;
+            if (p == null) return HarmonyPrefixRet.skipOriginal;
             OperatorDocument doc = AK_Tool.GetDoc(p);
-            if (doc == null) return false;
+            if (doc == null) return HarmonyPrefixRet.skipOriginal;
             //动态立绘显示
             int fashion = doc.preferedSkin;
             if ((fashion == 1) && (doc.operatorDef.fashionAnimation.Count > fashion - 1))
@@ -32,13 +32,13 @@ namespace AK_SpineExtention
                 {
                     GC_OpAnimationDocument.cachedOpSkinAnimation.Add(doc, new Dictionary<int, GameObject>());
                 }
-                GameObject ooa = GC_OpAnimationDocument.cachedOpSkinAnimation[doc].TryGetValue(fashion);
+                GC_OpAnimationDocument.cachedOpSkinAnimation[doc].TryGetValue(fashion, out GameObject ooa);
                 if (ooa == null)
                 {
                     SpriteEvo.AnimationDef def = doc.operatorDef.fashionAnimation?[fashion - 1]?.FindDef();
-                    if (def == null) return true;
+                    if (def == null) return HarmonyPrefixRet.keepOriginal;
                     ooa = SkeletonAnimationUtility.InstantiateInGameOnly(def, key: def.defName);
-                    if (ooa == null) return true;
+                    if (ooa == null) return HarmonyPrefixRet.keepOriginal;
                     GC_OpAnimationDocument.cachedOpSkinAnimation[doc].Add(fashion, ooa);
                 }
                 else
@@ -46,7 +46,7 @@ namespace AK_SpineExtention
                     if (ooa.activeInHierarchy)
                         Widgets.DrawTextureFitted(new Rect(AK_ModSettings.xOffset * 5, AK_ModSettings.yOffset * 5, 408, 408), ooa.AnimationTexture(), AK_ModSettings.ratio * 0.05f);
                 }
-                return false;
+                return HarmonyPrefixRet.skipOriginal;
             }
             //皮肤切换
             else if ((fashion > 1) && (doc.operatorDef.fashionAnimation.Count > fashion - 2))
@@ -55,13 +55,13 @@ namespace AK_SpineExtention
                 {
                     GC_OpAnimationDocument.cachedOpSkinAnimation.Add(doc, new Dictionary<int, GameObject>());
                 }
-                GameObject oob = GC_OpAnimationDocument.cachedOpSkinAnimation[doc].TryGetValue(fashion);
+                GC_OpAnimationDocument.cachedOpSkinAnimation[doc].TryGetValue(fashion, out GameObject oob);
                 if (oob == null)
                 {
                     SpriteEvo.AnimationDef def = doc.operatorDef.fashionAnimation?[fashion - 1]?.FindDef();
-                    if (def == null) return true;
+                    if (def == null) return HarmonyPrefixRet.keepOriginal;
                     oob = SkeletonAnimationUtility.InstantiateInGameOnly(def, key: def.defName);
-                    if (oob == null) return true;
+                    if (oob == null) return HarmonyPrefixRet.keepOriginal;
                     GC_OpAnimationDocument.cachedOpSkinAnimation[doc].Add(fashion, oob);
                 }
                 else
@@ -69,10 +69,10 @@ namespace AK_SpineExtention
                     if (oob.activeInHierarchy)
                         Widgets.DrawTextureFitted(new Rect(AK_ModSettings.xOffset * 5, AK_ModSettings.yOffset * 5, 408, 408), oob.AnimationTexture(), AK_ModSettings.ratio * 0.05f);
                 }
-                return false;
+                return HarmonyPrefixRet.skipOriginal;
             }
             //else
-            return true;
+            return HarmonyPrefixRet.keepOriginal;
         }
     }
     #endregion

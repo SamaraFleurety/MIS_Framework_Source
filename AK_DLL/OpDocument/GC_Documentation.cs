@@ -12,7 +12,7 @@ namespace AK_DLL
 {
     //下面这个GameComponent使用了和原版不一样的存读档流程。除非真的知道你在干什么，不然别改。
     //一个干员的档案
-    public class OperatorDocument : IExposable, ILoadReferenceable
+    public class OperatorDocument : IExposable/*, ILoadReferenceable*/
     {
         //开放开盒干员的权限
         public string operatorID;

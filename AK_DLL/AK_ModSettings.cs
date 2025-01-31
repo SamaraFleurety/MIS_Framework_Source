@@ -100,6 +100,7 @@ namespace AK_DLL
         //public List<Pawn> exampleListOfPawns = new List<Pawn>();
         //public Dictionary<string, Pawn>;
 
+        public static bool allowManualRegister = false;
 
         public override void ExposeData()
         {
@@ -156,6 +157,7 @@ namespace AK_DLL
             Scribe_Values.Look(ref lastViewedClass, "lastClass", -1);
             Scribe_Values.Look(ref lastViewedSeries, "lastSeries", -1);
             //Scribe_Collections.Look(ref exampleListOfPawns, "exampleListOfPawns", LookMode.Reference);
+            Scribe_Values.Look(ref allowManualRegister, "manualReg", false);
         }
     }
 
@@ -178,6 +180,7 @@ namespace AK_DLL
             Listing_Standard listingStandard = new Listing_Standard();
             listingStandard.Begin(inRect);
             if (Prefs.DevMode) listingStandard.CheckboxLabeled("测试模式", ref AK_ModSettings.debugOverride, "开启明日方舟MOD的测试模式。如果您不是测试人员请勿勾选此选项。");
+            if (Prefs.DevMode || AK_ModSettings.allowManualRegister) listingStandard.CheckboxLabeled("AK_Option_AllowReg".Translate(), ref AK_ModSettings.allowManualRegister, "AK_Option_AllowRegDesc".Translate());
             if (listingStandard.ButtonTextLabeled("AK_GUIBar_Setting".Translate(), "Open".Translate()))
             {
                 Find.WindowStack.Add(new DoBarSetting_Window());

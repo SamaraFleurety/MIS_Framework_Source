@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Verse;
 using UnityEngine;
 using RimWorld;
-
+using AK_TypeDef;
 
 namespace AK_DLL
 {
@@ -73,7 +73,21 @@ namespace AK_DLL
             apparel.Clear();
         }
 
+        //手动注册
+        public void ManualRegister(Pawn p)
+        {
+            OperatorDocument doc = p.GetDoc();
+            if (false && doc != null)
+            {
+                Log.Error("[AK] 此殖民者已经被视为干员，不能手动绑定");
+                return;
+            }
 
+            IntVec3 cell = p.Position;
+            Map map = p.Map;
+            p.Destroy();
+            this.operatorDef.Recruit(cell, map);
+        }
         public string GetUniqueLoadID()
         {
             return (this.operatorID + "Doc");

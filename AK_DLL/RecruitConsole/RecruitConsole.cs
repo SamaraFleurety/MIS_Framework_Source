@@ -7,6 +7,7 @@ using RimWorld.Planet;
 using HarmonyLib;
 using Verse.Sound;
 using UnityEngine;
+using Steamworks;
 
 namespace AK_DLL
 {
@@ -27,6 +28,26 @@ namespace AK_DLL
             if (selPawn.health.Dead || selPawn == null && selPawn.CanReach(this, PathEndMode.Touch, Danger.Deadly))
             {
                 yield return new FloatMenuOption("AK_PawnNull".Translate(), null); yield break;
+            }
+
+            //手动注册干员
+            if (AK_ModSettings.allowManualRegister)
+            {
+                foreach (OperatorDocument docu in GC_OperatorDocumentation.opDocArchive.Values)
+                {
+                    OperatorDef opdef = docu.operatorDef;
+                    if (selPawn.Name.ToString().Equals(new NameTriple(opdef.name, opdef.nickname, opdef.surname).ToString()))
+                    {
+                        yield return new FloatMenuOption("AK_ManualRegOp".Translate(opdef.nickname), delegate
+                        {
+                            OperatorDocument doc1 = docu;
+                            Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("AK_ManualRegConfirm".Translate(opdef.nickname), delegate
+                            {
+                                doc1.ManualRegister(selPawn);
+                            }));
+                        });
+                    }
+                }
             }
 
             //换装 右键直接出选项，没有ui
@@ -53,7 +74,7 @@ namespace AK_DLL
                 }
             }
 
-            foreach(FloatMenuOption i in base.GetFloatMenuOptions(selPawn))
+            foreach (FloatMenuOption i in base.GetFloatMenuOptions(selPawn))
             {
                 if (i != null) yield return i;
             }

@@ -7,6 +7,7 @@ using RimWorld.Planet;
 using FS_LivelyRim;
 using AKA_Ability;
 using AKM_MusicPlayer;
+using AK_TypeDef;
 
 namespace AK_DLL
 {
@@ -254,6 +255,7 @@ namespace AK_DLL
 
             //档案系统
             VAbility_Operator operatorID = Recruit_OperatorID(weapon);
+            operator_Pawn.AddDoc(new OpDocContainer(operator_Pawn) { va = operatorID });
             clothTemp.Clear();
 
             Recruit_Ability(operatorID);
@@ -267,7 +269,7 @@ namespace AK_DLL
                 }
             }
 
-            GC_OperatorDocumentation.cachedOperators.Add(operator_Pawn, operatorID.Document);
+            //GC_OperatorDocumentation.cachedOperators.Add(operator_Pawn, operatorID.Document);
 
             GenSpawn.Spawn(operator_Pawn, intVec, map);
             CameraJumper.TryJump(new GlobalTargetInfo(intVec, map));

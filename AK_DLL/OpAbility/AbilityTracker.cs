@@ -18,7 +18,7 @@ namespace AK_DLL
         public override void ExposeData()
         {
             base.ExposeData();
-            //Scribe_References.Look(ref doc, "doc");
+            Scribe_References.Look(ref doc, "doc");
         }
 
         public override void Notify_AbilityCasted(AKAbility_Base ability)

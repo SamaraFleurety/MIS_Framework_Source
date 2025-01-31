@@ -184,6 +184,7 @@
     <Compile Include="AK_ModSettings.cs" />
     <Compile Include="Def\OperatorDef\OperatorDef.cs" />
     <Compile Include="OpDocument\GC_Documentation.cs" />
+    <Compile Include="OpDocument\OpDocContainer.cs" />
     <Compile Include="RecruitConsole\Window\Dialog_Input.cs" />
     <Compile Include="RecruitPostEffectWorker\RecruitPostEffectWorker_Base.cs" />
     <Compile Include="Thing\Comp\TCP_DrawOverlay.cs" />

@@ -10,6 +10,7 @@ using AK_DLL.UI;
 using HarmonyLib;
 using System.Diagnostics;
 using System;
+using AK_TypeDef;
 
 namespace AK_DLL
 {
@@ -142,6 +143,11 @@ namespace AK_DLL
         {
             if (OperatorDef.currentlyGenerating) return null;
             if (p == null) return null;
+
+            OperatorDocument doc = p.TryGetDoc<OpDocContainer>()?.va?.Document;
+
+            if (doc != null) return doc;
+
             if (p.abilities == null) return null;
             if (!p.IsColonist) return null;
             if (GC_OperatorDocumentation.cachedOperators.ContainsKey(p))
@@ -159,6 +165,7 @@ namespace AK_DLL
                 {
                     va = vab;
                     GC_OperatorDocumentation.cachedOperators.Add(p, va.Document);
+                    p.AddDoc(new OpDocContainer() { parent = p, va = vab });
                     break;
                 }
             }
@@ -167,7 +174,7 @@ namespace AK_DLL
                 GC_OperatorDocumentation.cachedNonOperators.Add(p);
                 return null;
             }
-            OperatorDocument doc = va.Document;
+            doc = va.Document;
             return doc;
         }
         #endregion

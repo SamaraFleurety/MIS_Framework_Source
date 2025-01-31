@@ -15,13 +15,30 @@ namespace AK_TypeDef
         #region 文档系统
         public static T TryGetDoc<T>(this Thing t, string id = null) where T : DocumentBase
         {
-            GC_Generic.Instance.documents.TryGetValue(t, out DocumentManager manager);
+            GC_Generic.instance.documents.TryGetValue(t, out DocumentTracker manager);
             if (manager == null) return default;
 
             id ??= typeof(T).FullName;
 
-            manager.documentTracker.TryGetValue(id, out DocumentBase res);
+            manager.documents.TryGetValue(id, out DocumentBase res);
             return res as T;
+        }
+
+        public static void AddDoc<T>(this Thing t, T doc, string givenID = null) where T : DocumentBase
+        {
+            GC_Generic.instance.documents.TryGetValue(t, out DocumentTracker manager);
+            if (manager == null)
+            {
+                manager = new DocumentTracker() { parent = t };
+                GC_Generic.instance.documents.Add(t, manager);
+            }
+            givenID ??= typeof(T).FullName;
+            if (manager.documents.ContainsKey(givenID))
+            {
+                Log.Error($"[AK] 尝试给{t} 重复的文档:{givenID}");
+                return;
+            }
+            manager.documents.Add(givenID, doc);
         }
         #endregion
 

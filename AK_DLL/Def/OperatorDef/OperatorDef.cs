@@ -6,7 +6,7 @@ using UnityEngine;
 using RimWorld.Planet;
 using FS_LivelyRim;
 using AKA_Ability;
-using AKM_MusicPlayer;
+//using AKM_MusicPlayer;
 using AK_TypeDef;
 
 namespace AK_DLL
@@ -87,6 +87,8 @@ namespace AK_DLL
         public List<Type> postEffects = new List<Type>();
 
         public bool alwaysHidden = false;  //是否隐藏。被隐藏的干员不会在招募ui显示，仅能通过特殊手段出现。fixme:没做。
+
+        //static public SkillDef skillOfSex = new SkillDef() { skillLabel = "Sex" };
 
         public Type documentType = typeof(OperatorDocument);   //写了碧蓝之后发现档案甚至都可以扩充
         #endregion
@@ -406,6 +408,14 @@ namespace AK_DLL
                     AbilityEffect_AddHediff.AddHediff(operator_Pawn, i.hediff, i.part, customLabel: i.partCustomLabel, severity: i.serverity);
                 }
             }
+
+            // rjw
+            {
+                rjw.SexPartAdder.add_breasts(operator_Pawn);
+                rjw.SexPartAdder.add_anus(operator_Pawn);
+                rjw.SexPartAdder.add_genitals(operator_Pawn);
+            }
+
             return;
         }
         protected void FixAlienHairColor(HediffDef hediffDef)
@@ -448,6 +458,17 @@ namespace AK_DLL
             {
                 operator_Pawn.story.traits.GainTrait(new Trait(TraitAndDegree.def, TraitAndDegree.degree));
             }
+            {
+                // add virgin trait
+                if (operator_Pawn.gender == Gender.Female)
+                {
+                    operator_Pawn.story.traits.GainTrait(new Trait(RJWSexperience.RsDefOf.Trait.Virgin, 2));
+                } 
+                else if (operator_Pawn.gender == Gender.Male)
+                {
+                    operator_Pawn.story.traits.GainTrait(new Trait(RJWSexperience.RsDefOf.Trait.Virgin, 1));
+                }
+            }
             //特性更改
             operator_Pawn.story.Childhood = this.childHood;
             operator_Pawn.story.Adulthood = this.age < 20 ? null : this.adultHood;
@@ -463,6 +484,15 @@ namespace AK_DLL
                 {
                     passion = skillDef.fireLevel,
                     Level = skillDef.level
+                };
+                operator_Pawn.skills.skills.Add(skill);
+            }
+            {
+                // add sex herea
+                SkillRecord skill = new SkillRecord(operator_Pawn, RJWSexperience.RsDefOf.Skill.Sex)
+                {
+                    passion = 0,
+                    Level = 0
                 };
                 operator_Pawn.skills.skills.Add(skill);
             }
@@ -547,19 +577,19 @@ namespace AK_DLL
 
         protected void Recruit_ArkSongExtension()
         {
-            DefExt_ArkSong ext = this.GetModExtension<DefExt_ArkSong>();
-            if (ext == null) return;
-            ThingDef recordDef = DefDatabase<ThingDef>.GetNamed("AKM_Item_Record");
-            if (ext.arkSong != null)
-            {
-                ThingClass_MusicRecord t = Recruit_Inventory_Additem(recordDef, 1) as ThingClass_MusicRecord;
-                t.recordedSong = ext.arkSong;
-            }
-            foreach (ArkSongDef i in ext.arkSongs)
-            {
-                ThingClass_MusicRecord t = Recruit_Inventory_Additem(recordDef, 1) as ThingClass_MusicRecord;
-                t.recordedSong = i;
-            }
+            //DefExt_ArkSong ext = this.GetModExtension<DefExt_ArkSong>();
+            //if (ext == null) return;
+            //ThingDef recordDef = DefDatabase<ThingDef>.GetNamed("AKM_Item_Record");
+            //if (ext.arkSong != null)
+            //{
+            //    ThingClass_MusicRecord t = Recruit_Inventory_Additem(recordDef, 1) as ThingClass_MusicRecord;
+            //    t.recordedSong = ext.arkSong;
+            //}
+            //foreach (ArkSongDef i in ext.arkSongs)
+            //{
+            //    ThingClass_MusicRecord t = Recruit_Inventory_Additem(recordDef, 1) as ThingClass_MusicRecord;
+            //    t.recordedSong = i;
+            //}
         }
         #endregion
 

@@ -14,6 +14,7 @@ namespace AK_DLL
     public abstract class RIWindow : UGUIWindow_Base
     {
         public GameObject L2DInstance = null; //干员l2d的模型本身
+        public GameObject spineInstance = null;
 
         internal AssetBundle Bundle => AK_Tool.FSAsset;
 

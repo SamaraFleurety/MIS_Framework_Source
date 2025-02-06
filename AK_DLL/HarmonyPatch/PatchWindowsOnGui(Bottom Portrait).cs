@@ -27,7 +27,7 @@ namespace AK_DLL
             Pawn p = Find.Selector.SelectedPawns.First();
             if (p == null) return;
             OperatorDocument doc = AK_Tool.GetDoc(p);
-            if (doc == null) return;
+            if (doc == null || doc.preferedSkin >= 1000) return; //这里仅支持静态立绘渲染
 
             Color color = GUI.color;
             GUI.color = new Color(1f, 1f, 1f, AK_ModSettings.opacity / 100f);

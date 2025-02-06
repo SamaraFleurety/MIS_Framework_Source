@@ -10,7 +10,8 @@ using SpriteEvo;
 
 namespace AK_SpineExtention
 {
-    #region 左上角动态立绘
+
+    #region 左上角动态立绘LiveModelDef
     [HarmonyPatch(typeof(PatchWindowOnGUI), "DrawBottomLeftPortrait")]
     public class Patch_DrawBottomLeftPortrait
     {
@@ -37,7 +38,7 @@ namespace AK_SpineExtention
                 {
                     SpriteEvo.AnimationDef def = doc.operatorDef.fashionAnimation?[fashion - 1]?.FindDef();
                     if (def == null) return HarmonyPrefixRet.keepOriginal;
-                    ooa = SkeletonAnimationUtility.InstantiateInGameOnly(def, key: def.defName);
+                    ooa = SkeletonAnimationUtility.InstantiateSpine(def, key: def.defName);
                     if (ooa == null) return HarmonyPrefixRet.keepOriginal;
                     GC_OpAnimationDocument.cachedOpSkinAnimation[doc].Add(fashion, ooa);
                 }
@@ -60,7 +61,7 @@ namespace AK_SpineExtention
                 {
                     SpriteEvo.AnimationDef def = doc.operatorDef.fashionAnimation?[fashion - 1]?.FindDef();
                     if (def == null) return HarmonyPrefixRet.keepOriginal;
-                    oob = SkeletonAnimationUtility.InstantiateInGameOnly(def, key: def.defName);
+                    oob = SkeletonAnimationUtility.InstantiateSpine(def, key: def.defName);
                     if (oob == null) return HarmonyPrefixRet.keepOriginal;
                     GC_OpAnimationDocument.cachedOpSkinAnimation[doc].Add(fashion, oob);
                 }

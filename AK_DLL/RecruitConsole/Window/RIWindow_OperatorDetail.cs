@@ -250,6 +250,7 @@ namespace AK_DLL.UI
 
         private bool canRecruit;
 
+        //0~999是静态立绘，1000-1999是l2d，2000-2999是spine
         int preferredSkin = 1;  //当前选中皮肤。同时存储于干员文档（如果有）来实现主界面左下角显示立绘，和mod设置的秘书选择。
 
         static int preferredVanillaSkillChart = 0;
@@ -263,7 +264,7 @@ namespace AK_DLL.UI
         GameObject floatingBubbleInstance;
 
         public GameObject OpStand; //干员静态立绘的渲染目标
-        public GameObject OpL2D;   //干员动态立绘的渲染目标（不是模型本身）
+        public GameObject OpL2DRenderTarget;   //干员动态立绘的渲染目标（不是模型本身）
         static string OpL2DRenderTargetName = "L2DRenderTarget";  //干员动态立绘的渲染目标的名字
 
         #region 快捷属性
@@ -295,12 +296,6 @@ namespace AK_DLL.UI
         {
             return int.Parse(clickedBtn.name.Substring(RIWindow_OperatorList.orderInName));
         }
-
-        /*private int btnOpAbilityAbsOrder(GameObject clickedBtn)
-        {
-            // FSUI_OpAb_{i}_{logicOrder}
-            return int.Parse(clickedBtn.name[10].ToString());
-        }*/
 
         private int PreferredAbility
         {
@@ -360,7 +355,7 @@ namespace AK_DLL.UI
             floatingBubbleInstance.SetActive(false);
 
             OpStand = GameObject.Find("OpStand");
-            OpL2D = GameObject.Find(OpL2DRenderTargetName);
+            OpL2DRenderTarget = GameObject.Find(OpL2DRenderTargetName);
         }
         #region 绘制UI
 
@@ -474,6 +469,23 @@ namespace AK_DLL.UI
                         ChangeStandTo(j);
                     });
                     fashionBtns.Add(j, fashionIcon);
+                    ++logicOrder;
+                }
+            }
+            //spine2d动态换装
+            if (ModLister.GetActiveModWithIdentifier("Paluto22.SpriteEvo") != null)
+            {
+                v3 = fashionIconPrefab.transform.localPosition;
+                for (int i = 0; i < Def.fashionAnimation.Count; ++i)
+                {
+                    fashionIcon = GameObject.Instantiate(fashionIconPrefab, FashionPanel);
+                    fashionIcon.transform.localPosition = new Vector3(v3.x * logicOrder, v3.y);
+                    int k = i + 2000;
+                    fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate
+                    {
+                        ChangeStandTo(k);
+                    });
+                    fashionBtns.Add(k, fashionIcon);
                     ++logicOrder;
                 }
             }
@@ -780,8 +792,9 @@ namespace AK_DLL.UI
         {
             //禁用掉之前的立绘
             OpStand.SetActive(false);
-            OpL2D.SetActive(false);
-            if (L2DInstance != null) L2DInstance.SetActive(false);
+            OpL2DRenderTarget.SetActive(false);
+            L2DInstance?.SetActive(false);
+            spineInstance?.SetActive(false);
 
             //静态立绘
             if (preferredSkin < 1000)
@@ -790,13 +803,29 @@ namespace AK_DLL.UI
                 AK_Tool.DrawStaticOperatorStand(Def, preferredSkin, OpStand);
             }
             //l2d
-            else
+            else if (preferredSkin < 2000)
             {
-                OpL2D.SetActive(true);
-                RIWindow_MainMenu.SetLive2dDefaultCanvas(false);
+                OpL2DRenderTarget.SetActive(true);
+                RIWindow_MainMenu.SetLive2dDefaultCanvas(false); //就用ui的 canvas就可以
                 //FS_Tool.SetDefaultCanvas(false); //ui有canvas
                 //L2DInstance = FS_Utilities.DrawModel(DisplayModelAt.RIWDetail, RIWindowHandler.def.Live2DModelDef(Def.live2dModel[preferredSkin - 1000]), OpL2D);
-                L2DInstance = RIWindow_MainMenu.DrawLive2DModel(Def, 4/*DisplayModelAt.RIWDetail*/, Def.live2dModel[preferredSkin - 1000], OpL2D);
+                L2DInstance = RIWindow_MainMenu.DrawLive2DModel(/*Def, */4/*DisplayModelAt.RIWDetail*/, Def.live2dModel[preferredSkin - 1000], OpL2DRenderTarget);
+            }
+            else
+            {
+                Log.Message("a");
+                OpL2DRenderTarget.SetActive(true);
+
+                Log.Message("b");
+                Image compImage = OpL2DRenderTarget.GetComponent<Image>();
+                compImage.material ??= AK_Tool.FSAsset.LoadAsset<Material>("OffScreenCameraMaterial");
+
+                Log.Message("d");
+                spineInstance = RIWindow_MainMenu.DrawSpine2DModel(Def.fashionAnimation[preferredSkin - 2000]);
+
+                Log.Message("e");
+                compImage.material.mainTexture = spineInstance.GetComponentInChildren<Camera>().targetTexture;
+                Log.Message("f");
             }
         }
 
@@ -808,10 +837,11 @@ namespace AK_DLL.UI
 
             if (doc != null)
             {
-                if (val < 1000)
+                doc.preferedSkin = val;
+                /*if (val < 1000)
                 {
                     doc.preferedSkin = val;
-                }
+                }*/
             }
             //禁用之前的换装按钮
             fBtn = fashionBtns[preferredSkin];

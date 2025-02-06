@@ -1,4 +1,5 @@
 ﻿using Live2D.Cubism.FSAddon;
+using System.Reflection;
 using UnityEngine;
 using Verse;
 
@@ -11,6 +12,47 @@ namespace FS_LivelyRim
         static GameObject defaultCanvas => FS_Tool.defaultCanvas;
         static GameObject defaultModelInstance => FS_Tool.defaultModelInstance;
         #endregion
+
+        public static void VerifyL2DDefname(string nickname, string defname)
+        {
+            LiveModelDef i = DefDatabase<LiveModelDef>.GetNamed(defname);
+
+            if (defname == null)
+            {
+                Log.Error($"[L2D] 不存在 l2d def {defname}");
+            }
+            if (ModLister.GetActiveModWithIdentifier(i.modID) == null)
+            {
+                Log.Error($"FS.L2D. error with {nickname}'s live2d named {i} : missing mod with ID {i.modID}");
+                return;
+            }
+            AssetBundle ab = FS_Tool.LoadAssetBundle(i.modID, i.assetBundle);
+            if (ab == null)
+            {
+                Log.Error($"FS.L2D. error with {nickname}'s live2d named {i} : missing assetbundle named {i.assetBundle}");
+                return;
+            }
+            GameObject modelPrefab = ab.LoadAsset<GameObject>(i.modelName);
+            if (modelPrefab == null)
+            {
+                Log.Error($"FS.L2D. error with {nickname}'s live2d named {i} : missing model named {i.modelName}");
+                return;
+            }
+        }
+
+        public static LiveModelDef Live2DModelDef(string live2dModel)
+        {
+            return DefDatabase<LiveModelDef>.GetNamed(live2dModel);
+        }
+
+        public static GameObject DrawLive2DModel(int drawAt, string l2dDefname, GameObject renderTarget = null)
+        {
+            return DrawModel(drawAt, Live2DModelDef(l2dDefname), renderTarget);
+
+            /*MethodInfo method = typeof(FS_Utilities).GetMethod("DrawModel", BindingFlags.Public | BindingFlags.Static);
+            return (GameObject)method.Invoke(null, new object[] { drawAt, def.Live2DModelDef(l2dDefname), renderTarget });*/
+            //return FS_Utilities.DrawModel(drawAt, RIWindowHandler.def.Live2DModelDef(l2dDefname), renderTarget);
+        }
 
         //离屏相机的原输出。
         public static RenderTexture OffScreenCameraRenderTarget => OffscreenRendering.OffCamera.targetTexture;

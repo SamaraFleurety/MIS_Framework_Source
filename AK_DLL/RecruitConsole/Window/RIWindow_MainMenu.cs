@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using FS_LivelyRim;
 using System.Reflection;
+using SpriteEvo;
 
 namespace AK_DLL.UI
 {
@@ -394,6 +395,8 @@ namespace AK_DLL.UI
         {
             OpStand.SetActive(false);
             OpL2D.SetActive(false);
+            L2DInstance?.SetActive(false);
+            spineInstance?.SetActive(false);
 
             if (SecretaryDef == null)
             {
@@ -409,21 +412,38 @@ namespace AK_DLL.UI
                 GameObject opStandObj = GameObject.Find("OpStand");
                 AK_Tool.DrawStaticOperatorStand(SecretaryDef, preferredSkin, opStandObj, SecretaryLoc);
             }
-            else
+            else if (preferredSkin < 2000)
             {
                 OpL2D.SetActive(true);
                 //L2DInstance =  AK_Tool.DrawLive2DOperatorStand(SecretaryDef, preferredSkin, OpL2D);
                 //L2DInstance = FS_Utilities.DrawModel(DisplayModelAt.RIWMain, RIWindowHandler.def.Live2DModelDef(SecretaryDef.live2dModel[preferredSkin - 1000]), OpL2D);
-                L2DInstance = DrawLive2DModel(SecretaryDef, 3/*DisplayModelAt.RIWMain*/, SecretaryDef.live2dModel[preferredSkin - 1000], OpL2D);
+                L2DInstance = DrawLive2DModel(/*SecretaryDef, */3/*DisplayModelAt.RIWMain*/, SecretaryDef.live2dModel[preferredSkin - 1000], OpL2D);
                 L2DInstance.transform.position = SecretaryLoc;
+            }
+            else
+            {
+                OpL2D.SetActive(true);
+                
+                Image compImage = OpL2D.GetComponent<Image>();
+                compImage.material ??= AK_Tool.FSAsset.LoadAsset<Material>("OffScreenCameraMaterial");
+
+                spineInstance = DrawSpine2DModel(SecretaryDef.fashionAnimation[preferredSkin - 2000]);
+
+                compImage.material.mainTexture = spineInstance.GetComponentInChildren<Camera>().targetTexture;
             }
         }
 
-        public static GameObject DrawLive2DModel(OperatorDef def, int drawAt, string l2dDefname, GameObject renderTarget = null)
+        public static GameObject DrawLive2DModel(int drawAt, string l2dDefname, GameObject renderTarget = null)
         {
-            MethodInfo method = typeof(FS_Utilities).GetMethod("DrawModel", BindingFlags.Public | BindingFlags.Static);
-            return (GameObject)method.Invoke(null, new object[] { drawAt, def.Live2DModelDef(l2dDefname), renderTarget });
+            MethodInfo method = typeof(FS_Utilities).GetMethod("DrawLive2DModel", BindingFlags.Public | BindingFlags.Static);
+            return (GameObject)method.Invoke(null, new object[] { drawAt, l2dDefname, renderTarget });
             //return FS_Utilities.DrawModel(drawAt, RIWindowHandler.def.Live2DModelDef(l2dDefname), renderTarget);
+        }
+
+        public static GameObject DrawSpine2DModel(string spineDefname)
+        {
+            MethodInfo method = typeof(SkeletonAnimationUtility).GetMethod("InstantiateSpineByDefname", BindingFlags.Public | BindingFlags.Static);
+            return (GameObject)method.Invoke(null, new object[] { spineDefname, spineDefname, 2, true, true, true, null });
         }
 
         //FIXME 没做

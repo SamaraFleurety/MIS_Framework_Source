@@ -71,9 +71,8 @@
     <Reference Include="HarmonyMod">
       <HintPath>./packages/HarmonyMod.dll</HintPath>
     </Reference>
-    <Reference Include="LivelyRim, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>S:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\LivelyRim\Assemblies\LivelyRim.dll</HintPath>
+    <Reference Include="SpriteEvo">
+      <HintPath>..\Rely\SpriteEvo.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -217,6 +216,10 @@
     <ProjectReference Include="..\AKR_WeightedRandomUnified\AKR_WeightedRandomUnified.csproj">
       <Project>{CE31C711-E3F1-43D2-AD6A-216097EE20AB}</Project>
       <Name>AKR_WeightedRandomUnified</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LivelyRim\FS_LivelyRim.csproj">
+      <Project>{ca2d2594-7051-4fc9-b1e1-ef077f439fcf}</Project>
+      <Name>FS_LivelyRim</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

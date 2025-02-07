@@ -27,7 +27,7 @@ namespace AK_SpineExtention
             base.StartedNewGame();
             if (ModLister.GetActiveModWithIdentifier("MIS.Arknights") != null)
             {
-                Find.LetterStack.ReceiveLetter(Translator.Translate("AK_StartLabel"), Translator.Translate("AK_StartDesc"), LetterDefOf.NeutralEvent, null);
+                Find.LetterStack.ReceiveLetter(Translator.Translate("AK_StartLabel"), Translator.Translate("AK_StartDesc"), LetterDefOf.NeutralEvent, debugInfo: null);
             }
             cachedOpSkinAnimation = new Dictionary<OperatorDocument, Dictionary<int, GameObject>>();
         }

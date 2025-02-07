@@ -16,7 +16,7 @@ namespace FS_LivelyRim
         public static void VerifyL2DDefname(string nickname, string defname)
         {
             LiveModelDef i = DefDatabase<LiveModelDef>.GetNamed(defname);
-
+            
             if (defname == null)
             {
                 Log.Error($"[L2D] 不存在 l2d def {defname}");

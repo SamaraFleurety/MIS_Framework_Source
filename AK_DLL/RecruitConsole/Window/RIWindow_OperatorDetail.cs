@@ -8,6 +8,7 @@ using TMPro;
 using FSUI;
 using FS_LivelyRim;
 using AKA_Ability;
+using SpriteEvo;
 
 namespace AK_DLL.UI
 {
@@ -813,19 +814,19 @@ namespace AK_DLL.UI
             }
             else
             {
-                Log.Message("a");
                 OpL2DRenderTarget.SetActive(true);
 
-                Log.Message("b");
                 Image compImage = OpL2DRenderTarget.GetComponent<Image>();
                 compImage.material ??= AK_Tool.FSAsset.LoadAsset<Material>("OffScreenCameraMaterial");
 
-                Log.Message("d");
                 spineInstance = RIWindow_MainMenu.DrawSpine2DModel(Def.fashionAnimation[preferredSkin - 2000]);
 
-                Log.Message("e");
-                compImage.material.mainTexture = spineInstance.GetComponentInChildren<Camera>().targetTexture;
-                Log.Message("f");
+                Camera camera = spineInstance.GetComponentInChildren<Camera>();
+                if (camera.targetTexture.width != 1920 || camera.targetTexture.height != 1080)
+                {
+                    camera.targetTexture = new RenderTexture(1920, 1080, 24);
+                }
+                compImage.material.mainTexture = camera.targetTexture;
             }
         }
 

@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 using FS_LivelyRim;
 using System.Reflection;
 using SpriteEvo;
+using RimWorld;
 
 namespace AK_DLL.UI
 {
@@ -429,7 +430,10 @@ namespace AK_DLL.UI
 
                 spineInstance = DrawSpine2DModel(SecretaryDef.fashionAnimation[preferredSkin - 2000]);
 
-                compImage.material.mainTexture = spineInstance.GetComponentInChildren<Camera>().targetTexture;
+                Camera camera = spineInstance.GetComponentInChildren<Camera>();
+                camera.targetTexture.width = 1920;
+                camera.targetTexture.height = 1080;
+                compImage.material.mainTexture = camera.targetTexture;
             }
         }
 

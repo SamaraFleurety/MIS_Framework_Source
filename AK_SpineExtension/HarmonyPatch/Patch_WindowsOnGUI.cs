@@ -12,7 +12,7 @@ namespace AK_SpineExtention
 {
 
     #region 左上角动态立绘LiveModelDef
-    [HarmonyPatch(typeof(PatchWindowOnGUI), "DrawBottomLeftPortrait")]
+    /*[HarmonyPatch(typeof(PatchWindowOnGUI), "DrawBottomLeftPortrait")]
     public class Patch_DrawBottomLeftPortrait
     {
         public static bool CanDrawNow => AK_ModSettings.displayAnimationLeftPortrait;
@@ -134,6 +134,6 @@ namespace AK_SpineExtention
                 }
             }
         }
-    }
+    }*/
     #endregion
 }

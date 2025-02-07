@@ -51,20 +51,8 @@ namespace AK_DLL
         public override void Close(bool closeEV = true)
         {
             L2DInstance?.SetActive(false);
+            spineInstance?.SetActive(false);
             base.Close(closeEV);
-
-            /*this.UIInstance.SetActive(false);
-            GameObject.Destroy(UIInstance);
-            if (L2DInstance != null)
-            {
-                L2DInstance.SetActive(false);
-                L2DInstance = null;
-            }
-            if (closeEV)
-            {
-                AK_Tool.SetEV(false);
-                AK_Tool.disableIMGUI = false;
-            }*/
         }
     }
 }

@@ -260,7 +260,7 @@ namespace AK_DLL.UI
 
         List<GameObject> vanillaSkillBtns;  //0,1: 条形图; 2,3: 雷达图
 
-        List<GameObject> opSkills;  //只有可选技能被加进来。
+        List<GameObject> opSkills = new();  //只有可选技能被加进来。
 
         GameObject floatingBubbleInstance;
 
@@ -506,7 +506,6 @@ namespace AK_DLL.UI
             });
 
             //柱状图
-            //GameObject skillBarPanelPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("SkillBarPanel");
             GameObject skillBarPanel = GameObject.Find("SkillBarPanel");
             GameObject skillBar;
             for (int i = 0; i < TypeDef.SortOrderSkill.Count; ++i)
@@ -676,7 +675,9 @@ namespace AK_DLL.UI
                     {
                         this.Close(true);
                         RecruitConsole.TryGetComp<CompRefuelable>().ConsumeFuel(Def.ticketCost);
-                        Def.Recruit(RecruitConsole.Map);
+                        Pawn resultPawn = Def.Recruit(RecruitConsole.Map);
+                        OperatorDocument doc = resultPawn.GetDoc();
+                        doc.preferedSkin = this.preferredSkin;
                         if (RIWindowHandler.continuousRecruit) //连续招募
                         {
                             RIWindowHandler.OpenRIWindow(AKDefOf.AK_Prefab_yccOpList /*RIWindowType.Op_List*/);
@@ -694,7 +695,7 @@ namespace AK_DLL.UI
                 button.onClick.AddListener(delegate ()
                 {
                     windowPurpose = OpDetailType.Recruit;
-                    AK_ModSettings.secretary = AK_Tool.GetOperatorIDFrom(Def.defName);
+                    AK_ModSettings.secretary = Def.defName;
                     AK_ModSettings.secretarySkin = preferredSkin;
                     if (preferredSkin < 1000)
                     {
@@ -766,7 +767,7 @@ namespace AK_DLL.UI
         private void SwitchGroupedSkillTo(int val)
         {
             if (AK_ModSettings.debugOverride) Log.Message($"try switch skills to {val}");
-            if (doc == null || doc.currentExist == false || Def.AKAbilities.Count == 0) return;
+            if (doc == null || doc.currentExist == false || Def.AKAbilities.Count == 0 || opSkills.Count <= PreferredAbility) return;
             opSkills[PreferredAbility].transform.GetChild(1).gameObject.SetActive(false);
             PreferredAbility = val;
             opSkills[PreferredAbility].transform.GetChild(1).gameObject.SetActive(true);
@@ -817,16 +818,17 @@ namespace AK_DLL.UI
                 OpL2DRenderTarget.SetActive(true);
 
                 Image compImage = OpL2DRenderTarget.GetComponent<Image>();
-                compImage.material ??= AK_Tool.FSAsset.LoadAsset<Material>("OffScreenCameraMaterial");
+                //compImage.material ??= AK_Tool.FSAsset.LoadAsset<Material>("OffScreenCameraMaterial");
 
                 spineInstance = RIWindow_MainMenu.DrawSpine2DModel(Def.fashionAnimation[preferredSkin - 2000]);
 
-                Camera camera = spineInstance.GetComponentInChildren<Camera>();
+                /*Camera camera = spineInstance.GetComponentInChildren<Camera>();
                 if (camera.targetTexture.width != 1920 || camera.targetTexture.height != 1080)
                 {
                     camera.targetTexture = new RenderTexture(1920, 1080, 24);
                 }
-                compImage.material.mainTexture = camera.targetTexture;
+                compImage.material.mainTexture = camera.targetTexture;*/
+                compImage.material.mainTexture = RIWindow_MainMenu.GetOrSetSpineRenderTexture(spineInstance);
             }
         }
 

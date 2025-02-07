@@ -232,7 +232,7 @@ namespace AK_DLL.UI
             }
         }
 
-        private OperatorDef SecretaryDef => AK_Tool.GetDef(AK_ModSettings.secretary);
+        private OperatorDef SecretaryDef => DefDatabase<OperatorDef>.GetNamed(AK_ModSettings.secretary);
 
         private Vector3 SecretaryLoc
         {
@@ -399,13 +399,32 @@ namespace AK_DLL.UI
             L2DInstance?.SetActive(false);
             spineInstance?.SetActive(false);
 
+            //因为添加移除mod后导致的，缺失秘书
             if (SecretaryDef == null)
             {
                 Log.Error($"[MIS] missing operator named {AK_ModSettings.secretary}");
-                return;
+                List<OperatorDef> allOpDefs = DefDatabase<OperatorDef>.AllDefsListForReading;
+                if (allOpDefs.NullOrEmpty()) return;
+                AK_ModSettings.secretary = allOpDefs.RandomElement().defName;
+                AK_ModSettings.secretarySkin = 1;
+                Log.Message($"[MIS] setting secretary as {SecretaryDef}");
+                AK_Mod.settings.Write();
             }
 
+
             int preferredSkin = AK_ModSettings.secretarySkin;
+            if (preferredSkin >= 2000 && ModLister.GetActiveModWithIdentifier("Paluto22.SpriteEvo") == null) //之前是spine，但现在不可能
+            {
+                AK_ModSettings.secretarySkin = 1;
+                preferredSkin = 1;
+                AK_Mod.settings.Write();
+            }
+            else if (preferredSkin >= 1000 && ModLister.GetActiveModWithIdentifier("FS.LivelyRim") == null) //现在不能播l2d
+            {
+                AK_ModSettings.secretarySkin = 1;
+                preferredSkin = 1;
+                AK_Mod.settings.Write();
+            }
 
             if (preferredSkin < 1000)
             {
@@ -426,14 +445,14 @@ namespace AK_DLL.UI
                 OpL2D.SetActive(true);
                 
                 Image compImage = OpL2D.GetComponent<Image>();
-                compImage.material ??= AK_Tool.FSAsset.LoadAsset<Material>("OffScreenCameraMaterial");
+                //compImage.material ??= AK_Tool.FSAsset.LoadAsset<Material>("OffScreenCameraMaterial");
 
                 spineInstance = DrawSpine2DModel(SecretaryDef.fashionAnimation[preferredSkin - 2000]);
 
-                Camera camera = spineInstance.GetComponentInChildren<Camera>();
+                /*Camera camera = spineInstance.GetComponentInChildren<Camera>();
                 camera.targetTexture.width = 1920;
-                camera.targetTexture.height = 1080;
-                compImage.material.mainTexture = camera.targetTexture;
+                camera.targetTexture.height = 1080;*/
+                compImage.material.mainTexture = GetOrSetSpineRenderTexture(spineInstance);
             }
         }
 
@@ -448,6 +467,16 @@ namespace AK_DLL.UI
         {
             MethodInfo method = typeof(SkeletonAnimationUtility).GetMethod("InstantiateSpineByDefname", BindingFlags.Public | BindingFlags.Static);
             return (GameObject)method.Invoke(null, new object[] { spineDefname, spineDefname, 2, true, true, true, null });
+        }
+
+        public static RenderTexture GetOrSetSpineRenderTexture(GameObject spine, int width = 1920, int height = 1080)
+        {
+            Camera camera = spine.GetComponentInChildren<Camera>();
+            if (camera.targetTexture.width != width || camera.targetTexture.height != height)
+            {
+                camera.targetTexture = new RenderTexture(width, height, 24);
+            }
+             return camera.targetTexture;
         }
 
         //FIXME 没做

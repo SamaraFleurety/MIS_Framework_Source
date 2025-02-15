@@ -12,9 +12,14 @@ namespace AKA_Ability.AbilityEffect
     {
         public PawnKindDef summonedDef;  //召唤物
 
+        public DutyDef dutyDef;
+
         protected override Thing GenerateSummoned(AKAbility_Summon source)
         {
-            return PawnGenerator.GeneratePawn(summonedDef, source.CasterPawn.Faction);
+            var pawn = PawnGenerator.GeneratePawn(summonedDef, source.CasterPawn.Faction);
+            var lord = LordMaker.MakeNewLord(source.CasterPawn.Faction, new LordJob_Variable(dutyDef, null, null, null, 15f), source.CasterPawn.Map);
+            lord.AddPawn(pawn);
+            return pawn;
         }
     }
 }

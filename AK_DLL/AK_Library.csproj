@@ -55,7 +55,7 @@
     </Reference>
     <Reference Include="Assembly-CSharp, Version=1.5.8838.19357, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\SSR_Framework\Solar-System-Republic-Framework\FS_SSR\bin\Debug\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\Rely\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="com.rlabrecque.steamworks.net, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -131,6 +131,9 @@
   <ItemGroup>
     <Compile Include="AK_Algorithm.cs" />
     <Compile Include="AK_Tool4Unity.cs" />
+    <Compile Include="BanOperator\Patch_DefsInMod.cs" />
+    <Compile Include="BanOperator\Patch_ForbidCrossRef.cs" />
+    <Compile Include="BanOperator\Patch_test.cs" />
     <Compile Include="DebugTools.cs" />
     <Compile Include="Def\OperatorClassDef.cs" />
     <Compile Include="Def\OperatorDef\HediffStat.cs" />
@@ -210,8 +213,7 @@
     <Compile Include="RecruitConsole\Window\RIWindow_OperatorList.cs" />
     <Compile Include="VoicePlayer\VoicePlayer.cs" />
   </ItemGroup>
-  <ItemGroup>
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\AKR_WeightedRandomUnified\AKR_WeightedRandomUnified.csproj">
       <Project>{CE31C711-E3F1-43D2-AD6A-216097EE20AB}</Project>

@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Verse;
+using Verse.AI;
+using Verse.AI.Group;
 
 namespace AKA_Ability.AbilityEffect
 {
@@ -17,8 +19,11 @@ namespace AKA_Ability.AbilityEffect
         protected override Thing GenerateSummoned(AKAbility_Summon source)
         {
             var pawn = PawnGenerator.GeneratePawn(summonedDef, source.CasterPawn.Faction);
-            var lord = LordMaker.MakeNewLord(source.CasterPawn.Faction, new LordJob_Variable(dutyDef, null, null, null, 15f), source.CasterPawn.Map);
-            lord.AddPawn(pawn);
+            if (dutyDef != null)
+            {
+                var lord = LordMaker.MakeNewLord(source.CasterPawn.Faction, new LordJob_Variable(dutyDef, null, null, null, 15f), source.CasterPawn.Map);
+                lord.AddPawn(pawn);
+            }
             return pawn;
         }
     }

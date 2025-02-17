@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using HarmonyLib;
+using System.Reflection;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -174,6 +176,12 @@ namespace AK_DLL
         public AK_Mod(ModContentPack content) : base(content)
         {
             settings = GetSettings<AK_ModSettings>();
+            Harmony instance = new Harmony("AK_DLL");
+            instance.PatchAll(Assembly.GetExecutingAssembly());
+            if (ModLister.GetActiveModWithIdentifier("Nals.FacialAnimation") == null)
+            {
+                instance.Patch(original: AccessTools.Method(typeof(PawnRenderer), "ParallelGetPreRenderResults"), prefix: new HarmonyMethod(typeof(Patch_PreRenderResults), nameof(Patch_PreRenderResults.Prefix_ParallelGetPreRenderResults)));
+            }
         }
         public override void DoSettingsWindowContents(Rect inRect)
         {

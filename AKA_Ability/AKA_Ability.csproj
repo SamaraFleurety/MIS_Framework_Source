@@ -118,6 +118,7 @@
     <Compile Include="AbilityEffect\AddHediff\DpsEnhance\HCP_DpsEnhance_Ranged.cs" />
     <Compile Include="AbilityEffect\AddHediff\DpsEnhance\HC_DpsEnhance_Melee.cs" />
     <Compile Include="AbilityEffect\AddHediff\DpsEnhance\HC_DpsEnhance_Ranged.cs" />
+    <Compile Include="AbilityEffect\AddHediff\DpsEnhance\HC_RemoveAfterAttack.cs" />
     <Compile Include="AbilityEffect\AddHediff\Regrow\AE_Regrow.cs" />
     <Compile Include="AbilityEffect\AddHediff\Regrow\HC_Regrow.cs" />
     <Compile Include="AbilityEffect\AE_SpawnMote.cs" />
@@ -129,8 +130,10 @@
     <Compile Include="AbilityEffect\Command\AE_RewardTool.cs" />
     <Compile Include="AbilityEffect\CostCharges\AE_CostChargeStatic.cs" />
     <Compile Include="AbilityEffect\AssignJob\AE_AssignJob.cs" />
+    <Compile Include="AbilityEffect\Effect\AE_ArcAOE.cs" />
     <Compile Include="AbilityEffect\Effect\AE_CatchMother.cs" />
     <Compile Include="AbilityEffect\DelayedEffects\AE_DelayedEffects.cs" />
+    <Compile Include="AbilityEffect\Effect\AE_Effecter.cs" />
     <Compile Include="AbilityEffect\Effect\AE_Explode.cs" />
     <Compile Include="AbilityEffect\Effect\AE_FireExtinguisher.cs" />
     <Compile Include="AbilityEffect\Effect\AE_GainTrait.cs" />
@@ -143,6 +146,7 @@
     <Compile Include="AbilityEffect\Effect\AE_SendMessage.cs" />
     <Compile Include="AbilityEffect\Effect\AE_Kill.cs" />
     <Compile Include="AbilityEffect\Effect\AE_ShootProjectile.cs" />
+    <Compile Include="AbilityEffect\Effect\AE_SpawnThing.cs" />
     <Compile Include="AbilityEffect\Effect\AE_TeleportSelfToTarget.cs" />
     <Compile Include="AbilityEffect\Effect\AE_VanillaEffecterMaintain.cs" />
     <Compile Include="AbilityEffect\Effect\Mass\AbilityMassEffectBase.cs" />
@@ -159,6 +163,7 @@
     <Compile Include="Framework\Gizmos\ExtraGizmos\EGD_SelectAllSummoned.cs" />
     <Compile Include="Framework\Gizmos\Gizmo_SelectAllSummon.cs" />
     <Compile Include="LordJob_Variable.cs" />
+    <Compile Include="Mote_AttachedRotate.cs" />
     <Compile Include="PawnRenderNodeSubWorker_PretendTurretGun.cs" />
     <Compile Include="PawnRenderNode_HeldWeaponIcon.cs" />
     <Compile Include="Projectile_Custom.cs" />
@@ -201,6 +206,7 @@
     <Compile Include="Harmony\transpilertest.cs" />
     <Compile Include="Summon\PawnClass_Summoned.cs" />
     <Compile Include="Summon\TCP_SummonedProperties.cs" />
+    <Compile Include="TC_ClusterBomb.cs" />
     <Compile Include="TC_FleckEmitterSmooth.cs" />
     <Compile Include="TypeDef.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

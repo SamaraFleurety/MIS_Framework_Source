@@ -1,6 +1,7 @@
 ﻿using AKA_Ability.DelayedEffects;
 using RimWorld.Planet;
 using System;
+using System.Collections.Generic;
 using Verse;
 using static UnityEngine.GraphicsBuffer;
 
@@ -10,6 +11,8 @@ namespace AKA_Ability.AbilityEffect
     public class AE_DelayedEffects : AbilityEffectBase
     {
         public AbilityEffectsDef delayedEffect;
+
+        public List<AbilityEffectBase> compEffectList;
 
         public int burstCount = 1;
 

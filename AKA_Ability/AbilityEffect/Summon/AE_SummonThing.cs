@@ -13,9 +13,14 @@ namespace AKA_Ability.AbilityEffect
         public ThingDef summoned;
 
         public ThingDef stuff = null;
+
+        public bool setFaction = false;
+
         protected override Thing GenerateSummoned(AKAbility_Summon source)
         {
-            return ThingMaker.MakeThing(summoned, stuff);
+            var thing = ThingMaker.MakeThing(summoned, stuff);
+            if (setFaction) thing.SetFactionDirect(source.Caster.Faction);
+            return thing;
         }
     }
 }

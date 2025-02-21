@@ -43,6 +43,21 @@ namespace AKA_Ability
 
             pawn_NotifyHitTarget[owner].Remove(ab);
         }
+        public static Effecter SpawnMaintainedIfPossible(this EffecterDef effecterDef, TargetInfo A, TargetInfo B, float scale = 1f)
+        {
+            if (effecterDef.maintainTicks > 0)
+            {
+                return effecterDef.SpawnMaintained(A, B, scale);
+            }
+            else
+            {
+                return effecterDef.Spawn(A, B, scale);
+            }
+        }
+        public static Effecter SpawnMaintainedIfPossible(this EffecterDef effecterDef, LocalTargetInfo A, LocalTargetInfo B, Map map, float scale = 1f)
+        {
+            return effecterDef.SpawnMaintainedIfPossible(A.ToTargetInfo(map), B.ToTargetInfo(map), scale);
+        }
     }
 
 }

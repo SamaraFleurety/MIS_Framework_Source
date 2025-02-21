@@ -2,33 +2,49 @@
 using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
+using UnityEngine;
 using Verse;
+using Verse.AI;
 
 namespace AKA_Ability
 {
     public class AbilityEffect_AddHediff : AbilityEffectBase
     {
-        protected virtual void PreProcess() { 
+        protected virtual void PreProcess()
+        {
         }
 
         protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
             PreProcess();
+            if (onSelf) target = caster.CasterPawn;
             if (target == null || target.Pawn is not Pawn target_Pawn)
             {
                 return false;
             }
-            //Pawn target_Pawn = target.Pawn;
             if (target_Pawn != null && !target_Pawn.Dead)
             {
-                Hediff hediff = AddHediff(target_Pawn, this.hediffDef, this.bodyPart, severity: this.severity);
-
+                Hediff hediff = AddHediff(target_Pawn, hediffDef, bodyPart, severity: severity);
                 if (hediff != null) postAddHediff(hediff);
             }
-            else
+
+            if (AOERadius > 0)
             {
-                Log.Warning("目标为空或已死亡.");
+                var thingList = GenRadial.RadialDistinctThingsAround(target_Pawn.Position, target_Pawn.Map, AOERadius, true)
+                      .Where(t => t is Pawn).Cast<Pawn>().ToList();
+                foreach (var thing in thingList)
+                {
+                    if (caster.CasterPawn.HostileTo(thing) != hostileAOE) continue;
+                    if (hostileAOE && thing.ThreatDisabled(caster.CasterPawn)) continue;
+
+                    if (!GenSight.LineOfSightToThing(target_Pawn.PositionHeld, thing, target_Pawn.Map)) continue;
+
+                    Hediff hediff = AddHediff(target_Pawn, hediffDef, bodyPart, severity: severity);
+                    if (hediff != null) postAddHediff(hediff);
+                }
             }
+
+
             return base.DoEffect(caster, target);
         }
         /*public override void DoEffect_Pawn(Pawn user, Thing target, bool delayed)
@@ -52,7 +68,7 @@ namespace AKA_Ability
             }
         }*/
 
-        protected virtual void postAddHediff (Hediff h)
+        protected virtual void postAddHediff(Hediff h)
         {
         }
 
@@ -67,7 +83,7 @@ namespace AKA_Ability
         ///             -如果严重度小于等于0(即减少严重度)，那就ret空 (减少不存在的hediff没有意义)
         ///             -否则就增加此Hediff并调整严重度。
         /// </summary>
-        public static Hediff AddHediff (Pawn target, HediffDef hediffDef, BodyPartDef part = null, BodyPartRecord partRecord = null, float severity = 1, string customLabel = null)
+        public static Hediff AddHediff(Pawn target, HediffDef hediffDef, BodyPartDef part = null, BodyPartRecord partRecord = null, float severity = 1, string customLabel = null)
         {
             if (target == null) return null;
 
@@ -120,10 +136,12 @@ namespace AKA_Ability
             return candidate.RandomElement();
         }
 
-        //[Obsolete]
-        //public bool onSelf = false;
+
+        public bool onSelf = false;
         public HediffDef hediffDef;
         public float severity = 1f;
         public BodyPartDef bodyPart = null;
+        public float AOERadius = -1;
+        public bool hostileAOE = true;
     }
 }

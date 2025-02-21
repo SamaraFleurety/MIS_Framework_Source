@@ -67,7 +67,7 @@ namespace AKA_Ability
         public override void CompPostTick(ref float severityAdjustment)
         {
             base.CompPostTick(ref severityAdjustment);
-            this.tick++; 
+            this.tick++;
             if (this.tick >= (int)TimeToTick.rSecond * this.Interval)  //默认每 1秒(60tick) 渐进1次
             {
                 pastRSec++;
@@ -75,13 +75,13 @@ namespace AKA_Ability
             }
         }
 
-        private void EndEnhance ()
+        private void EndEnhance()
         {
             RestoreTools(this.Enhances);
             this.parent.Severity -= 10f;
         }
 
-        private void RestoreTools (List<toolEnhance> enhances)
+        private void RestoreTools(List<toolEnhance> enhances)
         {
             if (enhances == null) return;
             foreach (toolEnhance i in enhances)
@@ -91,12 +91,12 @@ namespace AKA_Ability
                 i.tool.cooldownTime = i.originalCD;
             }
         }
-        private void EnhanceTools (List<Tool> tools, List<toolEnhance> enhances)
+        private void EnhanceTools(List<Tool> tools, List<toolEnhance> enhances)
         {
             if (tools == null || enhances == null) return;
             foreach (toolEnhance enhance in enhances)
             {
-                if (enhance.tool == null && !enhance.shouldSkip) enhance.tool = findTool(enhance, tools); 
+                if (enhance.tool == null && !enhance.shouldSkip) enhance.tool = findTool(enhance, tools);
                 if (enhance.tool != null)
                 {
                     enhance.tool.power += enhance.powerOffsetTotal / (float)this.ProcedureCount;
@@ -105,9 +105,9 @@ namespace AKA_Ability
             }
         }
 
-        private Tool findTool (toolEnhance enhance, List<Tool> tools)
+        private Tool findTool(toolEnhance enhance, List<Tool> tools)
         {
-            foreach(Tool i in tools)
+            foreach (Tool i in tools)
             {
                 if (i.cooldownTime == enhance.originalCD && i.power == enhance.originalPower)
                 {

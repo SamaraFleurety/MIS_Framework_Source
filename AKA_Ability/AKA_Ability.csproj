@@ -144,6 +144,7 @@
     <Compile Include="Framework\Gizmos\ExtraGizmos\ExtraGizmoDrawer_Base.cs" />
     <Compile Include="Framework\Gizmos\ExtraGizmos\EGD_SelectAllSummoned.cs" />
     <Compile Include="Framework\Gizmos\Gizmo_SelectAllSummon.cs" />
+    <Compile Include="Framework\SharedData\AbilityTrackerSharedData_Base.cs" />
     <Compile Include="Summon\Patch_AllowTakeOrder.cs" />
     <Compile Include="AKA_Algorithm.cs" />
     <Compile Include="AKA_Utilities.cs" />

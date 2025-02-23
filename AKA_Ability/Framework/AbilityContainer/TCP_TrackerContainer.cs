@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using AKA_Ability.SharedData;
+using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ namespace AKA_Ability
     public class TCP_AKATracker : CompProperties
     {
         public List<AKAbilityDef> abilities = new List<AKAbilityDef>();
+
+        public Type sharedDataType = null;
         public TCP_AKATracker()
         {
             compClass = typeof(TC_AKATracker);
@@ -26,6 +29,8 @@ namespace AKA_Ability
         private List<AKAbilityDef> Abilities => Props.abilities;
 
         Apparel Parent => parent as Apparel;
+
+        Type SharedDataType => Props.sharedDataType;
 
         Pawn Wearer
         {
@@ -54,9 +59,11 @@ namespace AKA_Ability
             {
                 return;
             }
-            //Log.Message($"caster pawn {CasterPawn == null}");
-            //Log.Message($"caster pawn {CasterPawn.Name}");
             tracker = new AbilityTracker(CasterPawn);
+            if (SharedDataType != null)
+            {
+                tracker.sharedData = (AbilityTrackerSharedData_Base)Activator.CreateInstance(SharedDataType, tracker);
+            }
             if (this.Abilities != null && this.Abilities.Count > 0)
             {
                 foreach (AKAbilityDef i in this.Abilities)

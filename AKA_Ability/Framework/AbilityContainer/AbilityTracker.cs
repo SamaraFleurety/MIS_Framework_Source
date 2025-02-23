@@ -1,4 +1,5 @@
 ﻿using AKA_Ability.AbilityEffect;
+using AKA_Ability.SharedData;
 using RimWorld;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,7 @@ namespace AKA_Ability
 
         public bool shouldRefreshActiveStatus = true;
 
+        public AbilityTrackerSharedData_Base sharedData = null;
         public AKAbility_Base SelectedGroupedAbility
         {
             get
@@ -159,6 +161,7 @@ namespace AKA_Ability
             Scribe_References.Look(ref barDisplayedAbility, "barA");
             Scribe_Collections.Look(ref summonAbilities, "summonA", LookMode.Reference);
 
+            Scribe_Deep.Look(ref sharedData, "sharedData", this);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 foreach (AKAbility_Base i in innateAbilities) i.container = this;
@@ -202,6 +205,12 @@ namespace AKA_Ability
                     yield return summoned;
                 }
             }
+        }
+
+        public T TryGetSharedData<T>() where T : AbilityTrackerSharedData_Base
+        {
+            if (sharedData != null && sharedData is T data) return data;
+            return null;
         }
     }
 }

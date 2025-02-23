@@ -16,6 +16,7 @@
 
         public bool ignoredByAuto = false;
 
+        public bool invert = false;  //如果是true的话，会反着输出结果
         public abstract bool Castable(AKAbility_Base instance);
     }
 }

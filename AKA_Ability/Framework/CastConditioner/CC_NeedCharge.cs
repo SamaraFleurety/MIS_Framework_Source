@@ -11,7 +11,7 @@
 
         public override bool Castable(AKAbility_Base instance)
         {
-            return instance.cooldown.charge >= chargeRequire;
+            return instance.cooldown.Charge >= chargeRequire;
         }
     }
 }

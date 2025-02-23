@@ -1,9 +1,5 @@
 ﻿using AK_DLL;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using Verse;
 
 namespace AKA_Ability.Cooldown
@@ -29,7 +25,6 @@ namespace AKA_Ability.Cooldown
         }
     }
 
-
     //就是舟的sp
     //谁tm写的cd
     //继承可能有点问题 没写基类 但是自回+1其实也挺基础的，随便吧
@@ -38,10 +33,21 @@ namespace AKA_Ability.Cooldown
         public AKAbility_Base parent;
         public CooldownProperty prop;
 
-        public int SP;   //当前sp 就是舟那种sp 越高越趋于增加充能
-        public int charge;
-
+        public int skillPoint;
+        public virtual int SP   //当前sp 就是舟那种sp 越高越趋于增加充能
+        {
+            get => skillPoint;
+            set => skillPoint = value;
+        }
+        //自回速率
         public virtual int Rate => prop.rate;
+
+        public int charge;
+        public virtual int Charge
+        {
+            get => charge;
+            set => charge = value;
+        }
         public virtual int MaxCharge => prop.maxCharge;
         public virtual int MaxSP => prop.SPPerCharge * (int)prop.SPUnit;
 
@@ -56,7 +62,7 @@ namespace AKA_Ability.Cooldown
 
         public virtual void ExposeData()
         {
-            Scribe_Values.Look(ref SP, "CD");
+            Scribe_Values.Look(ref skillPoint, "CD");
             Scribe_Values.Look(ref charge, "charge");
             BackCompatibility.PostExposeData(this);
         }
@@ -64,8 +70,8 @@ namespace AKA_Ability.Cooldown
         //在tick里面只动sp 在下面的刷新充能去判断是否应该增加充能
         public virtual void Tick(int amt)
         {
-            if (charge >= MaxCharge) return;
-            SP += amt;
+            if (Charge >= MaxCharge) return;
+            SP += amt * Rate;
             RefreshChargeAndSP();
         }
 
@@ -75,7 +81,7 @@ namespace AKA_Ability.Cooldown
             while (SP > MaxSP && charge < MaxCharge)
             {
                 SP -= MaxSP;
-                ++charge;
+                ++Charge;
             }
             if (charge >= MaxCharge) SP = 0;
         }
@@ -92,13 +98,13 @@ namespace AKA_Ability.Cooldown
         {
             if (cost == 0) return;
             if (charge == MaxCharge) SP = 0;    //之前是满充能 需要刷新cd。否则维持之前充能进度
-            charge -= cost;
-            charge = Math.Max(charge, 0);
+            Charge -= cost;
+            Charge = Math.Max(Charge, 0);
         }
 
         public override string ToString()
         {
-            return "SP" + this.SP + "，MaxSP" + this.MaxSP + "，MaxCharge" + this.MaxCharge + "，Charge" + this.charge;
+            return "SP" + this.SP + "，MaxSP" + this.MaxSP + "，MaxCharge" + this.MaxCharge + "，Charge" + this.Charge;
         }
 
         //给攻击回复和受击回复sp留的。设计是仅注册有必要的技能而不是每次受伤都遍历所有技能

@@ -14,7 +14,7 @@ namespace AKA_Ability
     {
         public List<AKAbilityDef> abilities = new List<AKAbilityDef>();
 
-        public Type sharedDataType = null;
+        public AbilityTrackerSharedDataProperty sharedDataProperty = null;
         public TCP_AKATracker()
         {
             compClass = typeof(TC_AKATracker);
@@ -30,7 +30,7 @@ namespace AKA_Ability
 
         Apparel Parent => parent as Apparel;
 
-        Type SharedDataType => Props.sharedDataType;
+        AbilityTrackerSharedDataProperty SharedDataProp => Props.sharedDataProperty;
 
         Pawn Wearer
         {
@@ -60,9 +60,9 @@ namespace AKA_Ability
                 return;
             }
             tracker = new AbilityTracker(CasterPawn);
-            if (SharedDataType != null)
+            if (SharedDataProp != null)
             {
-                tracker.sharedData = (AbilityTrackerSharedData_Base)Activator.CreateInstance(SharedDataType, tracker);
+                tracker.sharedData = (AbilityTrackerSharedData_Base)Activator.CreateInstance(SharedDataProp.sharedDataType, tracker, SharedDataProp);
             }
             if (this.Abilities != null && this.Abilities.Count > 0)
             {
@@ -115,8 +115,9 @@ namespace AKA_Ability
         public override void PostExposeData()
         {
             base.PostExposeData();
-            Log.Message("expose tcp tracker");
+            //Log.Message("expose tcp tracker");
             Scribe_Deep.Look(ref tracker, "AKATracker", CasterPawn);
+            if (SharedDataProp != null) tracker.sharedData.props = SharedDataProp;
         }
     }
 }

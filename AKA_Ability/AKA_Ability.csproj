@@ -141,10 +141,13 @@
     <Compile Include="Framework\AbilityContainer\HCP_TrackerContainer.cs" />
     <Compile Include="Framework\AbilityEffectsDef.cs" />
     <Compile Include="Framework\ActiveConditioner\ActiveConditioner_Base.cs" />
+    <Compile Include="Framework\CastConditioner\CC_NeedFullCharge.cs" />
+    <Compile Include="Framework\Cooldown\CD_TrackerShared.cs" />
     <Compile Include="Framework\Gizmos\ExtraGizmos\ExtraGizmoDrawer_Base.cs" />
     <Compile Include="Framework\Gizmos\ExtraGizmos\EGD_SelectAllSummoned.cs" />
     <Compile Include="Framework\Gizmos\Gizmo_SelectAllSummon.cs" />
     <Compile Include="Framework\SharedData\AbilityTrackerSharedData_Base.cs" />
+    <Compile Include="Framework\SharedData\SD_SharedCharge.cs" />
     <Compile Include="Summon\Patch_AllowTakeOrder.cs" />
     <Compile Include="AKA_Algorithm.cs" />
     <Compile Include="AKA_Utilities.cs" />

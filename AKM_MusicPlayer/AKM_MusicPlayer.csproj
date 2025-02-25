@@ -33,11 +33,13 @@
   <ItemGroup>
     <Reference Include="0Harmony, Version=2.3.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\AK_DLL\bin\Debug\0Harmony.dll</HintPath>
+      <HintPath>..\Rely\0Harmony.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp, Version=1.5.8838.19357, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\AK_DLL\bin\Debug\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\Rely\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -48,10 +50,12 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
-      <HintPath>..\AK_DLL\bin\Debug\UnityEngine.dll</HintPath>
+      <HintPath>..\Rely\UnityEngine.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\AK_DLL\bin\Debug\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\Rely\UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>

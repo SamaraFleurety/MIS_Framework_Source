@@ -33,11 +33,13 @@
   <ItemGroup>
     <Reference Include="0Harmony, Version=2.2.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DebugTweak\FS_SSR\bin\Debug\0Harmony.dll</HintPath>
+      <HintPath>..\Rely\0Harmony.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp, Version=1.4.8385.39127, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DebugTweak\FS_SSR\bin\Debug\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\Rely\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

@@ -37,7 +37,7 @@
   <ItemGroup>
     <Reference Include="0Harmony, Version=2.3.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\SSR_Framework\Solar-System-Republic-Framework\FS_SSR\bin\Debug\0Harmony.dll</HintPath>
+      <HintPath>..\Rely\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="1AK_TypeDef, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -51,7 +51,7 @@
     </Reference>
     <Reference Include="AlienRace, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>./packages/AlienRace.dll</HintPath>
+      <HintPath>..\Rely\AlienRace.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp, Version=1.5.8838.19357, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -59,20 +59,18 @@
     </Reference>
     <Reference Include="com.rlabrecque.steamworks.net, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>S:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\com.rlabrecque.steamworks.net.dll</HintPath>
+      <HintPath>..\Rely\com.rlabrecque.steamworks.net.dll</HintPath>
     </Reference>
     <Reference Include="FSUI, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>S:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\Framework\Assemblies\FSUI.dll</HintPath>
+      <HintPath>..\Rely\FSUI.dll</HintPath>
     </Reference>
     <Reference Include="FS_UGUIFramework">
-      <HintPath>..\..\SSR_Framework\Solar-System-Republic-Framework\FS_UGUIFramework\bin\Debug\FS_UGUIFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="HarmonyMod">
-      <HintPath>./packages/HarmonyMod.dll</HintPath>
+      <HintPath>..\Rely\FS_UGUIFramework.dll</HintPath>
     </Reference>
     <Reference Include="SpriteEvo">
       <HintPath>..\Rely\SpriteEvo.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -83,49 +81,64 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>./packages/Unity.TextMeshPro.dll</HintPath>
+      <HintPath>..\Rely\Unity.TextMeshPro.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Timeline">
-      <HintPath>S:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\Framework\Assemblies\Unity.Timeline.dll</HintPath>
+      <HintPath>..\Rely\Unity.Timeline.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>./packages/UnityEngine.dll</HintPath>
+      <HintPath>..\Rely\UnityEngine.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.AssetBundleModule">
-      <HintPath>./packages/UnityEngine.AssetBundleModule.dll</HintPath>
+      <HintPath>..\Rely\UnityEngine.AssetBundleModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>./packages/UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\Rely\UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.ImageConversionModule">
-      <HintPath>./packages/UnityEngine.ImageConversionModule.dll</HintPath>
+      <HintPath>..\Rely\UnityEngine.ImageConversionModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>./packages/UnityEngine.IMGUIModule.dll</HintPath>
+      <HintPath>..\Rely\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>./packages/UnityEngine.InputLegacyModule.dll</HintPath>
+      <HintPath>..\Rely\UnityEngine.InputLegacyModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.InputModule">
-      <HintPath>./packages/UnityEngine.InputModule.dll</HintPath>
+      <HintPath>..\Rely\UnityEngine.InputModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.ProfilerModule">
-      <HintPath>./packages/UnityEngine.ProfilerModule.dll</HintPath>
+      <HintPath>..\Rely\UnityEngine.ProfilerModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.TextCoreModule">
-      <HintPath>./packages/UnityEngine.TextCoreModule.dll</HintPath>
+      <HintPath>..\Rely\UnityEngine.TextCoreModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule">
-      <HintPath>./packages/UnityEngine.TextRenderingModule.dll</HintPath>
+      <HintPath>..\Rely\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>./packages/UnityEngine.UI.dll</HintPath>
+      <HintPath>..\Rely\UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UIElementsModule">
-      <HintPath>./packages/UnityEngine.UIElementsModule.dll</HintPath>
+      <HintPath>..\Rely\UnityEngine.UIElementsModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UIModule">
-      <HintPath>./packages/UnityEngine.UIModule.dll</HintPath>
+      <HintPath>..\Rely\UnityEngine.UIModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>

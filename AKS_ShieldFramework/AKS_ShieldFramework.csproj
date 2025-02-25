@@ -36,9 +36,11 @@
   <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>..\Rely\0Harmony.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\Rely\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -50,13 +52,24 @@
     <Reference Include="System.Xml" />
     <Reference Include="Unity.TextMeshPro">
       <HintPath>..\Rely\Unity.TextMeshPro.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>..\Rely\UnityEngine.AIModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" />
-    <Reference Include="UnityEngine.IMGUIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" />
-    <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Rely\UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Rely\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Rely\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Effector\AbsorbDamageEffector_Base.cs" />
@@ -75,6 +88,7 @@
     <ProjectReference Include="..\AK_DLL\AK_Library.csproj">
       <Project>{25A323A4-A832-487C-9AB2-32E14C56E148}</Project>
       <Name>AK_Library</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

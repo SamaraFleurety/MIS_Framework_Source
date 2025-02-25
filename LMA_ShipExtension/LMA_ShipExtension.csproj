@@ -36,9 +36,11 @@
   <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>..\Rely\0Harmony.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\Rely\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -50,27 +52,35 @@
     <Reference Include="System.Xml" />
     <Reference Include="Unity.TextMeshPro">
       <HintPath>..\Rely\Unity.TextMeshPro.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\Rely\UnityEngine.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>..\Rely\UnityEngine.AIModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\Rely\UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.ImageConversionModule">
       <HintPath>..\Rely\UnityEngine.ImageConversionModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
       <HintPath>..\Rely\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>..\Rely\UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UIModule">
       <HintPath>..\Rely\UnityEngine.UIModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -90,10 +100,12 @@
     <ProjectReference Include="..\AK_DLL\AK_Library.csproj">
       <Project>{25a323a4-a832-487c-9ab2-32e14c56e148}</Project>
       <Name>AK_Library</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\AK_TypeDef\1AK_TypeDef.csproj">
       <Project>{ff2ece8f-73b3-49f0-82e6-bc15c45e33a6}</Project>
       <Name>1AK_TypeDef</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

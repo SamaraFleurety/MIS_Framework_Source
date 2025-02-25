@@ -36,16 +36,19 @@
   <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>..\Rely\0Harmony.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="1AK_TypeDef">
       <HintPath>..\AK_TypeDef\bin\Debug\1AK_TypeDef.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\Rely\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Generic.RedBlack, Version=1.3.4618.26633, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Collections.Generic.RedBlack.1.3.4618\lib\net40\System.Collections.Generic.RedBlack.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -56,34 +59,44 @@
     <Reference Include="System.Xml" />
     <Reference Include="Unity.TextMeshPro">
       <HintPath>..\Rely\Unity.TextMeshPro.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\Rely\UnityEngine.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>..\Rely\UnityEngine.AIModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\Rely\UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.ImageConversionModule">
       <HintPath>..\Rely\UnityEngine.ImageConversionModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
       <HintPath>..\Rely\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.TextCoreModule">
       <HintPath>..\Rely\UnityEngine.TextCoreModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Rely\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>..\Rely\UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UIModule">
       <HintPath>..\Rely\UnityEngine.UIModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -33,9 +33,11 @@
   <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>..\Rely\0Harmony.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\Rely\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -47,33 +49,43 @@
     <Reference Include="System.Xml" />
     <Reference Include="Unity.TextMeshPro">
       <HintPath>..\Rely\Unity.TextMeshPro.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\Rely\UnityEngine.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>..\Rely\UnityEngine.AIModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\Rely\UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.ImageConversionModule">
       <HintPath>..\Rely\UnityEngine.ImageConversionModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
       <HintPath>..\Rely\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.TextCoreModule">
       <HintPath>..\Rely\UnityEngine.TextCoreModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule">
       <HintPath>..\Rely\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>..\Rely\UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UIModule">
       <HintPath>..\Rely\UnityEngine.UIModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -93,18 +105,22 @@
     <ProjectReference Include="..\AKA_Ability\AKA_Ability.csproj">
       <Project>{92cfb99e-4d93-47f2-a4ad-dd0668efe739}</Project>
       <Name>AKA_Ability</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\AKS_ShieldFramework\AKS_ShieldFramework.csproj">
       <Project>{8c33efd6-9006-4cf3-8c33-50cc0418238c}</Project>
       <Name>AKS_ShieldFramework</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\AK_DLL\AK_Library.csproj">
       <Project>{25a323a4-a832-487c-9ab2-32e14c56e148}</Project>
       <Name>AK_Library</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\AK_TypeDef\1AK_TypeDef.csproj">
       <Project>{ff2ece8f-73b3-49f0-82e6-bc15c45e33a6}</Project>
       <Name>1AK_TypeDef</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

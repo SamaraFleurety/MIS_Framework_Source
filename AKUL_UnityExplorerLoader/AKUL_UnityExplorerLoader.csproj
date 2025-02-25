@@ -32,10 +32,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>..\AK_DLL\bin\Debug\0Harmony.dll</HintPath>
+      <HintPath>..\Rely\0Harmony.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\AK_DLL\bin\Debug\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\Rely\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -46,30 +48,37 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
-      <HintPath>S:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>..\Rely\UnityEngine.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\AK_DLL\bin\Debug\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\Rely\UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\AK_DLL\bin\Debug\UnityEngine.TextRenderingModule.dll</HintPath>
+      <HintPath>..\Rely\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>S:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <HintPath>..\Rely\UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\AK_DLL\bin\Debug\UnityEngine.UIModule.dll</HintPath>
+      <HintPath>..\Rely\UnityEngine.UIModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityExplorer.STANDALONE.Mono">
-      <HintPath>S:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\UnityExplorer\Assemblies\UnityExplorer.STANDALONE.Mono.dll</HintPath>
+      <HintPath>..\Rely\UnityExplorer.STANDALONE.Mono.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UniverseLib.Mono, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>S:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\UnityExplorer\Assemblies\UniverseLib.Mono.dll</HintPath>
+      <HintPath>..\Rely\UniverseLib.Mono.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>

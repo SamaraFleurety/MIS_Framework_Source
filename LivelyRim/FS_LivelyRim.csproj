@@ -33,20 +33,25 @@
   <ItemGroup>
     <Reference Include="0Harmony, Version=2.2.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DebugTweak\FS_SSR\bin\Debug\0Harmony.dll</HintPath>
+      <HintPath>..\Rely\0Harmony.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp, Version=1.4.8385.39127, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DebugTweak\FS_SSR\bin\Debug\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\Rely\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="CubismRim">
-      <HintPath>..\AK_DLL\bin\Debug\CubismRim.dll</HintPath>
+      <HintPath>..\Rely\CubismRim.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="CubismRimAddon">
-      <HintPath>S:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\LivelyRim\Assemblies\CubismRimAddon.dll</HintPath>
+      <HintPath>..\Rely\CubismRimAddon.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="LitJSON">
-      <HintPath>..\AK_DLL\bin\Debug\LitJSON.dll</HintPath>
+      <HintPath>..\Rely\LitJSON.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -57,27 +62,37 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
-      <HintPath>..\AK_DLL\bin\Debug\UnityEngine.dll</HintPath>
+      <HintPath>..\Rely\UnityEngine.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.AnimationModule">
-      <HintPath>..\AK_DLL\bin\Debug\UnityEngine.AnimationModule.dll</HintPath>
+      <HintPath>..\Rely\UnityEngine.AnimationModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.AssetBundleModule">
-      <HintPath>..\AK_DLL\bin\Debug\UnityEngine.AssetBundleModule.dll</HintPath>
+      <HintPath>..\Rely\UnityEngine.AssetBundleModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\AK_DLL\bin\Debug\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\Rely\UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.ImageConversionModule">
-      <HintPath>..\AK_DLL\bin\Debug\UnityEngine.ImageConversionModule.dll</HintPath>
+      <HintPath>..\Rely\UnityEngine.ImageConversionModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\AK_DLL\bin\Debug\UnityEngine.IMGUIModule.dll</HintPath>
+      <HintPath>..\Rely\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Rely\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>..\AK_DLL\bin\Debug\UnityEngine.UI.dll</HintPath>
+      <HintPath>..\Rely\UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>

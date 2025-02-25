@@ -35,13 +35,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>..\..\SSR_Framework\Solar-System-Republic-Framework\FS_TransWeapon\bin\Debug\0Harmony.dll</HintPath>
+      <HintPath>..\Rely\0Harmony.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="AK_DLL">
       <HintPath>..\AK_DLL\bin\Debug\AK_DLL.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>D:\Docu\Tencent Files\1610207132\FileRecv\输出\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\Rely\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Spine38, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -60,10 +61,11 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\AK_DLL\bin\Debug\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\Rely\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
       <HintPath>E:\SteamLibrary\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>

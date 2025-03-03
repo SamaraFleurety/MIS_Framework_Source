@@ -212,5 +212,19 @@ namespace AKA_Ability
             if (sharedData != null && sharedData is T data) return data;
             return null;
         }
+
+        //遍历，因为技能没几个 要是以后多了找个缓存
+        public AKAbility_Base TryGetAbility(AKAbilityDef def)
+        {
+            foreach (AKAbility_Base ab in innateAbilities)
+            {
+                if (ab.def == def) return ab;
+            }
+            foreach (AKAbility_Base ab in groupedAbilities)
+            {
+                if (ab.def == def) return ab;
+            }
+            return null;
+        }
     }
 }

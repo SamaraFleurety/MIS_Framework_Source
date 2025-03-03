@@ -144,9 +144,10 @@
   <ItemGroup>
     <Compile Include="AK_Algorithm.cs" />
     <Compile Include="AK_Tool4Unity.cs" />
-    <Compile Include="BanOperator\Patch_DefsInMod.cs" />
-    <Compile Include="BanOperator\Patch_ForbidCrossRef.cs" />
-    <Compile Include="BanOperator\Patch_test.cs" />
+    <Compile Include="LoadingOptimizer\Patch_DefsInMod.cs" />
+    <Compile Include="LoadingOptimizer\Patch_ForbidCrossRef.cs" />
+    <Compile Include="LoadingOptimizer\Patch_ForbidLoadFiles.cs" />
+    <Compile Include="LoadingOptimizer\Patch_test.cs" />
     <Compile Include="DebugTools.cs" />
     <Compile Include="Def\OperatorClassDef.cs" />
     <Compile Include="Def\OperatorDef\HediffStat.cs" />

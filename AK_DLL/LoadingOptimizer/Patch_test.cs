@@ -7,6 +7,7 @@ using System.Reflection.Emit;
 using System.Reflection;
 using Verse;
 using System.IO;
+using System.Xml;
 
 namespace AK_DLL.HarmonyPatchs
 {
@@ -42,12 +43,14 @@ namespace AK_DLL.HarmonyPatchs
         }
     }*/
 
-    /*[HarmonyPatch(typeof(DirectXmlLoader), "XmlAssetsInModFolder")]
+    //按xml文件路径跳过读取
+    [HarmonyPatch(typeof(DirectXmlLoader), "XmlAssetsInModFolder")]
     public static class patchloader
     {
         [HarmonyTranspiler]
         public static IEnumerable<CodeInstruction> transpiler(IEnumerable<CodeInstruction> instructions)
         {
+            return instructions;
             List<CodeInstruction> list = instructions.ToList();
 
             MethodInfo overrideMethod = typeof(patchloader).GetMethod("OverrideJudge", BindingFlags.Static | BindingFlags.Public);
@@ -83,10 +86,14 @@ namespace AK_DLL.HarmonyPatchs
 
         public static bool OverrideJudge(bool containsKey, FileInfo fileInfo)
         {
-            if (containsKey || fileInfo.Name.Contains("_Defender")|| fileInfo.Name.Contains("_Caster") || fileInfo.Name.Contains("Guard") || fileInfo.Name.Contains("_Supporter") || fileInfo.Name.Contains("_Medic") || fileInfo.Name.Contains("_Sniper") || fileInfo.Name.Contains("_Specialist")) return true;
+            if (containsKey /*|| fileInfo.Name.Contains("_Defender")*/|| fileInfo.FullName.Contains("Main") /*|| fileInfo.Name.Contains("Guard") || fileInfo.Name.Contains("_Supporter") || fileInfo.Name.Contains("_Medic") || fileInfo.Name.Contains("_Sniper") || fileInfo.Name.Contains("_Specialist")*/)
+            {
+                Log.Message("skipped");
+                return true;
+            }
             return false;
             //Log.Message($"file name {fileInfo.Name}");
             //return containsKey;
         }
-    }*/
+    }
 }

@@ -24,7 +24,7 @@ namespace AK_DLL.HarmonyPatchs
 
         public static bool ShouldSkipDefname(string defname)
         {
-            if (defname.Contains("Dusk")) return true;
+            if (defname.Contains("AK_") || defname.Contains("AKS")) return true;
             return false;
         }
     }*/

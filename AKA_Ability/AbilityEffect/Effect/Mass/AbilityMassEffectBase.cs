@@ -28,12 +28,10 @@ namespace AKA_Ability.AbilityEffect
 
         public static IEnumerable<Pawn> AllPawnAliveInCell(AKAbility_Base ab, IntVec3 cell)
         {
-            //List<Pawn> res = new List<Pawn>();
             foreach (Thing t in cell.GetThingList(ab.CasterPawn.Map))
             {
                 if (t is Pawn p && !p.Dead && !p.Destroyed) yield return p;
             }
-            //return res;
         }
     }
 
@@ -59,7 +57,7 @@ namespace AKA_Ability.AbilityEffect
         //基本就是全部效果 不直接写在上面的doeffect是对以后对有效目标有后效预留
         public virtual List<T> DoEffect_AllTargets(AKAbility_Base caster, LocalTargetInfo target)
         {
-            List<IntVec3> affectedCells = GenRadial.RadialCellsAround(target.Cell, prop.radius, true).ToList();
+            List<IntVec3> affectedCells = GenRadial.RadialCellsAround(target.Cell, prop.radius, true).ToList(); //获取所有有效格子
             List<T> affectedTargets = new List<T>();
 
             foreach (IntVec3 cell in affectedCells)

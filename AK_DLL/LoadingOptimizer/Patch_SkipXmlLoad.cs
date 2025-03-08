@@ -8,6 +8,7 @@ using System.Reflection;
 using Verse;
 using System.IO;
 using System.Xml;
+using UnityEngine.TextCore;
 
 namespace AK_DLL.HarmonyPatchs
 {
@@ -45,15 +46,22 @@ namespace AK_DLL.HarmonyPatchs
 
     //按xml文件路径跳过读取
     [HarmonyPatch(typeof(DirectXmlLoader), "XmlAssetsInModFolder")]
-    public static class patchloader
+    public static class Patch_SkipXmlLoad
     {
+        /*foreach (FileInfo fileInfo in files)
+            {
+                string key = fileInfo.FullName.Substring(text.Length + 1);
+                if (!dictionary.ContainsKey(key))    <--------------插入点在这，等于在括号里面的末尾加了个 &&不在跳过路径内
+                {
+                    dictionary.Add(key, fileInfo);
+                }
+}       */
         [HarmonyTranspiler]
         public static IEnumerable<CodeInstruction> transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            return instructions;
             List<CodeInstruction> list = instructions.ToList();
 
-            MethodInfo overrideMethod = typeof(patchloader).GetMethod("OverrideJudge", BindingFlags.Static | BindingFlags.Public);
+            MethodInfo overrideMethod = typeof(Patch_SkipXmlLoad).GetMethod("OverrideJudge", BindingFlags.Static | BindingFlags.Public);
             //FieldInfo fieldPawn = typeof(SkillRecord).GetField("pawn", BindingFlags.NonPublic | BindingFlags.Instance);
 
             int index = -1;
@@ -78,22 +86,29 @@ namespace AK_DLL.HarmonyPatchs
             list.InsertRange(index + 1, new CodeInstruction[]
                 {
                     new CodeInstruction(OpCodes.Ldloc_S, 8),
+                    new CodeInstruction(OpCodes.Ldarg_0),
                     new CodeInstruction(OpCodes.Call, overrideMethod)
                 });
 
             return list;
         }
 
-        public static bool OverrideJudge(bool containsKey, FileInfo fileInfo)
+        public static bool OverrideJudge(bool containsKey, FileInfo fileInfo, ModContentPack mod)
         {
-            if (containsKey /*|| fileInfo.Name.Contains("_Defender")*/|| fileInfo.FullName.Contains("Main") /*|| fileInfo.Name.Contains("Guard") || fileInfo.Name.Contains("_Supporter") || fileInfo.Name.Contains("_Medic") || fileInfo.Name.Contains("_Sniper") || fileInfo.Name.Contains("_Specialist")*/)
+            if (!AK_Tool.ImplementLoadingOptimizer(mod)) return containsKey;
+
+            AhoCorasick.Trie trie = new();
+            foreach (string s in AK_ModSettings.forbiddenXmls)
             {
-                Log.Message("skipped");
+                trie.Add(s);
+            }
+            trie.Build();
+            if (containsKey || trie.Find(fileInfo.FullName).Any() /*|| fileInfo.Name.Contains("_Defender")|| fileInfo.FullName.Contains("Main") /*|| fileInfo.Name.Contains("Guard") || fileInfo.Name.Contains("_Supporter") || fileInfo.Name.Contains("_Medic") || fileInfo.Name.Contains("_Sniper") || fileInfo.Name.Contains("_Specialist")*/)
+            {
+                Log.Message($"skipped xml: {fileInfo.FullName}");
                 return true;
             }
             return false;
-            //Log.Message($"file name {fileInfo.Name}");
-            //return containsKey;
         }
     }
 }

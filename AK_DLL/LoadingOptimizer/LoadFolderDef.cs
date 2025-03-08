@@ -1,0 +1,18 @@
+﻿using RimWorld;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Verse;
+
+namespace AK_DLL
+{
+    public class LoadFolderDef : Def
+    {
+        //会禁止读取此路径的xml
+        public List<string> xmlFilePaths = new();
+        //会禁止读取此路径的文件(贴图/声音)
+        public List<string> assetPaths = new();
+    }
+}

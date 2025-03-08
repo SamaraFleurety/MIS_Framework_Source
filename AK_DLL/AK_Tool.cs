@@ -50,6 +50,12 @@ namespace AK_DLL
             }
         }
 
+        //此mod是否可选职业 当前仅舟主包可以
+        public static bool ImplementLoadingOptimizer(ModContentPack mod)
+        {
+            return mod.PackageId.Equals("MIS.Arknights".ToLower());
+        }
+
         private static void InitializeUI()
         {
             for (int i = 0; i < Mods.Count; ++i)

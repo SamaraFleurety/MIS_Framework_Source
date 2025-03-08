@@ -94,7 +94,10 @@
     <Compile Include="MovSpdOnWater\Ext_MoveSpdOnWater.cs" />
     <Compile Include="MovSpdOnWater\Patch_MovSpdOnWater.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RecruitConsole\JobDriver_UseRecruitConsoleAzur.cs" />
+    <Compile Include="RecruitConsole\RecruitConsole_Azur.cs" />
     <Compile Include="ShipDocument.cs" />
+    <Compile Include="TypeDef.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AK_DLL\AK_Library.csproj">
@@ -107,6 +110,9 @@
       <Name>1AK_TypeDef</Name>
       <Private>False</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="RecruitConsole\UGUI\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

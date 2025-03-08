@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Verse.AI;
 using RimWorld;
 using Verse;
 using RimWorld.Planet;
-using HarmonyLib;
-using Verse.Sound;
-using UnityEngine;
-using Steamworks;
 
 namespace AK_DLL
 {
@@ -80,25 +75,30 @@ namespace AK_DLL
             }
 
             //可以招募
-            if (CompRefuelable.Fuel >= 0.1)
+            if (CompRefuelable.Fuel < 0.1)
             {
-                yield return new FloatMenuOption("AK_CanReach".Translate(),
+                yield return new FloatMenuOption("AK_NoTicket".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0); yield break;
+
+            }
+
+            foreach (FloatMenuOption option in GetFloatMenuOptions(selPawn))
+            {
+                yield return option;
+            }
+        }
+
+        public virtual IEnumerable<FloatMenuOption> GetFloatMenuRecruitOptions(Pawn selPawn)
+        {
+            yield return new FloatMenuOption("AK_CanReach".Translate(),
                 delegate
                 {
                     selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AKDefOf.AK_Job_UseRecruitConsole, this));
                 }
                 );
-                yield return new FloatMenuOption("AK_RecruitContinuous".Translate(), delegate
-                {
-                    selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AKDefOf.AK_Job_UseRecruitConsole, this, this));  //用target B做标记，要是不为null就是连续招募模式
-                });
-
-                yield break;
-            }
-            else
+            yield return new FloatMenuOption("AK_RecruitContinuous".Translate(), delegate
             {
-                yield return new FloatMenuOption("AK_NoTicket".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0); yield break;
-            }
+                selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AKDefOf.AK_Job_UseRecruitConsole, this, this));  //用target B做标记，要是不为null就是连续招募模式
+            });
         }
 
         public override string Label

@@ -224,13 +224,13 @@ namespace AK_DLL.UI
         public GameObject OpL2D;   //干员动态立绘的渲染目标（不是模型本身，是名为L2DRenderTarget的游戏物体）
 
         #region 快捷函数
-        private GameObject ClickedBtn
+        /*private GameObject ClickedBtn
         {
             get
             {
                 return EventSystem.current.currentSelectedGameObject;
             }
-        }
+        }*/
 
         private OperatorDef SecretaryDef => DefDatabase<OperatorDef>.GetNamed(AK_ModSettings.secretary);
 

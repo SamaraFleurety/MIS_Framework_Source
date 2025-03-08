@@ -1,12 +1,17 @@
-﻿using System.Collections.Generic;
-using RimWorld;
-using Verse.AI;
-using Verse;
+﻿using AK_DLL;
 using AK_DLL.UI;
+using RimWorld;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Verse;
+using Verse.AI;
 
-namespace AK_DLL
+namespace LMA_Lib.AI
 {
-    public class JobDriver_UseRecruitConsole : JobDriver
+    public class JobDriver_UseRecruitConsoleAzur : JobDriver
     {
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
@@ -20,7 +25,7 @@ namespace AK_DLL
             {
                 Find.TickManager.Pause();
                 RIWindowHandler.continuousRecruit = TargetThingB == null ? false : true;    //用target B做标记，要是不为null就是连续招募模式
-                UI.RIWindowHandler.OpenRIWindow(AKDefOf.AK_Prefab_yccMainMenu, TargetThingA, pawn, OpDetailType.Recruit /*RIWindowType.MainMenu,TargetThingA*/);
+                RIWindowHandler.OpenRIWindow(AzurDefOf.LMA_Prefab_MainMenu, TargetThingA, pawn, OpDetailType.Recruit);
             };
             yield return t;
             yield break;

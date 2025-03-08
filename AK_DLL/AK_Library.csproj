@@ -149,7 +149,7 @@
     <Compile Include="LoadingOptimizer\Patch_DefsInMod.cs" />
     <Compile Include="LoadingOptimizer\Patch_ForbidCrossRef.cs" />
     <Compile Include="LoadingOptimizer\Patch_ForbidLoadFiles.cs" />
-    <Compile Include="LoadingOptimizer\Patch_test.cs" />
+    <Compile Include="LoadingOptimizer\Patch_SkipXmlLoad.cs" />
     <Compile Include="DebugTools.cs" />
     <Compile Include="Def\OperatorClassDef.cs" />
     <Compile Include="Def\OperatorDef\HediffStat.cs" />

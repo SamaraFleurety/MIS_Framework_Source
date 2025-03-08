@@ -100,16 +100,6 @@ namespace AK_DLL.UI
             //OpenRIWindow();
             UGUIHandler.OpenUIWindow(prefab);
         }
-
-        //打开干员详情界面，但是因为换装
-        /*public static void OpenRIWindow_OpDetail(Pawn p, Thing Console)
-        {
-            window = RIWindowType.Op_Detail;
-            def = p.GetDoc().operatorDef;
-            RIWindow_OperatorDetail.windowPurpose = OpDetailType.Fashion;
-            OpenRIWindow();
-        }*/
-
         #endregion
 
         #region 初始化数据

@@ -101,7 +101,7 @@ namespace AK_DLL
         #endregion
 
         #region 选择性不加载职业
-        public static List<LoadFolderDef> forbiddenLoadClasses = new();
+        public static List<string> forbiddenLoadClasses = new();
         public static List<string> forbiddenXmls = new(); //禁止包含里面任一string的xml路径的读取
         public static List<string> forbiddenAssets = new(); //禁止包含里面任一string的多媒体文件路径的读取
         #endregion
@@ -116,8 +116,9 @@ namespace AK_DLL
 
             HashSet<string> forbiddenXmlSet = new HashSet<string>();
             HashSet<string> forbiddenAssetSet = new();
-            foreach (LoadFolderDef def in forbiddenLoadClasses)
+            foreach (string defname in forbiddenLoadClasses)
             {
+                LoadFolderDef def = DefDatabase<LoadFolderDef>.GetNamedSilentFail(defname);
                 forbiddenXmlSet.AddRange(def.xmlFilePaths);
                 forbiddenAssetSet.AddRange(def.assetPaths);
             }
@@ -127,7 +128,7 @@ namespace AK_DLL
 
         public override void ExposeData()
         {
-            Scribe_Collections.Look(ref forbiddenLoadClasses, "loadban_def", LookMode.Def);
+            Scribe_Collections.Look(ref forbiddenLoadClasses, "loadban_def", LookMode.Value);
             Scribe_Collections.Look(ref forbiddenXmls, "loadban_xml", LookMode.Value);
             Scribe_Collections.Look(ref forbiddenAssets, "loadban_asset", LookMode.Value);
 

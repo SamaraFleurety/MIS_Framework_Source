@@ -77,11 +77,11 @@ namespace AK_DLL
             //可以招募
             if (CompRefuelable.Fuel < 0.1)
             {
-                yield return new FloatMenuOption("AK_NoTicket".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0); yield break;
-
+                yield return new FloatMenuOption("AK_NoTicket".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield break;
             }
 
-            foreach (FloatMenuOption option in GetFloatMenuOptions(selPawn))
+            foreach (FloatMenuOption option in GetFloatMenuRecruitOptions(selPawn))
             {
                 yield return option;
             }

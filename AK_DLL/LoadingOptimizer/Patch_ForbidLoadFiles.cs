@@ -21,7 +21,6 @@ namespace AK_DLL.HarmonyPatchs
         [HarmonyTranspiler]
         public static IEnumerable<CodeInstruction> transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            //return instructions;
             List<CodeInstruction> list = instructions.ToList();
 
             MethodInfo overrideMethod = typeof(Patch_ForbidLoadFiles).GetMethod("OverrideMethod", BindingFlags.Static | BindingFlags.Public);
@@ -53,11 +52,13 @@ namespace AK_DLL.HarmonyPatchs
 
         public static FileInfo[] OverrideMethod(FileInfo[] files, ModContentPack mod)
         {
-            if (!AK_Tool.ImplementLoadingOptimizer(mod)) return files;
+            if (!Patch_SkipXmlLoad.ImplementLoadingOptimizer(mod) || AK_ModSettings.forbiddenAssets.NullOrEmpty()) return files;
 
+            Log.Message("inner");
             AhoCorasick.Trie trie = new();
             foreach (string s in AK_ModSettings.forbiddenAssets)
             {
+                Log.Message($"[AK] trie added {s}");
                 trie.Add(s);
             }
             trie.Build();
@@ -66,7 +67,11 @@ namespace AK_DLL.HarmonyPatchs
 
             foreach (FileInfo file in files)
             {
-                if (trie.Find(file.FullName).Any()) continue;
+                if (trie.Find(file.FullName).Any())
+                {
+                    Log.Message($"[AK]skipped file {file.FullName}");
+                    continue;
+                }
                 filesFiltered.Add(file);
             }
             return filesFiltered.ToArray();

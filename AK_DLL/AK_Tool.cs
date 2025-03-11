@@ -44,16 +44,10 @@ namespace AK_DLL
                 InitializeUI();
                 Log.Message($"MIS.初始化完成");
             }
-            catch
+            catch (Exception ex)
             {
-                Log.Error("MIS. Critical Error: Initialization fail");
+                Log.Error($"MIS. Critical Error: Initialization fail : {ex.Message} + {ex.StackTrace}");
             }
-        }
-
-        //此mod是否可选职业 当前仅舟主包可以
-        public static bool ImplementLoadingOptimizer(ModContentPack mod)
-        {
-            return mod.PackageId.Equals("MIS.Arknights".ToLower());
         }
 
         private static void InitializeUI()

@@ -147,7 +147,7 @@ namespace AK_DLL.UI
                 }
                 catch (Exception ex)
                 {
-                    Log.Error("MIS. 没加起" + i.nickname + $"at {ex.ToString()}\n{ex.StackTrace}");
+                    Log.Error("[MIS] 添加失败: " + i.nickname + $"at {ex.ToString()}\n{ex.StackTrace}");
                 }
             }
         }

@@ -39,7 +39,7 @@ namespace AK_DLL
         public List<TraitAndDegree> traits;//干员特性
         public ThingDef weapon;//干员武器                                                  
         public List<ThingDef> apparels;//干员衣服
-        public List<ThingDef> accessory; //干员配件。和衣服的区别是在换装时不会丢掉。适合填入比如护盾。
+        public List<ThingDef> accessory = new(); //干员配件。和衣服的区别是在换装时不会丢掉。适合填入比如护盾。
         public List<ItemOnSpawn> items;
         public BodyTypeDef bodyTypeDef;//干员的体型
         public HeadTypeDef headTypeDef;
@@ -82,6 +82,8 @@ namespace AK_DLL
         public bool alwaysHidden = false;  //是否隐藏。被隐藏的干员不会在招募ui显示，仅能通过特殊手段出现。fixme:没做。
 
         public Type documentType = typeof(OperatorDocument);   //写了碧蓝之后发现档案甚至都可以扩充
+
+        public bool ignoreAutoFill = false; //跳过自动填充
         #endregion
 
         #region 快捷属性
@@ -159,13 +161,15 @@ namespace AK_DLL
 
             operator_Pawn = p;
             clothTemp = new List<Thing>();
+
+            int apparelTextureIndex = -1;
             if (def == null)
             {
                 if (apparels != null)
                 {
                     foreach (ThingDef apparelDef in this.apparels)
                     {
-                        Recruit_Inventory_Wear(apparelDef, operator_Pawn, true);
+                        Apparel apparel = Recruit_Inventory_Wear(apparelDef, operator_Pawn, true);
                     }
                 }
                 operator_Pawn.story.hairDef = hair ?? HairDefOf.Bald;
@@ -187,9 +191,10 @@ namespace AK_DLL
             else
             {
                 OperatorFashionSetDef set = def;
+                if (set.apparelTextureIndex is int index) apparelTextureIndex = index;
                 foreach (ThingDef apparelDef in set.apparels)
                 {
-                    Recruit_Inventory_Wear(apparelDef, operator_Pawn, true);
+                    Apparel apparel = Recruit_Inventory_Wear(apparelDef, operator_Pawn, true);
                 }
                 if (set.hair != null) operator_Pawn.story.hairDef = set.hair;
                 if (set.voice != null)
@@ -210,6 +215,17 @@ namespace AK_DLL
                     doc.weapon = weapon;
                 }
             }
+
+            foreach (var apparel in operator_Pawn.apparel.WornApparel)
+            {
+                Log.Message($"ap {apparel}");
+                if (apparel is Apparel_Operator ap)
+                {
+                    Log.Message($"found ap is {ap}");
+                    ap.SetGraphicIndex(apparelTextureIndex);
+                }
+            }
+
             operator_Pawn.style.Notify_StyleItemChanged();
             operator_Pawn.style.MakeHairFilth();
             doc.RegisterFashionSet(clothTemp);
@@ -292,6 +308,8 @@ namespace AK_DLL
 
         public virtual void AutoFill()
         {
+            if (ignoreAutoFill) return;
+
             //默认名字
             AutoFill_Name();
 
@@ -319,6 +337,8 @@ namespace AK_DLL
             AutoFill_BackStory();
 
             AutoFill_Age();
+
+            ignoreAutoFill = true;
         }
 
         #region RecruitSubMethods
@@ -517,7 +537,7 @@ namespace AK_DLL
             return weapon;
         }
 
-        protected void Recruit_Inventory_Wear(ThingDef apparelDef, Pawn p, bool isFashion = true)
+        protected Apparel Recruit_Inventory_Wear(ThingDef apparelDef, Pawn p, bool isFashion = true)
         {
             Apparel apparel = (Apparel)ThingMaker.MakeThing(apparelDef);
             CompBiocodable comp = apparel.GetComp<CompBiocodable>();
@@ -528,6 +548,7 @@ namespace AK_DLL
             {
                 clothTemp.Add(apparel);
             }
+            return apparel;
         }
 
         protected Thing Recruit_Inventory_Additem(ThingDef itemDef, int cnt = 1)
@@ -664,7 +685,7 @@ namespace AK_DLL
             foreach (string thingType in TypeDef.apparelType)
             {
                 tempThing = DefDatabase<ThingDef>.GetNamedSilentFail(AK_Tool.GetThingdefNameFrom(this.defName, thingType));
-                if (tempThing != null && !this.apparels.Contains(tempThing)) this.apparels.Add(tempThing);
+                if (tempThing != null && !this.apparels.Contains(tempThing) && !accessory.Contains(tempThing)) this.apparels.Add(tempThing);
             }
         }
 

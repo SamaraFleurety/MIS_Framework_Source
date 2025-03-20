@@ -45,6 +45,8 @@ namespace AK_DLL
                 }
             }
 
+            foreach (FloatMenuOption extraOptions in GetFloatMenuRecruitOptions(selPawn)) yield return extraOptions;
+
             //换装 右键直接出选项，没有ui
             OperatorDocument doc = selPawn.GetDoc();
             if (doc != null && !doc.operatorDef.clothSets.NullOrEmpty())
@@ -99,6 +101,11 @@ namespace AK_DLL
             {
                 selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AKDefOf.AK_Job_UseRecruitConsole, this, this));  //用target B做标记，要是不为null就是连续招募模式
             });
+        }
+
+        public virtual IEnumerable<FloatMenuOption> GetExtendedFloatMenuOptions(Pawn selPawn)
+        {
+            yield break;
         }
 
         public override string Label

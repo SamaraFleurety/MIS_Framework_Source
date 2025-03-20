@@ -33,5 +33,8 @@ namespace LMA_Lib
                 return cachedWaterList;
             }
         }
+
+        //招募ui中，每个原版技能点都有个图标
+        public Dictionary<SkillDef, string> skillIcons = new();
     }
 }

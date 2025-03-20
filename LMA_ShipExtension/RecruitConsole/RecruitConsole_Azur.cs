@@ -8,6 +8,18 @@ namespace LMA_Lib
     //最后还是觉得写个新类 兼容性更好
     public class RecruitConsole_Azur : RecruitConsole
     {
+        public override IEnumerable<FloatMenuOption> GetExtendedFloatMenuOptions(Pawn selPawn)
+        {
+            yield return new FloatMenuOption("LMA_Invest_6480".Translate(), delegate
+            {
+
+            });
+            yield return new FloatMenuOption("LMA_Invest_All".Translate(), delegate
+            {
+
+            });
+        }
+
         public override IEnumerable<FloatMenuOption> GetFloatMenuRecruitOptions(Pawn selPawn)
         {
             yield return new FloatMenuOption("AK_CanReach".Translate(),
@@ -21,6 +33,5 @@ namespace LMA_Lib
                 selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AzurDefOf.LMA_Job_UseRecruitConsole, this, this));  //用target B做标记，要是不为null就是连续招募模式
             });
         }
-
     }
 }

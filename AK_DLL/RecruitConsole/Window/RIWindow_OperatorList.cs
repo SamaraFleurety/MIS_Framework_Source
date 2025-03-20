@@ -9,6 +9,7 @@ using System.Reflection;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 
 //记得给干员页面写下拉 series
 //sortOperator可能封装一下更好 特别是按字母排序
@@ -128,9 +129,9 @@ namespace AK_DLL.UI
         private static int sortType = (int)OperatorSortType.Alphabet;
         private static bool sortReverseOrder = false;
         //排序按钮的面板（通用父类）
-        private static Transform sorterColumnLoc = null;
+        protected static Transform sorterColumnLoc = null;
         //干员面板
-        private static Transform opListPanel = null;
+        protected static Transform opListPanel = null;
         private static List<GameObject> opList = new List<GameObject>();
         //相当投机取巧地在名字里面存储数据 字符串内可以随便填。现在的值是12。
         public static int orderInName = "FSUI_whatev_".Length;
@@ -148,6 +149,16 @@ namespace AK_DLL.UI
             }
         }
 
+        protected virtual int MaxOperatorPerPage => 24;
+
+        protected virtual GameObject OperatorPortraitInstance
+        {
+            get
+            {
+                GameObject opRectPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("OperatorTemplate");
+                return GameObject.Instantiate(opRectPrefab, opListPanel);
+            }
+        }
         /*private GameObject ClickedBtnParent
         {
             get
@@ -212,6 +223,15 @@ namespace AK_DLL.UI
         }
 
         #region 切换系列/职业
+        protected static Transform classColumn;
+        protected virtual GameObject ClassButtonInstance
+        {
+            get
+            {
+                GameObject classBtnPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("btnClassTemplate");
+                return GameObject.Instantiate(classBtnPrefab, classColumn);
+            }
+        }
         /// <summary>
         /// 致敬经典 - 废话summary
         /// Just Draw classes buttons
@@ -219,8 +239,8 @@ namespace AK_DLL.UI
         private void DrawAllClassBtn()
         {
             if (choosingSeries) return;
-            GameObject classBtnPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("btnClassTemplate");
-            Transform classColumn;
+            
+            //Transform classColumn;
             //新版ui
             if (true)
             {
@@ -233,7 +253,8 @@ namespace AK_DLL.UI
             foreach(int node in ActiveClasses)
             {
                 OperatorClassDef opClass = RIWindowHandler.operatorClasses[node];
-                classBtnInstance = GameObject.Instantiate(classBtnPrefab, classColumn);
+                // classBtnInstance = ClassButtonInstance;
+                classBtnInstance = DrawOneClassBtn(node);
                 //位置
                 Vector3 pos = classBtnInstance.transform.localPosition;
                 classBtnInstance.transform.localPosition = new Vector3(pos.x, pos.y * i);
@@ -241,27 +262,19 @@ namespace AK_DLL.UI
                 //名字
                 classBtnInstance.name = "FSUI_classs_" + node;
                 //按钮 非实时
-                int j = node;
-                classBtnInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+                //int j = node;
+                /*classBtnInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
                 {
                     OperatorClass = j;
                     cachedOperatorList = RIWindowHandler.operatorDefs[OperatorClass].Values.ToList();
                     //默认使用 首字母排序
-                    //NeedSortTo((int)OperatorSortType.Alphabet, true);
                     NeedSortTo(sortType, true);
 
                     //实际排序
                     SortOperator(sortType);
-                    /*SortOperator<string>(delegate (string a, string b)
-                    {
-                        return string.Compare(a, b) <= 0;
-                    }, delegate (OperatorDef def)
-                    {
-                        return AK_Tool.GetOperatorIDFrom(def.defName);
-                    });*/
                     DrawOperatorListContent();
                 });
-                DrawOneClassBtn(classBtnInstance, opClass.Icon, opClass.label.Translate());
+                DrawOneClassBtn(classBtnInstance, opClass.Icon, opClass.label.Translate(), node);*/
             }
         }
 
@@ -283,23 +296,6 @@ namespace AK_DLL.UI
                 DrawSeriesPanel();
                 DrawAllClassBtn();
             });
-            //绘制所有的系列图标（可隐藏）
-            /*for (int i = 0; i < AllSeries.Count; ++i)
-            {
-                seriesBtnInstance = GameObject.Instantiate(classBtnPrefab, seriesColumn);
-                DrawOneClassBtn(seriesBtnInstance, AllSeries[i].Icon, AllSeries[i].label);
-                seriesBtnInstance.GetComponent<Image>().sprite = AK_Tool4Unity.Image2Spirit(AllSeries[i].Icon);
-
-                int j = i;
-                seriesBtnInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
-                {
-                    series = j;
-                    DrawAllClassBtn();
-                });
-            }*/
-
-            /*seriesPanel.GetChild(0).gameObject.SetActive(false);
-            seriesPanel.GetChild(1).gameObject.SetActive(false);*/
         }
 
         private void DrawSeriesPanel()
@@ -311,33 +307,78 @@ namespace AK_DLL.UI
             Utilities_Unity.ClearAllChild(seriesColumn);           
             for (int i = 0; i < AllSeries.Count; ++i)
             {
-                seriesBtnInstance = GameObject.Instantiate(classBtnPrefab, seriesColumn);
-                DrawOneClassBtn(seriesBtnInstance, AllSeries[i].Icon, AllSeries[i].label);
-                seriesBtnInstance.GetComponent<Image>().sprite = Utilities_Unity.Image2Spirit(AllSeries[i].Icon);
+                //seriesBtnInstance = GameObject.Instantiate(classBtnPrefab, seriesColumn);
+                //DrawOneClassBtn(seriesBtnInstance, AllSeries[i].Icon, AllSeries[i].label);
+                //seriesBtnInstance.GetComponent<Image>().sprite = Utilities_Unity.Image2Spirit(AllSeries[i].Icon);
 
-                int j = i;
+                seriesBtnInstance = DrawOneSeriesBtn(i);
+                /*int j = i;
                 seriesBtnInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
                 {
                     choosingSeries = false;
                     Series = j;
                     DrawAllClassBtn();
-                });
+                });*/
             }
         }
 
-        //画单个图标。如果没有图片 就显示字
-        private void DrawOneClassBtn(GameObject ins, Texture2D icon, string label)
+        //绘制单个系列按钮
+        protected virtual GameObject DrawOneSeriesBtn(int seriesIndex)
         {
+            GameObject seriesBtn = DrawOneClassBtn_Functionless(AllSeries[seriesIndex].Icon, AllSeries[seriesIndex].label);
+
+            int j = seriesIndex;
+            seriesBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            {
+                choosingSeries = false;
+                Series = j;
+                DrawAllClassBtn();
+            });
+
+            return seriesBtn;
+        }
+
+        //画单个职业按钮。如果没有图片 就显示字
+        protected virtual GameObject DrawOneClassBtn(int classIndex)
+        {
+            OperatorClassDef opClass = RIWindowHandler.operatorClasses[classIndex];
+            Texture2D icon = opClass.Icon;
+            string label = opClass.label;
+            //GameObject classBtnInstance = ClassButtonInstance;
+            GameObject classBtnInstance = DrawOneClassBtn_Functionless(icon, label);
+            //按钮 非实时
+            int j = classIndex;
+            classBtnInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            {
+                OperatorClass = j;
+                cachedOperatorList = RIWindowHandler.operatorDefs[OperatorClass].Values.ToList();
+                //默认使用 首字母排序
+                NeedSortTo(sortType, true);
+
+                //实际排序
+                SortOperator(sortType);
+                DrawOperatorListContent();
+            });
+
+            return classBtnInstance;
+        }
+
+        //绘制一个无功能的职业按钮。职业和系列共用此按钮，只是功能不同。
+        protected virtual GameObject DrawOneClassBtn_Functionless(Texture2D icon, string label)
+        {
+            GameObject classBtnInstance = ClassButtonInstance;
             if (icon == null)
             {
-                TextMeshProUGUI TMP = ins.GetComponentInChildren<TextMeshProUGUI>();
+                TextMeshProUGUI TMP = classBtnInstance.GetComponentInChildren<TextMeshProUGUI>();
                 TMP.text = label;
             }
             else
             {
-                ins.GetComponent<Image>().sprite = Sprite.Create(icon, new Rect(0, 0, icon.width, icon.height), new Vector2(0.5f, 0.5f));
+                classBtnInstance.GetComponent<Image>().sprite = Sprite.Create(icon, new Rect(0, 0, icon.width, icon.height), new Vector2(0.5f, 0.5f));
             }
-            ins.SetActive(true);
+            classBtnInstance.SetActive(true);
+
+            return classBtnInstance;
         }
         #endregion
 
@@ -382,7 +423,7 @@ namespace AK_DLL.UI
                 }
             }
             //如果小于3*8个干员 就不显示右边的没用滑动条
-            if (cnt <= 24)
+            if (cnt <= MaxOperatorPerPage)
             {
                 GameObject silder = GameObject.Find("OpReg_Scrollbar");
                 if (silder != null) silder.SetActive(false);
@@ -411,13 +452,9 @@ namespace AK_DLL.UI
             Texture2D operatorTex = ContentFinder<Texture2D>.Get(def.headPortrait);
             if (j >= opList.Count || opList[j] == null)
             {
-                GameObject opRectPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("OperatorTemplate");
-                opPortraitInstance = GameObject.Instantiate(opRectPrefab, opListPanel);
-                //opPortraitInstance.transform.parent = opListLoc;
+                opPortraitInstance = OperatorPortraitInstance;
                 if (j >= opList.Count) opList.Add(opPortraitInstance);
                 else opList[j] = opPortraitInstance;
-
-                
             }
             else
             {
@@ -427,8 +464,9 @@ namespace AK_DLL.UI
             opPortraitInstance.GetComponentInChildren<Button>().onClick.RemoveAllListeners();
             opPortraitInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
-                RIWindowHandler.OpenRIWindow_OpDetail(AKDefOf.AK_Prefab_OpDetail, cachedOperatorList[k]);
-                this.Close(false);
+                OpPortraitBtnOnClickListener(k);
+                /*RIWindowHandler.OpenRIWindow_OpDetail(AKDefOf.AK_Prefab_OpDetail, cachedOperatorList[k]);
+                this.Close(false);*/
             });
             //设定名字中 以后检索干员def时用的数字序
             //opPortraitInstance.name = "FSUI_Opertr_" + i;
@@ -440,13 +478,48 @@ namespace AK_DLL.UI
             opPortraitInstance.transform.GetChild(1).GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = GetSortDetail(def);
             opPortraitInstance.SetActive(true);
         }
+
+        protected virtual void OpPortraitBtnOnClickListener(int index)
+        {
+            RIWindowHandler.OpenRIWindow_OpDetail(AKDefOf.AK_Prefab_OpDetail, cachedOperatorList[index]);
+            this.Close(false);
+        }
 #endregion
 
 #region 排序相关
-        //按钮的功能有一定的优化空间，但我懒得做
-        private void DrawSortBtns()
+        protected virtual GameObject SortButtonInstance
         {
-            GameObject sortBtnPrefab = Bundle.LoadAsset<GameObject>("btnSortTemplate");
+            get
+            {
+                GameObject sortBtnPrefab = Bundle.LoadAsset<GameObject>("btnSortTemplate");
+                return GameObject.Instantiate(sortBtnPrefab, sorterColumnLoc);
+            }
+        }
+
+        protected virtual GameObject DrawOneSortBtn(int sortID, string label)
+        {
+            GameObject sortBtnInstance;
+            sortBtnInstance = SortButtonInstance;
+            TextMeshProUGUI textTMP = sortBtnInstance.GetComponentInChildren<TextMeshProUGUI>();
+            //按钮的显示文字
+            textTMP.text = label;
+            int k = sortID;
+            sortBtnInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            {
+                sortBtnInstance = ClickedBtn;
+                if (NeedSortTo(k))
+                {
+                    SortOperator(k);
+                }
+                DrawOperatorListContent();
+            });
+            sortBtnInstance.SetActive(true);
+            return sortBtnInstance;
+        }
+        //按钮的功能有一定的优化空间，但我懒得做
+        protected void DrawSortBtns()
+        {
+            //GameObject sortBtnPrefab = Bundle.LoadAsset<GameObject>("btnSortTemplate");
             GameObject sortBtnInstance;
             TextMeshProUGUI textTMP;
             if (sorterColumnLoc == null)
@@ -458,12 +531,10 @@ namespace AK_DLL.UI
             //按某种技能的等级排序
             for (int i = 0; i < TypeDef.SortOrderSkill.Count(); ++i)
             {
-                sortBtnInstance = GameObject.Instantiate(sortBtnPrefab, sorterColumnLoc);
-                textTMP = sortBtnInstance.GetComponentInChildren<TextMeshProUGUI>();
+                sortBtnInstance = DrawOneSortBtn(i, TypeDef.SortOrderSkill[i].label.Translate());
+                /*textTMP = sortBtnInstance.GetComponentInChildren<TextMeshProUGUI>();
                 //按钮的显示文字
                 textTMP.text = TypeDef.SortOrderSkill[i].label.Translate();
-                //使用了投机取巧而不是正常的方式存储数据。 已弃用。 
-                //sortBtnInstance.name = "FSUI_Sorter_" + i;
                 int k = i;
                 sortBtnInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
                 {
@@ -474,70 +545,55 @@ namespace AK_DLL.UI
                     }
                     DrawOperatorListContent();
                 });
-                sortBtnInstance.SetActive(true);
-
-                //sortBtnInstance.transform.localPosition = new Vector3(sortBtnInstance.transform.localPosition.x * (i - (i / 7 * 7)), sortBtnInstance.transform.localPosition.y * (i / 7));
+                sortBtnInstance.SetActive(true);*/
 
                 sorterBtns.Add(sortBtnInstance.transform);
             }
 
             //按面板DPS排序
-            sortBtnInstance = GameObject.Instantiate(sortBtnPrefab, sorterColumnLoc);
-            textTMP = sortBtnInstance.GetComponentInChildren<TextMeshProUGUI>();
-            //按钮的显示文字
-            textTMP.text = "AK_SortDPS".Translate();
-
             int temp = (int)OperatorSortType.Dps;
+            //sortBtnInstance = SortButtonInstance;
+            sortBtnInstance = DrawOneSortBtn(temp, "AK_SortDPS".Translate());
+            //textTMP = sortBtnInstance.GetComponentInChildren<TextMeshProUGUI>();
+            //按钮的显示文字
+            //textTMP.text = "AK_SortDPS".Translate();
+
             sortBtnInstance.name = "FSUI_Sorter_" + temp;
 
-            sortBtnInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            /*sortBtnInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
              
                 if (NeedSortTo((int)OperatorSortType.Dps))
                 {
                     SortOperator((int)OperatorSortType.Dps);
-                    /*SortOperator<double>(delegate (double a, double b)
-                    {
-                        return !(a <= b);
-                    }, delegate (OperatorDef def)
-                    {
-                        return 
-                    lculator(def);
-                    });*/
                 }
                 DrawOperatorListContent();
-            });
-            sortBtnInstance.SetActive(true);
+            });*/
+            //sortBtnInstance.SetActive(true);
 
             sortBtnInstance.transform.localPosition = new Vector3(sortBtnInstance.transform.localPosition.x * (temp - (temp / 7 * 7)), sortBtnInstance.transform.localPosition.y * (temp / 7));
 
             sorterBtns.Add(sortBtnInstance.transform);
 
             //按字母表排序,a->z
-            sortBtnInstance = GameObject.Instantiate(sortBtnPrefab, sorterColumnLoc);
-            textTMP = sortBtnInstance.GetComponentInChildren<TextMeshProUGUI>();
-            //按钮的显示文字
-            textTMP.text = "AK_SortAlphabet".Translate();
-
             temp = (int)OperatorSortType.Alphabet;
+            //sortBtnInstance = SortButtonInstance;
+            sortBtnInstance = DrawOneSortBtn(temp, "AK_SortAlphabet".Translate());
+            //textTMP = sortBtnInstance.GetComponentInChildren<TextMeshProUGUI>();
+            //按钮的显示文字
+            //textTMP.text = "AK_SortAlphabet".Translate();
+
             sortBtnInstance.name = "FSUI_Sorter_" + temp;
 
-            sortBtnInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            /*sortBtnInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
                 if (NeedSortTo((int)OperatorSortType.Alphabet))
                 {
                     SortOperator((int)OperatorSortType.Alphabet);
-                    /*SortOperator<string>(delegate (string a, string b)
-                    {
-                        return string.Compare(a, b) <= 0;
-                    }, delegate (OperatorDef def)
-                    {
-                        return AK_Tool.GetOperatorIDFrom(def.defName);
-                    });*/
                 }
                 DrawOperatorListContent();
-            });
-            sortBtnInstance.SetActive(true);
+            });*/
+            //sortBtnInstance.SetActive(true);
 
             sortBtnInstance.transform.localPosition = new Vector3(sortBtnInstance.transform.localPosition.x * (temp - (temp / 7 * 7)), sortBtnInstance.transform.localPosition.y * (temp / 7));
 
@@ -756,7 +812,7 @@ namespace AK_DLL.UI
 
         static List<Transform> sorterBtns = new List<Transform>();
 
-        static List<OperatorDef> cachedOperatorList = new List<OperatorDef>();
+        protected static List<OperatorDef> cachedOperatorList = new List<OperatorDef>();
         public Thing RecruitConsole
         {
             get { return RIWindowHandler.RecruitConsole; }

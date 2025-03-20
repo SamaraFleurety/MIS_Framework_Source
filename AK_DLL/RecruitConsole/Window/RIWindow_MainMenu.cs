@@ -218,7 +218,7 @@ namespace AK_DLL.UI
     public class RIWindow_MainMenu : RIWindow
     {
         //调整秘书位置的按钮
-        List<GameObject> adjustSecBtns;
+        protected List<GameObject> adjustSecBtns;
 
         public GameObject OpStand; //干员静态立绘的渲染目标
         public GameObject OpL2D;   //干员动态立绘的渲染目标（不是模型本身，是名为L2DRenderTarget的游戏物体）
@@ -232,15 +232,15 @@ namespace AK_DLL.UI
             }
         }*/
 
-        private OperatorDef SecretaryDef => DefDatabase<OperatorDef>.GetNamed(AK_ModSettings.secretary);
+        protected OperatorDef SecretaryDef => DefDatabase<OperatorDef>.GetNamed(AK_ModSettings.secretary);
 
-        private Vector3 SecretaryLoc
+        protected Vector3 SecretaryLoc
         {
             get { return AK_ModSettings.secretaryLoc; }
             set { AK_ModSettings.secretaryLoc = value; }
         }
 
-        private int SecretaryLocSensetive
+        protected int SecretaryLocSensetive
         {
             get { return AK_ModSettings.secLocSensitive * 10; }
         }
@@ -275,7 +275,7 @@ namespace AK_DLL.UI
             DrawStand();
         }
 
-        private void DrawNavBtn()
+        protected virtual void DrawNavBtn()
         {
             GameObject.Find("BtnBack").GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
@@ -284,7 +284,7 @@ namespace AK_DLL.UI
         }
 
         //左边6个主要功能
-        private void DrawMainFeature()
+        protected virtual void DrawMainFeature()
         {
             GameObject.Find("MBtn_Recruit").GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
@@ -300,18 +300,20 @@ namespace AK_DLL.UI
             });
         }
 
-
-
-        private void DrawSubFeature()
+        protected virtual void DrawSubFeature_ChangeSecretary()
         {
-            GameObject temp;
             GameObject.Find("SBtn_ChangeSecretary").GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
-                //RIWindow_OperatorDetail.windowPurpose = OpDetailType.Secretary;
-                //RIWindowHandler.OpenRIWindow(RIWindowType.Op_List);
                 RIWindowHandler.OpenRIWindow(AKDefOf.AK_Prefab_yccOpList, purpose: OpDetailType.Secretary);
                 this.Close(false);
             });
+        }
+
+        protected virtual void DrawSubFeature()
+        {
+            GameObject temp;
+
+            DrawSubFeature_ChangeSecretary();
 
             //点击已解锁的按钮变成未解锁。 解锁时，只需要启用锁定图标，不需要禁用未锁定图标。
             /*GameObject.Find("SBtn_UnlockedSec").GetComponent<Button>().onClick.AddListener(delegate
@@ -379,7 +381,6 @@ namespace AK_DLL.UI
                 DrawStand();
             });
 
-            //SetSecretaryOffsetBtnsActive(false);
 
         }
 
@@ -392,7 +393,7 @@ namespace AK_DLL.UI
             }
         }
 
-        private void DrawStand()
+        protected virtual void DrawStand()
         {
             OpStand.SetActive(false);
             OpL2D.SetActive(false);
@@ -480,7 +481,7 @@ namespace AK_DLL.UI
         }
 
         //FIXME 没做
-        private void DrawResoureHeader()
+        protected virtual void DrawResoureHeader()
         {
 
         }

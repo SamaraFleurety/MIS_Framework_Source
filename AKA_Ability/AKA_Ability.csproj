@@ -165,6 +165,8 @@
     <Compile Include="LordJob_Variable.cs" />
     <Compile Include="Mote_AttachedRotate.cs" />
     <Compile Include="PawnRenderNodeSubWorker_PretendTurretGun.cs" />
+    <Compile Include="PawnRenderNodeSubWorker_StatusEffect.cs" />
+    <Compile Include="PawnRenderNode_EffectOverlay.cs" />
     <Compile Include="PawnRenderNode_HeldWeaponIcon.cs" />
     <Compile Include="Projectile_Custom.cs" />
     <Compile Include="Summon\Patch_AllowTakeOrder.cs" />

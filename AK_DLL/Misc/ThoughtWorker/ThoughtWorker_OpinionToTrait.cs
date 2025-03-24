@@ -15,7 +15,7 @@ namespace AK_DLL
         {
             OperatorDocument doc = otherPawn.GetDoc();
             if (doc == null || doc.operatorDef == null) return false;
-            if (true && doc.operatorDef.thoughtReceived == this.def)
+            if (doc.operatorDef.thoughtReceived == this.def)
             {
                 return ThoughtState.ActiveAtStage(doc.operatorDef.TRStage);
             }

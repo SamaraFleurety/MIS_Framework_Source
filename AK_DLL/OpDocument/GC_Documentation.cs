@@ -55,7 +55,8 @@ namespace AK_DLL
         public void RegisterFashionSet(List<Thing> fashionSet)
         {
             DestroyFashionSet();
-            if (apparel == null) apparel = new List<Thing>();
+            apparel ??= new List<Thing>();
+            if (fashionSet == null) return;
             foreach (Thing i in fashionSet)
             {
                 apparel.Add(i);

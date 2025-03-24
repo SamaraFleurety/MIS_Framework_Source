@@ -17,8 +17,9 @@ namespace AK_DLL
             if (obj is Pawn pawn)
             {
                 OperatorDocument doc = pawn.GetDoc();
-                if (doc != null)
-                { doc.voicePack.selectSounds.RandomElement().PlaySound(); }
+                if (doc == null) return;
+                if (doc.voicePack == null) return;
+                doc.voicePack.selectSounds.RandomElement().PlaySound(); 
             }
         }
     }

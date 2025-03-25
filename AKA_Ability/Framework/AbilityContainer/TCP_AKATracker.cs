@@ -12,7 +12,7 @@ namespace AKA_Ability
     //放Thing上面的技能容器。可能是放在衣服上需要穿戴，也可能放在pawn上面可以直接施法
     public class TCP_AKATracker : CompProperties
     {
-        public List<AKAbilityDef> abilities = new List<AKAbilityDef>();
+        public List<AKAbilityDef> abilities = new();
 
         public AbilityTrackerSharedDataProperty sharedDataProperty = null;
         public TCP_AKATracker()

@@ -170,7 +170,7 @@
     <Compile Include="AbilityEffect\DelayedEffects\Effectors\DelayedEffectorBase.cs" />
     <Compile Include="AbilityEffect\DelayedEffects\Effectors\Effector_ShootProjectile.cs" />
     <Compile Include="Framework\AbilityContainer\ACP_AbilityAddon.cs" />
-    <Compile Include="Framework\AbilityContainer\TCP_TrackerContainer.cs" />
+    <Compile Include="Framework\AbilityContainer\TCP_AKATracker.cs" />
     <Compile Include="Framework\AbilityInstance\AKAbility_Base.cs" />
     <Compile Include="Framework\AbilityInstance\AKAbility_AutoSelf.cs" />
     <Compile Include="Framework\AbilityInstance\AKAbility_SelfTarget.cs" />

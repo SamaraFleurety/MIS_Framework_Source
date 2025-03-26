@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FS_UGUIFramework.UI;
 using UnityEngine;
-using Verse;
-using TMPro;
-using FS_UGUIFramework.UI;
 
 namespace AK_DLL
 {

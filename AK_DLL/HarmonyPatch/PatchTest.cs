@@ -1,14 +1,4 @@
-﻿using HarmonyLib;
-using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Verse;
-using static Verse.DamageWorker;
-
-namespace AK_DLL
+﻿namespace AK_DLL
 {
     /*[HarmonyPatch(typeof(Pawn), "Drafted", MethodType.Getter)]
     public class PatchTest

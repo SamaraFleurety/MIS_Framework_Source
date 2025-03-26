@@ -1,13 +1,9 @@
-﻿using RimWorld;
+﻿using FS_UGUIFramework.UI;
+using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 using Verse;
-using FS_UGUIFramework;
-using FS_UGUIFramework.UI;
 
 namespace AK_DLL.UI
 {

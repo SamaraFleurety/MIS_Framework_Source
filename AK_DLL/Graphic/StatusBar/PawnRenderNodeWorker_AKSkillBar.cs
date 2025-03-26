@@ -1,9 +1,9 @@
 ﻿using AKA_Ability;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using Verse;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace AK_DLL
 {
@@ -130,6 +130,10 @@ namespace AK_DLL
         {
             Pawn pawn = parms.pawn;
             if (CurrentProgramState != ProgramState.Playing || pawn == null)
+            {
+                return false;
+            }
+            if (!AK_ModSettings.enable_Skillbar)//可能造成切换设置后延迟显示 无所谓的
             {
                 return false;
             }

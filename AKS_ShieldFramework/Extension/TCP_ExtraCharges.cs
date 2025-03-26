@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
-using Verse.AI;
 
 namespace AKS_Shield.Extension
 {

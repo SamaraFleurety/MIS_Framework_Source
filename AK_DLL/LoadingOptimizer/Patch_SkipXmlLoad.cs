@@ -1,15 +1,10 @@
 ﻿using HarmonyLib;
-using RimWorld;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Reflection;
-using Verse;
 using System.IO;
-using System.Xml;
-using UnityEngine.TextCore;
-using UnityEngine;
+using System.Linq;
+using System.Reflection;
+using System.Reflection.Emit;
+using Verse;
 
 namespace AK_DLL.HarmonyPatchs
 {

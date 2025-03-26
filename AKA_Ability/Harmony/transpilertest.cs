@@ -1,14 +1,4 @@
-﻿using HarmonyLib;
-using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
-using Verse;
-
-namespace AKA_Ability
+﻿namespace AKA_Ability
 {
     /*[HarmonyPatch(typeof(DebugToolsGeneral), "Kill")]
     public class transpilertest

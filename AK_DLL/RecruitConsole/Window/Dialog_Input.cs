@@ -1,15 +1,11 @@
 ﻿using RimWorld;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
 namespace AK_DLL
 {
-	//fixme：从power++抄的输入框，有空看一下
+    //fixme：从power++抄的输入框，有空看一下
     public class Dialog_Input : Window
     {
 		protected string curName;

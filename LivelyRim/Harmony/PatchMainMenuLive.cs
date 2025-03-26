@@ -2,18 +2,12 @@
 #if L2DFull
 
 using HarmonyLib;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Live2D.Cubism.FSAddon;
 using RimWorld;
-using Verse;
 using RimWorld.Planet;
 using System.Reflection;
 using UnityEngine;
-using Live2D.Cubism.FSAddon;
-using Live2D.Cubism.Rendering;
+using Verse;
 
 namespace FS_LivelyRim
 {

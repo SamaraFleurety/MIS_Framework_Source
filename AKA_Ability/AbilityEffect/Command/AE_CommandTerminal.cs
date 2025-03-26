@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Verse;
+﻿using AK_DLL;
 using RimWorld;
-using Verse.Noise;
-using AK_DLL;
+using Verse;
 namespace AKA_Ability
 {
     public class AE_CommandTerminal : AbilityEffectBase

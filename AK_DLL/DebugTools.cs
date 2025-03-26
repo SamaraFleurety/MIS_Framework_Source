@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using RimWorld;
-using RimWorld.Planet;
-using Verse;
-using System.Reflection;
-using HarmonyLib;
+﻿using AK_DLL.UI;
 using LudeonTK;
-using AK_DLL.UI;
+using System.Collections.Generic;
+using Verse;
 
 namespace AK_DLL
 {
-	public static class FS_DebugAction
+    public static class FS_DebugAction
 	{
 		private static Map Map => Find.CurrentMap;
 		private static BoolGrid usedCells;

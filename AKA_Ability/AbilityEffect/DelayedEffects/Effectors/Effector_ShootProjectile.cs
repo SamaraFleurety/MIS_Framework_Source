@@ -1,12 +1,4 @@
-﻿using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Verse;
-
-/*namespace AKA_Ability.DelayedEffects
+﻿/*namespace AKA_Ability.DelayedEffects
 {
     public class Effector_ShootProjectile : DelayedEffectorBase
     {

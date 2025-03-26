@@ -1,9 +1,5 @@
 ﻿using RimWorld;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Verse;
 
 namespace AKA_Ability
@@ -24,13 +20,13 @@ namespace AKA_Ability
         }
         public override void AbilityTick()
         {
-            AKATracker.Tick();
+            AKATracker?.Tick();
             return;
         }
 
         public override IEnumerable<Command> GetGizmos()
         {
-            return AKATracker.GetGizmos();
+            return AKATracker?.GetGizmos();
         }
 
         public override void ExposeData()

@@ -1,15 +1,13 @@
-﻿using System;
-using Verse;
-using System.Linq;
-using System.Text;
-using RimWorld;
-using UnityEngine;
+﻿using RimWorld;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using TMPro;
-using UnityEngine.UI;
+using UnityEngine;
 using UnityEngine.EventSystems;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
+using UnityEngine.UI;
+using Verse;
 
 //记得给干员页面写下拉 series
 //sortOperator可能封装一下更好 特别是按字母排序

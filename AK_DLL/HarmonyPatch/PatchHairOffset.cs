@@ -1,16 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
-using HarmonyLib;
-using RimWorld;
-using UnityEngine;
-using Verse;
-
-//转译器和Traverse测试
+﻿//转译器和Traverse测试
 namespace AK_DLL
 {
     /*[HarmonyPatch(typeof(Graphic_Multi), "Init")]

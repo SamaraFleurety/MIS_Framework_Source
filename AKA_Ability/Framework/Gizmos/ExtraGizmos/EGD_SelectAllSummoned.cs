@@ -1,12 +1,4 @@
-﻿using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Verse;
-
-namespace AKA_Ability.Gizmos
+﻿namespace AKA_Ability.Gizmos
 {
     /*public class EGD_SelectAllSummoned : ExtraGizmoDrawer_Base
     {

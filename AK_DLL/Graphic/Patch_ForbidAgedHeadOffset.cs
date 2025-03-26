@@ -1,13 +1,9 @@
 ﻿using HarmonyLib;
 using RimWorld;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+using System.Reflection.Emit;
 using Verse;
 
 namespace AK_DLL.HarmonyPatchs
@@ -18,7 +14,7 @@ namespace AK_DLL.HarmonyPatchs
     public class Patch_ForbidAgedHeadOffset
     {
         [HarmonyTranspiler]
-        public static IEnumerable<CodeInstruction> tanspiler(IEnumerable<CodeInstruction> instructions)
+        public static IEnumerable<CodeInstruction> Tanspiler(IEnumerable<CodeInstruction> instructions)
         {
             List<CodeInstruction> list = instructions.ToList();
 

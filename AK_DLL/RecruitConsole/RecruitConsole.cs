@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using Verse.AI;
-using RimWorld;
-using Verse;
+﻿using RimWorld;
 using RimWorld.Planet;
+using System.Collections.Generic;
+using Verse;
+using Verse.AI;
 
 namespace AK_DLL
 {

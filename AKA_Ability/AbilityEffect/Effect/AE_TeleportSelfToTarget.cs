@@ -1,5 +1,4 @@
-﻿using RimWorld;
-using RimWorld.Planet;
+﻿using RimWorld.Planet;
 using Verse;
 
 namespace AKA_Ability.AbilityEffect

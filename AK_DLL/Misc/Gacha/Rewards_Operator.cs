@@ -1,11 +1,5 @@
-﻿using AKR_Random;
-using AKR_Random.Rewards;
-using RimWorld;
-using System;
+﻿using AKR_Random.Rewards;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Verse;
 
 namespace AK_DLL.Rewards

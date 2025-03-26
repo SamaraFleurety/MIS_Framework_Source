@@ -1,14 +1,4 @@
-﻿using HarmonyLib;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AK_DLL;
-using UnityEngine;
-using Verse;
-using SpriteEvo;
-
-namespace AK_SpineExtention
+﻿namespace AK_SpineExtention
 {
 
     #region 左上角动态立绘LiveModelDef

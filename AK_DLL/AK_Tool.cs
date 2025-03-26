@@ -1,16 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using RimWorld;
-using UnityEngine;
-using Verse;
-using UnityEngine.UI;
-using System.Text.RegularExpressions;
-using AKA_Ability;
+﻿using AK_DLL.Document;
 using AK_DLL.UI;
-using HarmonyLib;
-using System.Diagnostics;
-using System;
 using AK_TypeDef;
+using RimWorld;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using UnityEngine;
+using UnityEngine.UI;
+using Verse;
 
 namespace AK_DLL
 {
@@ -138,16 +136,19 @@ namespace AK_DLL
 
             return doc;
         }
-
+        //只有OpDocContainer才有Doc
         public static OperatorDocument GetDoc(this Pawn p)
         {
             if (OperatorDef.currentlyGenerating) return null;
             if (p == null) return null;
 
-            OperatorDocument doc = p.TryGetDoc<OpDocContainer>()?.va?.Document;
+            DocumentBase document = p.TryGetDoc<DocumentBase>();
+            OpDocContainer opdoc = document as OpDocContainer;
+            OperatorDocument doc = opdoc?.va?.Document;
 
             if (doc != null) return doc;
-
+            if (document is not OpDocContainer) return null;//对非干员档案的判断
+            //(doc == null)
             if (p.abilities == null) return null;
             if (!p.IsColonist) return null;
             if (GC_OperatorDocumentation.cachedOperators.ContainsKey(p))
@@ -174,8 +175,7 @@ namespace AK_DLL
                 GC_OperatorDocumentation.cachedNonOperators.Add(p);
                 return null;
             }
-            doc = va.Document;
-            return doc;
+            return va.Document;
         }
         #endregion
 

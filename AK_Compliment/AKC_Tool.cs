@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AK_Compliment
+﻿namespace AK_Compliment
 {
     public static class AKC_Tool
     {

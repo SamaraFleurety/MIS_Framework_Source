@@ -1,15 +1,4 @@
-﻿using AKA_Ability.CastConditioner;
-using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-using Verse;
-using Verse.AI;
-
-namespace AKA_Ability.Gizmos
+﻿namespace AKA_Ability.Gizmos
 {
     //当前仅给召唤技能用的 额外gizmo渲染。召唤技能有召唤和选择所有召唤物2个按钮。
     //说实话多写一个"选择所有召唤物"技能可能也行。都行。

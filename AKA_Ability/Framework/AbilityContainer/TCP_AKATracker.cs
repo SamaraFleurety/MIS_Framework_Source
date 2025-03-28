@@ -49,6 +49,31 @@ namespace AKA_Ability
             }
         }
 
+        CompEquippable CompEquippable 
+        {
+            get 
+            {
+                CompEquippable compEquippable = parent.TryGetComp<CompEquippable>();
+                if (compEquippable != null) 
+                {
+                    return compEquippable;
+                }
+                return null;
+            }
+        }
+
+        Pawn Holder 
+        {
+            get 
+            {
+                if (parent.ParentHolder is Pawn holder)
+                {
+                    return holder;
+                }
+                return null;
+            }
+        }
+
         public override void PostPostMake()
         {
             base.PostPostMake(); 
@@ -110,6 +135,13 @@ namespace AKA_Ability
             if (CasterPawn == null || CasterPawn.Faction != Faction.OfPlayer) return Enumerable.Empty<Gizmo>();
             return tracker.GetGizmos();
         }
+
+        public virtual IEnumerable<Gizmo> CompGetWeaponGizmosExtra()
+        {
+            if (Holder == null || Holder.Faction != Faction.OfPlayer || CompEquippable == null) return Enumerable.Empty<Gizmo>();
+            return tracker.GetGizmos();
+        }
+
         public override void PostExposeData()
         {
             base.PostExposeData();

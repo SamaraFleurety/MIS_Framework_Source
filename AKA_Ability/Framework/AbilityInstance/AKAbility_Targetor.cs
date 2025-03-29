@@ -1,5 +1,6 @@
 ﻿using AKA_Ability.Gizmos;
 using RimWorld;
+using System.Linq;
 using UnityEngine;
 using Verse;
 
@@ -62,7 +63,28 @@ namespace AKA_Ability
             if (target.IsValid)
             {
                 GenDraw.DrawTargetHighlight(target);
+                DrawAbilityFieldRadiusAroundTarget(target);
             }
+        }
+
+        public override void DrawAbilityFieldRadiusAroundTarget(LocalTargetInfo target)
+        {
+            float num = HighlightFieldRadiusAroundTarget(out bool needLOSToCenter);
+            if (!(num > 0.2f) || !CanHitTarget(target)) return;
+            if (needLOSToCenter)
+            {
+                GenExplosion.RenderPredictedAreaOfEffect(target.Cell, num, Color.white);
+                return;
+            }
+            GenDraw.DrawFieldEdges((from x in GenRadial.RadialCellsAround(target.Cell, num, useCenter: true)
+                                    where x.InBounds(Find.CurrentMap)
+                                    select x).ToList(), Color.white);
+        }
+
+        public virtual float HighlightFieldRadiusAroundTarget(out bool needLOSToCenter)
+        {
+            needLOSToCenter = true;
+            return FieldRange;
         }
 
         //不知道为啥GenDraw.DrawTargetHighlight放着只有点下左键那一瞬间才会画

@@ -94,7 +94,7 @@ namespace AK_TypeDef
             return r;
         }
 
-        private static Hediff GetMatchedHediff(Pawn p, HediffDef hDef, BodyPartRecord partRecord)
+        public static Hediff GetMatchedHediff(Pawn p, HediffDef hDef, BodyPartRecord partRecord)
         {
             if (p == null || p.Dead || hDef == null) return null;
             IEnumerable<Hediff> candidate = p.health.hediffSet.hediffs;

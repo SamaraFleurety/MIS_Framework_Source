@@ -39,6 +39,8 @@ namespace AKA_Ability
             }
         }
 
+        public virtual float FieldRange => def.field;
+
         //仅读档时要用这个 -- 任何时候缺乏def会报错
         public AKAbility_Base(AbilityTracker tracker) /*: this()*/
         {
@@ -144,6 +146,11 @@ namespace AKA_Ability
             float range = Range;
             if (range <= 0) return;
             GenDraw.DrawRadiusRing(CasterPawn.Position, range, Color.white);
+        }
+
+        //画技能的作用范围
+        public virtual void DrawAbilityFieldRadiusAroundTarget(LocalTargetInfo target) 
+        {
         }
 
         public virtual void SpawnSetup()

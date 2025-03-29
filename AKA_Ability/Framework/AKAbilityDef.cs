@@ -33,6 +33,7 @@ namespace AKA_Ability
         //目标选择
         public TargetingParameters targetParams = TargetingParameters.ForPawns();
         public float range = 0;
+        public float field = 0;                 //技能范围
         public Type rangeWorker = null;         //可变射程 这个比上面的float优先
         public bool reqLineofSight = false;     //是否需要视线
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using AK_TypeDef;
+using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
@@ -67,7 +68,8 @@ namespace AKA_Ability
         /// </summary>
         public static Hediff AddHediff (Pawn target, HediffDef hediffDef, BodyPartDef part = null, BodyPartRecord partRecord = null, float severity = 1, string customLabel = null)
         {
-            if (target == null) return null;
+            return GenericUtilities.AddHediff(target, hediffDef, part, partRecord, severity, customLabel);
+            /*if (target == null) return null;
 
             Hediff hediff;
             if (part == null && partRecord == null)
@@ -91,12 +93,13 @@ namespace AKA_Ability
                 hediff = target.health.AddHediff(hediffDef, partRecord, null, null);
                 hediff.Severity = severity;
             }
-            return hediff;
+            return hediff;*/
         }
 
         public static BodyPartRecord GetBodyPartRecord(Pawn p, BodyPartDef partDef, string customLabel = null)
         {
-            if (p == null || p.Dead || partDef == null) return null;
+            return GenericUtilities.GetBodyPartRecord(p, partDef, customLabel);
+            /*if (p == null || p.Dead || partDef == null) return null;
             IEnumerable<BodyPartRecord> candidate = p.health.hediffSet.GetNotMissingParts();
             candidate = candidate.Where((BodyPartRecord record) => record.def == partDef);
 
@@ -106,16 +109,17 @@ namespace AKA_Ability
             if (candidate == null || candidate.Count() == 0) return null;
 
             BodyPartRecord r = candidate.RandomElement();
-            return r;
+            return r;*/
         }
 
-        private static Hediff GetMatchedHediff(Pawn p, HediffDef hDef, BodyPartRecord partRecord)
+        public static Hediff GetMatchedHediff(Pawn p, HediffDef hDef, BodyPartRecord partRecord)
         {
-            if (p == null || p.Dead || hDef == null) return null;
+            return GenericUtilities.GetMatchedHediff(p, hDef, partRecord);
+            /*if (p == null || p.Dead || hDef == null) return null;
             IEnumerable<Hediff> candidate = p.health.hediffSet.hediffs;
             candidate = candidate.Where((Hediff h) => (h.Part == partRecord && h.def == hDef));
             if (candidate == null || candidate.Count() == 0) return null;
-            return candidate.RandomElement();
+            return candidate.RandomElement();*/
         }
 
         //[Obsolete]

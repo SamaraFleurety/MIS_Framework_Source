@@ -9,8 +9,6 @@ namespace AKA_Ability
 
         public override void CompTick()
         {
-            Log.Message("CompTick");
-            base.CompTick();
             Tracker?.CompTick();
         }
 

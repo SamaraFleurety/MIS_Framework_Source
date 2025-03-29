@@ -1,11 +1,4 @@
-﻿using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Verse;
 
 namespace AKA_Ability
@@ -16,14 +9,19 @@ namespace AKA_Ability
 
         public override void CompTick()
         {
+            Log.Message("CompTick");
             base.CompTick();
             Tracker?.CompTick();
         }
 
-        public override IEnumerable<Gizmo> CompGetGizmosExtra()
+        public override IEnumerable<Gizmo> CompGetEquippedGizmosExtra()
         {
-            if (!base.Holder.Drafted) return Enumerable.Empty<Gizmo>();
-            return Tracker?.CompGetGizmosExtra();
+            if (!base.Holder.Drafted)
+                yield break;
+            foreach (Gizmo gizmo in Tracker.CompGetWeaponGizmosExtra())
+            {
+                yield return (Command)gizmo;
+            }
         }
     }
 }

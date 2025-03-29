@@ -14,7 +14,8 @@ namespace AKA_Ability.AbilityEffect
         public bool doVisualEffects = true; //是否启用视觉特效
         public bool doSoundEffects = false; //是否启用音效特效
 
-        public float radius = 10f; //
+        public FloatRange radiusRange = new(10f, 10f);
+        public float RandomizedRadius => radiusRange.RandomInRange;
         public float heatEnergyPerCell = 0f; //每格所施加的热量能量
         public float screenShakeFactor = 1f; //摇晃系数
 
@@ -37,17 +38,17 @@ namespace AKA_Ability.AbilityEffect
 
             if (heatEnergyPerCell > float.Epsilon)
             {
-                GenTemperature.PushHeat(position, map, heatEnergyPerCell * GenRadial.RadialCellsAround(position, radius, true).Count());
+                GenTemperature.PushHeat(position, map, heatEnergyPerCell * GenRadial.RadialCellsAround(position, RandomizedRadius, true).Count());
             }
             if (doVisualEffects)
             {
-                FleckMaker.Static(position, map, FleckDefOf.ExplosionFlash, radius * 6f);
+                FleckMaker.Static(position, map, FleckDefOf.ExplosionFlash, RandomizedRadius * 6f);
                 if (map == Find.CurrentMap)
                 {
                     float magnitude = (position.ToVector3Shifted() - Find.Camera.transform.position).magnitude;
-                    Find.CameraDriver.shaker.DoShake(4f * radius * screenShakeFactor / magnitude);
+                    Find.CameraDriver.shaker.DoShake(4f * RandomizedRadius * screenShakeFactor / magnitude);
                 }
-                DoVisualEffectCenter(position, map, radius);
+                DoVisualEffectCenter(position, map, RandomizedRadius);
             }
             if (useSounds.Count > 0)
             {

@@ -19,7 +19,6 @@ namespace AKA_Ability
 
         public override void Tick()
         {
-            Log.Message("Tick::AKAbility_CompEquippable");
             Tracker?.CompTick();
         }
 

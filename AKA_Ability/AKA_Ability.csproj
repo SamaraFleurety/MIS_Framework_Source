@@ -155,9 +155,9 @@
     <Compile Include="AbilityEffect\Summon\AE_SummonThings_Radius.cs" />
     <Compile Include="Framework\AbilityContainer\HCP_TrackerContainer.cs" />
     <Compile Include="Framework\AbilityEffectsDef.cs" />
-    <Compile Include="Framework\AbilityInstance\AKAbility_CompEquippable.cs" />
     <Compile Include="Framework\ActiveConditioner\ActiveConditioner_Base.cs" />
     <Compile Include="Framework\CastConditioner\CC_NeedFullCharge.cs" />
+    <Compile Include="Framework\Comp\CompEquippable_AKAbility.cs" />
     <Compile Include="Framework\Cooldown\CD_TrackerShared.cs" />
     <Compile Include="Framework\Gizmos\ExtraGizmos\ExtraGizmoDrawer_Base.cs" />
     <Compile Include="Framework\Gizmos\ExtraGizmos\EGD_SelectAllSummoned.cs" />

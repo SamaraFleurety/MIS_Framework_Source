@@ -49,37 +49,6 @@ namespace AKA_Ability
             }
         }
 
-        CompEquippable EquipmentSource 
-        {
-            get 
-            {
-                if (compEquippableInt != null)
-                {
-                    return compEquippableInt;
-                }
-                compEquippableInt = parent.TryGetComp<CompEquippable>();
-                if (compEquippableInt == null) 
-                {
-                    return null;
-                }
-                return compEquippableInt;
-            }
-        }
-
-        private CompEquippable compEquippableInt;
-        private Verb verbInt;
-
-        Verb Verb
-        {
-            get
-            {
-                verbInt ??= EquipmentSource.PrimaryVerb;
-                return verbInt;
-            }
-        }
-
-        Pawn WeaponOwner => Verb.CasterPawn;
-
         public override void PostPostMake()
         {
             base.PostPostMake(); 
@@ -139,12 +108,6 @@ namespace AKA_Ability
         public override IEnumerable<Gizmo> CompGetWornGizmosExtra()
         {
             if (CasterPawn == null || CasterPawn.Faction != Faction.OfPlayer) return Enumerable.Empty<Gizmo>();
-            return tracker.GetGizmos();
-        }
-
-        public virtual IEnumerable<Gizmo> CompGetWeaponGizmosExtra()
-        {
-            if (WeaponOwner == null || WeaponOwner.Faction != Faction.OfPlayer) return Enumerable.Empty<Gizmo>();
             return tracker.GetGizmos();
         }
 

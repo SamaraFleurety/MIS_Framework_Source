@@ -3,7 +3,7 @@ using Verse;
 
 namespace AKA_Ability
 {
-    //是个空容器 用来激活武器上面的AKATracker Comp
+    //是个空容器 用来激活武器上面的TC_AKATracker Comp
     public class AKAbility_CompEquippable : AKAbility_Base
     {
         private ThingWithComps Weapon => CasterPawn?.equipment?.Primary;

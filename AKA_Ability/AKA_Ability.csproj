@@ -131,6 +131,7 @@
     <Compile Include="AbilityEffect\Effect\AE_CatchMother.cs" />
     <Compile Include="AbilityEffect\DelayedEffects\AE_DelayedEffects.cs" />
     <Compile Include="AbilityEffect\Effect\AE_DestroyThing.cs" />
+    <Compile Include="AbilityEffect\FX\AE_DoEffectFX.cs" />
     <Compile Include="AbilityEffect\Effect\AE_Explode.cs" />
     <Compile Include="AbilityEffect\Effect\AE_FireExtinguisher.cs" />
     <Compile Include="AbilityEffect\Effect\AE_GainTrait.cs" />

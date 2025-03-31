@@ -39,16 +39,19 @@ namespace AKA_Ability.DelayedEffects
         }
 
         //判定是否能发动技能
-        public virtual bool CastableNow()
+        public virtual bool CastableNow
         {
-            cachedCastableCondition = (effectDef.castConditions == null) || effectDef.castConditions.All(condition => condition.Castable(sourceAbility));
-            return cachedCastableCondition;
+            get
+            {
+                cachedCastableCondition = effectDef.castConditions == null || effectDef.castConditions.All(condition => condition.Castable(sourceAbility));
+                return cachedCastableCondition;
+            }
         }
 
         public virtual void TryDoEffect()
         {
             if (sourceAbility == null) return;
-            if (CastableNow() == false) return;
+            if (CastableNow == false) return;
 
             foreach (AbilityEffectBase effect in effectDef.compEffectList)
             {

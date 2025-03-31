@@ -12,7 +12,6 @@ namespace AKA_Ability.AbilityEffect
     public class AE_DoEffectFX : AbilityEffectBase
     {
         public bool doVisualEffects = true; //是否启用视觉特效
-        public bool doSoundEffects = false; //是否启用音效特效
 
         public FloatRange radiusRange = new(10f, 10f);
         public float RandomizedRadius => radiusRange.RandomInRange;
@@ -101,7 +100,6 @@ namespace AKA_Ability.AbilityEffect
 
         private void PlayFxSound(SoundDef explosionSound, TargetInfo targetInfo)
         {
-            if (!doSoundEffects) return;
             if ((!Prefs.DevMode) ? (!explosionSound.NullOrUndefined()) : (explosionSound != null))
             {
                 explosionSound.PlayOneShot(targetInfo);

@@ -1,4 +1,6 @@
-﻿using RimWorld.Planet;
+﻿using AKA_Ability.CastConditioner;
+using RimWorld.Planet;
+using System.Linq;
 using Verse;
 
 namespace AKA_Ability.DelayedEffects
@@ -7,6 +9,7 @@ namespace AKA_Ability.DelayedEffects
     public class DelayedEffectorBase : IExposable
     {
         //public DelayedEffectDef effectDef;
+        protected bool cachedCastableCondition = false;
 
         public Pawn CasterPawn => sourceAbility.CasterPawn;
 
@@ -35,9 +38,17 @@ namespace AKA_Ability.DelayedEffects
             Scribe_TargetInfo.Look(ref globalTarget, "gTarget");
         }
 
-        public virtual void DoEffect()
+        //判定是否能发动技能
+        public virtual bool CastableNow()
+        {
+            cachedCastableCondition = (effectDef.castConditions == null) || effectDef.castConditions.All(condition => condition.Castable(sourceAbility));
+            return cachedCastableCondition;
+        }
+
+        public virtual void TryDoEffect()
         {
             if (sourceAbility == null) return;
+            if (CastableNow() == false) return;
 
             foreach (AbilityEffectBase effect in effectDef.compEffectList)
             {

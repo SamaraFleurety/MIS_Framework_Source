@@ -26,7 +26,7 @@ namespace AKA_Ability
             if (first <= 0) first = delayedAbilities.GetMinKey();
             if (CurrentTick >= first)
             {
-                delayedAbilities[first].DoEffect();
+                delayedAbilities[first].TryDoEffect();
                 delayedAbilities.Remove(first);
                 if (delayedAbilities.Any()) first = delayedAbilities.GetMinKey();
                 else first = -1;

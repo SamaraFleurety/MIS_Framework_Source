@@ -13,11 +13,7 @@ namespace AK_DLL
         {
             get
             {
-                if (cachedGraphic == null)
-                {
-                    cachedGraphic = (def.graphicData as GraphicData_MultiFoam).GetGraphicWithIndex(graphicIndex, this);
-                }
-
+                cachedGraphic ??= (def.graphicData as GraphicData_MultiFoam).GetGraphicWithIndex(graphicIndex, this);
                 return cachedGraphic;
             }
         }

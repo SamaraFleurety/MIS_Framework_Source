@@ -12,6 +12,8 @@ namespace AKA_Ability.AbilityEffect
     public class AE_DoEffectFX : AbilityEffectBase
     {
         public bool doVisualEffects = true; //是否启用视觉特效
+        public bool doFlash = true;
+        public bool doSmoke = false;
 
         public FloatRange radiusRange = new(10f, 10f);
         public float RandomizedRadius => radiusRange.RandomInRange;
@@ -41,13 +43,16 @@ namespace AKA_Ability.AbilityEffect
             }
             if (doVisualEffects)
             {
-                FleckMaker.Static(position, map, FleckDefOf.ExplosionFlash, RandomizedRadius * 6f);
+                if (doFlash)
+                {
+                    FleckMaker.Static(position, map, FleckDefOf.ExplosionFlash, RandomizedRadius * 6f);
+                }
                 if (map == Find.CurrentMap)
                 {
                     float magnitude = (position.ToVector3Shifted() - Find.Camera.transform.position).magnitude;
                     Find.CameraDriver.shaker.DoShake(4f * RandomizedRadius * screenShakeFactor / magnitude);
                 }
-                DoVisualEffectCenter(position, map, RandomizedRadius);
+                DoVisualEffectCenter(position, map, RandomizedRadius, doSmoke);
             }
             if (useSounds.Count > 0)
             {

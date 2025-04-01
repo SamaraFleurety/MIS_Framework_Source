@@ -47,7 +47,7 @@ namespace AKA_Ability.AbilityEffect
                 {
                     FleckMaker.Static(position, map, FleckDefOf.ExplosionFlash, RandomizedRadius * 6f);
                 }
-                if (map == Find.CurrentMap)
+                if (map == Find.CurrentMap && screenShakeFactor > 0)
                 {
                     float magnitude = (position.ToVector3Shifted() - Find.Camera.transform.position).magnitude;
                     Find.CameraDriver.shaker.DoShake(4f * RandomizedRadius * screenShakeFactor / magnitude);

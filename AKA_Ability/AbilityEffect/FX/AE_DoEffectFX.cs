@@ -18,7 +18,7 @@ namespace AKA_Ability.AbilityEffect
         public FloatRange radiusRange = new(10f, 10f);
         public float RandomizedRadius => radiusRange.RandomInRange;
         public float heatEnergyPerCell = 0f; //每格所施加的热量能量
-        public float screenShakeFactor = 1f; //摇晃系数
+        public float screenShakeFactor = 0f; //摇晃系数
 
         public float fxInteriorCellCountMultiplier = 1f;
         public float fxInteriorCellDistanceMultiplier = 0.7f;

@@ -9,7 +9,7 @@ namespace AKA_Ability.AbilityEffect
 
         protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
-            AME_Worker<Pawn> worker = new AME_Worker<Pawn>(this, doEffect_SingleTarget: delegate (AKAbility_Base ab, Pawn victim)
+            AME_Worker<Pawn> worker = new(this, doEffect_SingleTarget: delegate (AKAbility_Base ab, Pawn victim)
             {
                 if (victim.DestroyedOrNull()) return;
 
@@ -17,7 +17,7 @@ namespace AKA_Ability.AbilityEffect
                 victim.Position = GenSight.LastPointOnLineOfSight(victim.Position, target.Cell, delegate (IntVec3 cell)
                 {
                     return cell.Standable(caster.CasterPawn.Map);
-                }); 
+                });
 
                 victim.pather.StopDead();
                 victim.jobs.StopAll();

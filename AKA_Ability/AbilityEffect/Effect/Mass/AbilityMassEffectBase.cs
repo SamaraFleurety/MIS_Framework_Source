@@ -57,15 +57,29 @@ namespace AKA_Ability.AbilityEffect
         public virtual List<T> DoEffect_AllTargets(AKAbility_Base caster, LocalTargetInfo target)
         {
             List<IntVec3> affectedCells = GenRadial.RadialCellsAround(target.Cell, prop.radius, true).ToList(); //获取所有有效格子
-            List<T> affectedTargets = new List<T>();
+            List<T> affectedTargets = new();
 
-            foreach (IntVec3 cell in affectedCells)
+            /*foreach (IntVec3 cell in affectedCells)
             {
-                /*IEnumerable<T> localTargets = ;
-                if (localTargets == null || localTargets.Count() == 0) continue;*/
+                //IEnumerable<T> localTargets = ;
+                //if (localTargets == null || localTargets.Count() == 0) continue;
                 
                 foreach (T t in validatedThingsAtCell(caster, cell))
                 {
+                    doEffect_SingleTarget(caster, t);
+                }
+            }*/
+
+            //System.InvalidOperationException: Collection was modified; enumeration operation might not execute.
+            //在枚举过程中集合具有不可变性(迭代器MoveNext的指针可能丢失),所以换for给Cells照个快照就行
+            for (int i = 0; i < affectedCells.Count; i++)
+            {
+                IntVec3 cell = affectedCells[i];
+                IEnumerable<T> targetsInCell = validatedThingsAtCell(caster, cell);
+                T[] targetsArray = targetsInCell.ToArray();
+                for (int j = 0; j < targetsArray.Length; j++)
+                {
+                    T t = targetsArray[j];
                     doEffect_SingleTarget(caster, t);
                 }
             }

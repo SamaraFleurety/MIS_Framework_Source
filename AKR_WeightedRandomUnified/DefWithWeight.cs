@@ -20,7 +20,18 @@ namespace AKR_Random
 
         public void LoadDataFromXmlCustom(XmlNode xmlRoot)
         {
-            DirectXmlCrossRefLoader.RegisterObjectWantsCrossRef(this, "def", xmlRoot.Name);
+            XmlAttribute attributeDefType = xmlRoot.Attributes["DefClass"];
+            Type defType = typeof(Def);
+            if (attributeDefType != null)
+            {
+                defType = GenTypes.GetTypeInAnyAssembly(attributeDefType.Value);
+                if (defType == null)
+                {
+                    Log.Error("[AKR]Could not find type named " + attributeDefType.Value + " from node " + xmlRoot.OuterXml);
+                    defType = typeof(Def);
+                }
+            }
+            DirectXmlCrossRefLoader.RegisterObjectWantsCrossRef(this, "def", xmlRoot.Name, overrideFieldType: defType);
             if (xmlRoot.HasChildNodes)
             {
                 weight = ParseHelper.FromString<int>(xmlRoot.FirstChild.Value);

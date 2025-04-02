@@ -130,7 +130,10 @@ namespace AK_DLL.UI
             {
                 try
                 {
-                    i.AutoFill();
+                    if (!i.ignoreAutoFill)
+                    {
+                        i.AutoFill();
+                    }
                 }
                 catch (Exception ex) 
                 {
@@ -139,6 +142,7 @@ namespace AK_DLL.UI
 
                 try
                 {
+                    if (i.alwaysHidden) continue;
                     operatorDefs[i.operatorType.sortingOrder].Add(AK_Tool.GetOperatorIDFrom(i.defName), i);
                 }
                 catch (Exception ex)

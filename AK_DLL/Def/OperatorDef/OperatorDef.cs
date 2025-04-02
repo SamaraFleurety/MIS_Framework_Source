@@ -43,10 +43,10 @@ namespace AK_DLL
         public List<ItemOnSpawn> items;
         public BodyTypeDef bodyTypeDef;//干员的体型
         public HeadTypeDef headTypeDef;
-        private List<SkillAndFire> skills;//技能列表；要是哪天排序卡得不行就给改成树
+        public List<SkillAndFire> skills;//技能列表；要是哪天排序卡得不行就给改成树
         private bool skillSorted = false;
-        public Color skinColor = new Color(1, 1, 1, 1); /*= PawnSkinColors.GetSkinColor(0.5f)*///皮肤颜色
-        public Color hairColor = new Color(1, 1, 1, 1); /*= PawnSkinColors.GetSkinColor(1f)*///头发颜色
+        public Color skinColor = new Color(1, 1, 1, 1); //皮肤颜色
+        public Color hairColor = new Color(1, 1, 1, 1); //头发颜色
         public HairDef hair;//头发类型
         public BeardDef beard;//胡须
 
@@ -86,6 +86,8 @@ namespace AK_DLL
         public bool ignoreAutoFill = false; //跳过自动填充
         #endregion
 
+        //年龄阈值，小于此年龄就无成人故事。
+        protected const int BackstoryAdultAgeThreshold = 20;
         #region 快捷属性
         /*//为了兼容性 这玩意不好写成static
         public LiveModelDef Live2DModelDef(string live2dModel)
@@ -93,10 +95,11 @@ namespace AK_DLL
             return DefDatabase<LiveModelDef>.GetNamed(live2dModel);
         }*/
 
+
         public static bool currentlyGenerating = false;
 
         //缓存 招募时给的衣服。这个时候有可能还没生成doc
-        private static List<Thing> clothTemp = new List<Thing>();
+        protected static List<Thing> clothTemp = new List<Thing>();
         public string Prefix
         {
             get { return AK_Tool.GetPrefixFrom(this.defName); }
@@ -245,12 +248,9 @@ namespace AK_DLL
 
             Recruit_AddRelations();
 
-            //operator_Pawn.story.CrownType = CrownType.Average;
-
-            ThingWithComps weapon = Recruit_Inventory();
+            Recruit_Inventory();
 
             if (ModLister.GetActiveModWithIdentifier("mis.arkmusic") != null) Recruit_ArkSongExtension();
-
 
             //基因
             if (ModLister.BiotechInstalled)
@@ -260,34 +260,28 @@ namespace AK_DLL
                 //operator_Pawn.genes.SetXenotype(DefDatabase<XenotypeDef>.GetNamed("AK_BaseType"));
             }
             //播放语音
-            this.voicePackDef.recruitSound.PlaySound();
+            this.voicePackDef?.recruitSound.PlaySound();
 
             //档案系统
-            VAbility_Operator operatorID = Recruit_OperatorID(weapon);
-            operator_Pawn.AddDoc(new OpDocContainer(operator_Pawn) { va = operatorID });
+            VAbility_Operator operatorID = Recruit_VAB() as VAbility_Operator;
+
+            //对vab容器进行aka技能以外的处理
+            Recruit_OperatorID(operatorID);
+            //(operatorID.AKATracker as AK_AbilityTracker).doc = doc;
             clothTemp.Clear();
 
-            Recruit_Ability(operatorID);
+            Recruit_AKAbility(operatorID);
 
-            if (!postEffects.NullOrEmpty())
-            {
-                foreach (Type RPEW in postEffects)
-                {
-                    RecruitPostEffectWorker_Base worker = (RecruitPostEffectWorker_Base)Activator.CreateInstance(RPEW, this, operator_Pawn);
-                    worker?.RecruitPostEffect();
-                }
-            }
-
-            //GC_OperatorDocumentation.cachedOperators.Add(operator_Pawn, operatorID.Document);
+            Recruit_PostEffects();
 
             GenSpawn.Spawn(operator_Pawn, intVec, map);
             CameraJumper.TryJump(new GlobalTargetInfo(intVec, map));
-
 
             currentlyGenerating = false;
 
             return operator_Pawn;
         }
+
 
         public virtual Pawn Recruit(Map map)
         {
@@ -323,10 +317,7 @@ namespace AK_DLL
             AutoFill_Apparel();
 
             //默认发型，没有也无所谓，生成时有另一个默认值
-            if (this.hair == null)
-            {
-                this.hair = DefDatabase<HairDef>.GetNamedSilentFail(AK_Tool.GetThingdefNameFrom(this.defName, "Hair"));
-            }
+            this.hair ??= DefDatabase<HairDef>.GetNamedSilentFail(AK_Tool.GetThingdefNameFrom(this.defName, "Hair"));
 
             //默认头像和立绘
             AutoFill_StandPortrait();
@@ -343,9 +334,36 @@ namespace AK_DLL
 
         #region RecruitSubMethods
         protected static Pawn operator_Pawn;
-        protected void Recruit_Ability(VAbility_Operator vanillaAbility)
+
+        protected void Recruit_PostEffects()
         {
-            if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null)
+            if (!postEffects.NullOrEmpty())
+            {
+                foreach (Type RPEW in postEffects)
+                {
+                    RecruitPostEffectWorker_Base worker = (RecruitPostEffectWorker_Base)Activator.CreateInstance(RPEW, this, operator_Pawn);
+                    worker?.RecruitPostEffect();
+                }
+            }
+        }
+        //原版技能，用作舟技能的容器。可以使用不同的def但是必须是这个类型的子类。如果技能def是null那就不适用舟技能。
+        //不提供别的原版技能支持。
+        protected VAbility_AKATrackerContainer Recruit_VAB()
+        {
+            if (operatorID == null) return null;
+            VAbility_Operator vAbility = AbilityUtility.MakeAbility(operatorID, operator_Pawn) as VAbility_Operator;
+            return vAbility;
+        }
+        private OperatorDocument Recruit_Document(Thing weapon)
+        {
+            GC_OperatorDocumentation.AddPawn(this.OperatorID, this, operator_Pawn, weapon, clothTemp);
+            OperatorDocument document = GC_OperatorDocumentation.opDocArchive[this.OperatorID];
+            document.voicePack = voicePackDef;
+            return document;
+        }
+        protected void Recruit_AKAbility(VAbility_AKATrackerContainer vanillaAbility)
+        {
+            if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null || vanillaAbility == null)
             {
                 return;
             }
@@ -355,7 +373,6 @@ namespace AK_DLL
                 foreach (AKAbilityDef i in this.AKAbilities)
                 {
                     tracker.AddAbility(i);
-                    //AKAbilityMaker.MakeAKAbility(i, tracker);
                 }
             }
         }
@@ -372,23 +389,33 @@ namespace AK_DLL
             }
         }
 
-        protected VAbility_Operator Recruit_OperatorID(Thing weapon)
+        protected virtual void Recruit_OperatorID(VAbility_AKATrackerContainer vab)
         {
-            //档案系统
+            /*/档案系统
             GC_OperatorDocumentation.AddPawn(this.OperatorID, this, operator_Pawn, weapon, clothTemp);
             OperatorDocument document = GC_OperatorDocumentation.opDocArchive[this.OperatorID];
-            document.voicePack = voicePackDef;
+            document.voicePack = voicePackDef;*/
 
             //干员身份证，改放在原版技能里了
-            if (this.operatorID == null) operatorID = AKDefOf.AK_VAbility_Operator;
-            VAbility_Operator vAbility = AbilityUtility.MakeAbility(operatorID, operator_Pawn) as VAbility_Operator;
+            //if (this.operatorID == null) operatorID = AKDefOf.AK_VAbility_Operator;
+
+            //干员文档
+            OperatorDocument document = Recruit_Document(operator_Pawn.equipment.Primary);
+            if (vab is not VAbility_Operator vAbility)
+            {
+                Log.Error($"[AK] 招募{label}时出错:无有效的身份证容器");
+                return;
+            }
             vAbility.AKATracker = new AK_AbilityTracker
             {
                 doc = document,
                 owner = operator_Pawn
             };
             operator_Pawn.abilities.abilities.Add(vAbility);
-            return vAbility;
+
+            //这不是干员文档。这是通用的全局注册系统。这是用来调用干员文档，而非直接存储干员数据。
+            operator_Pawn.AddDoc(new OpDocContainer(operator_Pawn) { va = vAbility });
+            return;
         }
 
         protected void Recruit_Hediff()
@@ -436,7 +463,7 @@ namespace AK_DLL
             }
         }
 
-        protected void Recruit_PersonalStat()
+        protected virtual void Recruit_PersonalStat()
         {
             //避免Bug更改
             operator_Pawn.needs.food.CurLevel = operator_Pawn.needs.food.MaxLevel;
@@ -451,19 +478,19 @@ namespace AK_DLL
             //发型与体型设置
             operator_Pawn.story.bodyType = this.bodyTypeDef;
             operator_Pawn.story.headType = this.headTypeDef ?? DefDatabase<HeadTypeDef>.GetNamed("Female_NarrowPointy");
-            operator_Pawn.story.hairDef = hair == null ? HairDefOf.Bald : hair;
+            operator_Pawn.story.hairDef = hair ?? HairDefOf.Bald;
             operator_Pawn.style.beardDef = this.beard == null ? BeardDefOf.NoBeard : this.beard;
             operator_Pawn.story.skinColorOverride = this.skinColor;
             operator_Pawn.story.HairColor = this.hairColor;
 
+            //特性更改
             operator_Pawn.story.traits.allTraits.Clear();
             foreach (TraitAndDegree TraitAndDegree in this.traits)
             {
                 operator_Pawn.story.traits.GainTrait(new Trait(TraitAndDegree.def, TraitAndDegree.degree));
             }
-            //特性更改
-            operator_Pawn.story.Childhood = this.childHood;
-            operator_Pawn.story.Adulthood = this.age < 20 ? null : this.adultHood;
+            operator_Pawn.story.Childhood = childHood;
+            operator_Pawn.story.Adulthood = this.age < BackstoryAdultAgeThreshold ? null : adultHood;
             //背景设置
 
             //清除因为自动生成的故事和特性导致的，某些工作被禁用的缓存
@@ -490,7 +517,7 @@ namespace AK_DLL
             }
             //从干员文档更新属性
         }
-        protected ThingWithComps Recruit_Inventory()
+        protected void Recruit_Inventory()
         {
             operator_Pawn.inventoryStock.stockEntries.Clear();
             //增加物品
@@ -527,14 +554,14 @@ namespace AK_DLL
             {
                 if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null && ModLister.GetActiveModWithIdentifier("paluto22.ak.combatextended") == null)
                 {
-                    return null;
+                    return;
                 }
                 weapon = (ThingWithComps)ThingMaker.MakeThing(this.weapon);
                 CompBiocodable comp = weapon.GetComp<CompBiocodable>();
                 if (comp != null) comp.CodeFor(operator_Pawn);
                 operator_Pawn.equipment.AddEquipment(weapon);
             }
-            return weapon;
+            return;
         }
 
         protected Apparel Recruit_Inventory_Wear(ThingDef apparelDef, Pawn p, bool isFashion = true)

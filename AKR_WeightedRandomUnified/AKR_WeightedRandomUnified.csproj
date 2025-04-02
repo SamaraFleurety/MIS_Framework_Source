@@ -67,6 +67,7 @@
     <Compile Include="Algorithm.cs" />
     <Compile Include="Comp\TCP_Lottery.cs" />
     <Compile Include="Comp\TCP_LotteryAuto.cs" />
+    <Compile Include="DefWithWeight.cs" />
     <Compile Include="Def\RandomizerDef.cs" />
     <Compile Include="Interface\IRandomizer.cs" />
     <Compile Include="Interface\IWeightedRandomable.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="RandNode\RandomizerNode_Subnodes.cs" />
     <Compile Include="RandNode\RandomizerNode_Rewards.cs" />
     <Compile Include="RewardSet\RewardSet_Base.cs" />
+    <Compile Include="RewardSet\Rewards_Def.cs" />
     <Compile Include="RewardSet\Rewards_Nothing.cs" />
     <Compile Include="RewardSet\Rewards_Things.cs" />
   </ItemGroup>

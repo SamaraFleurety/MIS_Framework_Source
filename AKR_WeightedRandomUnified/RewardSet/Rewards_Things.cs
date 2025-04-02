@@ -24,16 +24,6 @@ namespace AKR_Random.Rewards
 
             foreach (ItemOnSpawn item in itemRewards)
             {
-                /*Thing reward = ThingMaker.MakeThing(item.item, item.stuff);
-                reward.stackCount = item.amount;
-
-                if (item.quality is QualityCategory quality)
-                {
-                    CompQuality compQuality = reward.TryGetComp<CompQuality>();
-                    compQuality?.SetQuality(quality, null);
-                }
-
-                GenPlace.TryPlaceThing(reward, cell, map, ThingPlaceMode.Near);*/
                 yield return item.SpawnThing(cell, map);
             }
         }

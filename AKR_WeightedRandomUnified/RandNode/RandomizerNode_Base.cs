@@ -29,7 +29,7 @@ namespace AKR_Random
             }
         }
 
-        protected int[] weightCached;
+        protected int[] weightCached; //会在此node第一次gacha的时候缓存
 
         protected bool arrayCached = false;
         #endregion

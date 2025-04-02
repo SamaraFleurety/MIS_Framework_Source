@@ -1,0 +1,234 @@
+﻿using RimWorld;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Verse;
+using AKR_Random;
+using AKR_Random.RewardSet;
+using RimWorld.Planet;
+using AKA_Ability;
+
+namespace AK_DLL
+{
+    //为预备干员或者种族之类的使用的def。此def不进招募台，也不限1，并且部分属性可以在一定范围内随机。
+    public class ReserveOperatorDef : OperatorDef
+    {
+        public ReserveOperatorDef() : base()
+        {
+            alwaysHidden = true;
+            ignoreAutoFill = true;
+        }
+
+        //生成新人时，使用这个
+        public PawnKindDef pawnkind;
+        public PawnKindDef RecruitPawnkind
+        {
+            get
+            {
+                return pawnkind ?? PawnKindDefOf.Colonist;
+            }
+        }
+
+        public FactionDef faction = null;
+        public Faction RecruitFaction
+        {
+            get
+            {
+                FactionDef def = null;
+                if (faction != null) def = faction;
+                else if (pawnkind != null && pawnkind.defaultFactionType != null) def = pawnkind.defaultFactionType;
+
+                if (def != null)
+                {
+                    return Find.FactionManager.FirstFactionOfDef(def);
+                }
+                return Faction.OfPlayer;
+            }
+        }
+
+        //名字遵循原版rule pack
+        //pawnkind里面有
+        //public RulePackDef nameRule = null;
+        #region 角色可随机属性
+        //可以让生成出来的角色仅在一定范围内随机
+
+        public List<DefWithWeight> bodyTypeRange = null;
+        public RandomizerNode_Rewards randNode_BodyType = null;
+        //随机一个bodytypedef给当前正在刷的任务。下面类似名字的属性同理。
+        public BodyTypeDef BodyTypeThisPawn
+        {
+            get
+            {
+                if (bodyTypeRange == null) return bodyTypeDef;
+                randNode_BodyType ??= DefWithWeightToRandNode(bodyTypeRange);
+
+                return randNode_BodyType.TryIssueGachaResult().First() as BodyTypeDef;
+            }
+        }
+
+        public List<DefWithWeight> headTypeRange = null;
+        public RandomizerNode_Rewards randNode_HeadType = null;
+        public HeadTypeDef HeadTypeThisPawn
+        {
+            get
+            {
+                if (headTypeRange == null) return headTypeDef;
+                randNode_HeadType ??= DefWithWeightToRandNode(headTypeRange);
+
+                return randNode_HeadType.TryIssueGachaResult().First() as HeadTypeDef;
+            }
+        }
+
+        public List<DefWithWeight> hairRange = null;
+        public RandomizerNode_Rewards randNode_Hair = null;
+        public HairDef HairThisPawn
+        {
+            get
+            {
+                if (hairRange == null) return base.hair;
+                randNode_Hair ??= DefWithWeightToRandNode(hairRange);
+
+                return randNode_Hair.TryIssueGachaResult().First() as HairDef;
+            }
+        }
+
+        public List<DefWithWeight> backstoryChildRange = null;
+        public List<DefWithWeight> backstoryAdultRange = null;
+
+        public RandomizerNode_Rewards randNode_storyChild = null;
+        public BackstoryDef BackStoryChildThisPawn
+        {
+            get
+            {
+                if (backstoryChildRange == null) return childHood;
+                randNode_storyChild ??= DefWithWeightToRandNode(backstoryChildRange);
+
+                return randNode_storyChild.TryIssueGachaResult().First() as BackstoryDef;
+            }
+        }
+
+        public RandomizerNode_Rewards randNode_storyAdult = null;
+        public BackstoryDef BackStoryAdultThisPawn
+        {
+            get
+            {
+                if (backstoryAdultRange == null) return adultHood;
+                randNode_storyChild ??= DefWithWeightToRandNode(backstoryChildRange);
+
+                return randNode_storyChild.TryIssueGachaResult().First() as BackstoryDef;
+            }
+        }
+
+        RandomizerNode_Rewards DefWithWeightToRandNode(List<DefWithWeight> weights)
+        {
+            RandomizerNode_Rewards randNode = new();
+            foreach (DefWithWeight weight in weights)
+            {
+                randNode.rewards.Add(weight.TransformToRewardSet<Rewards_Def>());
+            }
+            return randNode;
+        }
+        #endregion
+
+        #region 招募
+        public override Pawn Recruit(IntVec3 intVec, Map map)
+        {
+            currentlyGenerating = true;
+
+            operator_Pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(RecruitPawnkind, RecruitFaction, forcedXenotype: xenoType));
+
+            Recruit_Hediff();
+
+            Recruit_PersonalStat();
+
+            //估计预备干员写不了关系
+            //Recruit_AddRelations();
+
+            Recruit_Inventory();
+
+            if (ModLister.GetActiveModWithIdentifier("mis.arkmusic") != null) Recruit_ArkSongExtension();
+
+            //基因
+            if (ModLister.BiotechInstalled)
+            {
+                operator_Pawn.genes.ClearXenogenes();
+            }
+            //播放语音
+            this.voicePackDef?.recruitSound.PlaySound();
+
+            //档案系统
+            VAbility_AKATrackerContainer operatorID = Recruit_VAB();
+
+            //对vab容器进行aka技能以外的处理
+            Recruit_OperatorID(operatorID);
+            //(operatorID.AKATracker as AK_AbilityTracker).doc = doc;
+            clothTemp.Clear();
+
+            Recruit_AKAbility(operatorID);
+
+            Recruit_PostEffects();
+
+            GenSpawn.Spawn(operator_Pawn, intVec, map);
+            CameraJumper.TryJump(new GlobalTargetInfo(intVec, map));
+
+            currentlyGenerating = false;
+
+            return operator_Pawn;
+        }
+
+        protected override void Recruit_OperatorID(VAbility_AKATrackerContainer vab)
+        {
+            return;
+        }
+
+        protected override void Recruit_PersonalStat()
+        {
+            //避免Bug更改
+            operator_Pawn.needs.food.CurLevel = operator_Pawn.needs.food.MaxLevel;
+
+            //pawnkind里面有rule pack
+            //operator_Pawn.Name = new NameTriple(this.name, this.nickname, this.surname);//“名”“简”“姓”
+
+            //性别更改
+            operator_Pawn.gender = (this.isMale) ? Gender.Male : Gender.Female;
+            operator_Pawn.ageTracker.AgeBiologicalTicks = this.age * (long)TimeToTick.year;
+            operator_Pawn.ageTracker.AgeChronologicalTicks = this.realAge * (long)TimeToTick.year;
+
+            //发型与体型设置
+            operator_Pawn.story.bodyType = this.BodyTypeThisPawn;
+            operator_Pawn.story.headType = this.HeadTypeThisPawn ?? DefDatabase<HeadTypeDef>.GetNamed("Female_NarrowPointy");
+            operator_Pawn.story.hairDef = HairThisPawn ?? HairDefOf.Bald;
+            operator_Pawn.style.beardDef = this.beard == null ? BeardDefOf.NoBeard : this.beard;
+            operator_Pawn.story.skinColorOverride = this.skinColor;
+            operator_Pawn.story.HairColor = this.hairColor;
+
+            //特性更改
+            /*operator_Pawn.story.traits.allTraits.Clear();
+            foreach (TraitAndDegree TraitAndDegree in this.traits)
+            {
+                operator_Pawn.story.traits.GainTrait(new Trait(TraitAndDegree.def, TraitAndDegree.degree));
+            }*/
+            operator_Pawn.story.Childhood = BackStoryChildThisPawn;
+            operator_Pawn.story.Adulthood = this.age < BackstoryAdultAgeThreshold ? null : BackStoryAdultThisPawn;
+            //背景设置
+
+            //清除因为自动生成的故事和特性导致的，某些工作被禁用的缓存
+            operator_Pawn.Notify_DisabledWorkTypesChanged();
+
+            /*operator_Pawn.skills.skills.Clear();
+            foreach (SkillAndFire skillDef in this.skills)
+            {
+                SkillRecord skill = new(operator_Pawn, skillDef.skill)
+                {
+                    passion = skillDef.fireLevel,
+                    Level = skillDef.level
+                };
+                operator_Pawn.skills.skills.Add(skill);
+            }*/
+            //技能属性更改
+        }
+        #endregion
+    }
+}

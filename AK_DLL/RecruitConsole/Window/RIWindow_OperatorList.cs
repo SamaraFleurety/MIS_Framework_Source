@@ -157,18 +157,6 @@ namespace AK_DLL.UI
                 return GameObject.Instantiate(opRectPrefab, opListPanel);
             }
         }
-        /*private GameObject ClickedBtnParent
-        {
-            get
-            {
-                return ClickedBtn.transform.parent.gameObject;
-            }
-        }*/
-        //完了 好像创建临时变量就可以 不需要这么麻烦的方法
-        /*private int btnOrder(GameObject clickedBtn)
-        {
-            return int.Parse(clickedBtn.name.Substring(orderInName));
-        }*/
 
 #endregion
 

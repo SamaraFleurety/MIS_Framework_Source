@@ -11,7 +11,7 @@ namespace AKA_Ability
 
         public virtual bool DoEffect(AKAbility_Base caster, GlobalTargetInfo globalTargetInfo = default(GlobalTargetInfo), LocalTargetInfo localTargetInfo = default(LocalTargetInfo))
         {
-            if (caster.container == null) return false;
+            if (caster.CasterPawn == null) return false;
 
             if (forceTargetSelf)
             {

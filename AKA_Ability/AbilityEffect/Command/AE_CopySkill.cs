@@ -9,6 +9,8 @@ namespace AKA_Ability
     {
         protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
+            if (caster.CasterPawn == null) return false;
+
             Pawn targetPawn = target.Pawn;
             if (targetPawn == null|| !targetPawn.RaceProps.Humanlike)
             {

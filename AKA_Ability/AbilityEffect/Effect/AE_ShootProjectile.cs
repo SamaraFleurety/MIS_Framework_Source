@@ -8,7 +8,7 @@ namespace AKA_Ability.AbilityEffect
 
         protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
-            if (caster.container == null) return false;
+            if (caster.CasterPawn == null) return false;
 
             Pawn casterPawn = caster.CasterPawn;
             ShootLine shootLine = new ShootLine(casterPawn.Position, target.Cell);

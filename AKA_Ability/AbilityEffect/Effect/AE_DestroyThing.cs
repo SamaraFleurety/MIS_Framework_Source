@@ -9,8 +9,6 @@ namespace AKA_Ability.AbilityEffect
         public int amount = 1;
         protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
-            if (caster.container == null) return false;
-
             Thing targetThing = target.Thing;
             if (targetThing == null || targetThing.def != thingdef || targetThing.stackCount < amount)
             {

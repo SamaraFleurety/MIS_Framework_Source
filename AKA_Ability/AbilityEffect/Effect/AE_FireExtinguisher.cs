@@ -16,7 +16,7 @@ namespace AKA_Ability
 
         protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
-            if (caster.container == null) return false;
+            if (caster.CasterPawn == null) return false;
 
             IntVec3 targetCell = target.Cell;
             Pawn casterPawn = caster.CasterPawn;

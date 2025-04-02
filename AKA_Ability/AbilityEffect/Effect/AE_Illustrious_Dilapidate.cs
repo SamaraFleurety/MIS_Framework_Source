@@ -22,7 +22,7 @@ namespace AKA_Ability.AbilityEffect
         static List<float> cloakTimeOnCharge = new List<float>() { 0, 0, 0, 0, 2, 5, 9 };
         protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
-            if (caster.container == null) return false;
+            if (caster.CasterPawn == null) return false;
 
             Pawn casterPawn = caster.CasterPawn;
             int charge = caster.cooldown.charge;

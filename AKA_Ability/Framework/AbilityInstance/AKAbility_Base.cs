@@ -54,7 +54,7 @@ namespace AKA_Ability
             cooldown = (Cooldown_Regen)Activator.CreateInstance(def.cooldownProperty.cooldownClass, def.cooldownProperty, this);
         }
 
-        public Pawn CasterPawn => container.owner;
+        public Pawn CasterPawn => container?.owner;
 
         public virtual void Tick()
         {

@@ -19,7 +19,7 @@ namespace AKA_Ability.AbilityEffect
         const float Dmg_Bonus_Per_Enemy = 0.1f;
         protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
-            if (caster.container == null) return false;
+            if (caster.CasterPawn == null) return false;
 
             enemyCnt = 0;
             //改成直接作用全图了

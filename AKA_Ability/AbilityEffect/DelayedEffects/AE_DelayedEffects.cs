@@ -20,6 +20,8 @@ namespace AKA_Ability.AbilityEffect
 
         public override bool DoEffect(AKAbility_Base caster, GlobalTargetInfo globalTargetInfo = default, LocalTargetInfo localTargetInfo = default)
         {
+            if (caster.CasterPawn == null) return false;
+
             if (forceTargetSelf) localTargetInfo = new LocalTargetInfo(caster.CasterPawn);
 
             int delay = 1;

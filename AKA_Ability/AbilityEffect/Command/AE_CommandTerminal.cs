@@ -24,6 +24,8 @@ namespace AKA_Ability
 
         protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
+            if (caster.CasterPawn == null) return false;
+
             string translatedMessage = TranslatorFormattedStringExtensions.Translate("AK_SuccessfulCallSupplyDropPod");
             Pawn casterPawn = caster.CasterPawn;
             Map map = casterPawn.Map;

@@ -1,5 +1,4 @@
-﻿using AKA_Ability.CastConditioner;
-using RimWorld.Planet;
+﻿using RimWorld.Planet;
 using System.Linq;
 using Verse;
 
@@ -50,7 +49,6 @@ namespace AKA_Ability.DelayedEffects
 
         public virtual void TryDoEffect()
         {
-            if (sourceAbility == null) return;
             if (CastableNow == false) return;
 
             foreach (AbilityEffectBase effect in effectDef.compEffectList)

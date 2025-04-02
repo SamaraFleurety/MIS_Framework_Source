@@ -8,6 +8,8 @@ namespace AKA_Ability.AbilityEffect
 
         protected override Thing GenerateSummoned(AKAbility_Summon source)
         {
+            if (caster.container == null) return false;
+
             return PawnGenerator.GeneratePawn(summonedDef, source.CasterPawn.Faction);
         }
     }

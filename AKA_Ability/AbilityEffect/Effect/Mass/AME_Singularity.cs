@@ -9,6 +9,8 @@ namespace AKA_Ability.AbilityEffect
 
         protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
+            if (caster.container == null) return false;
+
             AME_Worker<Pawn> worker = new(this, doEffect_SingleTarget: delegate (AKAbility_Base ab, Pawn victim)
             {
                 if (victim.DestroyedOrNull()) return;

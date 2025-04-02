@@ -8,6 +8,8 @@ namespace AKA_Ability.AbilityEffect
         ThingDef moteDef;
         protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
+            if (caster.container == null) return false;
+
             /*Mote mote = (Mote)ThingMaker.MakeThing(moteDef);
             //mote.Attach(caster.CasterPawn);
             GenSpawn.Spawn(mote, target.Cell, caster.CasterPawn.Map);

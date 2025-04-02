@@ -71,7 +71,7 @@ namespace AKA_Ability.AbilityEffect
             }*/
 
             //System.InvalidOperationException: Collection was modified; enumeration operation might not execute.
-            //在枚举过程中集合具有不可变性(迭代器MoveNext的指针可能丢失),所以换for给Cells照个快照就行
+            //在枚举过程中集合是只读的(修改会导致迭代器MoveNext的指针丢失),所以换for转数组给Cells照个快照就行
             for (int i = 0; i < affectedCells.Count; i++)
             {
                 IntVec3 cell = affectedCells[i];

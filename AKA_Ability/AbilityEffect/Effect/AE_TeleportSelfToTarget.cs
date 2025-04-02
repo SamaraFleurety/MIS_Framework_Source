@@ -7,6 +7,8 @@ namespace AKA_Ability.AbilityEffect
     {
         protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
+            if (caster.container == null) return false;
+
             Pawn casterPawn = caster.CasterPawn;
             bool drafted = casterPawn.Drafted;
             Map map = casterPawn.Map;

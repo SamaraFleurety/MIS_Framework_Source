@@ -8,6 +8,8 @@ namespace AKA_Ability.AbilityEffect
         public int maintainTicks = 60;
         protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
+            if (caster.container == null) return false;
+
             var effecter = this.effecter.Spawn();
             effecter.ticksLeft = maintainTicks;
             var map = caster.CasterPawn.Map;

@@ -9,6 +9,8 @@ namespace AKA_Ability
 
         protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
+            if (caster.container == null) return false;
+
             return JumpUtility.DoJump(caster.CasterPawn, target, null, verbJump);
         }
     }

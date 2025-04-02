@@ -34,6 +34,9 @@ namespace AKA_Ability.AbilityEffect
 
         protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
+            //延迟技能已经录入GC但是可能执行的时候技能容器已经带着container一起炸了
+            if (caster.container == null) return false;
+
             IntVec3 position = target.Cell;
             Map map = caster.CasterPawn.Map;
 

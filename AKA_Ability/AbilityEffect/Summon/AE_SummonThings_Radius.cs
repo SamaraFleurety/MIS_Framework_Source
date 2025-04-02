@@ -13,6 +13,8 @@ namespace AKA_Ability.AbilityEffect
 
         protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
+            if (caster.container == null) return false;
+
             if (caster is not AKAbility_Summon casterReal)
             {
                 Log.Error($"[AK]尝试使用非召唤技能{caster.def.label}召唤召唤物。");

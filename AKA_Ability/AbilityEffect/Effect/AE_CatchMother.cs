@@ -12,6 +12,8 @@ namespace AKA_Ability
 
         protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
+            if (caster.container == null) return false;
+
             Pawn user = caster.CasterPawn;
             Pawn targetPawn = target.Pawn;
 

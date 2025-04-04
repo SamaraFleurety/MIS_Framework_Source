@@ -9,6 +9,7 @@ using AKR_Random;
 using AKR_Random.RewardSet;
 using RimWorld.Planet;
 using AKA_Ability;
+using UnityEngine;
 
 namespace AK_DLL
 {
@@ -91,6 +92,16 @@ namespace AK_DLL
                 randNode_Hair ??= DefWithWeightToRandNode(hairRange);
 
                 return randNode_Hair.TryIssueGachaResult().First() as HairDef;
+            }
+        }
+
+        public List<ColorOption> hairColorRange= null;
+        public Color HairColorThisPawn
+        {
+            get
+            {
+                if (hairColorRange == null) return base.hairColor;
+                return hairColorRange.RandomElementByWeight((ColorOption pi) => pi.weight).only;
             }
         }
 

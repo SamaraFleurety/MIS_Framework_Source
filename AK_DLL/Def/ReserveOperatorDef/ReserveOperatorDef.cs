@@ -101,7 +101,7 @@ namespace AK_DLL
             get
             {
                 if (hairColorRange == null) return base.hairColor;
-                return hairColorRange.RandomElementByWeight((ColorOption pi) => pi.weight).only;
+                return hairColorRange.RandomElementByWeight(co => co.weight).only;
             }
         }
 

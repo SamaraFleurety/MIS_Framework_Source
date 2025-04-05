@@ -24,6 +24,7 @@ namespace AKA_Ability
 
         public bool shouldRefreshActiveStatus = true;
 
+        //对于使用共享数据(比如cd)这里面的才是真实数据
         public AbilityTrackerSharedData_Base sharedData = null;
         public AKAbility_Base SelectedGroupedAbility
         {

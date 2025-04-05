@@ -5,8 +5,15 @@ namespace AKA_Ability
 {
     public class CompEquippable_AKAbility : CompEquippable
     {
-        private TC_AKATracker Tracker => parent?.GetComp<TC_AKATracker>();
-
+        TC_AKATracker cachedTracker = null;
+        private TC_AKATracker Tracker
+        {
+            get
+            {
+                cachedTracker ??= parent?.GetComp<TC_AKATracker>();
+                return cachedTracker;
+            }
+        }
         public override void CompTick()
         {
             Tracker?.CompTick();

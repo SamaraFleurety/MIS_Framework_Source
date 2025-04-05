@@ -46,6 +46,7 @@ namespace AKA_Ability
 
         public void Tick()
         {
+            if (owner == null || !owner.IsColonist) return;
             foreach (AKAbility_Base i in innateAbilities)
             {
                 i.Tick();

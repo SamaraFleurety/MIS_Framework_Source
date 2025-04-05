@@ -12,6 +12,7 @@ namespace AKA_Ability
     {
         public List<AKAbilityDef> abilities = new();
 
+        //对于多个技能共享数据(例如cd)的，这里面的才是原始数据。不可以把CD_TrackerShared等非真实数据放进来！
         public AbilityTrackerSharedDataProperty sharedDataProperty = null;
         public TCP_AKATracker()
         {

@@ -4,6 +4,7 @@ using Verse;
 namespace AKA_Ability.Cooldown
 {
     //实现多个技能共享cd
+    //此CD是虚拟CD，任何参数皆无意义，对此CD的使用会跳转到主cd
     public class CD_TrackerShared : Cooldown_Regen
     {
         SD_SharedCharge SharedChargeData => parent.container.TryGetSharedData<SD_SharedCharge>();

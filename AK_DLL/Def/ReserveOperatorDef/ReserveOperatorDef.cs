@@ -95,13 +95,15 @@ namespace AK_DLL
             }
         }
 
-        public List<ColorOption> hairColorRange= null;
+        //public List<ColorOption> hairColorRange= null;
+        ColorGenerator hairColorRange = null;
         public Color HairColorThisPawn
         {
             get
             {
                 if (hairColorRange == null) return base.hairColor;
-                return hairColorRange.RandomElementByWeight(co => co.weight).only;
+                //return hairColorRange.RandomElementByWeight(co => co.weight).only;
+                return hairColorRange.NewRandomizedColor();
             }
         }
 
@@ -140,6 +142,17 @@ namespace AK_DLL
                 randNode.rewards.Add(weight.TransformToRewardSet<Rewards_Def>());
             }
             return randNode;
+        }
+
+        protected override void FixAlienHairColor()
+        {
+            if (ModLister.GetActiveModWithIdentifier("erdelf.HumanoidAlienRaces") != null)
+            {
+                HediffWithComps hediffAlienPatch = HediffMaker.MakeHediff(AKDefOf.AK_Hediff_AlienRacePatch, operator_Pawn, operator_Pawn.health.hediffSet.GetBrain()) as HediffWithComps;
+                HC_ForceColors comp = hediffAlienPatch.TryGetComp<HC_ForceColors>();
+                comp.exactProps.skinColor = this.skinColor;
+                comp.exactProps.hairColor = HairColorThisPawn;
+            }
         }
         #endregion
 
@@ -213,7 +226,7 @@ namespace AK_DLL
             operator_Pawn.story.hairDef = HairThisPawn ?? HairDefOf.Bald;
             operator_Pawn.style.beardDef = this.beard == null ? BeardDefOf.NoBeard : this.beard;
             operator_Pawn.story.skinColorOverride = this.skinColor;
-            operator_Pawn.story.HairColor = this.hairColor;
+            operator_Pawn.story.HairColor = HairColorThisPawn;
 
             //特性更改
             /*operator_Pawn.story.traits.allTraits.Clear();

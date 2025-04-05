@@ -431,13 +431,7 @@ namespace AK_DLL
 
             //外星人发色兼容
 
-            if (ModLister.GetActiveModWithIdentifier("erdelf.HumanoidAlienRaces") != null)
-            {
-                HediffWithComps hediffAlienPatch = HediffMaker.MakeHediff(AKDefOf.AK_Hediff_AlienRacePatch, operator_Pawn, operator_Pawn.health.hediffSet.GetBrain()) as HediffWithComps;
-                HC_ForceColors comp = hediffAlienPatch.TryGetComp<HC_ForceColors>();
-                comp.exactProps.skinColor = this.skinColor;
-                comp.exactProps.hairColor = this.hairColor;
-            }
+            FixAlienHairColor();
 
             if (this.hediffInate != null && this.hediffInate.Count > 0)
             {
@@ -448,9 +442,16 @@ namespace AK_DLL
             }
             return;
         }
-        protected void FixAlienHairColor(HediffDef hediffDef)
+        protected virtual void FixAlienHairColor()
         {
-            //修复外星人会改发色的问题
+            if (ModLister.GetActiveModWithIdentifier("erdelf.HumanoidAlienRaces") != null)
+            {
+                HediffWithComps hediffAlienPatch = HediffMaker.MakeHediff(AKDefOf.AK_Hediff_AlienRacePatch, operator_Pawn, operator_Pawn.health.hediffSet.GetBrain()) as HediffWithComps;
+                HC_ForceColors comp = hediffAlienPatch.TryGetComp<HC_ForceColors>();
+                comp.exactProps.skinColor = this.skinColor;
+                comp.exactProps.hairColor = this.hairColor;
+            }
+            /*/修复外星人会改发色的问题
             if (ModLister.GetActiveModWithIdentifier("erdelf.HumanoidAlienRaces") != null)
             {
                 HCP_ForceColors comp = new HCP_ForceColors
@@ -460,7 +461,7 @@ namespace AK_DLL
                 };
                 if (hediffDef.comps == null) hediffDef.comps = new List<HediffCompProperties>();
                 if (!hediffDef.comps.Contains(comp)) hediffDef.comps.Add(comp);
-            }
+            }*/
         }
 
         protected virtual void Recruit_PersonalStat()

@@ -156,7 +156,6 @@
     <Compile Include="Def\OperatorClassDef.cs" />
     <Compile Include="Def\OperatorDef\HediffStat.cs" />
     <Compile Include="Def\OperatorDef\OperatorFashionSetDef.cs" />
-    <Compile Include="Def\OperatorDef\OperatorDef_Reserve.cs" />
     <Compile Include="GC_AKManager.cs" />
     <Compile Include="Graphic\Patch_ForbidAgedHeadOffset.cs" />
     <Compile Include="Graphic\StatusBar\AK_BarUITool.cs" />

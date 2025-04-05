@@ -18,6 +18,7 @@ namespace AKR_Random
 
         public int weight = 1;
 
+        //解析xml时，仅会匹配对应类型的def，不会自动匹配子类。需要手动指定，类似原版Class=""
         public void LoadDataFromXmlCustom(XmlNode xmlRoot)
         {
             XmlAttribute attributeDefType = xmlRoot.Attributes["DefClass"];

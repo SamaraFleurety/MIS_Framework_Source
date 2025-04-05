@@ -17,5 +17,15 @@ namespace AKR_Random.RewardSet
         {
             yield return def;
         }
+
+        public override bool RewardValidator(object reward)
+        {
+            return reward is Def;
+        }
+
+        public override void SetReward(object reward)
+        {
+            def = reward as Def;
+        }
     }
 }

@@ -77,7 +77,7 @@ namespace AK_DLL
 
         public AbilityDef operatorID = null;    //干员身份证的容器 其他派系角色可以自定义个图标不同的这玩意
 
-        public List<Type> postEffects = new List<Type>();
+        public List<Type> postEffects = new();
 
         public bool alwaysHidden = false;  //是否隐藏。被隐藏的干员不会在招募ui显示，仅能通过特殊手段出现。fixme:没做。
 
@@ -389,10 +389,11 @@ namespace AK_DLL
         }
         //原版技能，用作舟技能的容器。可以使用不同的def但是必须是这个类型的子类。如果技能def是null那就不适用舟技能。
         //不提供别的原版技能支持。
-        protected VAbility_AKATrackerContainer Recruit_VAB()
+        protected virtual VAbility_AKATrackerContainer Recruit_VAB()
         {
             if (operatorID == null) return null;
-            VAbility_Operator vAbility = AbilityUtility.MakeAbility(operatorID, operator_Pawn) as VAbility_Operator;
+            VAbility_AKATrackerContainer vAbility = AbilityUtility.MakeAbility(operatorID, operator_Pawn) as VAbility_AKATrackerContainer;
+            operator_Pawn.abilities.abilities.Add(vAbility);
             return vAbility;
         }
         private OperatorDocument Recruit_Document(Thing weapon)
@@ -409,7 +410,7 @@ namespace AK_DLL
                 return;
             }
             AbilityTracker tracker = vanillaAbility.AKATracker;
-            if (this.AKAbilities != null && this.AKAbilities.Count > 0)
+            if (!this.AKAbilities.NullOrEmpty())
             {
                 foreach (AKAbilityDef i in this.AKAbilities)
                 {
@@ -452,7 +453,7 @@ namespace AK_DLL
                 doc = document,
                 owner = operator_Pawn
             };
-            operator_Pawn.abilities.abilities.Add(vAbility);
+            //operator_Pawn.abilities.abilities.Add(vAbility);
 
             //这不是干员文档。这是通用的全局注册系统。这是用来调用干员文档，而非直接存储干员数据。
             operator_Pawn.AddDoc(new OpDocContainer(operator_Pawn) { va = vAbility });

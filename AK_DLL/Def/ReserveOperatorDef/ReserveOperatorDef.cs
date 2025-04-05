@@ -207,6 +207,13 @@ namespace AK_DLL
             return operator_Pawn;
         }
 
+        protected override VAbility_AKATrackerContainer Recruit_VAB()
+        {
+            VAbility_AKATrackerContainer res = base.Recruit_VAB();
+            res.AKATracker = new(operator_Pawn);
+            return res;
+        }
+
         protected override void Recruit_OperatorID(VAbility_AKATrackerContainer vab)
         {
             return;

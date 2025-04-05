@@ -50,7 +50,8 @@ namespace AKA_Ability
             {
                 i.Tick();
             }
-            if (groupedAbilities.Count > 0) groupedAbilities[indexActiveGroupedAbility].Tick();
+
+            if (indexActiveGroupedAbility > -1 && groupedAbilities.Count > indexActiveGroupedAbility) groupedAbilities[indexActiveGroupedAbility].Tick();
         }
 
         public IEnumerable<Command> GetGizmos()
@@ -118,7 +119,7 @@ namespace AKA_Ability
             //fixme:临时的 以后优化
             for (int i = 0; i < allAbilities.Count; ++i)
             {
-                AKAbility_Base ab = allAbilities[i]; 
+                AKAbility_Base ab = allAbilities[i];
                 if (ab.def.sortOrder >= def.sortOrder)
                 {
                     allAbilities.Insert(i, ability);

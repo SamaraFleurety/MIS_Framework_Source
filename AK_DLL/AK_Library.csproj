@@ -207,7 +207,7 @@
     <Compile Include="OpDocument\GC_Documentation.cs" />
     <Compile Include="OpDocument\OpDocContainer.cs" />
     <Compile Include="RecruitConsole\Window\Dialog_Input.cs" />
-    <Compile Include="RecruitPostEffectWorker\RecruitPostEffectWorker_Base.cs" />
+    <Compile Include="Def\RecruitPostEffectWorker\RecruitPostEffectWorker_Base.cs" />
     <Compile Include="Thing\ApparelOperator\Apparel_Operator.cs" />
     <Compile Include="Thing\ApparelOperator\GraphicData_MultiFoam.cs" />
     <Compile Include="Thing\ApparelOperator\Patch_WornGraphic.cs" />

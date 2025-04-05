@@ -33,19 +33,26 @@ namespace AK_DLL
         }
 
         public FactionDef faction = null;
+        public Faction cachedFaction = null;
         public Faction RecruitFaction
         {
             get
             {
+                if (cachedFaction != null) return cachedFaction;
+
                 FactionDef def = null;
                 if (faction != null) def = faction;
                 else if (pawnkind != null && pawnkind.defaultFactionType != null) def = pawnkind.defaultFactionType;
 
                 if (def != null)
                 {
-                    return Find.FactionManager.FirstFactionOfDef(def);
+                    cachedFaction = Find.FactionManager.FirstFactionOfDef(def);
                 }
-                return Faction.OfPlayer;
+                else
+                {
+                    cachedFaction = Faction.OfPlayer;
+                }
+                return cachedFaction;
             }
         }
 
@@ -157,7 +164,8 @@ namespace AK_DLL
         #endregion
 
         #region 招募
-        public override Pawn Recruit(IntVec3 intVec, Map map)
+
+        public override Pawn Recruit_NoMap()
         {
             currentlyGenerating = true;
 
@@ -193,9 +201,6 @@ namespace AK_DLL
             Recruit_AKAbility(operatorID);
 
             Recruit_PostEffects();
-
-            GenSpawn.Spawn(operator_Pawn, intVec, map);
-            CameraJumper.TryJump(new GlobalTargetInfo(intVec, map));
 
             currentlyGenerating = false;
 

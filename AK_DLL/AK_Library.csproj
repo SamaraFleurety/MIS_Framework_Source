@@ -144,6 +144,8 @@
   <ItemGroup>
     <Compile Include="AK_Algorithm.cs" />
     <Compile Include="AK_Tool4Unity.cs" />
+    <Compile Include="Def\ReserveOperatorDef\Ext_LinkedReservedOperatorDef.cs" />
+    <Compile Include="Def\ReserveOperatorDef\Patch_OverridePawnGeneration.cs" />
     <Compile Include="Def\ReserveOperatorDef\ReserveOperatorDef.cs" />
     <Compile Include="HarmonyPatch\Patch_EquipmentTracker.cs" />
     <Compile Include="LoadingOptimizer\AhoCorasick.cs" />

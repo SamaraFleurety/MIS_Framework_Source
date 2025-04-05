@@ -236,7 +236,7 @@ namespace AK_DLL
             currentlyGenerating = false;
         }
 
-        public virtual Pawn Recruit(IntVec3 intVec, Map map)
+        public virtual Pawn Recruit_NoMap()
         {
             currentlyGenerating = true;
 
@@ -273,11 +273,52 @@ namespace AK_DLL
             Recruit_AKAbility(operatorID);
 
             Recruit_PostEffects();
+            currentlyGenerating = false;
+            return operator_Pawn;
+        }
 
+        public virtual Pawn Recruit(IntVec3 intVec, Map map)
+        {
+            /*currentlyGenerating = true;
+
+            operator_Pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(PawnKindDefOf.Colonist, Faction.OfPlayer, forcedXenotype: xenoType));
+
+            Recruit_Hediff();
+
+            Recruit_PersonalStat();
+
+            Recruit_AddRelations();
+
+            Recruit_Inventory();
+
+            if (ModLister.GetActiveModWithIdentifier("mis.arkmusic") != null) Recruit_ArkSongExtension();
+
+            //基因
+            if (ModLister.BiotechInstalled)
+            {
+                operator_Pawn.genes.ClearXenogenes();
+                //operator_Pawn.genes = new Pawn_GeneTracker(operator_Pawn);
+                //operator_Pawn.genes.SetXenotype(DefDatabase<XenotypeDef>.GetNamed("AK_BaseType"));
+            }
+            //播放语音
+            this.voicePackDef?.recruitSound.PlaySound();
+
+            //档案系统
+            VAbility_Operator operatorID = Recruit_VAB() as VAbility_Operator;
+
+            //对vab容器进行aka技能以外的处理
+            Recruit_OperatorID(operatorID);
+            //(operatorID.AKATracker as AK_AbilityTracker).doc = doc;
+            clothTemp.Clear();
+
+            Recruit_AKAbility(operatorID);
+
+            Recruit_PostEffects();*/
+            Recruit_NoMap();
             GenSpawn.Spawn(operator_Pawn, intVec, map);
             CameraJumper.TryJump(new GlobalTargetInfo(intVec, map));
 
-            currentlyGenerating = false;
+            //currentlyGenerating = false;
 
             return operator_Pawn;
         }
@@ -520,6 +561,11 @@ namespace AK_DLL
         }
         protected void Recruit_Inventory()
         {
+            /*Log.Message("a");
+            Log.Message($"op? {operator_Pawn == null}");
+            Log.Message($"op inv? {operator_Pawn.inventoryStock == null}");
+            Log.Message($"op inv ent? {operator_Pawn.inventoryStock.stockEntries == null}");*/
+            operator_Pawn.inventoryStock ??= new();
             operator_Pawn.inventoryStock.stockEntries.Clear();
             //增加物品
             if (this.items != null && this.items.Count > 0)
@@ -533,7 +579,7 @@ namespace AK_DLL
                 }
             }
             //装备衣物和配件
-            operator_Pawn.apparel.DestroyAll();
+            //operator_Pawn.apparel.DestroyAll();
             clothTemp = new List<Thing>();
             if (apparels != null)
             {

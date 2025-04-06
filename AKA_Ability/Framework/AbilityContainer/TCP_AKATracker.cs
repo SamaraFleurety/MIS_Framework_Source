@@ -14,6 +14,9 @@ namespace AKA_Ability
 
         //对于多个技能共享数据(例如cd)的，这里面的才是原始数据。不可以把CD_TrackerShared等非真实数据放进来！
         public AbilityTrackerSharedDataProperty sharedDataProperty = null;
+        //给sharedDataProperty提供物品装填
+        public AbilityReloadProperty reloadProperty = null;
+
         public TCP_AKATracker()
         {
             compClass = typeof(TC_AKATracker);
@@ -30,6 +33,7 @@ namespace AKA_Ability
         Apparel Parent => parent as Apparel;
 
         AbilityTrackerSharedDataProperty SharedDataProp => Props.sharedDataProperty;
+        AbilityReloadProperty ReloadProp => Props.reloadProperty;
 
         Pawn Wearer
         {
@@ -89,10 +93,13 @@ namespace AKA_Ability
             {
                 return;
             }
-            tracker = new AbilityTracker(CasterPawn);
+            tracker = new AbilityTracker(CasterPawn)
+            {
+                holder = this.parent
+            };
             if (SharedDataProp != null)
             {
-                tracker.sharedData = (AbilityTrackerSharedData_Base)Activator.CreateInstance(SharedDataProp.sharedDataType, tracker, SharedDataProp);
+                tracker.sharedData = (AbilityTrackerSharedData_Base)Activator.CreateInstance(SharedDataProp.sharedDataType, tracker, SharedDataProp, ReloadProp);
             }
             if (this.Abilities != null && this.Abilities.Count > 0)
             {

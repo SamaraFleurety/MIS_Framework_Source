@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using RimWorld.Utility;
+using System.Collections.Generic;
 using Verse;
 
 namespace AKA_Ability
@@ -42,6 +43,12 @@ namespace AKA_Ability
             if (!pawn_NotifyHitTarget[owner].Contains(ab)) return;
 
             pawn_NotifyHitTarget[owner].Remove(ab);
+        }
+
+        //复制过来还没写
+        public static IEnumerable<Pair<IReloadableComp, Thing>> FindPotentiallyReloadableGear(Pawn pawn, List<Thing> potentialAmmo)
+        {
+            yield break;
         }
     }
 

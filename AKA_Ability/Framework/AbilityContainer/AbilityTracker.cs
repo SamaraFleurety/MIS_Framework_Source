@@ -10,6 +10,8 @@ namespace AKA_Ability
     {
         public Pawn owner;
 
+        public ThingWithComps holder;//为TC_AKATracker新增的载体引用字段
+
         public int indexActiveGroupedAbility = -1;
 
         public List<AKAbility_Base> innateAbilities = new List<AKAbility_Base>();

@@ -39,7 +39,7 @@ namespace AKA_Ability.Gizmos
             //if (!parent.CastableNow()) GUI.color = new Color(0.3f, 0.59f, 0.11f, 1);
             Widgets.DrawTextureFitted(rect, badTex, this.iconDrawScale * 0.85f, this.iconProportions, this.iconTexCoords, this.iconAngle, buttonMat);
             //充能
-            Widgets.Label(rect, this.Cooldown.charge + "/" + this.Cooldown.MaxCharge);
+            Widgets.Label(rect, this.Cooldown.Charge + "/" + this.Cooldown.MaxCharge);
             //技能冷却
             GUI.DrawTexture(new Rect(rect.x, rect.y + rect.height, rect.width, rect.height * Cooldown.CooldownPercent() * -1), ContentFinder<Texture2D>.Get("UI/Abilities/White"));
             GUI.color = Color.white;

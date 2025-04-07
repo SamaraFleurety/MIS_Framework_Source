@@ -121,8 +121,6 @@
     <Compile Include="AbilityEffect\AddHediff\Regrow\HC_Regrow.cs" />
     <Compile Include="AbilityEffect\AE_SpawnMote.cs" />
     <Compile Include="AbilityEffect\AssignJob\JobDriver_AbilityAssignedJob.cs" />
-    <Compile Include="AbilityEffect\AssignJob\JobDriver_ReloadCDTrackerShared.cs" />
-    <Compile Include="AbilityEffect\AssignJob\JobGiver_ReloadCDTrackerShared.cs" />
     <Compile Include="AbilityEffect\Command\AECommand_Window.cs" />
     <Compile Include="AbilityEffect\Command\AE_CommandTerminal.cs" />
     <Compile Include="AbilityEffect\Command\AE_CopySkill.cs" />
@@ -152,6 +150,7 @@
     <Compile Include="AbilityEffect\Effect\Mass\AME_Illustrious_Inory.cs" />
     <Compile Include="AbilityEffect\Effect\Mass\AME_Illustrious_RiseFall.cs" />
     <Compile Include="AbilityEffect\Effect\Mass\AME_Singularity.cs" />
+    <Compile Include="AbilityEffect\Reload\AE_ReloadFromThing.cs" />
     <Compile Include="AbilityEffect\Summon\AE_SummonBase.cs" />
     <Compile Include="AbilityEffect\Summon\AE_SummonPawn.cs" />
     <Compile Include="AbilityEffect\Summon\AE_SummonThing.cs" />
@@ -166,9 +165,8 @@
     <Compile Include="Framework\Gizmos\ExtraGizmos\EGD_SelectAllSummoned.cs" />
     <Compile Include="Framework\Gizmos\Gizmo_SelectAllSummon.cs" />
     <Compile Include="Framework\SharedData\AbilityTrackerSharedData_Base.cs" />
-    <Compile Include="Framework\SharedData\AbilityReload.cs" />
+    <Compile Include="AbilityEffect\Reload\AbilityReload.cs" />
     <Compile Include="Framework\SharedData\SD_SharedCharge.cs" />
-    <Compile Include="Harmony\Patch_FloatMenu.cs" />
     <Compile Include="Summon\Patch_AllowTakeOrder.cs" />
     <Compile Include="AKA_Algorithm.cs" />
     <Compile Include="AKA_Utilities.cs" />

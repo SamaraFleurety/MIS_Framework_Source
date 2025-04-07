@@ -4,19 +4,22 @@ using UnityEngine;
 using Verse;
 using Verse.Sound;
 
-namespace AKA_Ability.SharedData
+namespace AKA_Ability
 {
+    //填个AKAbilityDef获取充能状态
     public class AbilityReloadProperty
     {
         public Type reloadClass;
 
-        public int maxCharges;
+        public AKAbilityDef target;//技能多了有可能做成下标
 
-        public ThingDef ammoDef;
+        public bool refillMaxOnce = false; //是否一次性装满
 
-        public int ammoCountToRefill;
+        public ThingDef ammoDef; //弹药def
 
-        public int ammoCountPerCharge;
+        public int ammoCountToRefill = 0; //填了这个就是只接受一次性暴力装填,弹药数量满足就全部消耗,不论剩余
+
+        public int ammoCountPerCharge; //装填一次充能需要的弹药数量
 
         public int baseReloadTicks = 60;
 
@@ -35,8 +38,8 @@ namespace AKA_Ability.SharedData
         public NamedArgument ChargeNounArgument => chargeNoun.Named("CHARGENOUN");
     }
 
-    //以后可能会有多个技能同时要装填？先做共享tracker的再说
-    public class AbilityReload : IExposable, ICompWithCharges, IReloadableComp
+    //用来获取技能充能状态的组件
+    public class AbilityReload : ICompWithCharges, IReloadableComp
     {
         public AbilityTracker tracker;
         public AbilityReloadProperty Props;
@@ -46,15 +49,28 @@ namespace AKA_Ability.SharedData
             tracker = abilityTracker;
             Props = property;
         }
-        SD_SharedCharge SharedChargeData => tracker.TryGetSharedData<SD_SharedCharge>();
+
+        AKAbility_Base cachedTarget = null;
+        AKAbility_Base TargetToReload
+        {
+            get 
+            {
+                cachedTarget ??= tracker.TryGetAbility(Props.target);
+                if (cachedTarget is null)
+                {
+                    Log.Error("cachedTarget不存在");
+                }
+                return cachedTarget;
+            }
+        }
 
         public int RemainingCharges 
         {
-            get => SharedChargeData.cooldown.Charge; 
-            set => SharedChargeData.cooldown.Charge = value; 
+            get => TargetToReload.cooldown.Charge; 
+            set => TargetToReload.cooldown.Charge = value; 
         }
 
-        public int MaxCharges => SharedChargeData.cooldown.MaxCharge;
+        public int MaxCharges => TargetToReload.cooldown.MaxCharge;
 
         public Thing ReloadableThing => tracker.holder;
 
@@ -62,27 +78,14 @@ namespace AKA_Ability.SharedData
 
         public int BaseReloadTicks => Props.baseReloadTicks;
 
-        public string LabelRemaining => throw new NotImplementedException();
-
-        public virtual void ExposeData()
-        {
-            BackCompatibility.PostExposeData(this);
-        }
-
-        public string DisabledReason(int minNeeded, int maxNeeded)
-        {
-            return TranslatorFormattedStringExtensions.Translate(arg3: ((Props.ammoCountToRefill == 0) ? ((minNeeded == maxNeeded) ? minNeeded.ToString() : $"{minNeeded}-{maxNeeded}") : Props.ammoCountToRefill.ToString()).Named("COUNT"), key: "CommandReload_NoAmmo", arg1: Props.ChargeNounArgument, arg2: NamedArgumentUtility.Named(AmmoDef, "AMMO"));
-        }
+        public string LabelRemaining => $"{RemainingCharges} / {MaxCharges}";
 
         public bool NeedsReload(bool allowForceReload)
         {
             if (AmmoDef == null) return false;
             if (Props.ammoCountToRefill != 0)
             {
-                if (!allowForceReload)
-                {
-                    return RemainingCharges == 0;
-                }
+                if (!allowForceReload) return RemainingCharges == 0;
                 return RemainingCharges != MaxCharges;
             }
             return RemainingCharges != MaxCharges;
@@ -106,43 +109,31 @@ namespace AKA_Ability.SharedData
             }
             Props.soundReload?.PlayOneShot(new TargetInfo(tracker.owner.Position, tracker.owner.Map));
         }
+
         public int MinAmmoNeeded(bool allowForcedReload)
         {
-            if (!NeedsReload(allowForcedReload))
-            {
-                return 0;
-            }
-            if (Props.ammoCountToRefill != 0)
-            {
-                return Props.ammoCountToRefill;
-            }
+            if (!NeedsReload(allowForcedReload)) return 0;
+            if (Props.ammoCountToRefill != 0) return Props.ammoCountToRefill;
             return Props.ammoCountPerCharge;
         }
 
         public int MaxAmmoNeeded(bool allowForcedReload)
         {
-            if (!NeedsReload(allowForcedReload))
-            {
-                return 0;
-            }
-            if (Props.ammoCountToRefill != 0)
-            {
-                return Props.ammoCountToRefill;
-            }
+            if (!NeedsReload(allowForcedReload)) return 0;
+            if (Props.ammoCountToRefill != 0) return Props.ammoCountToRefill;
             return Props.ammoCountPerCharge * (MaxCharges - RemainingCharges);
         }
 
         public int MaxAmmoAmount()
         {
-            if (AmmoDef == null)
-            {
-                return 0;
-            }
-            if (Props.ammoCountToRefill == 0)
-            {
-                return Props.ammoCountPerCharge * MaxCharges;
-            }
+            if (AmmoDef == null) return 0;
+            if (Props.ammoCountToRefill == 0) return Props.ammoCountPerCharge * MaxCharges;
             return Props.ammoCountToRefill;
+        }
+
+        public string DisabledReason(int minNeeded, int maxNeeded)
+        {
+            return TranslatorFormattedStringExtensions.Translate(arg3: ((Props.ammoCountToRefill == 0) ? ((minNeeded == maxNeeded) ? minNeeded.ToString() : $"{minNeeded}-{maxNeeded}") : Props.ammoCountToRefill.ToString()).Named("COUNT"), key: "CommandReload_NoAmmo", arg1: Props.ChargeNounArgument, arg2: NamedArgumentUtility.Named(AmmoDef, "AMMO"));
         }
 
         public bool CanBeUsed(out string reason)

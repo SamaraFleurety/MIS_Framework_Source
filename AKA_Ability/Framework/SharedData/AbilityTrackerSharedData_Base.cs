@@ -15,8 +15,6 @@ namespace AKA_Ability.SharedData
         public AbilityTracker tracker;
 
         public AbilityTrackerSharedDataProperty props;
-
-        public AbilityReloadProperty reloadProps;
         //存读档的时候会调用这个
         protected AbilityTrackerSharedData_Base(AbilityTracker tracker)
         {
@@ -24,10 +22,9 @@ namespace AKA_Ability.SharedData
         }
 
         //仅初始化的时候会加载一次
-        protected AbilityTrackerSharedData_Base(AbilityTracker tracker, AbilityTrackerSharedDataProperty props, AbilityReloadProperty reloadProps) : this(tracker)
+        protected AbilityTrackerSharedData_Base(AbilityTracker tracker, AbilityTrackerSharedDataProperty props) : this(tracker)
         {
             this.props = props;
-            this.reloadProps = reloadProps;
         }
 
         public virtual void ExposeData()

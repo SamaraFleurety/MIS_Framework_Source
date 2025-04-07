@@ -17,8 +17,6 @@ namespace AKA_Ability
         public static SoundDef AK_SFX_Healboost;
         public static SoundDef AK_SFX_Tactboost;*/
 
-        public static JobDef AKA_ReloadCDTrackerShared;
-
         public static StatDef AKA_Stat_RangedDamageFactor;
 
     }

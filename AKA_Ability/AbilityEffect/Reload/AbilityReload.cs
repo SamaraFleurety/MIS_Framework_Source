@@ -13,8 +13,6 @@ namespace AKA_Ability
 
         public AKAbilityDef target;//技能多了有可能做成下标
 
-        public bool refillMaxOnce = false; //是否一次性装满
-
         public ThingDef ammoDef; //弹药def
 
         public int ammoCountToRefill = 0; //填了这个就是只接受一次性暴力装填,弹药数量满足就全部消耗,不论剩余

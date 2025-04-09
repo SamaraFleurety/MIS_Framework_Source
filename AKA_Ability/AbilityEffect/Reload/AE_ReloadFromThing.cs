@@ -3,9 +3,14 @@ using Verse;
 
 namespace AKA_Ability.AbilityEffect
 {
-    public class AE_ReloadFromThing : AbilityEffectBase
+    public class AE_ReloadFromThing : AbilityEffectBase, ITargetingValidator
     {
         public AbilityReloadProperty reloadProp = null;
+
+        public bool TargetingValidator(TargetInfo info)
+        {
+            throw new NotImplementedException();
+        }
 
         protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {

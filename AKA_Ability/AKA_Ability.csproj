@@ -150,6 +150,7 @@
     <Compile Include="AbilityEffect\Effect\Mass\AME_Illustrious_Inory.cs" />
     <Compile Include="AbilityEffect\Effect\Mass\AME_Illustrious_RiseFall.cs" />
     <Compile Include="AbilityEffect\Effect\Mass\AME_Singularity.cs" />
+    <Compile Include="AbilityEffect\ITargetingValidator.cs" />
     <Compile Include="AbilityEffect\Reload\AE_ReloadFromThing.cs" />
     <Compile Include="AbilityEffect\Summon\AE_SummonBase.cs" />
     <Compile Include="AbilityEffect\Summon\AE_SummonPawn.cs" />

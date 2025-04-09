@@ -1,4 +1,5 @@
-﻿using AKA_Ability.Gizmos;
+﻿using AKA_Ability.AbilityEffect;
+using AKA_Ability.Gizmos;
 using RimWorld;
 using System.Linq;
 using UnityEngine;
@@ -44,7 +45,31 @@ namespace AKA_Ability
 
         public Texture2D UIIcon => null;
 
-        public TargetingParameters targetParams => def.targetParams;
+        TargetingParameters cachedTargetingParams = null;
+        public TargetingParameters targetParams
+        {
+            get
+            {
+                if (cachedTargetingParams == null)
+                {
+                    cachedTargetingParams = def.targetParams;
+                    cachedTargetingParams.validator = TargetingValidator;
+                }
+                return cachedTargetingParams;
+            }
+        }
+
+        public virtual bool TargetingValidator(TargetInfo info)
+        {
+            foreach (AbilityEffectBase ae in def.compEffectList)
+            {
+                if (ae is ITargetingValidator validator)
+                {
+                    if (!validator.TargetingValidator(info)) return false;
+                }
+            }
+            return true;
+        }
 
         public ITargetingSource DestinationSelector => null;
 

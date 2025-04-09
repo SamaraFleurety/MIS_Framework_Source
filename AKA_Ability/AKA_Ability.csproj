@@ -167,6 +167,8 @@
     <Compile Include="Framework\SharedData\AbilityTrackerSharedData_Base.cs" />
     <Compile Include="AbilityEffect\Reload\AbilityReload.cs" />
     <Compile Include="Framework\SharedData\SD_SharedCharge.cs" />
+    <Compile Include="Framework\TickCondition\TickCondion_Base.cs" />
+    <Compile Include="Framework\TickCondition\TiC_ColonistOnly.cs" />
     <Compile Include="Summon\Patch_AllowTakeOrder.cs" />
     <Compile Include="AKA_Algorithm.cs" />
     <Compile Include="AKA_Utilities.cs" />

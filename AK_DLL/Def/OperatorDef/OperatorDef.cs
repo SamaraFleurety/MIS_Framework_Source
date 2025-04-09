@@ -248,6 +248,7 @@ namespace AK_DLL
 
             Recruit_AddRelations();
 
+            operator_Pawn.apparel?.DestroyAll();
             Recruit_Inventory();
 
             if (ModLister.GetActiveModWithIdentifier("mis.arkmusic") != null) Recruit_ArkSongExtension();
@@ -433,14 +434,6 @@ namespace AK_DLL
 
         protected virtual void Recruit_OperatorID(VAbility_AKATrackerContainer vab)
         {
-            /*/档案系统
-            GC_OperatorDocumentation.AddPawn(this.OperatorID, this, operator_Pawn, weapon, clothTemp);
-            OperatorDocument document = GC_OperatorDocumentation.opDocArchive[this.OperatorID];
-            document.voicePack = voicePackDef;*/
-
-            //干员身份证，改放在原版技能里了
-            //if (this.operatorID == null) operatorID = AKDefOf.AK_VAbility_Operator;
-
             //干员文档
             OperatorDocument document = Recruit_Document(operator_Pawn.equipment.Primary);
             if (vab is not VAbility_Operator vAbility)
@@ -451,9 +444,9 @@ namespace AK_DLL
             vAbility.AKATracker = new AK_AbilityTracker
             {
                 doc = document,
-                owner = operator_Pawn
+                owner = operator_Pawn,
             };
-            //operator_Pawn.abilities.abilities.Add(vAbility);
+            vAbility.AKATracker.tickCondition = new(vAbility.AKATracker);
 
             //这不是干员文档。这是通用的全局注册系统。这是用来调用干员文档，而非直接存储干员数据。
             operator_Pawn.AddDoc(new OpDocContainer(operator_Pawn) { va = vAbility });
@@ -562,10 +555,6 @@ namespace AK_DLL
         }
         protected void Recruit_Inventory()
         {
-            /*Log.Message("a");
-            Log.Message($"op? {operator_Pawn == null}");
-            Log.Message($"op inv? {operator_Pawn.inventoryStock == null}");
-            Log.Message($"op inv ent? {operator_Pawn.inventoryStock.stockEntries == null}");*/
             operator_Pawn.inventoryStock ??= new();
             operator_Pawn.inventoryStock.stockEntries.Clear();
             //增加物品
@@ -574,9 +563,6 @@ namespace AK_DLL
                 foreach (ItemOnSpawn i in this.items)
                 {
                     Recruit_Inventory_Additem(i.item, i.amount);
-                    /*Thing newThing = ThingMaker.MakeThing(i.item);
-                    newThing.stackCount = i.amount;
-                    operator_Pawn.inventory.TryAddAndUnforbid(newThing);*/
                 }
             }
             //装备衣物和配件

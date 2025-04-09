@@ -1,4 +1,5 @@
 ﻿using AKA_Ability.SharedData;
+using AKA_Ability.TickCondition;
 using RimWorld;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,13 @@ namespace AKA_Ability
     //放Thing上面的技能容器。可能是放在衣服上需要穿戴，也可能放在pawn上面可以直接施法
     public class TCP_AKATracker : CompProperties
     {
+        [Obsolete]
         public List<AKAbilityDef> abilities = new();
 
+        public AbilityTrackerGenerationProperty trackerGenProp = new();
+
         //对于多个技能共享数据(例如cd)的，这里面的才是原始数据。不可以把CD_TrackerShared等非真实数据放进来！
+        [Obsolete]
         public AbilityTrackerSharedDataProperty sharedDataProperty = null;
 
         public TCP_AKATracker()
@@ -85,27 +90,33 @@ namespace AKA_Ability
         public override void PostPostMake()
         {
             base.PostPostMake(); 
-            //fixme:没做ce兼容
-            if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null)
+
+            if (Props.trackerGenProp == null)
             {
+                Log.Warning($"[AKA] {parent.def.label} 仍在使用旧版AKA生成参数。");
+
+                //fixme:没做ce兼容
+                if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null)
+                {
+                    return;
+                }
+                tracker = new AbilityTracker(CasterPawn);
+                if (SharedDataProp != null)
+                {
+                    tracker.sharedData = (AbilityTrackerSharedData_Base)Activator.CreateInstance(SharedDataProp.sharedDataType, tracker, SharedDataProp);
+                }
+                if (this.Abilities != null && this.Abilities.Count > 0)
+                {
+                    foreach (AKAbilityDef i in this.Abilities)
+                    {
+                        tracker.AddAbility(i);
+                        //AKAbilityMaker.MakeAKAbility(i, AKATracker);
+                    }
+                }
                 return;
             }
-            tracker = new AbilityTracker(CasterPawn)
-            {
-                holder = this.parent
-            };
-            if (SharedDataProp != null)
-            {
-                tracker.sharedData = (AbilityTrackerSharedData_Base)Activator.CreateInstance(SharedDataProp.sharedDataType, tracker, SharedDataProp);
-            }
-            if (this.Abilities != null && this.Abilities.Count > 0)
-            {
-                foreach (AKAbilityDef i in this.Abilities)
-                {
-                    tracker.AddAbility(i);
-                    //AKAbilityMaker.MakeAKAbility(i, AKATracker);
-                }
-            }
+
+            tracker = Props.trackerGenProp.GenerateAbilityTracker(CasterPawn);
         }
         public override void Notify_Equipped(Pawn pawn)
         {

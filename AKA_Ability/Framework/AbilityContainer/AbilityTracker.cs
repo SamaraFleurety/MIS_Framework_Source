@@ -1,13 +1,54 @@
 ﻿using AKA_Ability.SharedData;
+using AKA_Ability.TickCondition;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Verse;
 
 namespace AKA_Ability
 {
+    //aka tracker生成时参数。此参数在生成后不可被调用，也不见得一定使用此参数生成tracker。
+    public class AbilityTrackerGenerationProperty
+    {
+        public Type AKATrackerClass = typeof(AbilityTracker);
+
+        //必须这玩意返回true，同时满足trakcer内其他条件才会tick。
+        public Type tickCondition = typeof(TiC_ColonistOnly);
+
+        //对于多个技能共享数据(例如cd)的，这里面的才是原始数据。不可以把CD_TrackerShared等非真实数据放进来！
+        public AbilityTrackerSharedDataProperty sharedDataProperty = null;
+        public List<AKAbilityDef> abilities = new();
+        public AbilityTrackerGenerationProperty() { }
+
+        public AbilityTracker GenerateAbilityTracker(Pawn casterPawn)
+        {
+            //新版好像自动兼容ce了
+            /*if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null)
+            {
+                return;
+            }*/
+            AbilityTracker tracker = (AbilityTracker)Activator.CreateInstance(AKATrackerClass, casterPawn);
+            tracker.tickCondition = (TickCondion_Base)Activator.CreateInstance(tickCondition, tracker);
+            if (sharedDataProperty != null)
+            {
+                tracker.sharedData = (AbilityTrackerSharedData_Base)Activator.CreateInstance(sharedDataProperty.sharedDataType, tracker, sharedDataProperty);
+            }
+            if (!abilities.NullOrEmpty())
+            {
+                foreach (AKAbilityDef i in this.abilities)
+                {
+                    tracker.AddAbility(i);
+                    //AKAbilityMaker.MakeAKAbility(i, AKATracker);
+                }
+            }
+            return tracker;
+        }
+    }
+
     //不能保证一个pawn只有一个tracker。
     public class AbilityTracker : IExposable
     {
+        //不可以改，许多ae都默认使用者是pawn
         public Pawn owner;
 
         public ThingWithComps holder;//为TC_AKATracker新增的载体引用字段
@@ -28,6 +69,8 @@ namespace AKA_Ability
 
         //对于使用共享数据(比如cd)这里面的才是真实数据
         public AbilityTrackerSharedData_Base sharedData = null;
+
+        public TickCondion_Base tickCondition = null;
         public AKAbility_Base SelectedGroupedAbility
         {
             get
@@ -49,7 +92,7 @@ namespace AKA_Ability
 
         public void Tick()
         {
-            if (owner == null || !owner.IsColonist) return;
+            if (!tickCondition.TickableNow() /*owner == null ||  !owner.IsColonist*/) return;
             foreach (AKAbility_Base i in innateAbilities)
             {
                 i.Tick();
@@ -161,6 +204,8 @@ namespace AKA_Ability
             Scribe_Collections.Look(ref summonAbilities, "summonA", LookMode.Reference);
 
             Scribe_Deep.Look(ref sharedData, "sharedData", this);
+
+            Scribe_Deep.Look(ref tickCondition, "ticker", this);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 foreach (AKAbility_Base i in innateAbilities) i.container = this;

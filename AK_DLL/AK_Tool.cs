@@ -60,7 +60,6 @@ namespace AK_DLL
                     break;
                 }
             }
-            //FSAsset = AssetBundle.LoadFromFile(@"S:/Program Files (x86)/Steam/steamapps/common/RimWorld/Mods/Framework/Asset/fsassets");
             if (FSAsset == null || PAAsset == null)
             {
                 Log.Error("MIS. Critical Error: Missing Assets");

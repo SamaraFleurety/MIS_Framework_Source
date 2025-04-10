@@ -1,5 +1,6 @@
 ﻿using AKA_Ability.CastConditioner;
 using AKA_Ability.Cooldown;
+using AKA_Ability.InertiaConditioner;
 using AKA_Ability.Range;
 using RimWorld;
 using System;
@@ -29,6 +30,32 @@ namespace AKA_Ability
         protected bool cachedCastableCondition = false;
 
         protected string lastFailReason = "";
+
+        public List<InertiaConditioner_Base> inertiaConditions = new();
+
+        bool? inertia = null;
+        //惰性，惰性的技能视为不存在（不显示，不tick，不可发）
+        //仅缓存一次，不会频繁刷新
+        //这个系统会取代之前的分组/固有技能的分类系统
+        public bool Inertia
+        {
+            get
+            {
+                if (inertia is bool res) return res;
+
+                inertia = false;
+                foreach (InertiaConditioner_Base ic in inertiaConditions)
+                {
+                    if (ic.InertiaNow())
+                    {
+                        inertia = true;
+                        break;
+                    }
+                }
+                return (bool)inertia;
+            }
+            set { inertia = value; }
+        }
         public virtual float Range
         {
             get
@@ -63,6 +90,7 @@ namespace AKA_Ability
 
         public virtual IEnumerable<Command> GetGizmos()
         {
+            if (Inertia) yield break;
             if (!CasterPawn.Drafted && !def.displayGizmoUndraft) yield break;
             if (cachedGizmo == null) InitializeGizmoInnate();
             UpdateGizmoInnate();
@@ -95,7 +123,7 @@ namespace AKA_Ability
                 cachedCastableCondition = true;
                 foreach (CastConditioner_Base i in def.castConditions)
                 {
-                    if (!i.Castable(this))
+                    if (!i.Castable_New(this))
                     {
                         cachedCastableCondition = false;
                         lastFailReason = i.failReason;
@@ -113,6 +141,7 @@ namespace AKA_Ability
             Scribe_Defs.Look(ref def, "def");
             Scribe_Deep.Look(ref cooldown, "CD", def.cooldownProperty, this);
             Scribe_Values.Look(ref ID, "id", -1);
+            Scribe_Collections.Look(ref inertiaConditions, "ic", LookMode.Deep, this);
         }
 
         public virtual void TryCastShot(LocalTargetInfo target)
@@ -178,5 +207,7 @@ namespace AKA_Ability
         {
             return "AKAbility" + ID;
         }
+
+
     }
 }

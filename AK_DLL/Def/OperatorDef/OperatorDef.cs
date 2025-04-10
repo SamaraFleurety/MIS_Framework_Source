@@ -1,4 +1,5 @@
-﻿using AK_TypeDef;
+﻿using AK_DLL.DynamicLoading;
+using AK_TypeDef;
 using AKA_Ability;
 using AKM_MusicPlayer;
 using FS_LivelyRim;
@@ -54,7 +55,7 @@ namespace AK_DLL
 
         [MayRequireBiotech]
         public string stand;//精2立绘
-        public string commonStand;  //精0立绘
+        public string commonStand = null;  //精0立绘
         public List<string> fashion; //换装立绘的路径 和小人身上的衣服无关
         public List<string> fashionAnimation = new();//spine2d动态立绘皮肤的defName列表
 
@@ -84,17 +85,13 @@ namespace AK_DLL
         public Type documentType = typeof(OperatorDocument);   //写了碧蓝之后发现档案甚至都可以扩充
 
         public bool ignoreAutoFill = false; //跳过自动填充
+
+        public string modPackageID = "MIS.Arknights";  //about.xml里面的package id，用于动态加载资源
         #endregion
 
         //年龄阈值，小于此年龄就无成人故事。
         protected const int BackstoryAdultAgeThreshold = 20;
         #region 快捷属性
-        /*//为了兼容性 这玩意不好写成static
-        public LiveModelDef Live2DModelDef(string live2dModel)
-        {
-            return DefDatabase<LiveModelDef>.GetNamed(live2dModel);
-        }*/
-
 
         public static bool currentlyGenerating = false;
 
@@ -133,9 +130,29 @@ namespace AK_DLL
         public Texture2D PreferredStand(int preferredSkin)
         {
             Texture2D texture;
-            if (preferredSkin == 0) texture = ContentFinder<Texture2D>.Get(this.commonStand);
+            if (preferredSkin == 0)
+            {
+                if (commonStand == null)
+                {
+                    Log.Error($"[AK] 尝试获取，但是{label}不存在精0立绘");
+                    texture = ContentFinder<Texture2D>.Get(this.stand);
+                    return texture;
+                }
+                texture = ContentFinder<Texture2D>.Get(this.commonStand);
+            }
             else if (preferredSkin == 1) texture = ContentFinder<Texture2D>.Get(this.stand);
-            else texture = ContentFinder<Texture2D>.Get(this.fashion[preferredSkin - 2]);
+            else
+            {
+                int skinIndex = preferredSkin - 2;
+                if (fashion.NullOrEmpty() || skinIndex >= fashion.Count)
+                {
+                    Log.Error($"[AK] 尝试获取，但是{label}不存在{skinIndex}号换装");
+                    texture = ContentFinder<Texture2D>.Get(this.stand);
+                    return texture;
+                }
+                texture = ContentFinder<Texture2D>.Get(this.fashion[skinIndex]);
+            }
+
             return texture;
         }
 
@@ -221,10 +238,8 @@ namespace AK_DLL
 
             foreach (var apparel in operator_Pawn.apparel.WornApparel)
             {
-                Log.Message($"ap {apparel}");
                 if (apparel is Apparel_Operator ap)
                 {
-                    Log.Message($"found ap is {ap}");
                     ap.SetGraphicIndex(apparelTextureIndex);
                 }
             }
@@ -240,6 +255,7 @@ namespace AK_DLL
         {
             currentlyGenerating = true;
 
+            ForceLoadResources();
             operator_Pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(PawnKindDefOf.Colonist, Faction.OfPlayer, forcedXenotype: xenoType));
 
             Recruit_Hediff();
@@ -280,50 +296,12 @@ namespace AK_DLL
 
         public virtual Pawn Recruit(IntVec3 intVec, Map map)
         {
-            /*currentlyGenerating = true;
-
-            operator_Pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(PawnKindDefOf.Colonist, Faction.OfPlayer, forcedXenotype: xenoType));
-
-            Recruit_Hediff();
-
-            Recruit_PersonalStat();
-
-            Recruit_AddRelations();
-
-            Recruit_Inventory();
-
-            if (ModLister.GetActiveModWithIdentifier("mis.arkmusic") != null) Recruit_ArkSongExtension();
-
-            //基因
-            if (ModLister.BiotechInstalled)
-            {
-                operator_Pawn.genes.ClearXenogenes();
-                //operator_Pawn.genes = new Pawn_GeneTracker(operator_Pawn);
-                //operator_Pawn.genes.SetXenotype(DefDatabase<XenotypeDef>.GetNamed("AK_BaseType"));
-            }
-            //播放语音
-            this.voicePackDef?.recruitSound.PlaySound();
-
-            //档案系统
-            VAbility_Operator operatorID = Recruit_VAB() as VAbility_Operator;
-
-            //对vab容器进行aka技能以外的处理
-            Recruit_OperatorID(operatorID);
-            //(operatorID.AKATracker as AK_AbilityTracker).doc = doc;
-            clothTemp.Clear();
-
-            Recruit_AKAbility(operatorID);
-
-            Recruit_PostEffects();*/
             Recruit_NoMap();
             GenSpawn.Spawn(operator_Pawn, intVec, map);
             CameraJumper.TryJump(new GlobalTargetInfo(intVec, map));
 
-            //currentlyGenerating = false;
-
             return operator_Pawn;
         }
-
 
         public virtual Pawn Recruit(Map map)
         {
@@ -770,6 +748,29 @@ namespace AK_DLL
         {
             if (this.age <= 0) this.age = 16;
             if (this.realAge <= 0) this.realAge = this.age;
+        }
+        #endregion
+
+        #region 动态加载媒体资源
+        //加载这个干员所需的多媒体资源
+        public void ForceLoadResources()
+        {
+            List<ThingDef> allThingdefs = new();
+            allThingdefs.AddRange(accessory);
+            allThingdefs.AddRange(apparels);
+            allThingdefs.Add(weapon);
+            foreach (ThingDef def in allThingdefs)
+            {
+                LoadResources_GraphicData(def.graphicData);
+            }
+        }
+
+        void LoadResources_GraphicData(GraphicData data)
+        {
+            if (data is not GraphicData_DynamicLoading dd) return;
+
+            dd.ForceLoad(modPackageID);
+            
         }
         #endregion
     }

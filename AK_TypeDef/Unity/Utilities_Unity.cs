@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using RimWorld.IO;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -64,7 +67,7 @@ namespace AK_DLL
         //从mod的ID读获取要的文件的路径
         //实际路径为[MOD根目录][subfolder]path
         //subfolder前后应该包括'/'
-        private static string ModIDtoPath(string modPackageID, string path, string subfolder = "")
+        private static string ModIDtoPath(string modPackageID, string path, string subfolder = "\\")
         {
             if (!modPath.ContainsKey(modPackageID.ToLower()))
             {
@@ -151,5 +154,74 @@ namespace AK_DLL
             Sprite sprite = Sprite.Create(image, new Rect(0, 0, image.width, image.height), new Vector2(0.5f, 0.5f));
             return sprite;
         }
+
+        #region 运行时加载媒体资源
+        public static T GetResource<T>(string itemPath, string modPackageID) where T : class
+        {
+            T val = null;
+            if (typeof(T) == typeof(Texture2D))
+            {
+                string path = ModIDtoPath(modPackageID, itemPath + ".png", DynContentPath<Texture2D>())/*.Replace('/', '\\')*/;
+                //FileInfo fileInfo = new(@path);
+                Texture2D texture = LoadTexture(@path);
+                val = (T)(object)texture;
+            }
+            if (typeof(T) == typeof(AudioClip))
+            {
+                val = (T)(object)Resources.Load<AudioClip>(ModIDtoPath(modPackageID, itemPath, DynContentPath<AudioClip>()));
+            }
+            if (val == null)
+            {
+                Log.Error($"[AK] 无法动态加载{typeof(T)}资源: {itemPath}");
+            }
+            return val;
+        }
+
+        public static string DynContentPath<T>() where T : class
+        {
+            if (typeof(T) == typeof(AudioClip))
+            {
+                return "/DynaLoad/Sounds/";
+            }
+            if (typeof(T) == typeof(Texture2D))
+            {
+                return "/DynaLoad/Textures/";
+            }
+            throw new ArgumentException();
+        }
+
+        private static Texture2D LoadTexture(string path)
+        {
+            if (!File.Exists(@path))
+            {
+                Log.Error($"[AK] 尝试获取不存在的文件于{path}");
+            }
+            FileStream file = new(@path, FileMode.Open, FileAccess.Read);
+            Texture2D texture2D;
+            byte[] data = new byte[file.Length];
+            file.Read(data, 0, data.Length);
+            texture2D = new Texture2D(2, 2, TextureFormat.Alpha8, mipChain: true);
+            texture2D.LoadImage(data);
+            if (texture2D.width % 4 != 0 || texture2D.height % 4 != 0)
+            {
+                if (Prefs.LogVerbose)
+                {
+                    Debug.LogWarning($"Texture does not support mipmapping, needs to be divisible by 4 ({texture2D.width}x{texture2D.height}) for '{file.Name}'");
+                }
+                texture2D = new Texture2D(2, 2, TextureFormat.Alpha8, mipChain: false);
+                texture2D.LoadImage(data);
+            }
+            if (Prefs.TextureCompression)
+            {
+                texture2D.Compress(highQuality: true);
+            }
+            texture2D.name = Path.GetFileNameWithoutExtension(file.Name);
+            texture2D.filterMode = FilterMode.Trilinear;
+            texture2D.anisoLevel = 2;
+            texture2D.Apply(updateMipmaps: true, makeNoLongerReadable: true);
+
+            return texture2D;
+        }
+        #endregion
     }
 }

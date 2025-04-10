@@ -47,7 +47,7 @@ namespace AKA_Ability
 
         public int sortOrder = 999; //自动排序，值越小越前
 
-        //public List<ExtraGizmoDrawer_Base> extraGizmos = new();
+        public List<Type> inertiaConditions = new();
         #region 非xml可填参数
         public Texture2D Icon => ContentFinder<Texture2D>.Get(icon);
         #endregion

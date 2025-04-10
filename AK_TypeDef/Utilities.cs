@@ -1,6 +1,8 @@
 ﻿using AK_DLL.Document;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using Verse;
 
 namespace AK_TypeDef
@@ -131,5 +133,7 @@ namespace AK_TypeDef
             }, 16, RegionType.Set_Passable);
             return tradeableCells;
         }
+
+        
     }
 }

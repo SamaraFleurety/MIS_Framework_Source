@@ -149,6 +149,8 @@
     <Compile Include="Def\ReserveOperatorDef\ReserveOperatorDef.cs" />
     <Compile Include="HarmonyPatch\Patch_EquipmentTracker.cs" />
     <Compile Include="LoadingOptimizer\AhoCorasick.cs" />
+    <Compile Include="LoadingOptimizer\DynamicLoading\Graphic\GraphicData_DynamicLoading.cs" />
+    <Compile Include="LoadingOptimizer\DynamicLoading\patchtest.cs" />
     <Compile Include="LoadingOptimizer\LoadFolderDef.cs" />
     <Compile Include="LoadingOptimizer\Patch_DefsInMod.cs" />
     <Compile Include="LoadingOptimizer\Patch_ForbidCrossRef.cs" />

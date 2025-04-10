@@ -211,6 +211,7 @@ namespace AK_DLL
         {
             VAbility_AKATrackerContainer res = base.Recruit_VAB();
             res.AKATracker = new(operator_Pawn);
+            res.AKATracker.tickCondition = new(res.AKATracker);
             return res;
         }
 

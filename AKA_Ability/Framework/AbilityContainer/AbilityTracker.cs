@@ -1,4 +1,5 @@
-﻿using AKA_Ability.SharedData;
+﻿using AKA_Ability.InertiaConditioner;
+using AKA_Ability.SharedData;
 using AKA_Ability.TickCondition;
 using System;
 using System.Collections.Generic;
@@ -59,6 +60,9 @@ namespace AKA_Ability
 
         public List<AKAbility_Base> groupedAbilities = new List<AKAbility_Base>();
 
+        //取消innate和group的区分，统一成此类。没有做完
+        public List<AKAbility_Base> abilitiesUnified = new();
+
         //fixme:没做完
         public AKAbility_Base barDisplayedAbility = null;   //舟味ui显示技能指示时 有多个技能则仅显示此技能。不允许是未被选中的分组技能。
 
@@ -95,6 +99,7 @@ namespace AKA_Ability
             if (!tickCondition.TickableNow() /*owner == null ||  !owner.IsColonist*/) return;
             foreach (AKAbility_Base i in innateAbilities)
             {
+                if (i.Inertia) continue;
                 i.Tick();
             }
 
@@ -150,6 +155,12 @@ namespace AKA_Ability
         public virtual AKAbility_Base AddAbility(AKAbilityDef def)
         {
             AKAbility_Base ability = (AKAbility_Base)Activator.CreateInstance(def.abilityClass, def, this);
+
+            foreach(Type icType in def.inertiaConditions)
+            {
+                InertiaConditioner_Base ic = (InertiaConditioner_Base)Activator.CreateInstance(icType, ability);
+                ability.inertiaConditions.Add(ic);
+            }
 
             List<AKAbility_Base> allAbilities = this.innateAbilities;
             if (def.grouped)

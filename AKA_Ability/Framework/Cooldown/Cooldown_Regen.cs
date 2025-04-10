@@ -50,6 +50,7 @@ namespace AKA_Ability.Cooldown
         }
         public virtual int MaxCharge => prop.maxCharge;
         public virtual int MaxSP => prop.SPPerCharge * (int)prop.SPUnit;
+        public virtual bool NeedsReload => Charge != MaxCharge;
 
         public Cooldown_Regen(CooldownProperty property, AKAbility_Base ability)
         {

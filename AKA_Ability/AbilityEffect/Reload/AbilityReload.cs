@@ -7,10 +7,8 @@ using Verse.Sound;
 namespace AKA_Ability
 {
     //填个AKAbilityDef获取充能状态
-    public class AbilityReloadProperty
+    /*public class AbilityReloadProperty
     {
-        public Type reloadClass;
-
         public AKAbilityDef target;//技能多了有可能做成下标
 
         public ThingDef ammoDef; //弹药def
@@ -22,11 +20,6 @@ namespace AKA_Ability
         public int baseReloadTicks = 60;
 
         public SoundDef soundReload;
-
-        public AbilityReloadProperty()
-        {
-            this.reloadClass = typeof(AbilityReload);
-        }
 
         [MustTranslate]
         public string cooldownGerund = "on cooldown";
@@ -144,5 +137,5 @@ namespace AKA_Ability
             }
             return true;
         }
-    }
+    }*/
 }

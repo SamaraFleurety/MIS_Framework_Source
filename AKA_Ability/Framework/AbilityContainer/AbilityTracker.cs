@@ -96,7 +96,7 @@ namespace AKA_Ability
 
         public void Tick()
         {
-            if (!tickCondition.TickableNow() /*owner == null ||  !owner.IsColonist*/) return;
+            if (tickCondition != null && !tickCondition.TickableNow() /*owner == null ||  !owner.IsColonist*/) return;
             foreach (AKAbility_Base i in innateAbilities)
             {
                 if (i.Inertia) continue;
@@ -156,7 +156,7 @@ namespace AKA_Ability
         {
             AKAbility_Base ability = (AKAbility_Base)Activator.CreateInstance(def.abilityClass, def, this);
 
-            foreach(Type icType in def.inertiaConditions)
+            foreach (Type icType in def.inertiaConditions)
             {
                 InertiaConditioner_Base ic = (InertiaConditioner_Base)Activator.CreateInstance(icType, ability);
                 ability.inertiaConditions.Add(ic);

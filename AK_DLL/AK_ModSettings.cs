@@ -101,15 +101,11 @@ namespace AK_DLL
         #endregion
 
         #region 选择性不加载职业
-        public static List<string> forbiddenLoadClasses = new();
+        /*public static List<string> forbiddenLoadClasses = new();
         public static List<string> forbiddenXmls = new(); //禁止包含里面任一string的xml路径的读取
-        public static List<string> forbiddenAssets = new(); //禁止包含里面任一string的多媒体文件路径的读取
-        #endregion
-
-        public static bool allowManualRegister = false;
-
+        public static List<string> forbiddenAssets = new(); //禁止包含里面任一string的多媒体文件路径的读取*/
         //在mod选项里面选完不游玩的职业后，需要手动确认
-        public static void ConfirmForbiddenClasses()
+        /*public static void ConfirmForbiddenClasses()
         {
             forbiddenXmls = new();
             forbiddenAssets = new();
@@ -124,14 +120,13 @@ namespace AK_DLL
             }
             forbiddenXmls = forbiddenXmlSet.ToList();
             forbiddenAssets = forbiddenAssetSet.ToList();
-        }
+        }*/
+        #endregion
+
+        public static bool allowManualRegister = false;
 
         public override void ExposeData()
         {
-            Scribe_Collections.Look(ref forbiddenLoadClasses, "loadban_def", LookMode.Value);
-            Scribe_Collections.Look(ref forbiddenXmls, "loadban_xml", LookMode.Value);
-            Scribe_Collections.Look(ref forbiddenAssets, "loadban_asset", LookMode.Value);
-
             //自动填充
             Scribe_Values.Look(ref enable_HealthBar, "displayBar", defaultValue: true);
             Scribe_Values.Look(ref display_PlayerFaction, "display_PlayerFaction", defaultValue: true);

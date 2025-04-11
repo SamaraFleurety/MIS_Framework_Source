@@ -96,6 +96,9 @@
       <HintPath>..\Rely\UnityEngine.AssetBundleModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>..\Rely\UnityEngine.AudioModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\Rely\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
@@ -148,14 +151,16 @@
     <Compile Include="Def\ReserveOperatorDef\Patch_OverridePawnGeneration.cs" />
     <Compile Include="Def\ReserveOperatorDef\ReserveOperatorDef.cs" />
     <Compile Include="HarmonyPatch\Patch_EquipmentTracker.cs" />
-    <Compile Include="LoadingOptimizer\AhoCorasick.cs" />
+    <Compile Include="LoadingOptimizer\DynamicLoading\Audio\AudioGrain_DynaLoad_Clip.cs" />
+    <Compile Include="LoadingOptimizer\DynamicLoading\Audio\SubSoundDef_DynaLoading.cs" />
+    <Compile Include="LoadingOptimizer\Legacy_SkipDefAndFolder\AhoCorasick.cs" />
     <Compile Include="LoadingOptimizer\DynamicLoading\Graphic\GraphicData_DynamicLoading.cs" />
     <Compile Include="LoadingOptimizer\DynamicLoading\patchtest.cs" />
-    <Compile Include="LoadingOptimizer\LoadFolderDef.cs" />
-    <Compile Include="LoadingOptimizer\Patch_DefsInMod.cs" />
-    <Compile Include="LoadingOptimizer\Patch_ForbidCrossRef.cs" />
-    <Compile Include="LoadingOptimizer\Patch_ForbidLoadFiles.cs" />
-    <Compile Include="LoadingOptimizer\Patch_SkipXmlLoad.cs" />
+    <Compile Include="LoadingOptimizer\Legacy_SkipDefAndFolder\LoadFolderDef.cs" />
+    <Compile Include="LoadingOptimizer\Legacy_SkipDefAndFolder\Patch_DefsInMod.cs" />
+    <Compile Include="LoadingOptimizer\Legacy_SkipDefAndFolder\Patch_ForbidCrossRef.cs" />
+    <Compile Include="LoadingOptimizer\Legacy_SkipDefAndFolder\Patch_ForbidLoadFiles.cs" />
+    <Compile Include="LoadingOptimizer\Legacy_SkipDefAndFolder\Patch_SkipXmlLoad.cs" />
     <Compile Include="DebugTools.cs" />
     <Compile Include="Def\OperatorClassDef.cs" />
     <Compile Include="Def\OperatorDef\HediffStat.cs" />

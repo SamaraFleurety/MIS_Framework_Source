@@ -1,4 +1,5 @@
-﻿using AK_DLL.DynamicLoading;
+﻿using AK_DLL.DynaLoad;
+using AK_DLL.DynamicLoading;
 using AK_TypeDef;
 using AKA_Ability;
 using AKM_MusicPlayer;
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using Verse;
+using Verse.Sound;
 
 namespace AK_DLL
 {
@@ -842,6 +844,36 @@ namespace AK_DLL
             {
                 LoadResources_GraphicData(def.graphicData);
             }
+
+            if (voicePackDef != null)
+            {
+                SubSoundDef_DynaLoading.shouldResolve = true;
+
+                List<SoundDef> allSounds = new();
+                if (voicePackDef.recruitSound != null) allSounds.Add(voicePackDef.recruitSound);
+                if (!voicePackDef.draftSounds.NullOrEmpty()) allSounds.AddRange(voicePackDef.draftSounds);
+                if (voicePackDef.undraftSound != null) allSounds.Add(voicePackDef.undraftSound);
+                if (voicePackDef.diedSound != null) allSounds.Add(voicePackDef.diedSound);
+                if (!voicePackDef.selectSounds.NullOrEmpty()) allSounds.AddRange(voicePackDef.selectSounds);
+                if (!voicePackDef.abilitySounds.NullOrEmpty()) allSounds.AddRange(voicePackDef.abilitySounds);
+
+                List<SubSoundDef_DynaLoading> allSubSounds = new();
+
+                foreach (SoundDef def in allSounds)
+                {
+                    foreach (SubSoundDef sub in def.subSounds)
+                    {
+                        if (sub is SubSoundDef_DynaLoading dyna) allSubSounds.Add(dyna);
+                    }
+                }
+
+                foreach (SubSoundDef_DynaLoading dyna in allSubSounds)
+                {
+                    dyna.ResolveReferences();
+                }
+
+                SubSoundDef_DynaLoading.shouldResolve = false;
+            }
         }
 
         void LoadResources_GraphicData(GraphicData data)
@@ -849,7 +881,7 @@ namespace AK_DLL
             if (data is not GraphicData_DynamicLoading dd) return;
 
             dd.ForceLoad(modPackageID);
-            
+
         }
         #endregion
     }

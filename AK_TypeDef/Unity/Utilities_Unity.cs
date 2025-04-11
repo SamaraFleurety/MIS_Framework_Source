@@ -1,4 +1,5 @@
 ﻿using RimWorld.IO;
+using RuntimeAudioClipLoader;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -178,7 +179,7 @@ namespace AK_DLL
         //根据参数，获得一个文件在硬盘上面的路径
         public static string ModIDtoPath_DynaLoading<T>(string itemPath, string modPackageID, string fileExtension = null) where T : class
         {
-            string path = null;
+            string path;
             if (typeof(T) == typeof(Texture2D))
             {
                 fileExtension ??= ".png";
@@ -201,13 +202,13 @@ namespace AK_DLL
             T val = null;
             if (typeof(T) == typeof(Texture2D))
             {
-                //string path = ModIDtoPath(modPackageID, itemPath + ".png", DynContentPath<Texture2D>())/*.Replace('/', '\\')*/;
-                //FileInfo fileInfo = new(@path);
                 Texture2D texture = LoadTexture(fileFullPath);
                 val = (T)(object)texture;
             }
             if (typeof(T) == typeof(AudioClip))
             {
+                AudioClip audio = Manager.Load(fileFullPath);
+                return (T)(object)audio;
                 //val = (T)(object)Resources.Load<AudioClip>(ModIDtoPath(modPackageID, itemPath, DynContentPath<AudioClip>()));
             }
             if (val == null)
@@ -261,8 +262,10 @@ namespace AK_DLL
             texture2D.anisoLevel = 2;
             texture2D.Apply(updateMipmaps: true, makeNoLongerReadable: true);
 
+            file.Close();
             return texture2D;
         }
+
         #endregion
     }
 }

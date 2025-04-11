@@ -8,6 +8,7 @@ using Verse;
 
 namespace AK_DLL.HarmonyPatchs
 {
+    /*
     //按路径，跳过部分资产文件夹的加载
     //此原函数仅加载文件夹下路径，不会读取文件内容。泰南会读取sounds和Textures内所有文件，无论是否被使用，此patch原理是假装某些路径的文件不存在。
     [HarmonyPatch(typeof(ModContentPack), "GetAllFilesForMod")]
@@ -71,5 +72,5 @@ namespace AK_DLL.HarmonyPatchs
             }
             return filesFiltered.ToArray();
         }
-    }
+    }*/
 }

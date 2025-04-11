@@ -156,23 +156,63 @@ namespace AK_DLL
         }
 
         #region 运行时加载媒体资源
-        public static T GetResource<T>(string itemPath, string modPackageID) where T : class
+        //直接从硬盘上的，环世界开游戏时不会读取的文件夹里面读取贴图/语音。
+
+        //需要重复调用的贴图会放在这里(有的在别的地方自带缓存)
+        public static Dictionary<string, Texture2D> dynamicLoadingTextures = new();
+        public static Texture2D GetDynamicLoadTexture(string itemPath, string modID, bool cacheIntoDictionary = false)
+        {
+            Texture2D texture;
+            string path = ModIDtoPath_DynaLoading<Texture2D>(itemPath, modID);
+            dynamicLoadingTextures.TryGetValue(path, out texture);
+            if (texture != null) return texture;
+
+            texture = LoadResourceIO<Texture2D>(path);
+
+            if (cacheIntoDictionary)
+            {
+                dynamicLoadingTextures.Add(path, texture);
+            }
+            return texture;
+        }
+        //根据参数，获得一个文件在硬盘上面的路径
+        public static string ModIDtoPath_DynaLoading<T>(string itemPath, string modPackageID, string fileExtension = null) where T : class
+        {
+            string path = null;
+            if (typeof(T) == typeof(Texture2D))
+            {
+                fileExtension ??= ".png";
+                path = ModIDtoPath(modPackageID, itemPath + fileExtension, DynContentPath<Texture2D>());
+            }
+            else if (typeof(T) == typeof(AudioClip))
+            {
+                fileExtension ??= ".wav";
+                path = ModIDtoPath(modPackageID, itemPath + fileExtension, DynContentPath<AudioClip>());
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
+            return path;
+        }
+        //自动分类和加载路径中的文件。完整路径需要用上面的函数获得
+        public static T LoadResourceIO<T>(string fileFullPath) where T : class
         {
             T val = null;
             if (typeof(T) == typeof(Texture2D))
             {
-                string path = ModIDtoPath(modPackageID, itemPath + ".png", DynContentPath<Texture2D>())/*.Replace('/', '\\')*/;
+                //string path = ModIDtoPath(modPackageID, itemPath + ".png", DynContentPath<Texture2D>())/*.Replace('/', '\\')*/;
                 //FileInfo fileInfo = new(@path);
-                Texture2D texture = LoadTexture(@path);
+                Texture2D texture = LoadTexture(fileFullPath);
                 val = (T)(object)texture;
             }
             if (typeof(T) == typeof(AudioClip))
             {
-                val = (T)(object)Resources.Load<AudioClip>(ModIDtoPath(modPackageID, itemPath, DynContentPath<AudioClip>()));
+                //val = (T)(object)Resources.Load<AudioClip>(ModIDtoPath(modPackageID, itemPath, DynContentPath<AudioClip>()));
             }
             if (val == null)
             {
-                Log.Error($"[AK] 无法动态加载{typeof(T)}资源: {itemPath}");
+                Log.Error($"[AK] 无法动态加载{typeof(T)}资源: {fileFullPath}");
             }
             return val;
         }
@@ -190,6 +230,7 @@ namespace AK_DLL
             throw new ArgumentException();
         }
 
+        //从路径到贴图实例，IO在此完成。
         private static Texture2D LoadTexture(string path)
         {
             if (!File.Exists(@path))

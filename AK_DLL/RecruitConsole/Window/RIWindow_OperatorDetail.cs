@@ -424,7 +424,7 @@ namespace AK_DLL.UI
             //精0/精1立绘 切换按钮
             fashionIcon = GameObject.Find("Elite0");
             fashionBtns.Add(0, fashionIcon);
-            if (OperatorDef.commonStand != null)
+            if (OperatorDef.commonStand != null || (OperatorDef.dynaLoadStaticStands && OperatorDef.staticStands.ContainsKey(0)))
             {
                 fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
                 {
@@ -443,11 +443,12 @@ namespace AK_DLL.UI
 
             //换装按钮。第一个换装（面板上第3个）在数组内是2。
             int logicOrder = 2;
-            if (OperatorDef.fashion != null)
+            if (OperatorDef.dynaLoadStaticStands)
             {
                 v3 = fashionIcon.transform.localPosition;
-                for (int i = 0; i < OperatorDef.fashion.Count; ++i)
+                foreach (int key in OperatorDef.staticStands.Keys)
                 {
+                    if (key <= 1) continue;
                     //逻辑顺序 代表这按钮在面板上实际的位置（即精2按钮之后）
                     fashionIcon = FashionBtnInstance;
                     fashionIcon.transform.localPosition = new Vector3(v3.x * logicOrder, v3.y);
@@ -461,6 +462,29 @@ namespace AK_DLL.UI
                     });
                     fashionBtns.Add(logicOrder, fashionIcon);
                     ++logicOrder;
+                }
+            }
+            else
+            {
+                if (OperatorDef.fashion != null)
+                {
+                    v3 = fashionIcon.transform.localPosition;
+                    for (int i = 0; i < OperatorDef.fashion.Count; ++i)
+                    {
+                        //逻辑顺序 代表这按钮在面板上实际的位置（即精2按钮之后）
+                        fashionIcon = FashionBtnInstance;
+                        fashionIcon.transform.localPosition = new Vector3(v3.x * logicOrder, v3.y);
+                        fashionIcon.SetActive(true);
+                        fashionIcon.name = "FSUI_FashIc_" + logicOrder;
+                        int j = logicOrder;
+                        fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+                        {
+                            //ChangeStandTo(btnOrder(ClickedBtn));
+                            ChangeStandTo(j);
+                        });
+                        fashionBtns.Add(logicOrder, fashionIcon);
+                        ++logicOrder;
+                    }
                 }
             }
             //在服装按钮界面实例化l2d换装按钮

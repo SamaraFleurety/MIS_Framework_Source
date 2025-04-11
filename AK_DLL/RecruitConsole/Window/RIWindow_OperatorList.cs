@@ -435,7 +435,9 @@ namespace AK_DLL.UI
                 Log.Error("MIS. DrawOperatorPortrait out of range");
                 return;
             }
-            Texture2D operatorTex = ContentFinder<Texture2D>.Get(def.headPortrait);
+            Texture2D operatorTex;
+            if (!def.dynaLoadStaticStands) operatorTex = ContentFinder<Texture2D>.Get(def.headPortrait);
+            else operatorTex = def.PreferredStand(-1);
             if (j >= opList.Count || opList[j] == null)
             {
                 opPortraitInstance = OperatorPortraitInstance;

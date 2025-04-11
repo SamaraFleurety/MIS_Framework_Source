@@ -21,7 +21,7 @@ namespace AK_DLL
                 position.height = 384f;
                 position.x = cardRect.width * 0.75f - position.width / 2f + 18f;
                 position.y = cardRect.center.y + 136f - position.height / 2f;
-                Texture2D stand = ContentFinder<Texture2D>.Get(doc.operatorDef.stand);
+                Texture2D stand = doc.operatorDef.PreferredStand(0); /*ContentFinder<Texture2D>.Get(doc.operatorDef.stand);*/
                 GUI.DrawTexture(position, stand, ScaleMode.ScaleAndCrop, true);
             }
         }

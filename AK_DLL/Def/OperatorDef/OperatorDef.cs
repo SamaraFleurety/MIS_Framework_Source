@@ -7,6 +7,7 @@ using RimWorld;
 using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using Verse;
 
@@ -53,10 +54,17 @@ namespace AK_DLL
 
         public OperatorClassDef operatorType;//干员类型/职业
 
-        [MayRequireBiotech]
         public string stand;//精2立绘
         public string commonStand = null;  //精0立绘
         public List<string> fashion; //换装立绘的路径 和小人身上的衣服无关
+
+        //新式的静态立绘列表，支持动态加载。其中，-1是头像，0是精2，1是精0，2~1000是静态换装。
+        //和原版默认根目录在Textures\里面类似，这里面的根目录是DynaLoad\Textures
+        //虽然看似可以，但是不要跳着写换装，ui会报错
+        public Dictionary<int, string> staticStands = new();
+        //标记是否启用动态加载。如果不启用会沿用旧式开局完全加载。
+        public bool dynaLoadStaticStands = false;
+
         public List<string> fashionAnimation = new();//spine2d动态立绘皮肤的defName列表
 
         //换装后，体现在rw小人服装上的变化。key的int是换装在List<string> fashion中的下标+3。
@@ -130,27 +138,42 @@ namespace AK_DLL
         public Texture2D PreferredStand(int preferredSkin)
         {
             Texture2D texture;
-            if (preferredSkin == 0)
+            if (dynaLoadStaticStands)
             {
-                if (commonStand == null)
+                //Log.Message($"[AK] getting {label} {preferredSkin}号立绘于:")
+                staticStands.TryGetValue(preferredSkin, out string path);
+                if (path == null)
                 {
-                    Log.Error($"[AK] 尝试获取，但是{label}不存在精0立绘");
-                    texture = ContentFinder<Texture2D>.Get(this.stand);
-                    return texture;
+                    Log.Error($"[AK] {label} 不存在 {preferredSkin} 号立绘");
+                    staticStands.TryGetValue(0, out path);
                 }
-                texture = ContentFinder<Texture2D>.Get(this.commonStand);
+
+                return Utilities_Unity.GetDynamicLoadTexture(path, modPackageID, true);
             }
-            else if (preferredSkin == 1) texture = ContentFinder<Texture2D>.Get(this.stand);
             else
             {
-                int skinIndex = preferredSkin - 2;
-                if (fashion.NullOrEmpty() || skinIndex >= fashion.Count)
+                if (preferredSkin == 0)
                 {
-                    Log.Error($"[AK] 尝试获取，但是{label}不存在{skinIndex}号换装");
-                    texture = ContentFinder<Texture2D>.Get(this.stand);
-                    return texture;
+                    if (commonStand == null)
+                    {
+                        Log.Error($"[AK] 尝试获取，但是{label}不存在精0立绘");
+                        texture = ContentFinder<Texture2D>.Get(this.stand);
+                        return texture;
+                    }
+                    texture = ContentFinder<Texture2D>.Get(this.commonStand);
                 }
-                texture = ContentFinder<Texture2D>.Get(this.fashion[skinIndex]);
+                else if (preferredSkin == 1) texture = ContentFinder<Texture2D>.Get(this.stand);
+                else
+                {
+                    int skinIndex = preferredSkin - 2;
+                    if (fashion.NullOrEmpty() || skinIndex >= fashion.Count)
+                    {
+                        Log.Error($"[AK] 尝试获取，但是{label}不存在{skinIndex}号换装");
+                        texture = ContentFinder<Texture2D>.Get(this.stand);
+                        return texture;
+                    }
+                    texture = ContentFinder<Texture2D>.Get(this.fashion[skinIndex]);
+                }
             }
 
             return texture;
@@ -655,53 +678,109 @@ namespace AK_DLL
         }
         private void AutoFill_StandPortrait()
         {
-            string standPath;
             string temp;
-            //FIXME 这写的啥玩意儿？记得把try去掉
-            if (this.headPortrait == null)
+
+            string portraitPath = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorIDFrom(this.defName) + "Portrait";
+            string standPath = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorIDFrom(this.defName) + "Stand";
+            if (!dynaLoadStaticStands)
             {
-                string portraitPath = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorIDFrom(this.defName) + "Portrait";
-                this.headPortrait = portraitPath;
-                try
+                if (this.headPortrait == null)
                 {
-                    ContentFinder<Texture2D>.Get(this.headPortrait);
+                    this.headPortrait = portraitPath;
+                    try
+                    {
+                        ContentFinder<Texture2D>.Get(this.headPortrait);
+                    }
+                    catch
+                    {
+                        Log.Error($"{this.nickname}缺乏头像。");
+                        this.headPortrait = "UI/Image/Caster/DuskPortrait";
+                    }
                 }
-                catch
+
+                if (this.stand == null)
                 {
-                    Log.Error($"{this.nickname}缺乏头像。");
-                    this.headPortrait = "UI/Image/Caster/DuskPortrait";
+                    this.stand = standPath;
+                    try
+                    {
+                        ContentFinder<Texture2D>.Get(this.stand);
+                    }
+                    catch
+                    {
+                        Log.Error($"{this.nickname}缺乏立绘。");
+                        this.stand = "UI/Image/Caster/DuskStand";
+                    }
+                }
+
+                if (this.commonStand == null)
+                {
+                    standPath = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorIDFrom(this.defName) + "Common";
+                    if (ContentFinder<Texture2D>.Get(standPath, false) != null) this.commonStand = standPath;
+                    else this.commonStand = null;
+                }
+                if (fashion == null) fashion = new List<string>();
+                standPath = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorIDFrom(this.defName) + "Fashion";
+                if (ContentFinder<Texture2D>.Get(standPath, false) != null) this.fashion.Add(standPath);
+                for (int i = 0; i < 10; ++i)
+                {
+                    temp = standPath + TypeDef.romanNumber[i];
+                    if (ContentFinder<Texture2D>.Get(temp, false) != null) this.fashion.Add(temp);
+                }
+            }
+            else  //新版动态加载立绘
+            {
+                if (!staticStands.ContainsKey(-1))
+                {
+                    temp = Utilities_Unity.ModIDtoPath_DynaLoading<Texture2D>(portraitPath, modPackageID);
+                    if (File.Exists(temp))
+                    {
+                        //string portrait = temp;
+                        staticStands.Add(-1, portraitPath);
+                    }
+                    else
+                    {
+                        Log.Error($"[AK] {this.nickname}缺乏头像。");
+                        staticStands.Add(-1, "UI/Image/Caster/DuskPortrait");
+                    }
+                }
+                if (!staticStands.ContainsKey(0))
+                {
+                    temp = Utilities_Unity.ModIDtoPath_DynaLoading<Texture2D>(standPath, modPackageID);
+                    if (File.Exists(temp))
+                    {
+                        string stand = standPath;
+                        staticStands.Add(0, stand);
+                    }
+                    else
+                    {
+                        Log.Error($"[AK] {this.nickname}缺乏默认立绘。");
+                        staticStands.Add(0, "UI/Image/Caster/DuskStand");
+                    }
+                }
+                if (!staticStands.ContainsKey(1))
+                {
+                    standPath = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorIDFrom(this.defName) + "Common";
+                    temp = Utilities_Unity.ModIDtoPath_DynaLoading<Texture2D>(standPath, modPackageID);
+                    if (File.Exists(temp))
+                    {
+                        string standCommon = standPath;
+                        staticStands.Add(1, standCommon);
+                    }
+                }
+                standPath = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorIDFrom(this.defName) + "Fashion";
+                for (int i = 0; i < 10; ++i)
+                {
+                    int fashionIndex = i + 2;
+                    temp = standPath + TypeDef.romanNumber[i];
+                    string temp2 = Utilities_Unity.ModIDtoPath_DynaLoading<Texture2D>(temp, modPackageID);
+                    if (!staticStands.ContainsKey(fashionIndex) && File.Exists(temp2))
+                    {
+                        string temp3 = temp;
+                        staticStands.Add(fashionIndex, temp3);
+                    }
                 }
             }
 
-            if (this.stand == null)
-            {
-                standPath = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorIDFrom(this.defName) + "Stand";
-                this.stand = standPath;
-                try
-                {
-                    ContentFinder<Texture2D>.Get(this.stand);
-                }
-                catch
-                {
-                    Log.Error($"{this.nickname}缺乏立绘。");
-                    this.stand = "UI/Image/Caster/DuskStand";
-                }
-            }
-
-            if (this.commonStand == null)
-            {
-                standPath = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorIDFrom(this.defName) + "Common";
-                if (ContentFinder<Texture2D>.Get(standPath, false) != null) this.commonStand = standPath;
-                else this.commonStand = null;
-            }
-            if (fashion == null) fashion = new List<string>();
-            standPath = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorIDFrom(this.defName) + "Fashion";
-            if (ContentFinder<Texture2D>.Get(standPath, false) != null) this.fashion.Add(standPath);
-            for (int i = 0; i < 10; ++i)
-            {
-                temp = standPath + TypeDef.romanNumber[i];
-                if (ContentFinder<Texture2D>.Get(temp, false) != null) this.fashion.Add(temp);
-            }
             if (AK_Tool.Live2DActivated) AutoFill_Live2D();
         }
 

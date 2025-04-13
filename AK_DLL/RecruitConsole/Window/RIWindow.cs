@@ -45,6 +45,7 @@ namespace AK_DLL
         {
             L2DInstance?.SetActive(false);
             spineInstance?.SetActive(false);
+            PatchWindowOnGUI.lastSpineInstance = null;
             base.Close(closeEV);
         }
     }

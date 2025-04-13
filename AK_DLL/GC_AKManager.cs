@@ -12,6 +12,7 @@ namespace AK_DLL
         {
             instance = this;
             superiorRecruitTowers = new HashSet<TC_TeleportTowerSuperior>();
+            PatchWindowOnGUI.lastSpineInstance = null;
         }
 
         public override void ExposeData()

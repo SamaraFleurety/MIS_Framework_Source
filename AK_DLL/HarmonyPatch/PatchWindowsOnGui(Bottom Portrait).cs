@@ -10,7 +10,7 @@ namespace AK_DLL
     public class PatchWindowOnGUI
     {
         static string lastSpineDefname = "";
-        static GameObject lastSpineInstance = null;
+        public static GameObject lastSpineInstance = null;
 
         [HarmonyPrefix]
         public static void Prefix()

@@ -198,6 +198,7 @@ namespace AK_DLL
                 foreach (KeyValuePair<string, OperatorDocument> node in opDocArchive)
                 {
                     node.Value.RecordSkills();
+                    node.Value.operatorDef.ForceLoadResources();
                     Log.Message($"当前已招募 {node.Value.operatorID}");
                 }
             }

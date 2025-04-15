@@ -42,7 +42,7 @@ namespace AK_DLL
 
         public List<TraitAndDegree> traits;//干员特性
         public ThingDef weapon;//干员武器                                                  
-        public List<ThingDef> apparels;//干员衣服
+        public List<ThingDef> apparels = new();//干员衣服
         public List<ThingDef> accessory = new(); //干员配件。和衣服的区别是在换装时不会丢掉。适合填入比如护盾。
         public List<ItemOnSpawn> items;
         public BodyTypeDef bodyTypeDef;//干员的体型
@@ -836,6 +836,7 @@ namespace AK_DLL
         //加载这个干员所需的多媒体资源
         public void ForceLoadResources()
         {
+            if (!dynaLoadStaticStands) return;
             List<ThingDef> allThingdefs = new();
             allThingdefs.AddRange(accessory);
             allThingdefs.AddRange(apparels);

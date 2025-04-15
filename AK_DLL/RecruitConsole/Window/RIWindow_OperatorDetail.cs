@@ -250,7 +250,7 @@ namespace AK_DLL.UI
         private bool canRecruit;
 
         //0~999是静态立绘，1000-1999是l2d，2000-2999是spine
-        int preferredSkin = 1;  //当前选中皮肤。同时存储于干员文档（如果有）来实现主界面左下角显示立绘，和mod设置的秘书选择。
+        int preferredSkin = 0;  //当前选中皮肤。同时存储于干员文档（如果有）来实现主界面左下角显示立绘，和mod设置的秘书选择。
 
         static int preferredVanillaSkillChart = 0;
 
@@ -423,22 +423,22 @@ namespace AK_DLL.UI
 
             //精0/精1立绘 切换按钮
             fashionIcon = GameObject.Find("Elite0");
-            fashionBtns.Add(0, fashionIcon);
-            if (OperatorDef.commonStand != null || (OperatorDef.dynaLoadStaticStands && OperatorDef.staticStands.ContainsKey(0)))
+            fashionBtns.Add(1, fashionIcon);
+            if ((!OperatorDef.dynaLoadStaticStands && OperatorDef.commonStand != null) || (OperatorDef.dynaLoadStaticStands && OperatorDef.staticStands.ContainsKey(0)))
             {
                 fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
                 {
-                    ChangeStandTo(0);
+                    ChangeStandTo(1);
                 });
             }
             else fashionIcon.SetActive(false);
 
             //精2立绘按钮。因为历史问题，这是默认立绘，必须有。
             fashionIcon = GameObject.Find("Elite2");
-            fashionBtns.Add(1, fashionIcon);
+            fashionBtns.Add(0, fashionIcon);
             fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
-                ChangeStandTo(1);
+                ChangeStandTo(0);
             });
 
             //换装按钮。第一个换装（面板上第3个）在数组内是2。
@@ -887,7 +887,6 @@ namespace AK_DLL.UI
                 compImage.material.mainTexture = RIWindow_MainMenu.GetOrSetSpineRenderTexture(spineInstance);
             }
         }
-
 
         protected void ChangeStandTo(int val, bool forceChange = false, StandType standType = StandType.Static)
         {

@@ -45,7 +45,7 @@ namespace AK_DLL
                 }
             }
 
-            foreach (FloatMenuOption extraOptions in GetFloatMenuRecruitOptions(selPawn)) yield return extraOptions;
+            foreach (FloatMenuOption extraOptions in GetExtendedFloatMenuOptions(selPawn)) yield return extraOptions;
 
             //换装 右键直接出选项，没有ui
             OperatorDocument doc = selPawn.GetDoc();

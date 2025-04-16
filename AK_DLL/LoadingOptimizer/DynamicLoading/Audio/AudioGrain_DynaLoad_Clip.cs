@@ -17,7 +17,7 @@ namespace AK_DLL.DynaLoad
         public override IEnumerable<ResolvedGrain> GetResolvedGrains()
         {
             if (!SubSoundDef_DynaLoading.shouldResolve) yield break;
-            Log.Message($"resolving {clipPath}");
+            //Log.Message($"resolving {clipPath}");
             AudioClip audioClip = Utilities_Unity.LoadResourceIO<AudioClip>(Utilities_Unity.ModIDtoPath_DynaLoading<AudioClip>(clipPath, ModID));
             //AudioClip audioClip = ContentFinder<AudioClip>.Get(clipPath);
             if (audioClip != null)

@@ -18,6 +18,7 @@ namespace AK_DLL.DynaLoad
             if (resolved || !shouldResolve) return;
             loadingFromMod = modID;
             base.ResolveReferences();
+            resolved = true;
         }
     }
 }

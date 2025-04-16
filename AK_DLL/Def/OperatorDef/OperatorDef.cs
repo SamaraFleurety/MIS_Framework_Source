@@ -90,7 +90,8 @@ namespace AK_DLL
 
         public List<Type> postEffects = new();
 
-        public bool alwaysHidden = false;  //是否隐藏。被隐藏的干员不会在招募ui显示，仅能通过特殊手段出现。fixme:没做。
+        public bool alwaysHidden = false;  //是否隐藏。被隐藏的干员不会在招募ui显示，仅能通过特殊手段出现
+        public bool alwaysHideStand = false; //是否在任何情况下都不显示左下立绘
 
         public Type documentType = typeof(OperatorDocument);   //写了碧蓝之后发现档案甚至都可以扩充
 

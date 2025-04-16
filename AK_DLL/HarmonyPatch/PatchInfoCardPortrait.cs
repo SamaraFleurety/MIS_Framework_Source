@@ -14,7 +14,7 @@ namespace AK_DLL
             Pawn p = ___thing as Pawn; 
             OperatorDocument doc;
 
-            if (p != null && ((doc = p.GetDoc()) != null)) 
+            if (p != null && ((doc = p.GetDoc()) != null) && !doc.operatorDef.alwaysHideStand) 
             {
                 Rect position = cardRect.AtZero(); 
                 position.width = 384f;

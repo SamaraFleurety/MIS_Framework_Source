@@ -26,9 +26,10 @@ namespace AK_DLL
             Pawn p = Find.Selector.SelectedPawns.First();
             if (p == null) return;
             OperatorDocument doc = AK_Tool.GetDoc(p);
-            if (doc == null /*|| doc.operatorID.Contains("LOF")*/) return;
+            if (doc == null || doc.operatorDef.alwaysHideStand) return;
 
             int skinIndex = doc.preferedSkin;
+            //Log.Message($"{doc.operatorDef.label} has skin {skinIndex}");
             if (skinIndex >= 1000 && skinIndex < 2000) return; //没做支持l2d
 
             Color color = GUI.color;
@@ -52,7 +53,6 @@ namespace AK_DLL
                 }
                 lastSpineInstance ??= RIWindow_MainMenu.DrawSpine2DModel(spineDefname);
                 if (!lastSpineInstance.activeSelf) lastSpineInstance.SetActive(true);
-                //lastSpineInstance.SetActive(true);
 
                 Widgets.DrawTextureFitted(new Rect(AK_ModSettings.xOffset * 5, AK_ModSettings.yOffset * 5, 408, 408), RIWindow_MainMenu.GetOrSetSpineRenderTexture(lastSpineInstance, 1080, 1080), (float)AK_ModSettings.ratio * 0.05f);
             }

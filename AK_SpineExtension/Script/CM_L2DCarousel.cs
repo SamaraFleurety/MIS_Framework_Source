@@ -38,7 +38,7 @@ namespace AK_SpineExtention
         public int IdleTimes = 0;
         public int ClickCounter = 0;
 
-        SkeletonAnimation skeletonAnimation;
+        IAnimationStateComponent skeletonAnimation;
         private void ResetAllParams()
         {
             IdleTimes = 0;
@@ -47,7 +47,7 @@ namespace AK_SpineExtention
         public override void OnEnable()
         {
             ResetAllParams();
-            skeletonAnimation ??= GetComponent<SkeletonAnimation>();
+            skeletonAnimation ??= GetComponent<IAnimationStateComponent>();
             if (skeletonAnimation == null) return;
             if (props == null) return;
 

@@ -461,6 +461,7 @@ namespace AK_DLL.UI
             //return FS_Utilities.DrawModel(drawAt, RIWindowHandler.def.Live2DModelDef(l2dDefname), renderTarget);
         }
 
+        //反射调用 不然DLL依赖必须前置SpriteEvo
         public static GameObject DrawSpine2DModel(string spineDefname)
         {
             MethodInfo method = typeof(SkeletonAnimationUtility).GetMethod("InstantiateSpineByDefname", BindingFlags.Public | BindingFlags.Static);

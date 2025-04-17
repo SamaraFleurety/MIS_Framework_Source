@@ -196,9 +196,20 @@ namespace AK_DLL
             }
             return path;
         }
+        public static bool VerifyFileExistIO(string fileFullPath)
+        {
+            if (!File.Exists(@fileFullPath))
+            {
+                Log.Error($"[AK] 尝试获取不存在的文件于{@fileFullPath}");
+                return false;
+            }
+            return true;
+        }
+
         //自动分类和加载路径中的文件。完整路径需要用上面的函数获得
         public static T LoadResourceIO<T>(string fileFullPath) where T : class
         {
+            if (!File.Exists(@fileFullPath)) return default(T);
             T val = null;
             if (typeof(T) == typeof(Texture2D))
             {
@@ -234,10 +245,6 @@ namespace AK_DLL
         //从路径到贴图实例，IO在此完成。
         private static Texture2D LoadTexture(string path)
         {
-            if (!File.Exists(@path))
-            {
-                Log.Error($"[AK] 尝试获取不存在的文件于{path}");
-            }
             FileStream file = new(@path, FileMode.Open, FileAccess.Read);
             Texture2D texture2D;
             byte[] data = new byte[file.Length];

@@ -41,7 +41,7 @@ namespace AK_DLL
         public Dictionary<string, PawnRelationDef> relations;
 
         public List<TraitAndDegree> traits;//干员特性
-        public ThingDef weapon;//干员武器                                                  
+        public ThingDef weapon = null;//干员武器                                                  
         public List<ThingDef> apparels = new();//干员衣服
         public List<ThingDef> accessory = new(); //干员配件。和衣服的区别是在换装时不会丢掉。适合填入比如护盾。
         public List<ItemOnSpawn> items;
@@ -340,6 +340,10 @@ namespace AK_DLL
                 {
                     result = Recruit(intVec, map);
                 }
+            }
+            else
+            {
+                Log.Error($"[AK]尝试招募干员，但是交互招募台不在任何地图上");
             }
             currentlyGenerating = false;
 
@@ -841,7 +845,7 @@ namespace AK_DLL
             List<ThingDef> allThingdefs = new();
             allThingdefs.AddRange(accessory);
             allThingdefs.AddRange(apparels);
-            allThingdefs.Add(weapon);
+            if (weapon != null) allThingdefs.Add(weapon);
             foreach (ThingDef def in allThingdefs)
             {
                 LoadResources_GraphicData(def.graphicData);

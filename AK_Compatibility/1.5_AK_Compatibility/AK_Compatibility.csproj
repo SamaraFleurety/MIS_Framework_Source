@@ -4,23 +4,25 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DF765A5A-9A0E-4423-B3F9-6150A2FF0C24}</ProjectGuid>
+    <ProjectGuid>{7F874629-1F65-47BC-94CC-E7CC8EE8AFB8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Paluto22.AK.Patch.AlienRace</RootNamespace>
-    <AssemblyName>AlienRace Compatibility</AssemblyName>
+    <RootNamespace>Paluto22.ak.headpatch</RootNamespace>
+    <AssemblyName>Arknights Compability</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>none</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\输出\Assemblies\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,45 +31,58 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0Harmony, Version=2.3.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Lib.Harmony.2.3.3\lib\net48\0Harmony.dll</HintPath>
-    </Reference>
-    <Reference Include="AK_DLL">
-      <HintPath>..\..\1.5 MIS_Framework_Source本地版\AK_DLL\bin\Debug\AK_DLL.dll</HintPath>
-    </Reference>
-    <Reference Include="AlienRace">
-      <HintPath>E:\SteamLibrary\steamapps\workshop\content\294100\839005762\1.5\Assemblies\AlienRace.dll</HintPath>
+    <Reference Include="0Harmony">
+      <HintPath>..\..\Rely\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\1.5 MIS_Framework_Source本地版\Rely\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\Rely\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\..\1.5 MIS_Framework_Source本地版\Rely\UnityEngine.CoreModule.dll</HintPath>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\Rely\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>..\..\1.5 MIS_Framework_Source本地版\Rely\UnityEngine.IMGUIModule.dll</HintPath>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\..\Rely\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HarmonyPatches.cs" />
-    <Compile Include="Patch_BodyGraphicForPrefix.cs" />
-    <Compile Include="Patch_HeadGraphicForPrefix.cs" />
+    <Compile Include="ModSetting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ModData\About\About.xml" />
+    <Content Include="ModData\About\Preview.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\AK_DLL\AK_Library.csproj">
+      <Project>{25a323a4-a832-487c-9ab2-32e14c56e148}</Project>
+      <Name>AK_Library</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SFLib\SFLib.csproj">
+      <Project>{7f0b6d09-307d-4b30-9fd9-94231d1acb89}</Project>
+      <Name>SFLib</Name>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
 </Project>

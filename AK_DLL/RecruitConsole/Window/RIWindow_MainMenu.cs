@@ -464,7 +464,7 @@ namespace AK_DLL.UI
         //反射调用 不然DLL依赖必须前置SpriteEvo
         public static GameObject DrawSpine2DModel(string spineDefname)
         {
-            MethodInfo method = typeof(SkeletonAnimationUtility).GetMethod("InstantiateSpineByDefname", BindingFlags.Public | BindingFlags.Static);
+            MethodInfo method = typeof(SkeletonGraphicUtility).GetMethod("InstantiateSpineByDefname", BindingFlags.Public | BindingFlags.Static);
             GameObject spine = (GameObject)method.Invoke(null, new object[] { spineDefname, spineDefname, 2, true, true, true, null });
             spine.SetActive(true);
             return spine;

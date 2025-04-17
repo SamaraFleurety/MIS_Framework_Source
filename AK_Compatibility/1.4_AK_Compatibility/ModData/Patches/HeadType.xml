@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+    <Operation Class="PatchOperationSequence">
+        <operations>
+            <li Class="PatchOperationInsert" MayRequire="erdelf.HumanoidAlienRaces">
+                <xpath>Defs/ThingDef[defName="Human"]/alienRace/generalSettings/alienPartGenerator/headTypes/li[text()="Male_AverageNormal"]</xpath>
+                <value>
+                    <li>AK_Head_Small</li>
+                </value>
+            </li>
+        </operations>
+    </Operation>
+</Patch>

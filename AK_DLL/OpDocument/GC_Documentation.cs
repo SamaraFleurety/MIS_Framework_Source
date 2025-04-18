@@ -26,7 +26,7 @@ namespace AK_DLL
         public OperatorDef operatorDef;
         public int oripathySeverity = 0;
 
-        public int preferedSkin = 0;    //选定立绘,0是精2, 1是精0, 后面是换装
+        public int preferedSkin = OperatorStandType.Elite2;    //选定立绘,0是精2, 1是精0, 后面是换装
 
         /*[Obsolete]
         public int pendingFashion = -1; //将要换装的序号*/

@@ -252,7 +252,7 @@ namespace AK_DLL.UI
         //0~999是静态立绘，1000-1999是l2d，2000-2999是spine
         int preferredSkin = 0;  //当前选中皮肤。同时存储于干员文档（如果有）来实现主界面左下角显示立绘，和mod设置的秘书选择。
 
-        static int preferredVanillaSkillChart = 0;
+        static int preferredVanillaSkillChart = OperatorStandType.Elite2;
 
         protected Dictionary<int, GameObject> fashionBtns;
 
@@ -428,7 +428,7 @@ namespace AK_DLL.UI
             {
                 fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
                 {
-                    ChangeStandTo(1);
+                    ChangeStandTo(OperatorStandType.Elite0);
                 });
             }
             else fashionIcon.SetActive(false);
@@ -438,7 +438,7 @@ namespace AK_DLL.UI
             fashionBtns.Add(0, fashionIcon);
             fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
-                ChangeStandTo(0);
+                ChangeStandTo(OperatorStandType.Elite2);
             });
 
             //换装按钮。第一个换装（面板上第3个）在数组内是2。

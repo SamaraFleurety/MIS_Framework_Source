@@ -29,7 +29,7 @@ namespace AK_DLL
             { "Intellectual", 11 }
         };
 
-        public static List<SkillDef> SortOrderSkill = new List<SkillDef>() { SkillDefOf.Shooting, SkillDefOf.Melee, SkillDefOf.Construction, SkillDefOf.Mining, SkillDefOf.Cooking, SkillDefOf.Plants, SkillDefOf.Animals, SkillDefOf.Crafting, SkillDefOf.Artistic, SkillDefOf.Medicine, SkillDefOf.Social, SkillDefOf.Intellectual};
+        public static List<SkillDef> SortOrderSkill = new List<SkillDef>() { SkillDefOf.Shooting, SkillDefOf.Melee, SkillDefOf.Construction, SkillDefOf.Mining, SkillDefOf.Cooking, SkillDefOf.Plants, SkillDefOf.Animals, SkillDefOf.Crafting, SkillDefOf.Artistic, SkillDefOf.Medicine, SkillDefOf.Social, SkillDefOf.Intellectual };
 
         public static Vector3 defaultSecLoc => new Vector3(400, 0, 1);
         public static Vector3 defaultSecLocLive => new Vector3(10010, -10, 10000);
@@ -103,6 +103,12 @@ namespace AK_DLL
         Dps,
         Alphabet,
         Tail,
+    }
+
+    public static class OperatorStandType
+    {
+        public static int Elite2 = 0;
+        public static int Elite0 = 1;
     }
 
     /*public enum TimeToTick

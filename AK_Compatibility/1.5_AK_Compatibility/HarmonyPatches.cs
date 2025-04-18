@@ -119,7 +119,7 @@ namespace Paluto22.AK.Patch
                     return;
                 }*/
                 OperatorDocument doc = ___pawn.GetDoc();
-                if (doc != null) return;
+                if (doc == null) return;
                 if (AKC_ModSettings.MIS_NoFace_Actived && !AKC_ModSettings.disable_FacialAnimation_NoFace) 
                 {
                     return;

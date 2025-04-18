@@ -155,7 +155,7 @@ namespace AK_DLL
             }
             else
             {
-                if (preferredSkin == 0)
+                if (preferredSkin == 1)
                 {
                     if (commonStand == null)
                     {
@@ -165,7 +165,7 @@ namespace AK_DLL
                     }
                     texture = ContentFinder<Texture2D>.Get(this.commonStand);
                 }
-                else if (preferredSkin == 1) texture = ContentFinder<Texture2D>.Get(this.stand);
+                else if (preferredSkin == 0) texture = ContentFinder<Texture2D>.Get(this.stand);
                 else
                 {
                     int skinIndex = preferredSkin - 2;

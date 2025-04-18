@@ -35,58 +35,31 @@ namespace AK_SpineExtention
         public int IdleInterval => Props.IdleInterval;
 
         #endregion
-        public int IdleTimes = 0;
-        public int ClickCounter = 0;
+        private int completeTimes = 0;
+        private int ClickCounter = 0;
 
         IAnimationStateComponent skeletonAnimation;
-        private void ResetAllParams()
-        {
-            IdleTimes = 0;
-            ClickCounter = 0;
-        }
+        
         public override void OnEnable()
         {
             ResetAllParams();
             skeletonAnimation ??= GetComponent<IAnimationStateComponent>();
-            if (skeletonAnimation == null) return;
-            if (props == null) return;
+            if (skeletonAnimation == null || props == null) return;
 
             TrackEntry track0 = skeletonAnimation.AnimationState.SetAnimation(0, Idle, false);
-            track0.Complete += delegate { IdleTimes++; };
-
-            skeletonAnimation.AnimationState.Complete += delegate
-            {
-                if (IdleInterval != 0 && PlaySpecial && this.IdleTimes == this.IdleInterval)
-                {
-                    TrackEntry track1 = skeletonAnimation.AnimationState.AddAnimation(0, Special, false, 0f);
-                    track1.Complete += delegate { this.IdleTimes++; };
-                    return;
-                }
-                if (IdleInterval != 0 && this.IdleTimes == (this.IdleInterval * 2) + 1)
-                {
-                    TrackEntry track1;
-                    if (PlayInteract)
-                    {
-                        track1 = skeletonAnimation.AnimationState.AddAnimation(0, Interact, false, 0f);
-                    }
-                    else
-                    {
-                        track1 = skeletonAnimation.AnimationState.AddAnimation(0, Special, false, 0f);
-
-                    }
-                    track1.Complete += delegate { IdleTimes = 0; };
-                    return;
-                }
-                TrackEntry track2 = skeletonAnimation.AnimationState.AddAnimation(0, Idle, false, 0f);
-                track2.Complete += delegate { this.IdleTimes++; };
-            };
+            track0.Complete += CompleteTimeCounter;
+            track0.Complete += CompleteEventHandler;
+            //skeletonAnimation.AnimationState.Complete += CompleteEventHandler; //这BYD会连续调用2次
         }
+
         public override void Start()
         {
         }
+
         public override void FixedUpdate()
         {
         }
+
         public override void Update()
         {
             if (Find.World == null || Find.CurrentMap == null || Find.Selector == null || Find.Selector.AnyPawnSelected == false || Find.Selector.SelectedPawns.Count == 0) return;
@@ -104,15 +77,52 @@ namespace AK_SpineExtention
                 ClickCounter = 0;
             }
         }
+
         public override void OnDisable()
         {
         }
+
+        private void CompleteTimeCounter(TrackEntry trackEntry) => completeTimes++;
+        private void ResetCompleteTime(TrackEntry trackEntry) => completeTimes = 0;
+        private void ResetAllParams() { completeTimes = 0; ClickCounter = 0; }
+
+        //改成单独回调了 简单好用
+        private void CompleteEventHandler(TrackEntry trackEntry)
+        {
+            if (PlaySpecial && IdleInterval != 0 && completeTimes == IdleInterval)
+            {
+                TrackEntry track1 = skeletonAnimation.AnimationState.AddAnimation(0, Special, false, 0f);
+                track1.Complete += CompleteTimeCounter;
+                track1.Complete += CompleteEventHandler;
+                return;
+            }
+            if (IdleInterval != 0 && (completeTimes == (2 * IdleInterval) + 1))
+            {
+                TrackEntry track1;
+                if (PlayInteract)
+                {
+                    track1 = skeletonAnimation.AnimationState.AddAnimation(0, Interact, false, 0f);
+                }
+                else
+                {
+                    track1 = skeletonAnimation.AnimationState.AddAnimation(0, Special, false, 0f);
+                }
+                track1.Complete += ResetCompleteTime;
+                track1.Complete += CompleteEventHandler;
+                return;
+            }
+            TrackEntry track2 = skeletonAnimation.AnimationState.AddAnimation(0, Idle, false, 0f);
+            track2.Complete += CompleteTimeCounter;
+            track2.Complete += CompleteEventHandler;
+        }
+
         private void TryDoInteract()
         {
             if (skeletonAnimation?.AnimationState.GetCurrent(0).Animation.Name == "Interact") return;
             TrackEntry track3 = skeletonAnimation.AnimationState.SetAnimation(0, Interact, false);
-            track3.Start += delegate { };
-            track3.Complete += delegate { this.IdleTimes++; };
+            //track3.Start += delegate { };
+            track3.Complete += CompleteTimeCounter;
+            track3.Complete += CompleteEventHandler;
         }
     }
 }

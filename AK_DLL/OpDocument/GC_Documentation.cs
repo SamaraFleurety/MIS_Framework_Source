@@ -15,7 +15,6 @@ namespace AK_DLL
         public bool currentExist;
         public Pawn pawn;
         public Thing weapon;
-        //public Hediff_Operator hediff;
 
         public int preferredFashionSet = -1;
         public List<Thing> apparel;
@@ -28,8 +27,6 @@ namespace AK_DLL
 
         public int preferedSkin = OperatorStandType.Elite2;    //选定立绘,0是精2, 1是精0, 后面是换装
 
-        /*[Obsolete]
-        public int pendingFashion = -1; //将要换装的序号*/
         public OperatorFashionSetDef pendingFashionDef = null;
 
         public OperatorDocument()
@@ -238,14 +235,12 @@ namespace AK_DLL
                 if (Find.WorldPawns.Contains(doc.pawn)) Find.WorldPawns.RemoveAndDiscardPawnViaGC(doc.pawn);
             }
             if (doc.weapon != null) doc.weapon.Destroy();
-            //if (doc.hediff != null) Log.Error("人都没了但hediff还存在,请提交此bug至制作组FS");
         }
 
         public static void ReRecruit(OperatorDocument doc, string defName, Pawn p, Thing weapon)
         {
             doc.pawn = p;
             doc.weapon = weapon;
-            //doc.hediff = p.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("AK_Operator")) as Hediff_Operator;
             doc.currentExist = true;
         }
     }

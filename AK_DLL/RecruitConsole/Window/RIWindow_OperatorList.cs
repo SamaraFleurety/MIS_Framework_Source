@@ -264,6 +264,12 @@ namespace AK_DLL.UI
             }
         }
 
+        void RefreshSeriesBtnTexture()
+        {
+            GameObject btnCurrentSeries = GameObject.Find("btnSeries");
+            btnCurrentSeries.GetComponent<Image>().sprite = Utilities_Unity.Image2Spirit(AllSeries[Series].Icon);
+
+        }
         //按下切换系列按钮后，会重新绘制新的职业按钮组（不在本函数内）
         private void DrawSeriesBtn()
         {
@@ -275,7 +281,8 @@ namespace AK_DLL.UI
             if (AllSeries.Count == 0) return;
 
             GameObject btnCurrentSeries = GameObject.Find("btnSeries");
-            btnCurrentSeries.GetComponent<Image>().sprite = Utilities_Unity.Image2Spirit(AllSeries[Series].Icon);
+            RefreshSeriesBtnTexture();
+            //btnCurrentSeries.GetComponent<Image>().sprite = Utilities_Unity.Image2Spirit(AllSeries[Series].Icon);
             btnCurrentSeries.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
                 choosingSeries = !choosingSeries;
@@ -318,6 +325,7 @@ namespace AK_DLL.UI
             {
                 choosingSeries = false;
                 Series = j;
+                RefreshSeriesBtnTexture();
                 DrawAllClassBtn();
             });
 

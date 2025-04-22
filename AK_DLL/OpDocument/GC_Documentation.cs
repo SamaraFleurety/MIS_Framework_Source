@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using AK_DLL.DynaLoad;
+using RimWorld;
 using System;
 using System.Collections.Generic;
 using Verse;
@@ -190,15 +191,22 @@ namespace AK_DLL
                 Log.Error("没保存起");
             }
             Scribe.mode = LoadSaveMode.Inactive;
-            if (AK_ModSettings.debugOverride)
+
+            LongEventHandler.ExecuteWhenFinished(delegate
             {
-                foreach (KeyValuePair<string, OperatorDocument> node in opDocArchive)
-                {
-                    node.Value.RecordSkills();
-                    node.Value.operatorDef.ForceLoadResources();
-                    Log.Message($"当前已招募 {node.Value.operatorID}");
-                }
+                SubSoundDef_DynaLoading.shouldResolve = true;
+            });
+            foreach (KeyValuePair<string, OperatorDocument> node in opDocArchive)
+            {
+                node.Value.RecordSkills();
+                node.Value.operatorDef.ForceLoadResources();
+
+                if (AK_ModSettings.debugOverride) Log.Message($"当前已招募 {node.Value.operatorID}");
             }
+            LongEventHandler.ExecuteWhenFinished(delegate
+            {
+                SubSoundDef_DynaLoading.shouldResolve = false;
+            });
         }
 
         public static void AddPawn(string ID, OperatorDef operatorDef, Pawn pawn, Thing weapon, List<Thing> fashionSet)

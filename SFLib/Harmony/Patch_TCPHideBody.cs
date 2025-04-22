@@ -14,10 +14,12 @@ namespace SFLib
     [HarmonyPatch(typeof(PawnRenderNode_Body), "GraphicFor")]
     public class Patch_TCPHideBody
     {
+        public static bool forceHideBody = false;
         public static HashSet<Pawn> registeredPawns = new HashSet<Pawn>();
         [HarmonyPrefix]
         public static bool prefix(ref Graphic __result, Pawn pawn, PawnRenderNode_Body __instance)
         {
+            if (forceHideBody) return HarmonyPrefixRet.skipOriginal;
             Shader shader = __instance.ShaderFor(pawn);
             if (shader == null)
             {

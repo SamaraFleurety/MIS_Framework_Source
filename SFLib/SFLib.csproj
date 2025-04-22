@@ -57,6 +57,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DebugAction.cs" />
     <Compile Include="Harmony\PatchMain.cs" />
     <Compile Include="Harmony\Patch_TCPHideBody.cs" />
     <Compile Include="Harmony\Patch_TCPHideHead.cs" />

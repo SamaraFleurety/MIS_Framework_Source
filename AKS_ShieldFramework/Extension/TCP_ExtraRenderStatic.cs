@@ -42,12 +42,12 @@ namespace AKS_Shield.Extension
             Vector3 loc = wearer.DrawPos;
             if (graphicData.graphicClass == typeof(Graphic_Single))           //单层贴图默认+1
             {
-                loc.y += 1f;
+                loc.y += 1.05f;
             }
             else if (graphicData.graphicClass == typeof(Graphic_Multi))       //多向静态贴图，应用比如碧蓝的舰装
             {
-                if (wearer.Rotation != Rot4.South) loc.y += 1f;         //显示在人物上面
-                else loc.y -= 1f;                                       //只有朝南是显示在人物下面
+                if (wearer.Rotation != Rot4.South) loc.y += 1.05f;         //显示在人物上面
+                else loc.y -= 1.05f;                                       //只有朝南是显示在人物下面
             }
 
             loc += graphicData.DrawOffsetForRot(rot);

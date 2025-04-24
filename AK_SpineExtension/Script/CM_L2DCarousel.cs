@@ -52,14 +52,6 @@ namespace AK_SpineExtention
             //skeletonAnimation.AnimationState.Complete += CompleteEventHandler; //这BYD会连续调用2次
         }
 
-        public override void Start()
-        {
-        }
-
-        public override void FixedUpdate()
-        {
-        }
-
         public override void Update()
         {
             if (Find.World == null || Find.CurrentMap == null || Find.Selector == null || Find.Selector.AnyPawnSelected == false || Find.Selector.SelectedPawns.Count == 0) return;
@@ -76,10 +68,6 @@ namespace AK_SpineExtention
                 TryDoInteract();
                 ClickCounter = 0;
             }
-        }
-
-        public override void OnDisable()
-        {
         }
 
         private void CompleteTimeCounter(TrackEntry trackEntry) => completeTimes++;

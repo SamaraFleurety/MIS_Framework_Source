@@ -40,7 +40,7 @@ namespace AK_SpineExtention
 
         IAnimationStateComponent skeletonAnimation;
         
-        public override void OnEnable()
+        protected override void OnEnable()
         {
             ResetAllParams();
             skeletonAnimation ??= GetComponent<IAnimationStateComponent>();
@@ -52,7 +52,7 @@ namespace AK_SpineExtention
             //skeletonAnimation.AnimationState.Complete += CompleteEventHandler; //这BYD会连续调用2次
         }
 
-        public override void Update()
+        protected override void Update()
         {
             if (Find.World == null || Find.CurrentMap == null || Find.Selector == null || Find.Selector.AnyPawnSelected == false || Find.Selector.SelectedPawns.Count == 0) return;
             Pawn p = Find.Selector.SelectedPawns.First();

@@ -3,9 +3,9 @@ using Verse;
 
 namespace AK_DLL
 {
-    public class RenderNodeWorker_FrontHair : PawnRenderNodeWorker
+    public class RenderNodeWorker_FrontHair : RenderNodeWorker_ExtraHair
     {
-        public override Vector3 OffsetFor(PawnRenderNode node, PawnDrawParms parms, out Vector3 pivot)
+        /*public override Vector3 OffsetFor(PawnRenderNode node, PawnDrawParms parms, out Vector3 pivot)
         {
             Vector3 offset = base.OffsetFor(node, parms, out pivot);
             offset += parms.pawn.story.hairDef.GetModExtension<Ext_FrontHair>().graphicData.DrawOffsetForRot(parms.facing);
@@ -14,17 +14,15 @@ namespace AK_DLL
 
         public override Vector3 ScaleFor(PawnRenderNode node, PawnDrawParms parms)
         {
-            /*if (StackTraceUtility.ExtractStackTrace().Contains("Portrait"))
-            {
-                Log.Message($"getting scale at {StackTraceUtility.ExtractStackTrace()}");
-            }*/
-
-            
             Vector3 scale = base.ScaleFor(node, parms);
             Vector2 graphicDataScale = parms.pawn.story.hairDef.GetModExtension<Ext_FrontHair>().graphicData.drawSize;
             scale.x *= graphicDataScale.x;
             scale.z *= graphicDataScale.y;
             return scale;
+        }*/
+        protected override Ext_ExtraGraphicData Ext(PawnDrawParms parms)
+        {
+            return parms.pawn.story.hairDef.GetModExtension<Ext_FrontHair>();
         }
     }
 }

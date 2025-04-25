@@ -97,6 +97,9 @@ namespace AK_DLL
 
         public bool ignoreAutoFill = false; //跳过自动填充
 
+        //如果不为空，获取render tree时会使用这个值
+        public PawnRenderTreeDef renderTreeOverride = null;
+
         public string modPackageID = "MIS.Arknights";  //about.xml里面的package id，用于动态加载资源
         #endregion
 

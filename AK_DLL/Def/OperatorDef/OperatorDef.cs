@@ -42,7 +42,7 @@ namespace AK_DLL
 
         public List<TraitAndDegree> traits;//干员特性
         public ThingDef weapon = null;//干员武器                                                  
-        public List<ThingDef> apparels = new();//干员衣服
+        public List<ItemOnSpawn> apparels = new();//干员衣服
         public List<ThingDef> accessory = new(); //干员配件。和衣服的区别是在换装时不会丢掉。适合填入比如护盾。
         public List<ItemOnSpawn> items;
         public BodyTypeDef bodyTypeDef;//干员的体型
@@ -214,13 +214,11 @@ namespace AK_DLL
             int apparelTextureIndex = -1;
             if (def == null)
             {
-                if (apparels != null)
+                foreach (ItemOnSpawn apparelDef in this.apparels)
                 {
-                    foreach (ThingDef apparelDef in this.apparels)
-                    {
-                        Apparel apparel = Recruit_Inventory_Wear(apparelDef, operator_Pawn, true);
-                    }
+                    Apparel apparel = Recruit_Inventory_Wear(apparelDef.item, operator_Pawn, true, apparelDef.stuff);
                 }
+
                 operator_Pawn.story.hairDef = hair ?? HairDefOf.Bald;
                 doc.voicePack = this.voicePackDef;
                 if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null && ModLister.GetActiveModWithIdentifier("paluto22.ak.combatextended") == null)
@@ -581,9 +579,9 @@ namespace AK_DLL
             clothTemp = new List<Thing>();
             if (apparels != null)
             {
-                foreach (ThingDef apparelDef in this.apparels)
+                foreach (ItemOnSpawn apparelDef in this.apparels)
                 {
-                    Recruit_Inventory_Wear(apparelDef, operator_Pawn, true);
+                    Recruit_Inventory_Wear(apparelDef.item, operator_Pawn, true, apparelDef.stuff);
                 }
             }
             if (accessory != null)
@@ -609,9 +607,9 @@ namespace AK_DLL
             return;
         }
 
-        protected Apparel Recruit_Inventory_Wear(ThingDef apparelDef, Pawn p, bool isFashion = true)
+        protected Apparel Recruit_Inventory_Wear(ThingDef apparelDef, Pawn p, bool isFashion = true, ThingDef stuff = null)
         {
-            Apparel apparel = (Apparel)ThingMaker.MakeThing(apparelDef);
+            Apparel apparel = (Apparel)ThingMaker.MakeThing(apparelDef, stuff);
             CompBiocodable comp = apparel.GetComp<CompBiocodable>();
             comp?.CodeFor(p);
             p.apparel.Wear(apparel, true, false);
@@ -806,14 +804,18 @@ namespace AK_DLL
 
         private void AutoFill_Apparel()
         {
-            if (this.apparels == null) this.apparels = new List<ThingDef>();
-
             ThingDef tempThing;
+
+            HashSet<string> addedApparals = new();
+            foreach (ItemOnSpawn i in new List<ItemOnSpawn>(apparels))
+            {
+                addedApparals.Add(i.item.defName);
+            }
 
             foreach (string thingType in TypeDef.apparelType)
             {
                 tempThing = DefDatabase<ThingDef>.GetNamedSilentFail(AK_Tool.GetThingdefNameFrom(this.defName, thingType));
-                if (tempThing != null && !this.apparels.Contains(tempThing) && !accessory.Contains(tempThing)) this.apparels.Add(tempThing);
+                if (tempThing != null && !addedApparals.Contains(tempThing.defName) && !accessory.Contains(tempThing)) this.apparels.Add(new ItemOnSpawn() { item = tempThing });
             }
         }
 
@@ -847,7 +849,13 @@ namespace AK_DLL
             if (!dynaLoadStaticStands) return;
             List<ThingDef> allThingdefs = new();
             allThingdefs.AddRange(accessory);
-            allThingdefs.AddRange(apparels);
+            //allThingdefs.AddRange(apparels);
+
+            foreach (ItemOnSpawn i in apparels)
+            {
+                allThingdefs.Add(i.item);
+            }
+
             if (weapon != null) allThingdefs.Add(weapon);
             foreach (ThingDef def in allThingdefs)
             {

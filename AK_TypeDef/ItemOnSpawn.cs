@@ -1,4 +1,6 @@
 ﻿using RimWorld;
+using System.Data;
+using System.Xml;
 using Verse;
 
 namespace AK_DLL
@@ -28,6 +30,15 @@ namespace AK_DLL
 
             GenPlace.TryPlaceThing(reward, cell, map, ThingPlaceMode.Near);
             return reward;
+        }
+
+        public static ItemOnSpawn Parser(string itemDefName)
+        {
+            ItemOnSpawn res = new();
+
+            DirectXmlCrossRefLoader.RegisterObjectWantsCrossRef(res, "item", itemDefName);
+
+            return res;
         }
     }
 }

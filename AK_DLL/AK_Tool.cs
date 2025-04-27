@@ -9,6 +9,8 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
 using Verse;
+using static RimWorld.Dialog_EditIdeoStyleItems;
+using static Verse.ParseHelper;
 
 namespace AK_DLL
 {
@@ -31,6 +33,7 @@ namespace AK_DLL
         {
             try
             {
+
                 if (AK_ModSettings.debugOverride) Log.Message("[AK] loading");
                 RIWindowHandler.LoadOperatorSeries();
                 if (AK_ModSettings.debugOverride) Log.Message($"AK loaded {RIWindowHandler.operatorSeries.Count} series");
@@ -40,6 +43,7 @@ namespace AK_DLL
                 RIWindowHandler.AutoFillOperators();
 
                 InitializeUI();
+
                 Log.Message($"MIS.初始化完成");
             }
             catch (Exception ex)

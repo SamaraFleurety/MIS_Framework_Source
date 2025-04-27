@@ -195,6 +195,7 @@ namespace AK_DLL
         }
         public AK_Mod(ModContentPack content) : base(content)
         {
+            ParseHelper.Parsers<ItemOnSpawn>.Register(ItemOnSpawn.Parser);
             settings = GetSettings<AK_ModSettings>();
             Harmony instance = new Harmony("AK_DLL");
             instance.PatchAll(Assembly.GetExecutingAssembly());

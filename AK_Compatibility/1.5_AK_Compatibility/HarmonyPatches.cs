@@ -150,10 +150,10 @@ namespace Paluto22.AK.Patch
         public static void NewGeneratePawn_Prefix(ref PawnGenerationRequest request)
         {
             if (OperatorDef.currentlyGenerating == false && !ModsConfig.IsActive("erdelf.HumanoidAlienRaces")) return;
-            if (/*Current.ProgramState == ProgramState.Playing && */OperatorDef.currentlyGenerating && !AKC_ModSettings.disable_PawnKindDef)
-            {
-                request.KindDef = PawnKindDefOf.Colonist;
-            }
+            //if (Current.ProgramState != ProgramState.Playing) return;
+            if (!OperatorDef.currentlyGenerating || AKC_ModSettings.disable_PawnKindDef) return;
+            if (request.KindDef.defName.Contains("LOF_PawnKind_Astro")) return;
+            request.KindDef = PawnKindDefOf.Colonist;
         }
     }
     /*

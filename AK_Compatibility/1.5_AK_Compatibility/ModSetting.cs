@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Verse;
 
-namespace Paluto22.AK.Patch
+namespace PA_AKPatch
 {
     public class AKC_ModSettings : ModSettings
     {

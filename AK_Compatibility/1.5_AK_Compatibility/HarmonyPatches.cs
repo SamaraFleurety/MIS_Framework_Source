@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-namespace Paluto22.AK.Patch
+namespace PA_AKPatch
 {
     [StaticConstructorOnStartup]
     public static class AKPatches
@@ -108,38 +108,22 @@ namespace Paluto22.AK.Patch
         public static void NewPawnRender_Postfix(ref List<PawnRenderNode> __result, Pawn ___pawn)
         {
             if (AKC_ModSettings.disable_FacialAnimation) return;
-            if (___pawn.GetDoc() != null)
+
+            OperatorDocument doc = ___pawn.GetDoc();
+            if (doc == null) return;
+            if (AKC_ModSettings.MIS_NoFace_Actived && !AKC_ModSettings.disable_FacialAnimation_NoFace)
             {
-                /*string name = ___pawn.GetDoc().operatorDef.defName;
-                bool is_AK = name.StartsWith("AK");
-                bool is_BA = name.StartsWith("BA");
-                if (!is_AK && !is_BA) return;
-                if (AKC_ModSettings.MIS_NoFace_Actived && is_AK && !AKC_ModSettings.disable_FacialAnimation_NoFace)
-                {
-                    return;
-                }*/
-                OperatorDocument doc = ___pawn.GetDoc();
-                if (doc == null) return;
-                if (AKC_ModSettings.MIS_NoFace_Actived && !AKC_ModSettings.disable_FacialAnimation_NoFace) 
-                {
-                    return;
-                }
-                __result = null;
+                return;
             }
+            __result = null;
         }
         public static void FashionWardrobe_Prefix(Rect inRect)
         {
-            if (!OperatorDef.currentlyGenerating)
-            {
-                OperatorDef.currentlyGenerating = true;
-            }
+            if (!OperatorDef.currentlyGenerating) OperatorDef.currentlyGenerating = true;
         }
         public static void FashionWardrobe_Postfix(bool doCloseSound = true)
         {
-            if (OperatorDef.currentlyGenerating)
-            {
-                OperatorDef.currentlyGenerating = false;
-            }
+            if (OperatorDef.currentlyGenerating) OperatorDef.currentlyGenerating = false;
         }
     }
     //种族修复
@@ -151,8 +135,10 @@ namespace Paluto22.AK.Patch
         {
             if (OperatorDef.currentlyGenerating == false && !ModsConfig.IsActive("erdelf.HumanoidAlienRaces")) return;
             //if (Current.ProgramState != ProgramState.Playing) return;
+
             if (!OperatorDef.currentlyGenerating || AKC_ModSettings.disable_PawnKindDef) return;
-            if (request.KindDef.defName.Contains("LOF_PawnKind_Astro")) return;
+            if (request.KindDef.HasModExtension<Ext_KeepOriginal>()) return;
+
             request.KindDef = PawnKindDefOf.Colonist;
         }
     }

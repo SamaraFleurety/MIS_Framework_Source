@@ -48,6 +48,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AK_Compatibility", "AK_Comp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AK_AlienRace_Compatibility", "AK_Compatibility\AlienRace_Compatibility\AK_AlienRace_Compatibility.csproj", "{DF765A5A-9A0E-4423-B3F9-6150A2FF0C24}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AKBG_MainmenuBackground", "AKBG_MainmenuBackground\AKBG_MainmenuBackground.csproj", "{23D1F4BC-F1A4-42F8-A4BC-4C30B6880A3C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -362,6 +364,26 @@ Global
 		{DF765A5A-9A0E-4423-B3F9-6150A2FF0C24}.Release|x64.Build.0 = Release|Any CPU
 		{DF765A5A-9A0E-4423-B3F9-6150A2FF0C24}.Release|x86.ActiveCfg = Release|Any CPU
 		{DF765A5A-9A0E-4423-B3F9-6150A2FF0C24}.Release|x86.Build.0 = Release|Any CPU
+		{23D1F4BC-F1A4-42F8-A4BC-4C30B6880A3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23D1F4BC-F1A4-42F8-A4BC-4C30B6880A3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23D1F4BC-F1A4-42F8-A4BC-4C30B6880A3C}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{23D1F4BC-F1A4-42F8-A4BC-4C30B6880A3C}.Debug|ARM.Build.0 = Debug|Any CPU
+		{23D1F4BC-F1A4-42F8-A4BC-4C30B6880A3C}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{23D1F4BC-F1A4-42F8-A4BC-4C30B6880A3C}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{23D1F4BC-F1A4-42F8-A4BC-4C30B6880A3C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{23D1F4BC-F1A4-42F8-A4BC-4C30B6880A3C}.Debug|x64.Build.0 = Debug|Any CPU
+		{23D1F4BC-F1A4-42F8-A4BC-4C30B6880A3C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{23D1F4BC-F1A4-42F8-A4BC-4C30B6880A3C}.Debug|x86.Build.0 = Debug|Any CPU
+		{23D1F4BC-F1A4-42F8-A4BC-4C30B6880A3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23D1F4BC-F1A4-42F8-A4BC-4C30B6880A3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23D1F4BC-F1A4-42F8-A4BC-4C30B6880A3C}.Release|ARM.ActiveCfg = Release|Any CPU
+		{23D1F4BC-F1A4-42F8-A4BC-4C30B6880A3C}.Release|ARM.Build.0 = Release|Any CPU
+		{23D1F4BC-F1A4-42F8-A4BC-4C30B6880A3C}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{23D1F4BC-F1A4-42F8-A4BC-4C30B6880A3C}.Release|ARM64.Build.0 = Release|Any CPU
+		{23D1F4BC-F1A4-42F8-A4BC-4C30B6880A3C}.Release|x64.ActiveCfg = Release|Any CPU
+		{23D1F4BC-F1A4-42F8-A4BC-4C30B6880A3C}.Release|x64.Build.0 = Release|Any CPU
+		{23D1F4BC-F1A4-42F8-A4BC-4C30B6880A3C}.Release|x86.ActiveCfg = Release|Any CPU
+		{23D1F4BC-F1A4-42F8-A4BC-4C30B6880A3C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -24,7 +24,9 @@ namespace AK_DLL
         public VoicePackDef voicePack;
         public int preferedAbility = 0;
         public OperatorDef operatorDef;
-        public int oripathySeverity = 0;
+        //public int oripathySeverity = 0;
+
+        public bool forceDisableNL = false;
 
         public int preferedSkin = OperatorStandType.Elite2;    //选定立绘,0是精2, 1是精0, 后面是换装
 
@@ -105,10 +107,12 @@ namespace AK_DLL
             Scribe_Collections.Look(ref this.skillLevel, "skill", LookMode.Def, LookMode.Value);
             Scribe_Defs.Look(ref this.operatorDef, "def");
             Scribe_Values.Look<int>(ref this.preferedAbility, "preferedAbility", 0, true);
-            Scribe_Values.Look<int>(ref this.oripathySeverity, "oriSev", 0, true);
+            //Scribe_Values.Look<int>(ref this.oripathySeverity, "oriSev", 0, true);
             Scribe_Values.Look<int>(ref this.preferedSkin, "skin");
 
             Scribe_Defs.Look(ref this.pendingFashionDef, "fashionDef");
+
+            Scribe_Values.Look(ref this.forceDisableNL, "disableNL", false);
         }
 
         //记录当前干员所有技能

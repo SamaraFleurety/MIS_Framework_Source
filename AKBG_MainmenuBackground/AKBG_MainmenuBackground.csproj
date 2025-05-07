@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CE31C711-E3F1-43D2-AD6A-216097EE20AB}</ProjectGuid>
+    <ProjectGuid>{23D1F4BC-F1A4-42F8-A4BC-4C30B6880A3C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AKR_Random</RootNamespace>
-    <AssemblyName>2AKR_WeightedRandomUnified</AssemblyName>
+    <RootNamespace>AKBG_MainmenuBackground</RootNamespace>
+    <AssemblyName>AKBG_MainmenuBackground</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -21,8 +21,8 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <LangVersion>9.0</LangVersion>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,13 +34,8 @@
     <LangVersion>9.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0Harmony">
-      <HintPath>..\Rely\0Harmony.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\Rely\Assembly-CSharp.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -52,41 +47,28 @@
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
       <HintPath>..\Rely\UnityEngine.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\Rely\UnityEngine.CoreModule.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
       <HintPath>..\Rely\UnityEngine.IMGUIModule.dll</HintPath>
-      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Algorithm.cs" />
-    <Compile Include="Comp\TCP_Lottery.cs" />
-    <Compile Include="Comp\TCP_LotteryAuto.cs" />
-    <Compile Include="DefWithWeight.cs" />
-    <Compile Include="Def\RandomizerDef.cs" />
-    <Compile Include="Interface\IRandomizer.cs" />
-    <Compile Include="Interface\IWeightedRandomable.cs" />
+    <Compile Include="BackgroundDef.cs" />
+    <Compile Include="ModSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RandNode\RandomizerNode_Base.cs" />
-    <Compile Include="RandNode\RandomizerNode_Def.cs" />
-    <Compile Include="RandNode\RandomizerNode_Subnodes.cs" />
-    <Compile Include="RandNode\RandomizerNode_Rewards.cs" />
-    <Compile Include="RewardSet\RewardSet_Base.cs" />
-    <Compile Include="RewardSet\Rewards_Def.cs" />
-    <Compile Include="RewardSet\Rewards_Generic.cs" />
-    <Compile Include="RewardSet\Rewards_Nothing.cs" />
-    <Compile Include="RewardSet\Rewards_Things.cs" />
+    <Compile Include="TypeDef.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AKR_WeightedRandomUnified\AKR_WeightedRandomUnified.csproj">
+      <Project>{ce31c711-e3f1-43d2-ad6a-216097ee20ab}</Project>
+      <Name>AKR_WeightedRandomUnified</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AK_TypeDef\1AK_TypeDef.csproj">
-      <Project>{FF2ECE8F-73B3-49F0-82E6-BC15C45E33A6}</Project>
+      <Project>{ff2ece8f-73b3-49f0-82e6-bc15c45e33a6}</Project>
       <Name>1AK_TypeDef</Name>
-      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

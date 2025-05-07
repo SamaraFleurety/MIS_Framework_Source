@@ -38,7 +38,7 @@ namespace AK_DLL.DynaLoad
             }
             if (hasAnySoundPack is true)
             {
-                AudioClip alterSound = ContentFinder<AudioClip>.Get(clipPath);
+                AudioClip alterSound = ContentFinder<AudioClip>.Get(clipPath, false);
                 if (alterSound != null)
                 {
                     yield return new ResolvedGrain_Clip(alterSound); ;

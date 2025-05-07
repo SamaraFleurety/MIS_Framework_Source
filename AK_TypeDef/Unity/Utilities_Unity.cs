@@ -54,7 +54,7 @@ namespace AK_DLL
         }
 
 
-        //存所有mod的路径 <packageID, 路径>
+        //存所有mod的路径 <packageID(原生), 路径>
         public static Dictionary<string, string> modPath = new Dictionary<string, string>();
         static void LoadAllModPath()
         {
@@ -161,9 +161,24 @@ namespace AK_DLL
 
         //需要重复调用的贴图会放在这里(有的在别的地方自带缓存)
         public static Dictionary<string, Texture2D> dynamicLoadingTextures = new();
-        public static Texture2D GetDynamicLoadTexture(string itemPath, string modID, bool cacheIntoDictionary = false)
+        public static Texture2D GetDynamicLoadTexture(string itemFullHardwarePath, bool cacheIntoDictionary = false)
         {
             Texture2D texture;
+            dynamicLoadingTextures.TryGetValue(itemFullHardwarePath, out texture);
+            if (texture != null) return texture;
+
+            texture = LoadResourceIO<Texture2D>(itemFullHardwarePath);
+
+            if (cacheIntoDictionary)
+            {
+                dynamicLoadingTextures.Add(itemFullHardwarePath, texture);
+            }
+            return texture;
+
+        }
+        public static Texture2D GetDynamicLoadTexture(string itemPath, string modID, bool cacheIntoDictionary = false)
+        {
+            /*Texture2D texture;
             string path = ModIDtoPath_DynaLoading<Texture2D>(itemPath, modID);
             dynamicLoadingTextures.TryGetValue(path, out texture);
             if (texture != null) return texture;
@@ -174,7 +189,9 @@ namespace AK_DLL
             {
                 dynamicLoadingTextures.Add(path, texture);
             }
-            return texture;
+            return texture;*/
+            string path = ModIDtoPath_DynaLoading<Texture2D>(itemPath, modID);
+            return GetDynamicLoadTexture(path, cacheIntoDictionary);
         }
         //根据参数，获得一个文件在硬盘上面的路径
         public static string ModIDtoPath_DynaLoading<T>(string itemPath, string modPackageID, string fileExtension = null) where T : class

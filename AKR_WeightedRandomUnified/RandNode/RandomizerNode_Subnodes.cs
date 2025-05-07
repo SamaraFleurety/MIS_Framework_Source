@@ -3,6 +3,11 @@ using Verse;
 
 namespace AKR_Random
 {
+    public class RandomizerNode_Subnodes<T> : RandomizerNode_Subnodes
+    {
+        public T val;
+    }
+
     //本身不提供任何奖励。从子节点里面随机挑一个，并返回子节点的结果
     public class RandomizerNode_Subnodes : RandomizerNode_Base
     {

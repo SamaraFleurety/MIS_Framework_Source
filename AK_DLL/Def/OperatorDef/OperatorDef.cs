@@ -101,6 +101,8 @@ namespace AK_DLL
         public PawnRenderTreeDef renderTreeOverride = null;
 
         public string modPackageID = "MIS.Arknights";  //about.xml里面的package id，用于动态加载资源
+
+        public bool forceDisableNL = false;
         #endregion
 
         //年龄阈值，小于此年龄就无成人故事。
@@ -212,7 +214,7 @@ namespace AK_DLL
             clothTemp = new List<Thing>();
 
             int apparelTextureIndex = -1;
-            if (def == null)
+            if (def == null)  //换回初始换装
             {
                 foreach (ItemOnSpawn apparelDef in this.apparels)
                 {
@@ -234,6 +236,7 @@ namespace AK_DLL
                     operator_Pawn.equipment.AddEquipment(weapon);
                     doc.weapon = weapon;
                 }
+                doc.forceDisableNL = this.forceDisableNL;
             }
             else
             {
@@ -261,6 +264,7 @@ namespace AK_DLL
                     operator_Pawn.equipment.AddEquipment(weapon);
                     doc.weapon = weapon;
                 }
+                doc.forceDisableNL = set.forceDisableNL;
             }
 
             foreach (var apparel in operator_Pawn.apparel.WornApparel)

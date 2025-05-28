@@ -82,8 +82,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="KeyInputToggleWidget.cs" />
     <Compile Include="ModSettings.cs" />
     <Compile Include="PatchSkip.cs" />
+    <Compile Include="Patch_KeyBindingDef.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

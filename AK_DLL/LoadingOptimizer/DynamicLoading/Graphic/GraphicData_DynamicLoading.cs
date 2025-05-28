@@ -42,7 +42,7 @@ namespace AK_DLL.DynamicLoading
                 cutout = ShaderTypeDefOf.Cutout;
             }
             Shader shader = cutout.Shader;
-            Texture2D textureDynamicLoading = Utilities_Unity.LoadResourceIO<Texture2D>(Utilities_Unity.ModIDtoPath_DynaLoading<Texture2D>(texPath,modID));
+            Texture2D textureDynamicLoading = Utilities_Unity.LoadResourceIO<Texture2D>(Utilities_Unity.DynaLoad_PathRelativeToFull<Texture2D>(texPath,modID));
             CachedGraphic = GraphicDatabase.Get(graphicClass, textureDynamicLoading, shader, drawSize, color, colorTwo, this, shaderParameters, maskPath);
             if (onGroundRandomRotateAngle > 0.01f)
             {

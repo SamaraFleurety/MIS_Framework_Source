@@ -34,6 +34,9 @@
     <LangVersion>9.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>..\Rely\0Harmony.dll</HintPath>
+    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\Rely\Assembly-CSharp.dll</HintPath>
     </Reference>
@@ -58,6 +61,8 @@
   <ItemGroup>
     <Compile Include="BackgroundDef.cs" />
     <Compile Include="ModSettings.cs" />
+    <Compile Include="Patchs\Patch_LoadingBG.cs" />
+    <Compile Include="Patchs\Patch_MainMenuBG.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TypeDef.cs" />
   </ItemGroup>

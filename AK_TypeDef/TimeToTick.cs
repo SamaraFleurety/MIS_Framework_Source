@@ -1,4 +1,6 @@
-﻿namespace AK_DLL
+﻿using System;
+
+namespace AK_DLL
 {
     public enum TimeToTick
     {
@@ -22,5 +24,15 @@
         public static int season = day * 15; //0.9M
         public static int year = season * 4; //3.6M
         public static int rSecond = 60;       //现实中的1秒
+    }
+
+    //现实中的系统时间
+    //这里面的tick不再是环世界的tick，而是指windows的tick。1tick=0.1纳秒
+    public static class RealTime
+    {
+        public static long CurrentTimeTick => DateTime.Now.Ticks;
+
+        public static long tick = 1;
+        public static long second = 10000000;  //多少tick算1秒
     }
 }

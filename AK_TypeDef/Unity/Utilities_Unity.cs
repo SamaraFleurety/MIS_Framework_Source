@@ -68,7 +68,7 @@ namespace AK_DLL
         //从mod的ID读获取要的文件的路径
         //实际路径为[MOD根目录][subfolder]path
         //subfolder前后应该包括'/'
-        private static string ModIDtoPath(string modPackageID, string path, string subfolder = "\\")
+        private static string ModIDtoPath(string modPackageID, string path, string subfolder = "/")
         {
             if (!modPath.ContainsKey(modPackageID.ToLower()))
             {
@@ -157,6 +157,12 @@ namespace AK_DLL
         }
 
         #region 运行时加载媒体资源
+        //将路径标准化 -- 统一使用'/'来区别文件夹
+        public static string StandardizePath(string path)
+        {
+            return path.Replace("\\", "/");
+        }
+
         //直接从硬盘上的，环世界开游戏时不会读取的文件夹里面读取贴图/语音。
 
         //需要重复调用的贴图会放在这里(有的在别的地方自带缓存)
@@ -176,6 +182,7 @@ namespace AK_DLL
             return texture;
 
         }
+        //输入相对路径，获得texture。相对路径开头不带'/'，末尾不带后缀，和原版相同。例：UI/path1/bg(
         public static Texture2D GetDynamicLoadTexture(string itemPath, string modID, bool cacheIntoDictionary = false)
         {
             /*Texture2D texture;
@@ -190,11 +197,11 @@ namespace AK_DLL
                 dynamicLoadingTextures.Add(path, texture);
             }
             return texture;*/
-            string path = ModIDtoPath_DynaLoading<Texture2D>(itemPath, modID);
+            string path = DynaLoad_PathRelativeToFull<Texture2D>(itemPath, modID);
             return GetDynamicLoadTexture(path, cacheIntoDictionary);
         }
         //根据参数，获得一个文件在硬盘上面的路径
-        public static string ModIDtoPath_DynaLoading<T>(string itemPath, string modPackageID, string fileExtension = null) where T : class
+        public static string DynaLoad_PathRelativeToFull<T>(string itemPath, string modPackageID, string fileExtension = null) where T : class
         {
             string path;
             if (typeof(T) == typeof(Texture2D))
@@ -212,6 +219,21 @@ namespace AK_DLL
                 throw new ArgumentException();
             }
             return path;
+        }
+
+        //完整硬盘路径转相对路径(变成xml里面填的那种)
+        public static string DynaLoad_PathFullToRelative<T>(string fullPath) where T : class
+        {
+            string temp = StandardizePath(fullPath);
+            string middlePath = DynContentPath<T>();
+            int index = fullPath.IndexOf(middlePath);
+            if (index == -1)
+            {
+                Log.Error($"[AK] {typeof(T).Name} {fullPath} 无法转变为相对路径");
+                return null;
+            }
+            temp = fullPath.Substring(index + middlePath.Length);
+            return Path.GetFileNameWithoutExtension(temp);
         }
         public static bool VerifyFileExistIO(string fileFullPath)
         {

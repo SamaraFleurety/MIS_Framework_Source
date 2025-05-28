@@ -743,7 +743,7 @@ namespace AK_DLL
             {
                 if (!staticStands.ContainsKey(-1))
                 {
-                    temp = Utilities_Unity.ModIDtoPath_DynaLoading<Texture2D>(portraitPath, modPackageID);
+                    temp = Utilities_Unity.DynaLoad_PathRelativeToFull<Texture2D>(portraitPath, modPackageID);
                     if (File.Exists(temp))
                     {
                         //string portrait = temp;
@@ -757,7 +757,7 @@ namespace AK_DLL
                 }
                 if (!staticStands.ContainsKey(0))
                 {
-                    temp = Utilities_Unity.ModIDtoPath_DynaLoading<Texture2D>(standPath, modPackageID);
+                    temp = Utilities_Unity.DynaLoad_PathRelativeToFull<Texture2D>(standPath, modPackageID);
                     if (File.Exists(temp))
                     {
                         string stand = standPath;
@@ -772,7 +772,7 @@ namespace AK_DLL
                 if (!staticStands.ContainsKey(1))
                 {
                     standPath = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorIDFrom(this.defName) + "Common";
-                    temp = Utilities_Unity.ModIDtoPath_DynaLoading<Texture2D>(standPath, modPackageID);
+                    temp = Utilities_Unity.DynaLoad_PathRelativeToFull<Texture2D>(standPath, modPackageID);
                     if (File.Exists(temp))
                     {
                         string standCommon = standPath;
@@ -784,7 +784,7 @@ namespace AK_DLL
                 {
                     int fashionIndex = i + 2;
                     temp = standPath + TypeDef.romanNumber[i];
-                    string temp2 = Utilities_Unity.ModIDtoPath_DynaLoading<Texture2D>(temp, modPackageID);
+                    string temp2 = Utilities_Unity.DynaLoad_PathRelativeToFull<Texture2D>(temp, modPackageID);
                     if (!staticStands.ContainsKey(fashionIndex) && File.Exists(temp2))
                     {
                         string temp3 = temp;

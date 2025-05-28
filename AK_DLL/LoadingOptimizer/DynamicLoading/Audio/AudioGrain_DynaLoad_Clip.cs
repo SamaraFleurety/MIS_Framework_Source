@@ -46,7 +46,7 @@ namespace AK_DLL.DynaLoad
                 }
             }
             
-            AudioClip audioClip = Utilities_Unity.LoadResourceIO<AudioClip>(Utilities_Unity.ModIDtoPath_DynaLoading<AudioClip>(clipPath, ModID));
+            AudioClip audioClip = Utilities_Unity.LoadResourceIO<AudioClip>(Utilities_Unity.DynaLoad_PathRelativeToFull<AudioClip>(clipPath, ModID));
             //AudioClip audioClip = ContentFinder<AudioClip>.Get(clipPath);
             if (audioClip != null)
             {

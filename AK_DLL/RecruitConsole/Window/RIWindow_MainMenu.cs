@@ -404,7 +404,7 @@ namespace AK_DLL.UI
                 List<OperatorDef> allOpDefs = DefDatabase<OperatorDef>.AllDefsListForReading;
                 if (allOpDefs.NullOrEmpty()) return;
                 AK_ModSettings.secretary = allOpDefs.RandomElement().defName;
-                AK_ModSettings.secretarySkin = 1;
+                AK_ModSettings.secretarySkin = (int)SkinType.EliteII;
                 Log.Message($"[MIS] setting secretary as {SecretaryDef}");
                 AK_Mod.settings.Write();
             }

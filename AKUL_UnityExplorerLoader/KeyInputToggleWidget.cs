@@ -7,7 +7,6 @@ using Text = UnityEngine.UI.Text;
 
 namespace AKUL_UnityExplorerLoader
 {
-
     internal class KeyInputToggleWidget
     {
         public KeyInputToggleWidget(GameObject parent)

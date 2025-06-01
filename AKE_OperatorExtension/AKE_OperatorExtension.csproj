@@ -95,6 +95,7 @@
     <Compile Include="AKE_Tools.cs" />
     <Compile Include="ApparelBreak\Apparel_Breakdown.cs" />
     <Compile Include="ApparelBreak\Ext_ApparelBreakGraphic.cs" />
+    <Compile Include="ApparelBreak\Patch_ApparelGraphic.cs" />
     <Compile Include="HarmonyPatchs\Patch_Inspiration.cs" />
     <Compile Include="CombatRecords\TCP_UseEffect_CombatRecord.cs" />
     <Compile Include="DefExtension\DefExt_SkillLossRate.cs" />

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
-namespace AKE_OperatorExtension.ApparelBreak
+namespace AKE_OperatorExtension
 {
     //砍口垒那种大破机制
     //因为设计上不鼓励脱下衣服，衣服也不能再制作，所以实际机制是：此衣服有耐久，但不会低于1；根据衣服耐久减少贴图会变化

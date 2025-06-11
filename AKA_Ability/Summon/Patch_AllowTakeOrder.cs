@@ -5,13 +5,13 @@ using Verse;
 
 namespace AKA_Ability.HarmonyPatchs
 {
-    [HarmonyPatch(typeof(FloatMenuMakerMap), "CanTakeOrder")]
+    [HarmonyPatch(typeof(Pawn), "CanTakeOrder", MethodType.Getter)]
     public class Patch_AllowTakeOrder
     {
         [HarmonyPrefix]
-        public static bool prefix(Pawn pawn, ref bool __result)
+        public static bool prefix(Pawn __instance, ref bool __result)
         {
-            if (pawn.TryGetComp<TC_SummonedProperties>() != null)
+            if (__instance.TryGetComp<TC_SummonedProperties>() != null)
             {
                 __result = true;
                 return HarmonyPrefixRet.skipOriginal;

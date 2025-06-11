@@ -80,7 +80,7 @@ namespace AKA_Ability
             if (this.AfterTick <= 0)
             {
                 if (this.Pawn.Map != null)
-                    GenExplosion.DoExplosion(this.Pawn.Position, this.Pawn.Map, this.Radius, DamageDefOf.Flame, null, this.Damage, -1f, null, null, null, null, null, 0f, 1, null, true, null, 0f, 1, 0f, false, null, null, null, true, 1f, 0f, true, null, 1f);
+                    GenExplosion.DoExplosion(this.Pawn.Position, this.Pawn.Map, this.Radius, DamageDefOf.Flame, null, this.Damage/*, -1f, null, null, null, null, null, 0f, 1, null, null, 255, true, null, 0f, 1, 0f, false, null, null, null, true, 1f, 0f, true, null, 1f*/);
                 HealthUtility.AdjustSeverity(Pawn, base.Def, -10f);
             }
         }

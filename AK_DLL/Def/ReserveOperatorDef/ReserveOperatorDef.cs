@@ -42,7 +42,7 @@ namespace AK_DLL
 
                 FactionDef def = null;
                 if (faction != null) def = faction;
-                else if (pawnkind != null && pawnkind.defaultFactionType != null) def = pawnkind.defaultFactionType;
+                else if (pawnkind != null && pawnkind.defaultFactionDef != null) def = pawnkind.defaultFactionDef;
 
                 if (def != null)
                 {

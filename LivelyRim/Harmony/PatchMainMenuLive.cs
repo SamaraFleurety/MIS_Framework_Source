@@ -37,7 +37,7 @@ namespace FS_LivelyRim
 
             PropertyInfo doMenuProp = typeof(UIRoot_Entry).GetProperty("ShouldDoMainMenu", BindingFlags.Instance | BindingFlags.NonPublic);
             bool doMenuFlag = (bool)doMenuProp.GetValue(__instance);
-            if (!WorldRendererUtility.WorldRenderedNow && doMenuFlag)
+            if (!WorldRendererUtility.WorldRendered && doMenuFlag)
             {
                 GameObject ins = FS_Utilities.DrawModel(DisplayModelAt.MainMenu, FS_Tool.defaultModelDef);
 

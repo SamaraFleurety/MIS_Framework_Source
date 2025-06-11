@@ -81,7 +81,7 @@ namespace AK_DLL
         //游戏开始后，删掉所有原生pawn
         public override void PostGameStart()
         {
-            List<Pawn> colonists = new List<Pawn>(PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_Colonists);
+            List<Pawn> colonists = new List<Pawn>(PawnsFinder.AllMapsCaravansAndTravellingTransporters_Alive_Colonists /*PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_Colonists*/);
             //Log.Message($"pgs {colonists.Count}");
             operatorDef.Recruit(Find.CurrentMap);
             foreach (Pawn p in colonists)

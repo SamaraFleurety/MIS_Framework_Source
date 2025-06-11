@@ -73,7 +73,8 @@ namespace AK_DLL
             if (AllTowers.Contains(this)) AllTowers.Remove(this);
             base.PostDestroy(mode, previousMap);
         }
-        public override void PostDeSpawn(Map map)
+
+        public override void PostDeSpawn(Map map, DestroyMode mode = DestroyMode.Vanish)
         {
             if (AllTowers.Contains(this)) AllTowers.Remove(this);
             base.PostDeSpawn(map);

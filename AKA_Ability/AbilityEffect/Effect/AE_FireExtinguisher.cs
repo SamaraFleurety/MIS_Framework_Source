@@ -21,11 +21,11 @@ namespace AKA_Ability
             IntVec3 targetCell = target.Cell;
             Pawn casterPawn = caster.CasterPawn;
 
-            if (targetCell == null || casterPawn == null || casterPawn.Map == null || !targetCell.InBounds(casterPawn.Map))
+            if (/*targetCell == null ||*/ casterPawn == null || casterPawn.Map == null || !targetCell.InBounds(casterPawn.Map))
             {
                 return false;
             }
-            GenExplosion.DoExplosion(targetCell, casterPawn.Map, explosiveRadius, DmgType, null, dmgAmount, dmgPenetration, explosionSound, null, null, null, postExplosionSpawnThingDef, postExplosionSpawnChance, postExplosionSpawnThingCount, null, applyDamageToExplosionCellsNeighbors: true, null, 0f, 0, 0f, false, null, null, null, true, 1f, 0f, true, null, screenShakeFactor: 1f);
+            GenExplosion.DoExplosion(targetCell, casterPawn.Map, explosiveRadius, DmgType, null, dmgAmount, dmgPenetration, explosionSound, null, null, null, postExplosionSpawnThingDef, postExplosionSpawnChance, postExplosionSpawnThingCount, null, null, 255, applyDamageToExplosionCellsNeighbors: true, null, 0f, 0, 0f, false, null, null, null, true, 1f, 0f, true, null, screenShakeFactor: 1f);
 
             return base.DoEffect(caster, target);
         }

@@ -18,6 +18,11 @@ namespace AK_DLL
         public PawnRenderNode_AKSkillBar(Pawn pawn, PawnRenderNodeProperties props, PawnRenderTree tree) : base(pawn, props, tree)
         {
         }
+
+        protected override void EnsureMeshesInitialized()
+        {
+            return;
+        }
         public override Mesh GetMesh(PawnDrawParms parms)
         {
             return base.GetMesh(parms);

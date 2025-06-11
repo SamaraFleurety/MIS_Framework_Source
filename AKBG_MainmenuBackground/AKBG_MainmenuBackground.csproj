@@ -41,6 +41,9 @@
       <HintPath>..\Rely\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Generic.RedBlack">
+      <HintPath>..\Rely\System.Collections.Generic.RedBlack.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -57,14 +60,16 @@
     <Reference Include="UnityEngine.IMGUIModule">
       <HintPath>..\Rely\UnityEngine.IMGUIModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BackgroundDef.cs" />
-    <Compile Include="ModSettings.cs" />
+    <Compile Include="AKBG_ModSettings.cs" />
     <Compile Include="Patchs\Patch_LoadingBG.cs" />
     <Compile Include="Patchs\Patch_MainMenuBG.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TypeDef.cs" />
+    <Compile Include="Window_BackgroundMod.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AKR_WeightedRandomUnified\AKR_WeightedRandomUnified.csproj">

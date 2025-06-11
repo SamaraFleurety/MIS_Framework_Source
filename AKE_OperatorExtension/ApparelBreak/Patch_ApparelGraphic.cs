@@ -1,5 +1,4 @@
-﻿using AKE_OperatorExtension.ApparelBreak;
-using HarmonyLib;
+﻿using HarmonyLib;
 using RimWorld;
 using System;
 using System.Collections.Generic;

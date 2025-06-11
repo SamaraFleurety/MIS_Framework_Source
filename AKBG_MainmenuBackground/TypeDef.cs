@@ -15,8 +15,8 @@ namespace AKBG_MainmenuBackground
     //多了的话可以改成flags
     public enum BGType
     {
-        Mainmenu,
-        Loading
+        Mainmenu = 0,
+        Loading = 1,
     }
 
 }

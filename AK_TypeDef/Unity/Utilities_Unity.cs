@@ -158,7 +158,7 @@ namespace AK_DLL
 
         #region 运行时加载媒体资源
         //将路径标准化 -- 统一使用'/'来区别文件夹
-        public static string StandardizePath(string path)
+        public static string StandardizePath(this string path)
         {
             return path.Replace("\\", "/");
         }

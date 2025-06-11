@@ -424,7 +424,7 @@ namespace AK_DLL.UI
             //精0/精1立绘 切换按钮
             fashionIcon = GameObject.Find("Elite0");
             fashionBtns.Add(1, fashionIcon);
-            if ((!OperatorDef.dynaLoadStaticStands && OperatorDef.commonStand != null) || (OperatorDef.dynaLoadStaticStands && OperatorDef.staticStands.ContainsKey(0)))
+            if ((!OperatorDef.dynaLoadStaticStands && OperatorDef.commonStand != null) || (OperatorDef.dynaLoadStaticStands && OperatorDef.staticStands.ContainsKey(OperatorStandType.Elite0)))
             {
                 fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
                 {

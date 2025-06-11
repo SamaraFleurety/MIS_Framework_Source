@@ -13,8 +13,8 @@ namespace AKBG_MainmenuBackground.HarmonyPatchs
     [HarmonyPatch(typeof(MainMenuDrawer), "Init")]
     public class Patch_MainMenuBG
     {
-        private static long CurrentTime => AK_DLL.RealTime.CurrentTimeTick;
-        private static long RefreshInterval => AK_DLL.RealTime.second * AKBG_ModSettings.randomMainmenuBGInterval;
+        private static long CurrentTime => AK_DLL.RealTimeDirect.CurrentTimeTick;
+        private static long RefreshInterval => AK_DLL.RealTimeDirect.second * AKBG_ModSettings.randomMainmenuBGInterval;
         private static long lastTime = 0;
         [HarmonyPostfix]
         public static void fix()

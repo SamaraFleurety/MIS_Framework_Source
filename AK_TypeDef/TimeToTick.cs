@@ -28,7 +28,7 @@ namespace AK_DLL
 
     //现实中的系统时间
     //这里面的tick不再是环世界的tick，而是指windows的tick。1tick=0.1纳秒
-    public static class RealTime
+    public static class RealTimeDirect
     {
         public static long CurrentTimeTick => DateTime.Now.Ticks;
 

@@ -1,10 +1,13 @@
-﻿using RimWorld;
-using System;
+﻿using System;
+using Verse;
 
 namespace AKA_Ability.CastConditioner
 {
     public abstract class CastConditioner_Base
     {
+        //翻译引用
+        [TranslationHandle]
+        public string refField = "CastConditioner";
         //想了想觉得还是有参数
         public string failReason = "AKA_Disabled";
 

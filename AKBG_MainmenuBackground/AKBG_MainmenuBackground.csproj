@@ -65,6 +65,8 @@
   <ItemGroup>
     <Compile Include="BackgroundDef.cs" />
     <Compile Include="AKBG_ModSettings.cs" />
+    <Compile Include="DataStructure\ContentPack_SingleMod.cs" />
+    <Compile Include="DataStructure\ContentPack_SingleTexture.cs" />
     <Compile Include="Patchs\Patch_LoadingBG.cs" />
     <Compile Include="Patchs\Patch_MainMenuBG.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

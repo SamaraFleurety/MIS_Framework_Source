@@ -12,116 +12,9 @@ namespace AKBG_MainmenuBackground
 {
     public class BackgroundMod_Tableview_Setting : IExposable
     {
-        public class ModContentPack_BG  //写到这玩意存读档
-        {
-            string modid;
+        
 
-            Dictionary<string, TexturePathProperties> allBGs = new();
-            //为可调顺序播放做的优化
-            TexturePathProperties firstBG = null;
-            TexturePathProperties lastBG = null;
-
-            public ModContentPack_BG(string modid)
-            {
-                this.modid = modid;
-            }
-
-            public bool BGIDExist(string BGUniqueID)
-            {
-                return allBGs.ContainsKey(BGUniqueID);
-            }
-            public void InsertAtTail(TexturePathProperties prop)
-            {
-                if (BGIDExist(prop.GetUniqueLoadID())) return;
-
-                allBGs.Add(prop.GetUniqueLoadID(), prop);
-                if (firstBG == null)  //显然不可能first和last仅其一是null
-                {
-                    firstBG = lastBG = prop;
-                    return;
-                }
-                else
-                {
-                    var lastNode_Old = lastBG;
-                    lastBG.next = prop;
-                    prop.prev = lastNode_Old;
-                }
-            }
-
-            public void RemoveNode(string id)
-            {
-                if (!BGIDExist(id)) return;
-
-                TexturePathProperties nodeToRemove = allBGs[id];
-
-                //仅有这一个
-                if (firstBG == lastBG && firstBG == nodeToRemove)
-                {
-                    firstBG = lastBG = null;
-                }
-                else if (firstBG == nodeToRemove) //这是第一个
-                {
-                    var next = nodeToRemove.next;
-                    firstBG = next;
-                    next.prev = null;
-                }
-                else if (lastBG == nodeToRemove) //芝士最后一个
-                {
-                    var prev = nodeToRemove.prev;
-                    lastBG = prev;
-                    prev.next = null; 
-                }
-                else  //两面包夹芝士
-                {
-                    var next = nodeToRemove.next;
-                    var prev = nodeToRemove.prev;
-                    prev.next = next;
-                    next.prev = prev;
-                }
-                allBGs.Remove(id);
-            }
-
-            public void SwapNode(TexturePathProperties nodeA, TexturePathProperties nodeB)
-            {
-                TexturePathProperties temp;
-                temp = nodeA.prev;
-                nodeA.prev = nodeB.prev;
-                nodeB.prev = temp;
-
-                temp = nodeB.next;
-                nodeB.next = nodeA.next;
-                nodeA.next = temp;
-            }
-        }
-
-        public class TexturePathProperties : IExposable, ILoadReferenceable
-        {
-            string modid;
-
-            string path;  //也是id 同mod肯定唯一
-            bool enabled = true;
-            int weight = 1;
-
-            //伪链表实现
-            public TexturePathProperties prev = null;
-            public TexturePathProperties next = null;
-
-            public void ExposeData()
-            {
-                Scribe_Values.Look(ref modid, "modid");
-                Scribe_Values.Look(ref path, "path");
-                Scribe_Values.Look(ref enabled, "enabled", true);
-                Scribe_Values.Look(ref weight, "weight", 1);
-
-                Scribe_References.Look(ref prev, "prev");
-                Scribe_References.Look(ref next, "next");
-            }
-
-            public string GetUniqueLoadID()
-            {
-                return modid + path;
-            }
-        }
+        
 
         #region 字段
         [DefaultValue(false)]
@@ -147,10 +40,8 @@ namespace AKBG_MainmenuBackground
         public RedBlackTree<string, RedBlackTree<string, TexturePathProperties>> enabledBGs = new();
 
         #region 保存
-        //不是常见的存读档流程。如果不熟悉此机制勿改。
-        List<TexturePathProperties> allBGListForSave = new();
 
-        void ExposeData_PreSave()
+        /*void ExposeData_PreSave()
         {
             allBGListForSave = new();
             foreach (var modid in allPossibleBGs.Keys)
@@ -164,7 +55,7 @@ namespace AKBG_MainmenuBackground
 
         void ExposeData_PostLoad()
         {
-        }
+        }*/
         public void ExposeData()
         {
             if (Scribe.mode == LoadSaveMode.Saving) ExposeData_PreSave();

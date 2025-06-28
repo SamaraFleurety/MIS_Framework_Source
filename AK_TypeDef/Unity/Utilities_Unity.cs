@@ -150,7 +150,7 @@ namespace AK_DLL
             return iconSprite;
         }
 
-        public static Sprite Image2Spirit(Texture2D image)
+        public static Sprite Image2Spirit(this Texture2D image)
         {
             Sprite sprite = Sprite.Create(image, new Rect(0, 0, image.width, image.height), new Vector2(0.5f, 0.5f));
             return sprite;

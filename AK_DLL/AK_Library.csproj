@@ -53,9 +53,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Rely\AlienRace.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp, Version=1.5.8838.19357, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Assembly-CSharp, Version=1.6.9293.12164, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Rely\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\Rely\1.6\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="com.rlabrecque.steamworks.net, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

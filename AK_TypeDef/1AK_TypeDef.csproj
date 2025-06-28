@@ -39,7 +39,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\Rely\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\Rely\1.6\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />

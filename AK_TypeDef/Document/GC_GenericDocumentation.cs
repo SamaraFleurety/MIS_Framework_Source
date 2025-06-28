@@ -38,7 +38,7 @@ namespace AK_DLL.Document
                 val = new();
                 foreach (Thing t in WeakTableKeys)
                 {
-                    if (t == null) continue;
+                    if (t == null || t.Discarded) continue;
                     key.Add(t);
                     documents.TryGetValue(t, out DocumentTracker value);
                     val.Add(value);

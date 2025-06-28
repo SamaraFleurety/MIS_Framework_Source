@@ -23,7 +23,7 @@ namespace AK_SpineExtention
         }
     }
 
-    public class CM_L2DCarousel : AnimationControllerBase<ISkeletonComponent, IAnimationStateComponent>
+    public class CM_L2DCarousel : ControllerBase<SkeletonGraphic>
     {
         #region Inspector
         private CMP_L2DCarousel Props => props as CMP_L2DCarousel;
@@ -38,13 +38,13 @@ namespace AK_SpineExtention
         #endregion
         private int completeTimes = 0;
         private int ClickCounter = 0;
-        
+
         protected override void OnEnable()
         {
             ResetAllParams();
-            if (animationStateInt == null || props == null) return;
+            if (SkeletonInstanceInt == null || props == null) return;
 
-            TrackEntry track0 = animationStateInt.AnimationState.SetAnimation(0, Idle, false);
+            TrackEntry track0 = SkeletonInstanceInt.AnimationState.SetAnimation(0, Idle, false);
             track0.Complete += CompleteTimeCounter;
             track0.Complete += CompleteEventHandler;
             //skeletonAnimation.AnimationState.Complete += CompleteEventHandler; //这BYD会连续调用2次
@@ -77,7 +77,7 @@ namespace AK_SpineExtention
         {
             if (PlaySpecial && IdleInterval != 0 && completeTimes == IdleInterval)
             {
-                TrackEntry track1 = animationStateInt.AnimationState.AddAnimation(0, Special, false, 0f);
+                TrackEntry track1 = SkeletonInstanceInt.AnimationState.AddAnimation(0, Special, false, 0f);
                 track1.Complete += CompleteTimeCounter;
                 track1.Complete += CompleteEventHandler;
                 return;
@@ -87,25 +87,25 @@ namespace AK_SpineExtention
                 TrackEntry track1;
                 if (PlayInteract)
                 {
-                    track1 = animationStateInt.AnimationState.AddAnimation(0, Interact, false, 0f);
+                    track1 = SkeletonInstanceInt.AnimationState.AddAnimation(0, Interact, false, 0f);
                 }
                 else
                 {
-                    track1 = animationStateInt.AnimationState.AddAnimation(0, Special, false, 0f);
+                    track1 = SkeletonInstanceInt.AnimationState.AddAnimation(0, Special, false, 0f);
                 }
                 track1.Complete += ResetCompleteTime;
                 track1.Complete += CompleteEventHandler;
                 return;
             }
-            TrackEntry track2 = animationStateInt.AnimationState.AddAnimation(0, Idle, false, 0f);
+            TrackEntry track2 = SkeletonInstanceInt.AnimationState.AddAnimation(0, Idle, false, 0f);
             track2.Complete += CompleteTimeCounter;
             track2.Complete += CompleteEventHandler;
         }
 
         private void TryDoInteract()
         {
-            if (animationStateInt?.AnimationState.GetCurrent(0).Animation.Name == "Interact") return;
-            TrackEntry track3 = animationStateInt.AnimationState.SetAnimation(0, Interact, false);
+            if (SkeletonInstanceInt?.AnimationState.GetCurrent(0).Animation.Name == "Interact") return;
+            TrackEntry track3 = SkeletonInstanceInt.AnimationState.SetAnimation(0, Interact, false);
             //track3.Start += delegate { };
             track3.Complete += CompleteTimeCounter;
             track3.Complete += CompleteEventHandler;

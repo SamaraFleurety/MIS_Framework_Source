@@ -38,13 +38,13 @@ namespace AK_DLL.Document
                 val = new();
                 foreach (Thing t in WeakTableKeys)
                 {
-                    if (t.DestroyedOrNull()) continue;
+                    if (t == null || t.Discarded) continue;
                     key.Add(t);
                     documents.TryGetValue(t, out DocumentTracker value);
                     val.Add(value);
                 }
             }
-            Scribe_Collections.Look(ref key, "weakTableKey", LookMode.Reference);
+            Scribe_Collections.Look(ref key, "weakTableKey", saveDestroyedThings: true, LookMode.Reference);
             Scribe_Collections.Look(ref val, "weakTableVal", LookMode.Deep);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {

@@ -9,7 +9,7 @@ namespace AK_DLL.HarmonyPatchs
     {
         [HarmonyPatch("OffsetFor")]
         [HarmonyPostfix]
-        public static void postfix_offset(ref Vector3 __result, PawnRenderNode n, PawnDrawParms parms)
+        public static void Postfix_offset(ref Vector3 __result, PawnRenderNode n, PawnDrawParms parms)
         {
             Ext_ExtraGraphicData ext = n.apparel.def.GetModExtension<Ext_ExtraGraphicData>();
             if (ext != null)
@@ -23,7 +23,7 @@ namespace AK_DLL.HarmonyPatchs
 
         [HarmonyPatch("ScaleFor")]
         [HarmonyPostfix]
-        public static void postfix_scale(ref Vector3 __result, PawnRenderNode n, PawnDrawParms parms)
+        public static void Postfix_scale(ref Vector3 __result, PawnRenderNode n, PawnDrawParms parms)
         {
             Ext_ExtraGraphicData ext = n.apparel.def.GetModExtension<Ext_ExtraGraphicData>();
             if (ext != null)

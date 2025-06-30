@@ -9,11 +9,22 @@ namespace AKA_Ability.Cooldown
     {
         SD_SharedCharge SharedChargeData => parent.container.TryGetSharedData<SD_SharedCharge>();
 
-        public override int SP { get => SharedChargeData.cooldown.SP; set => SharedChargeData.cooldown.SP = value; }
-        public override int Charge { get => SharedChargeData.cooldown.Charge ; set => SharedChargeData.cooldown.Charge = value; }
-        public override int MaxCharge => SharedChargeData.cooldown.MaxCharge;
-        public CD_TrackerShared(CooldownProperty property, AKAbility_Base ability) : base(property, ability)
+        public override int SP
         {
+            get => SharedChargeData.cooldown.SP; 
+            set
+            {
+                SharedChargeData.cooldown.SP = value;
+            }
+        }
+        public override int Charge { get => SharedChargeData.cooldown.Charge; set => SharedChargeData.cooldown.Charge = value; }
+        public override int MaxCharge => SharedChargeData.cooldown.MaxCharge;
+        public CD_TrackerShared(CooldownProperty property, AKAbility_Base ability) : base()
+        {
+            parent = ability;
+            prop = property;
+            charge = 0;
+            Tick(0);
         }
 
         public override void Tick(int amt)
@@ -23,7 +34,7 @@ namespace AKA_Ability.Cooldown
 
         public override void ExposeData()
         {
-            BackCompatibility.PostExposeData(this);
+            //BackCompatibility.PostExposeData(this);
         }
     }
 }

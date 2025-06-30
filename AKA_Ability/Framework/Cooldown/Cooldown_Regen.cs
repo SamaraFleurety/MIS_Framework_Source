@@ -52,6 +52,10 @@ namespace AKA_Ability.Cooldown
         public virtual int MaxSP => prop.SPPerCharge * (int)prop.SPUnit;
         public virtual bool NeedsReload => Charge != MaxCharge;
 
+        //仅用于给子类继承，直接用这个new会报错
+        public Cooldown_Regen()
+        {
+        }
         public Cooldown_Regen(CooldownProperty property, AKAbility_Base ability)
         {
             parent = ability;

@@ -21,6 +21,7 @@ namespace PA_AKPatch
             Scribe_Values.Look(ref disable_FacialAnimation_NoFace, "disable_FacialAnimation_NoFace", defaultValue: false);
         }
     }
+
     public class AKC_ModConfig : Mod
     {
         public static AKC_ModSettings settings;

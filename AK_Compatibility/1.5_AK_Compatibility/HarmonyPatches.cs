@@ -126,6 +126,7 @@ namespace PA_AKPatch
             if (OperatorDef.currentlyGenerating) OperatorDef.currentlyGenerating = false;
         }
     }
+
     //种族修复
     [HarmonyPatch(typeof(PawnGenerator), "GeneratePawn", new Type[] { typeof(PawnGenerationRequest) })]
     public class Patch_GeneratePawn 

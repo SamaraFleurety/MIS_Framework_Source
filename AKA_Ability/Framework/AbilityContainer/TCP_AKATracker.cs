@@ -52,6 +52,7 @@ namespace AKA_Ability
             {
                 if (Wearer != null) return Wearer;
                 else if (parent is Pawn p) return p;
+                else if (WeaponOwner != null) return WeaponOwner;
                 else return null;
             }
         }

@@ -74,15 +74,18 @@ namespace AK_DLL
         Static = 0,
         Live2D
     }
-    public enum SkinType : Byte
+    public enum SkinType : int
     {
-        Vanilla = 0,
-        EliteII,
-        SkinI,  //也可能是Elite I
+        HeadPortrait = -1,
+        Vanilla = 1,
+        EliteII = 0,
+        SkinI = 2,  //也可能是Elite I
         SkinII,
         SkinIII,
         SkinIV,
-        SkinV
+        SkinV,
+        LIVE_2D_START = 1000, //Live2D模型的起始编号，静态皮肤不可大于等于此数字
+        SPINE_2D_START = 2000, //Spine模型的起始编号，l2d皮肤不可大于等于此数字
     }
 
     public enum RIWindowType : Byte

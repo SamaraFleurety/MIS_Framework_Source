@@ -83,10 +83,10 @@ namespace AKE_OperatorExtension
             cachedWornGraphicPath = ext.WornGraphicPathByHPRatio(HPRatio, out int index);
 
             //hp不同但是使用的图相同也没必要刷新
-            if (index != lastIndex && Map != null)
+            if (index != lastIndex)
             {
                 lastIndex = index;
-                DirtyMapMesh(Map);
+                Notify_ColorChanged();
             }
         }
 

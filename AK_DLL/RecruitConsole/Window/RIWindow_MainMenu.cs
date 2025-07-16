@@ -405,32 +405,32 @@ namespace AK_DLL.UI
                 if (allOpDefs.NullOrEmpty()) return;
                 AK_ModSettings.secretary = allOpDefs.RandomElement().defName;
                 AK_ModSettings.secretarySkin = (int)SkinType.EliteII;
-                Log.Message($"[MIS] setting secretary as {SecretaryDef}");
+                Log.Message($"[MIS] setting secretary as {SecretaryDef}, {(int)SkinType.EliteII}");
                 AK_Mod.settings.Write();
             }
 
 
             int preferredSkin = AK_ModSettings.secretarySkin;
-            if (preferredSkin >= 2000 && ModLister.GetActiveModWithIdentifier("Paluto22.SpriteEvo") == null) //之前是spine，但现在不可能
+            if (preferredSkin >= (int)SkinType.SPINE_2D_START && ModLister.GetActiveModWithIdentifier("Paluto22.SpriteEvo") == null) //之前是spine，但现在不可能
             {
-                AK_ModSettings.secretarySkin = 1;
-                preferredSkin = 1;
+                AK_ModSettings.secretarySkin = (int)SkinType.EliteII;
+                preferredSkin = (int)SkinType.EliteII;
                 AK_Mod.settings.Write();
             }
-            else if (preferredSkin >= 1000 && ModLister.GetActiveModWithIdentifier("FS.LivelyRim") == null) //现在不能播l2d
+            else if (preferredSkin >= (int)SkinType.LIVE_2D_START && ModLister.GetActiveModWithIdentifier("FS.LivelyRim") == null) //现在不能播l2d
             {
-                AK_ModSettings.secretarySkin = 1;
-                preferredSkin = 1;
+                AK_ModSettings.secretarySkin = (int)SkinType.EliteII;
+                preferredSkin = (int)SkinType.EliteII;
                 AK_Mod.settings.Write();
             }
 
-            if (preferredSkin < 1000)
+            if (preferredSkin < (int)SkinType.LIVE_2D_START)  //<1000属于静态立绘
             {
                 OpStand.SetActive(true);
                 GameObject opStandObj = GameObject.Find("OpStand");
                 AK_Tool.DrawStaticOperatorStand(SecretaryDef, preferredSkin, opStandObj, SecretaryLoc);
             }
-            else if (preferredSkin < 2000)
+            else if (preferredSkin < (int)SkinType.SPINE_2D_START) //1000-1999是l2d
             {
                 OpL2D.SetActive(true);
                 //L2DInstance =  AK_Tool.DrawLive2DOperatorStand(SecretaryDef, preferredSkin, OpL2D);
@@ -438,7 +438,7 @@ namespace AK_DLL.UI
                 L2DInstance = DrawLive2DModel(/*SecretaryDef, */3/*DisplayModelAt.RIWMain*/, SecretaryDef.live2dModel[preferredSkin - 1000], OpL2D);
                 L2DInstance.transform.position = SecretaryLoc;
             }
-            else
+            else  //2000~ spine
             {
                 OpL2D.SetActive(true);
                 

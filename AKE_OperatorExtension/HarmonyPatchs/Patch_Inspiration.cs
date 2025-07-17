@@ -9,15 +9,17 @@ namespace AKE_OperatorExtension.HarmonyPatchs
     [HarmonyPatch("AppendThoughts_ForHumanlike")]
     public static class PawnDiedOrDownedThoughtsUtility_AppendThoughts_ForHumanlike_Patch  //在战斗中击杀敌人后，50%概率会产生一个灵感
     {
-        private static void Postfix(Pawn victim, DamageInfo? dinfo, PawnDiedOrDownedThoughtsKind thoughtsKind, List<IndividualThoughtToAdd> outIndividualThoughts, List<ThoughtToAddToAll> outAllColonistsThoughts)
+        [HarmonyPostfix]
+        public static void Postfix(Pawn victim, DamageInfo? dinfo, PawnDiedOrDownedThoughtsKind thoughtsKind, List<IndividualThoughtToAdd> outIndividualThoughts, List<ThoughtToAddToAll> outAllColonistsThoughts)
         {
-            if (dinfo == null || !dinfo.HasValue || dinfo.Value.Instigator == null)
+            if (dinfo == null || !dinfo.HasValue || dinfo.Value.Instigator is not Pawn pawn)
             {
                 return;
             }
-            Pawn pawn = (Pawn)dinfo.Value.Instigator;
-            if (pawn == null) { return; }
-            if (pawn.story?.traits?.HasTrait(TraitDef.Named("AK_Trait_SpecterUnchainedSecond")) == true)
+            //Pawn pawn = (Pawn)dinfo.Value.Instigator;
+            //if (pawn == null) { return; }
+            TraitSet set = pawn.story?.traits;
+            if (set != null && set.HasTrait(TraitDef.Named("AK_Trait_SpecterUnchainedSecond")) == true)
             {
                 float inspirationChance = 0.5f;
                 if (Rand.Chance(inspirationChance))

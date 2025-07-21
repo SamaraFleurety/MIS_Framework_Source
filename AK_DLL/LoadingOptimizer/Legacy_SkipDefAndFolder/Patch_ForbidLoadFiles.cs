@@ -1,12 +1,4 @@
-﻿using HarmonyLib;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Reflection.Emit;
-using Verse;
-
-namespace AK_DLL.HarmonyPatchs
+﻿namespace AK_DLL.HarmonyPatchs
 {
     /*
     //按路径，跳过部分资产文件夹的加载

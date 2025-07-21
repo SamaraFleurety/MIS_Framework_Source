@@ -48,7 +48,7 @@ namespace FS_LivelyRim
                 FS_Utilities.ChangeDefaultModel(def);
             }
 
-            moved = false; 
+            moved = false;
             //仅在开始时绘制一次模型
             GameObject ins = FS_Utilities.DrawModel(DisplayModelAt.MerchantRight, FS_Tool.defaultModelDef);
 

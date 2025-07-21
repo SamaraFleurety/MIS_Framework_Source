@@ -1,4 +1,6 @@
-﻿namespace AKA_Ability.CastConditioner
+﻿using System;
+
+namespace AKA_Ability.CastConditioner
 {
     public class CC_HPThreshold : CastConditioner_Base
     {
@@ -10,6 +12,7 @@
             failReason = "AKA_HPThreshold";
         }
 
+        [Obsolete]
         public override bool Castable(AKAbility_Base instance)
         {
             float pawnHPRatio = instance.CasterPawn.health?.summaryHealth?.SummaryHealthPercent ?? 0;

@@ -12,7 +12,7 @@ namespace AKA_Ability
             if (caster.CasterPawn == null) return false;
 
             Pawn targetPawn = target.Pawn;
-            if (targetPawn == null|| !targetPawn.RaceProps.Humanlike)
+            if (targetPawn == null || !targetPawn.RaceProps.Humanlike)
             {
                 return false;
             }

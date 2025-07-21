@@ -1,12 +1,12 @@
-﻿using HarmonyLib;
+﻿using AK_DLL;
+using HarmonyLib;
 using RimWorld;
 using System;
-using Verse;
-using System.Reflection;
-using AK_DLL;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
+using System.Reflection;
+using UnityEngine;
+using Verse;
 
 namespace PA_AKPatch
 {
@@ -129,7 +129,7 @@ namespace PA_AKPatch
 
     //种族修复
     [HarmonyPatch(typeof(PawnGenerator), "GeneratePawn", new Type[] { typeof(PawnGenerationRequest) })]
-    public class Patch_GeneratePawn 
+    public class Patch_GeneratePawn
     {
         [HarmonyPrefix]
         public static void NewGeneratePawn_Prefix(ref PawnGenerationRequest request)

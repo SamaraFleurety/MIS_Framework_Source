@@ -11,7 +11,7 @@ namespace AK_DLL.Document
 
         List<string> saveTempKey = new();
         List<DocumentBase> saveTempVal = new();
-        
+
         public void ExposeData()
         {
             Scribe_References.Look(ref parent, "parent");

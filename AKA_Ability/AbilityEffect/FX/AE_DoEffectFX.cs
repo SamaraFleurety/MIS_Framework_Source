@@ -66,7 +66,7 @@ namespace AKA_Ability.AbilityEffect
 
         protected virtual void DoVisualEffectCenter(IntVec3 position, Map map, float radius, bool doSmoke = false)
         {
-            if (doSmoke) 
+            if (doSmoke)
             {
                 for (int i = 0; i < 4; i++)
                 {

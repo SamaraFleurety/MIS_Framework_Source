@@ -9,7 +9,7 @@ namespace AKA_Ability.Gizmos
         private AKAbility_Targetor Parent => parent as AKAbility_Targetor;
         public override void ProcessInput(Event ev)
         {
-            base.ProcessInput(ev); 
+            base.ProcessInput(ev);
             Find.DesignatorManager.Deselect();
             //Find.Targeter.BeginTargeting(parent.def.targetParams, parent.TryCastShot, parent.CasterPawn, actionWhenFinished: null);
             Find.Targeter.BeginTargeting(Parent);

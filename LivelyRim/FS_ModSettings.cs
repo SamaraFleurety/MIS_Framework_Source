@@ -63,7 +63,7 @@ namespace FS_LivelyRim
             if (listingStandard.ButtonTextLabeled("selectl2ddef".Translate(), selectedLiveDef.label))
             {
                 List<FloatMenuOption> list = new List<FloatMenuOption>();
-                foreach(LiveModelDef i in allDefs)
+                foreach (LiveModelDef i in allDefs)
                 {
                     LiveModelDef local = i;
                     list.Add(new FloatMenuOption(i.label.Translate(), delegate ()

@@ -1,13 +1,7 @@
 ﻿using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
-using AK_TypeDef;
 
 namespace AK_DLL.DynamicLoading
 {
@@ -42,7 +36,7 @@ namespace AK_DLL.DynamicLoading
                 cutout = ShaderTypeDefOf.Cutout;
             }
             Shader shader = cutout.Shader;
-            Texture2D textureDynamicLoading = Utilities_Unity.LoadResourceIO<Texture2D>(Utilities_Unity.DynaLoad_PathRelativeToFull<Texture2D>(texPath,modID));
+            Texture2D textureDynamicLoading = Utilities_Unity.LoadResourceIO<Texture2D>(Utilities_Unity.DynaLoad_PathRelativeToFull<Texture2D>(texPath, modID));
             CachedGraphic = GraphicDatabase.Get(graphicClass, textureDynamicLoading, shader, drawSize, color, colorTwo, this, shaderParameters, maskPath);
             if (onGroundRandomRotateAngle > 0.01f)
             {

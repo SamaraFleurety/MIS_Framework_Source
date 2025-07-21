@@ -21,7 +21,7 @@ namespace AKA_Ability.AbilityEffect
                 return false;
             }
 
-            HashSet<IntVec3> cellInRange = GenericUtilities.TradeableCellsAround(target.Cell, caster.CasterPawn.Map, radius).ToHashSet();  
+            HashSet<IntVec3> cellInRange = GenericUtilities.TradeableCellsAround(target.Cell, caster.CasterPawn.Map, radius).ToHashSet();
             if (cellInRange.Count < count) count = cellInRange.Count;
 
             for (int i = 0; i < count; ++i)
@@ -33,7 +33,7 @@ namespace AKA_Ability.AbilityEffect
                 Thing summoned = GenerateSummoned(casterReal);
                 GenSpawn.Spawn(summoned, cell, caster.CasterPawn.Map);
 
-                cellInRange.Remove(cell); 
+                cellInRange.Remove(cell);
 
                 if (!recordCreature) continue;
 

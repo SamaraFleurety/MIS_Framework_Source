@@ -1,10 +1,4 @@
-﻿using RimWorld.Utility;
-using System;
-using UnityEngine;
-using Verse;
-using Verse.Sound;
-
-namespace AKA_Ability
+﻿namespace AKA_Ability
 {
     //填个AKAbilityDef获取充能状态
     /*public class AbilityReloadProperty

@@ -1,4 +1,6 @@
-﻿namespace AKA_Ability.CastConditioner
+﻿using System;
+
+namespace AKA_Ability.CastConditioner
 {
     public class CC_NeedCharge : CastConditioner_Base
     {
@@ -9,6 +11,7 @@
             failReason = "AKA_ChargeIsZero";
         }
 
+        [Obsolete]
         public override bool Castable(AKAbility_Base instance)
         {
             return instance.cooldown.Charge >= chargeRequire;

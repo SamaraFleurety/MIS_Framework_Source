@@ -4,7 +4,7 @@ namespace AKA_Ability.AbilityEffect
 {
     public class AE_ShootProjectile : AbilityEffectBase
     {
-        ThingDef projectile;
+        ThingDef projectile = null;
 
         protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {

@@ -16,7 +16,7 @@ namespace AKM_MusicPlayer
     {
         public override IEnumerable<FloatMenuOption> CompFloatMenuOptions(Pawn selPawn)
         {
-            foreach(ArkSongDef i in GC_MusicMuseum.enabledSongs)
+            foreach (ArkSongDef i in GC_MusicMuseum.enabledSongs)
             {
                 ArkSongDef j = i;
                 yield return new FloatMenuOption($"{"playsong".Translate()}: {j.label.Translate()}", j.PlayMe);

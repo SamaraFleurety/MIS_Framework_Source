@@ -1,5 +1,4 @@
-﻿using Verse;
-using Verse.Sound;
+﻿using Verse.Sound;
 
 namespace AK_DLL.DynaLoad
 {

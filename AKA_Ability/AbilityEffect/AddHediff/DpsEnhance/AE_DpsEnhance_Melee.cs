@@ -33,7 +33,7 @@ namespace AKA_Ability
 
         protected override void postAddHediff(Hediff h)
         {
-            HC_DpsEnhance_Melee comp = (h as HediffWithComps).TryGetComp<HC_DpsEnhance_Melee>(); 
+            HC_DpsEnhance_Melee comp = (h as HediffWithComps).TryGetComp<HC_DpsEnhance_Melee>();
             if (comp == null)
             {
                 Log.Error("因为未知原因," + h.pawn.Name + "身上的近战增伤hediff组件错误");

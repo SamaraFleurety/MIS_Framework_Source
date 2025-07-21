@@ -62,9 +62,9 @@ namespace AKM_MusicPlayer
         {
             List<Building> candidate = Map.listerBuildings.allBuildingsColonist;
 
-            foreach(Building i in candidate)
+            foreach (Building i in candidate)
             {
-                if (i.GetComp<TC_MusicPlayer>() != null && ReservationUtility.CanReserveAndReach(p, i, PathEndMode.InteractionCell, Danger.Deadly)) return i; 
+                if (i.GetComp<TC_MusicPlayer>() != null && ReservationUtility.CanReserveAndReach(p, i, PathEndMode.InteractionCell, Danger.Deadly)) return i;
             }
 
             return null;

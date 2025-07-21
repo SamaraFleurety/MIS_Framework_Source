@@ -203,7 +203,7 @@ namespace LMA_Lib.UGUI
 
         protected override void DrawFashionBtn()
         {
-            fashionPanel = GameObject.Find("FashionPanel").transform; 
+            fashionPanel = GameObject.Find("FashionPanel").transform;
             //GameObject fashionIconPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("FashionIcon");
             GameObject fashionIcon;
             Vector3 v3;

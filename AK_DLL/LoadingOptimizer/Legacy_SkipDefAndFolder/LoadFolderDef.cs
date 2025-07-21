@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Verse;
-
-namespace AK_DLL
+﻿namespace AK_DLL
 {
     /*public class LoadFolderDef : Def
     {

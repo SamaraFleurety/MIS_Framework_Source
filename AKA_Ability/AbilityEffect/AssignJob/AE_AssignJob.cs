@@ -26,7 +26,7 @@ namespace AKA_Ability.AbilityEffect
             {
                 return false;
             }
-            if(!invertTargetIndex) assignedPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(assignedJob, caster.CasterPawn, target));
+            if (!invertTargetIndex) assignedPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(assignedJob, caster.CasterPawn, target));
             else assignedPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(assignedJob, target, caster.CasterPawn));
             return base.DoEffect(caster, target);
         }

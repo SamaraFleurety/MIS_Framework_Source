@@ -55,7 +55,7 @@ namespace AK_DLL
             if (this.selectSounds.Count == 0) this.selectSounds.Add(DefDatabase<SoundDef>.GetNamed("AK_Voice_Select_Default"));
         }
 
-        private void AutoFillDraftSounds (string prefix, string operatorName)
+        private void AutoFillDraftSounds(string prefix, string operatorName)
         {
             string defNameBase = AK_Tool.GetThingdefNameFrom(operatorName, prefix, "Voice_Draft");
             SoundDef temp = DefDatabase<SoundDef>.GetNamedSilentFail(defNameBase);
@@ -94,7 +94,7 @@ namespace AK_DLL
             if (this.recruitSound == null) this.recruitSound = DefDatabase<SoundDef>.GetNamed("AK_Voice_Recruit_Default");
         }
 
-        private void AutoFillDiedSound   (string prefix, string operatorName)
+        private void AutoFillDiedSound(string prefix, string operatorName)
         {
             if (this.diedSound != null) return;
             this.diedSound = DefDatabase<SoundDef>.GetNamedSilentFail(AK_Tool.GetThingdefNameFrom(operatorName, prefix, "Voice_Die"));

@@ -1,7 +1,7 @@
 ﻿namespace AKA_Ability
 {
     public static class AKA_Algorithm
-    {        
+    {
         //模式1是精确搜索，2是找第一个更大值，3是找第一个更小值
         public static int quickSearch(int[] arr, int leftPtr, int rightPtr, int target, int mode)
         {

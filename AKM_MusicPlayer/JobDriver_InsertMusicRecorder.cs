@@ -39,13 +39,13 @@ namespace AKM_MusicPlayer
             yield return Toils_Goto.GotoThing(indexRecord, PathEndMode.Touch).FailOnDespawnedNullOrForbidden(indexRecord).FailOnSomeonePhysicallyInteracting(indexRecord);
 
             //拿起来
-            yield return Toils_Haul.StartCarryThing(indexRecord,false, true).FailOnDestroyedNullOrForbidden(indexRecord); 
+            yield return Toils_Haul.StartCarryThing(indexRecord, false, true).FailOnDestroyedNullOrForbidden(indexRecord);
 
             yield return Toils_Goto.GotoThing(indexPlayer, PathEndMode.InteractionCell);
 
             Toil toilWait = Toils_General.Wait(100);
             toilWait.WithProgressBarToilDelay(indexPlayer);
-            toilWait.FailOnCannotTouch(indexPlayer,PathEndMode.Touch);
+            toilWait.FailOnCannotTouch(indexPlayer, PathEndMode.Touch);
             yield return toilWait;
 
             Toil insertRecordIntoPlayer = ToilMaker.MakeToil();

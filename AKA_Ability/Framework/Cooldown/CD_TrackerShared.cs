@@ -1,5 +1,4 @@
 ﻿using AKA_Ability.SharedData;
-using Verse;
 
 namespace AKA_Ability.Cooldown
 {
@@ -11,7 +10,7 @@ namespace AKA_Ability.Cooldown
 
         public override int SP
         {
-            get => SharedChargeData.cooldown.SP; 
+            get => SharedChargeData.cooldown.SP;
             set
             {
                 SharedChargeData.cooldown.SP = value;

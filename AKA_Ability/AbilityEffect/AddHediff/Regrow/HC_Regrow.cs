@@ -105,7 +105,7 @@ namespace AKA_Ability
                 }
             }
         }
-        
+
         private void HealRandomInjury(Pawn pawn, float points)
         {
             for (int i = 0; i < pawn.health.hediffSet.hediffs.Count; ++i)

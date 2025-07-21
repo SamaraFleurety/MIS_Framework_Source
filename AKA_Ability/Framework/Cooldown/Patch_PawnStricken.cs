@@ -14,7 +14,7 @@ namespace AKA_Ability.HarmonyPatchs
             {
                 foreach (AKAbility_Base a in AKA_Utilities.pawn_NotifyStricken[__instance])
                 {
-                    a.Notify_OwnerStricken(ref  dinfo);
+                    a.Notify_OwnerStricken(ref dinfo);
                 }
             }
         }

@@ -373,7 +373,7 @@ namespace AK_DLL.UI
             {
                 TextMeshProUGUI TMP = opClassIcon.GetComponentInChildren<TextMeshProUGUI>();
                 TMP.gameObject.SetActive(true);
-                TMP.text = OperatorDef.operatorType.label.Translate(); 
+                TMP.text = OperatorDef.operatorType.label.Translate();
             }
             else
             {
@@ -585,10 +585,10 @@ namespace AK_DLL.UI
             {
                 case 1:
                     return "\"yellow\"";
-                    //break;
+                //break;
                 case 2:
                     return "\"red\"";
-                    //break;
+                //break;
                 default:
                     return "\"white\"";
                     //break;
@@ -719,7 +719,7 @@ namespace AK_DLL.UI
                         doc.preferedSkin = this.preferredSkin;
                         if (RIWindowHandler.continuousRecruit) //连续招募
                         {
-                            ReturnToParent(closeEV : false);
+                            ReturnToParent(closeEV: false);
                             //RIWindowHandler.OpenRIWindow(AKDefOf.AK_Prefab_yccOpList /*RIWindowType.Op_List*/);
                         }
                     }
@@ -750,7 +750,7 @@ namespace AK_DLL.UI
             }
             else if (windowPurpose == OpDetailType.Fashion)
             {
-                
+
             }
         }
 
@@ -774,7 +774,7 @@ namespace AK_DLL.UI
                 return;
             }
             opAbilityPanel = GameObject.Find("OpAbilityPanel").transform;
-            
+
             opSkills = new List<GameObject>();
             int logicOrder = 0; //在技能组内，实际的顺序
             for (int i = 0; i < skillCnt; ++i)

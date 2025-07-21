@@ -5,7 +5,7 @@ namespace AKA_Ability.AbilityEffect
 {
     public class AE_SpawnMote : AbilityEffectBase
     {
-        ThingDef moteDef;
+        ThingDef moteDef = null;
         protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
             if (caster.CasterPawn == null) return false;

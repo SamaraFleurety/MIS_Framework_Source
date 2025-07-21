@@ -6,7 +6,7 @@ namespace AKA_Ability.AbilityEffect
     //对附近敌人造成伤害并治疗自身
     public class AME_Illustrious_RiseFall : AbilityMassEffectBase
     {
-        DamageDef damageDef;
+        DamageDef damageDef = null;
         const float DAMAGE_HEAL_PER_PAWN = 20;
         protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {

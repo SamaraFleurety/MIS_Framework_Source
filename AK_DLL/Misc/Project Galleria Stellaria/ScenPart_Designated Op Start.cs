@@ -18,7 +18,7 @@ namespace AK_DLL
             Scribe_Values.Look(ref operatorClass, "opClass");
             Scribe_Defs.Look(ref operatorDef, "opDef");
         }
-        
+
         //ui
         public override void DoEditInterface(Listing_ScenEdit listing)
         {
@@ -50,7 +50,7 @@ namespace AK_DLL
             if (Widgets.ButtonText(rect, operatorDef.nickname.Translate()))
             {
                 List<FloatMenuOption> list = new List<FloatMenuOption>();
-                foreach(OperatorDef i in RIWindowHandler.operatorDefs[operatorClass].Values)
+                foreach (OperatorDef i in RIWindowHandler.operatorDefs[operatorClass].Values)
                 {
                     OperatorDef localOp = i;
                     list.Add(new FloatMenuOption(i.nickname.Translate(), delegate ()

@@ -119,7 +119,7 @@ namespace AKA_Ability.Cooldown
         public virtual void PostDespawn() { }
 
         public virtual void Notify_PawnStricken(ref DamageInfo dinfo) { }
-        
+
         public virtual void Notify_PawnHitTarget(ref DamageInfo dinfo) { }
     }
 }

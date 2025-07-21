@@ -21,7 +21,7 @@ namespace AKR_Random
         public override IEnumerable<IWeightedRandomable> Candidates
         {
             get { yield return subDef.root; }
-        }  
+        }
 
         public override IEnumerable<object> TryIssueGachaResult(IntVec3 cell = default, Map map = null, Pawn gambler = null, float point = 0)
         {

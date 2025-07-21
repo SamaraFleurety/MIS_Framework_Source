@@ -1,4 +1,5 @@
-﻿using Verse;
+﻿using System;
+using Verse;
 
 namespace AKA_Ability.CastConditioner
 {
@@ -8,6 +9,8 @@ namespace AKA_Ability.CastConditioner
         {
             this.failReason = "AKA_ExceedSummonLimit";
         }
+
+        [Obsolete]
         public override bool Castable(AKAbility_Base instance)
         {
             AKAbility_Summon ability = instance as AKAbility_Summon;

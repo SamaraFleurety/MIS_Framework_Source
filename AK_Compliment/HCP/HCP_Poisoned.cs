@@ -14,7 +14,7 @@ namespace AK_Compliment
     {
         public override void CompPostTick(ref float severityAdjustment)
         {
-            
+
         }
     }
 

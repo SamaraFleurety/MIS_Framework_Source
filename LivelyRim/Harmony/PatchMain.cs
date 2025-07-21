@@ -13,4 +13,4 @@ namespace FS_LivelyRim
             instance.PatchAll(Assembly.GetExecutingAssembly());
         }
     }
-} 
+}

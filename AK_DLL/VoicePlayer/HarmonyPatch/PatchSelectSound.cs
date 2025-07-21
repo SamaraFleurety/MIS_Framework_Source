@@ -16,7 +16,7 @@ namespace AK_DLL
                 OperatorDocument doc = pawn.GetDoc();
                 if (doc == null) return;
                 if (doc.voicePack == null) return;
-                doc.voicePack.selectSounds.RandomElement().PlaySound(); 
+                doc.voicePack.selectSounds.RandomElement().PlaySound();
             }
         }
     }

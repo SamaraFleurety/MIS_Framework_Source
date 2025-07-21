@@ -8,7 +8,7 @@ namespace LMA_Lib
     public class LMAConfigDef : Def
     {
         private static LMAConfigDef config = null;
-        public static  LMAConfigDef ConfigDef
+        public static LMAConfigDef ConfigDef
         {
             get
             {

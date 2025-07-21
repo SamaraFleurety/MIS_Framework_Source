@@ -8,7 +8,7 @@ namespace AKA_Ability.AbilityEffect
     {
         public string label;
         public string content;
-        LetterDef letterDef;
+        LetterDef letterDef = null;
 
         public override bool DoEffect(AKAbility_Base caster, GlobalTargetInfo globalTargetInfo = default, LocalTargetInfo localTargetInfo = default)
         {

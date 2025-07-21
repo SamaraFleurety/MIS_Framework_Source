@@ -8,7 +8,7 @@ namespace AKA_Ability.AbilityEffect
     public class AE_Illustrious_Dilapidate : AbilityEffectBase
     {
         public DamageDef damageDef;
-        static List<float> damageOnCharge  = new List<float>() { 0, 1, 2, 50, 100, 225, 550 };
+        static List<float> damageOnCharge = new List<float>() { 0, 1, 2, 50, 100, 225, 550 };
 
         public HediffDef hediffDef; //下面两个加攻击力用的 必须是Hediff_DynamicStage
         public float buffDuration = 96; //hour

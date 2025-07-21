@@ -3,7 +3,6 @@ using AKA_Ability.SharedData;
 using AKA_Ability.TickCondition;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Verse;
 
 namespace AKA_Ability
@@ -112,7 +111,7 @@ namespace AKA_Ability
 
             if (Find.World == null || Find.CurrentMap == null || Find.Selector == null || Find.Selector.AnyPawnSelected == false || Find.Selector.SelectedPawns.Count > 1) yield break;
 
-            Command c;
+            //Command c;
             //固有的 不取决于分组的技能会一直显示
             foreach (AKAbility_Base i in innateAbilities)
             {

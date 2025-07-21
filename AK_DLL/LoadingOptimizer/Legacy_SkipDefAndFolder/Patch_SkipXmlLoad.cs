@@ -1,12 +1,4 @@
-﻿using HarmonyLib;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Reflection.Emit;
-using Verse;
-
-namespace AK_DLL.HarmonyPatchs
+﻿namespace AK_DLL.HarmonyPatchs
 {
     /*[HarmonyPatch(typeof(DirectXmlLoader), "DefFromNode")]
     public class Patch_test

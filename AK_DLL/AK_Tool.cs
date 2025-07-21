@@ -1,5 +1,4 @@
-﻿using AK_DLL.Document;
-using AK_DLL.UI;
+﻿using AK_DLL.UI;
 using AK_TypeDef;
 using RimWorld;
 using System;
@@ -9,8 +8,6 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
 using Verse;
-using static RimWorld.Dialog_EditIdeoStyleItems;
-using static Verse.ParseHelper;
 
 namespace AK_DLL
 {
@@ -156,7 +153,7 @@ namespace AK_DLL
                 Log.Message("document is not OpDocContainer");
                 return null;//对非干员档案的判断
             }*/
-            
+
             //(doc == null)
             if (p.abilities == null) return null;
             if (!p.IsColonist) return null;

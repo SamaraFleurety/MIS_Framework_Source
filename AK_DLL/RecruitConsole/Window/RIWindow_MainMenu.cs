@@ -286,7 +286,7 @@ namespace AK_DLL.UI
             GameObject.Find("MBtn_Recruit").GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
                 //RIWindow_OperatorDetail.windowPurpose = OpDetailType.Recruit;
-                RIWindowHandler.OpenRIWindow(AKDefOf.AK_Prefab_yccOpList, purpose : OpDetailType.Recruit);
+                RIWindowHandler.OpenRIWindow(AKDefOf.AK_Prefab_yccOpList, purpose: OpDetailType.Recruit);
                 this.Close(false);
             });
 
@@ -441,7 +441,7 @@ namespace AK_DLL.UI
             else  //2000~ spine
             {
                 OpL2D.SetActive(true);
-                
+
                 Image compImage = OpL2D.GetComponent<Image>();
                 //compImage.material ??= AK_Tool.FSAsset.LoadAsset<Material>("OffScreenCameraMaterial");
 
@@ -477,7 +477,7 @@ namespace AK_DLL.UI
             {
                 camera.targetTexture = new RenderTexture(width, height, 24);
             }
-             return camera.targetTexture;
+            return camera.targetTexture;
         }
 
         //FIXME 没做

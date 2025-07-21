@@ -50,8 +50,7 @@ namespace AKA_Ability
             }
             else
             {
-                List<Thing> thingsToSend = new List<Thing>();
-                thingsToSend.Add(parent_mother);
+                List<Thing> thingsToSend = new() { parent_mother };
                 DropPodUtility.DropThingsNear(dropCenter, map, thingsToSend, 110, canInstaDropDuringInit: false, leaveSlag: false, canRoofPunch: false, forbid: false);
             }
             parent_mother.guest.SetGuestStatus(user.Faction, guestStatus: GuestStatus.Prisoner);
@@ -86,8 +85,6 @@ namespace AKA_Ability
                     Messages.Message(translatedMessage2, MessageTypeDefOf.NeutralEvent);
                     return;
                 }
-                pawn.Position = pos;
-                pawn.Notify_Teleported();
                 pawn.Position = pos;
                 pawn.Notify_Teleported();
             }

@@ -37,7 +37,7 @@ namespace AKA_Ability.Summon
             if (Props.allowDraft)
             {
                 Pawn summonedPawn = parent as Pawn;
-                if(summonedPawn != null && summonedPawn.drafter == null) summonedPawn.drafter = new Pawn_DraftController(summonedPawn);
+                if (summonedPawn != null && summonedPawn.drafter == null) summonedPawn.drafter = new Pawn_DraftController(summonedPawn);
             }
         }
 

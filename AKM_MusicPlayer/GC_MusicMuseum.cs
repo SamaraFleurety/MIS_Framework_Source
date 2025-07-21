@@ -41,7 +41,7 @@ namespace AKM_MusicPlayer
         {
             base.LoadedGame();
             InitializePotentialSongs();
-            foreach(ArkSongDef i in enabledSongs)
+            foreach (ArkSongDef i in enabledSongs)
             {
                 potentialSongs.Remove(i);
             }

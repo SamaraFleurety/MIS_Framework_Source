@@ -10,7 +10,7 @@ namespace AK_DLL
         {
             base.CompPostTick(ref severityAdjustment);
             age++;
-            if (age > this.Props.healOncePer) 
+            if (age > this.Props.healOncePer)
             {
                 float heal = (float)this.Props.healPoint;
                 for (int i = 0; i < parent.pawn.health.hediffSet.hediffs.Count; ++i)
@@ -52,7 +52,7 @@ namespace AK_DLL
         public override void CompExposeData()
         {
             base.CompExposeData();
-            Scribe_Values.Look(ref age,"age");
+            Scribe_Values.Look(ref age, "age");
         }
 
         public int age = 0;

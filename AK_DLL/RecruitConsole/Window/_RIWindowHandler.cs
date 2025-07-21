@@ -138,9 +138,9 @@ namespace AK_DLL.UI
                         i.AutoFill();
                     }
                 }
-                catch (Exception ex) 
+                catch (Exception ex)
                 {
-                    Log.Error("MIS. 自动补全失败:" + i.nickname + $"at { ex.ToString()}\n{ex.StackTrace}");
+                    Log.Error("MIS. 自动补全失败:" + i.nickname + $"at {ex.ToString()}\n{ex.StackTrace}");
                 }
 
                 try

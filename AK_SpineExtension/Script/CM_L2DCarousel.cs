@@ -38,7 +38,7 @@ namespace AK_SpineExtention
         #endregion
         private int completeTimes = 0;
         private int ClickCounter = 0;
-        
+
         protected override void OnEnable()
         {
             ResetAllParams();

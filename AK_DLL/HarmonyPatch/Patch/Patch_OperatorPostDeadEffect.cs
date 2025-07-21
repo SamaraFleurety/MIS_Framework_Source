@@ -9,7 +9,7 @@ namespace AK_DLL
     {
         [HarmonyPatch("Kill")]
         [HarmonyPostfix]
-        public static void Postfix(Pawn __instance) 
+        public static void Postfix(Pawn __instance)
         {
             OperatorDocument doc = __instance.GetDoc();
             if (doc == null) return;

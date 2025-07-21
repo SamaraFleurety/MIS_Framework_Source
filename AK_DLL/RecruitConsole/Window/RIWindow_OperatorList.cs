@@ -123,7 +123,7 @@ namespace AK_DLL.UI
 
     public class RIWindow_OperatorList : RIWindow
     {
-#region 属性，字段，快捷属性
+        #region 属性，字段，快捷属性
         private static int sortType = (int)OperatorSortType.Alphabet;
         private static bool sortReverseOrder = false;
         //排序按钮的面板（通用父类）
@@ -158,7 +158,7 @@ namespace AK_DLL.UI
             }
         }
 
-#endregion
+        #endregion
 
         public override void DoContent()
         {
@@ -198,7 +198,7 @@ namespace AK_DLL.UI
         public override void ReturnToParent(bool closeEV = true)
         {
             //RIWindow_OperatorDetail.windowPurpose = OpDetailType.Recruit;
-            RIWindowHandler.OpenRIWindow(AKDefOf.AK_Prefab_yccMainMenu, purpose : OpDetailType.Recruit /*RIWindowType.MainMenu*/);
+            RIWindowHandler.OpenRIWindow(AKDefOf.AK_Prefab_yccMainMenu, purpose: OpDetailType.Recruit /*RIWindowType.MainMenu*/);
             base.ReturnToParent(closeEV);
         }
 
@@ -225,7 +225,7 @@ namespace AK_DLL.UI
         private void DrawAllClassBtn()
         {
             if (choosingSeries) return;
-            
+
             //Transform classColumn;
             //新版ui
             if (true)
@@ -236,7 +236,7 @@ namespace AK_DLL.UI
             GameObject classBtnInstance;
             Utilities_Unity.ClearAllChild(classColumn); //直接清空所有老的职业图标 懒得复用了，感觉占不到几个性能
             int i = 0; //FIXME：晚点给删了
-            foreach(int node in ActiveClasses)
+            foreach (int node in ActiveClasses)
             {
                 OperatorClassDef opClass = RIWindowHandler.operatorClasses[node];
                 // classBtnInstance = ClassButtonInstance;
@@ -293,11 +293,11 @@ namespace AK_DLL.UI
 
         private void DrawSeriesPanel()
         {
-            if (!choosingSeries) return; 
+            if (!choosingSeries) return;
             GameObject classBtnPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("btnClassTemplate");
             Transform seriesColumn = GameObject.Find("seriesSelectPanel").transform;
             GameObject seriesBtnInstance;
-            Utilities_Unity.ClearAllChild(seriesColumn);           
+            Utilities_Unity.ClearAllChild(seriesColumn);
             for (int i = 0; i < AllSeries.Count; ++i)
             {
                 //seriesBtnInstance = GameObject.Instantiate(classBtnPrefab, seriesColumn);
@@ -376,7 +376,7 @@ namespace AK_DLL.UI
         }
         #endregion
 
-#region 绘制干员列表(不含排序逻辑)
+        #region 绘制干员列表(不含排序逻辑)
         //绘制干员列表的初期准备, 开1次UI仅运行1次。
         public void DrawOperatorList()
         {
@@ -395,7 +395,7 @@ namespace AK_DLL.UI
                 return AK_Tool.GetOperatorIDFrom(def.defName);
             });*/
             opListPanel = GameObject.Find("OpListPanel").transform;
-            
+
             DrawOperatorListContent();
         }
         //实际绘制所有干员列表 会在排序等情况被重复调用
@@ -480,9 +480,9 @@ namespace AK_DLL.UI
             RIWindowHandler.OpenRIWindow_OpDetail(AKDefOf.AK_Prefab_OpDetail, cachedOperatorList[index]);
             this.Close(false);
         }
-#endregion
+        #endregion
 
-#region 排序相关
+        #region 排序相关
         protected virtual GameObject SortButtonInstance
         {
             get
@@ -517,7 +517,7 @@ namespace AK_DLL.UI
         {
             //GameObject sortBtnPrefab = Bundle.LoadAsset<GameObject>("btnSortTemplate");
             GameObject sortBtnInstance;
-            TextMeshProUGUI textTMP;
+            //TextMeshProUGUI textTMP;
             if (sorterColumnLoc == null)
             {
                 sorterColumnLoc = GameObject.Find("sorterBg").transform;

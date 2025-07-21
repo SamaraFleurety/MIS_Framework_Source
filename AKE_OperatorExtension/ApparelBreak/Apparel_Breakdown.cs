@@ -1,9 +1,5 @@
 ﻿using RimWorld;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
@@ -108,7 +104,7 @@ namespace AKE_OperatorExtension
                 yield return new Command_Action
                 {
                     defaultLabel = "[Dev]减10hp",
-                    defaultDesc= "desc",
+                    defaultDesc = "desc",
                     action = () =>
                     {
                         this.HitPoints -= 10;

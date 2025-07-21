@@ -14,7 +14,7 @@ namespace FS_LivelyRim
     {
         public string modID;
         public string assetBundle;
-        public string modelName; 
+        public string modelName;
     }
 
     public class LiveModelDef : AssetResourceDef

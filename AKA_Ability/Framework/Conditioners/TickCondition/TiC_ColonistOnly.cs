@@ -1,12 +1,4 @@
-﻿using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Verse;
-
-namespace AKA_Ability.TickCondition
+﻿namespace AKA_Ability.TickCondition
 {
     public class TiC_ColonistOnly : TickCondion_Base
     {

@@ -1,13 +1,12 @@
 ﻿using AK_TypeDef;
-using System.Collections.Generic;
-using System.Linq;
 using Verse;
 
 namespace AKA_Ability
 {
     public class AbilityEffect_AddHediff : AbilityEffectBase
     {
-        protected virtual void PreProcess() { 
+        protected virtual void PreProcess()
+        {
         }
 
         protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
@@ -51,7 +50,7 @@ namespace AKA_Ability
             }
         }*/
 
-        protected virtual void postAddHediff (Hediff h)
+        protected virtual void postAddHediff(Hediff h)
         {
         }
 
@@ -66,7 +65,7 @@ namespace AKA_Ability
         ///             -如果严重度小于等于0(即减少严重度)，那就ret空 (减少不存在的hediff没有意义)
         ///             -否则就增加此Hediff并调整严重度。
         /// </summary>
-        public static Hediff AddHediff (Pawn target, HediffDef hediffDef, BodyPartDef part = null, BodyPartRecord partRecord = null, float severity = 1, string customLabel = null)
+        public static Hediff AddHediff(Pawn target, HediffDef hediffDef, BodyPartDef part = null, BodyPartRecord partRecord = null, float severity = 1, string customLabel = null)
         {
             return GenericUtilities.AddHediff(target, hediffDef, part, partRecord, severity, customLabel);
             /*if (target == null) return null;

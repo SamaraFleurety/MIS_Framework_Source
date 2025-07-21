@@ -17,7 +17,7 @@ namespace AK_DLL.Document
 
         }
 
-        public DocumentBase(Thing parent) : this() 
+        public DocumentBase(Thing parent) : this()
         {
             this.parent = parent;
         }

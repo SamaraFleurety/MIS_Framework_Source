@@ -12,7 +12,7 @@ namespace PA_AKPatch
         public static bool disable_FacialAnimation_NoFace = false;
         //
         public static bool MIS_NoFace_Actived => ModLister.GetActiveModWithIdentifier("MIS.NoFace") != null;
-        public override void ExposeData() 
+        public override void ExposeData()
         {
             Scribe_Values.Look(ref disable_PawnKindDef, "disable_PawnKindDef", defaultValue: false);
             Scribe_Values.Look(ref disable_HideHead, "disable_HideHead", defaultValue: false);

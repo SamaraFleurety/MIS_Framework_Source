@@ -1,5 +1,4 @@
 ﻿using AKA_Ability.SharedData;
-using AKA_Ability.TickCondition;
 using RimWorld;
 using System;
 using System.Collections.Generic;
@@ -90,7 +89,7 @@ namespace AKA_Ability
 
         public override void PostPostMake()
         {
-            base.PostPostMake(); 
+            base.PostPostMake();
 
             if (Props.trackerGenProp == null)
             {

@@ -34,7 +34,7 @@ namespace FS_LivelyRim
         public static GameObject defaultRenderTarget;
 
         //执行所有初始化 原生库只有x64
-        static FS_Tool ()
+        static FS_Tool()
         {
             try
             {
@@ -64,7 +64,7 @@ namespace FS_LivelyRim
                 modPath.Add(Mods[i].PackageId, Mods[i].RootDir);
             }
         }
-        
+
         //自动装载原生库。很可能不兼容x86/mac/linux
         static void CheckCubismCoreLib()
         {
@@ -363,7 +363,7 @@ namespace FS_LivelyRim
 
             AssetBundle ab = FS_Tool.LoadAssetBundle(def.modID, def.assetBundle);
             l2dInstance = FS_Tool.InstantiateLive2DModel(ab, def.modID, def.modelName, rigJsonPath: def.rigJsonPath, renderTarget: renderTarget, eyeFollowMouse: def.eyeFollowMouse);
-            
+
             if (l2dInstance == null)
             {
                 Log.Error($"[FS.L2D] failed to load live2d model named {def.defName}");
@@ -372,10 +372,10 @@ namespace FS_LivelyRim
 
             if (setAsDefault)
             {
-                defaultModelInstance = l2dInstance; 
+                defaultModelInstance = l2dInstance;
                 defaultModelDef = def;
             }
-            
+
             if (modelID != null)
             {
                 if (TypeDef.cachedL2DModel.ContainsKey(modelID)) TypeDef.cachedL2DModel[modelID] = l2dInstance;

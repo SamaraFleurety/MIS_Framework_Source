@@ -30,10 +30,7 @@ namespace AKA_Ability.SharedData
         {
             base.ExposeData();
             Scribe_Deep.Look(ref cooldown, "cd");
-            if (Scribe.mode == LoadSaveMode.PostLoadInit)
-            {
-                if (Props != null) cooldown.prop = Props.cooldownProperty;
-            }
+            if (Props != null) cooldown.prop = Props.cooldownProperty;
         }
     }
 }

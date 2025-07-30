@@ -207,7 +207,5 @@ namespace AKA_Ability
         {
             return "AKAbility" + ID;
         }
-
-
     }
 }

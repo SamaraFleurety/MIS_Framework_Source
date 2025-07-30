@@ -18,7 +18,10 @@ namespace AKA_Ability
         //对于多个技能共享数据(例如cd)的，这里面的才是原始数据。不可以把CD_TrackerShared等非真实数据放进来！
         public AbilityTrackerSharedDataProperty sharedDataProperty = null;
         public List<AKAbilityDef> abilities = new();
-        public AbilityTrackerGenerationProperty() { }
+
+        public AbilityTrackerGenerationProperty()
+        {
+        }
 
         public AbilityTracker GenerateAbilityTracker(Pawn casterPawn)
         {
@@ -55,18 +58,18 @@ namespace AKA_Ability
 
         public int indexActiveGroupedAbility = -1;
 
-        public List<AKAbility_Base> innateAbilities = new List<AKAbility_Base>();
+        public List<AKAbility_Base> innateAbilities = new();
 
-        public List<AKAbility_Base> groupedAbilities = new List<AKAbility_Base>();
+        public List<AKAbility_Base> groupedAbilities = new();
+
+        //召唤技能列表，是技能的子集。存在这个是因为有时候需要调用召唤物
+        public List<AKAbility_Summon> summonAbilities = new();
 
         //取消innate和group的区分，统一成此类。没有做完
         public List<AKAbility_Base> abilitiesUnified = new();
 
         //fixme:没做完
         public AKAbility_Base barDisplayedAbility = null;   //舟味ui显示技能指示时 有多个技能则仅显示此技能。不允许是未被选中的分组技能。
-
-        //召唤技能列表，是技能的子集。存在这个是因为有时候需要调用召唤物
-        public List<AKAbility_Summon> summonAbilities = new();
 
         public bool shouldRefreshActiveStatus = true;
 
@@ -192,30 +195,25 @@ namespace AKA_Ability
             }*/
             //else this.innateAbilities.Add(ability);
 
-
-
             return ability;
         }
 
         //技能成功释放后调用 现在用来播放干员音效
         public virtual void Notify_AbilityCasted(AKAbility_Base ability)
         {
-
         }
 
         public virtual void ExposeData()
         {
             Scribe_Values.Look(ref indexActiveGroupedAbility, "indexAGA");
-
             Scribe_Collections.Look(ref innateAbilities, "iA", LookMode.Deep, this);
             Scribe_Collections.Look(ref groupedAbilities, "gA", LookMode.Deep, this);
-
-            Scribe_References.Look(ref barDisplayedAbility, "barA");
             Scribe_Collections.Look(ref summonAbilities, "summonA", LookMode.Reference);
-
+            Scribe_References.Look(ref barDisplayedAbility, "barA");
             Scribe_Deep.Look(ref sharedData, "sharedData", this);
-
             Scribe_Deep.Look(ref tickCondition, "ticker", this);
+            Scribe_References.Look(ref holder, "holder");
+
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 foreach (AKAbility_Base i in innateAbilities) i.container = this;

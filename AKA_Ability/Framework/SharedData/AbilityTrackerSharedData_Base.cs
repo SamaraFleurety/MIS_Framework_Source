@@ -15,7 +15,8 @@ namespace AKA_Ability.SharedData
         public AbilityTracker tracker;
 
         public AbilityTrackerSharedDataProperty props;
-        //存读档的时候会调用这个
+
+        //存读档的时候调用(ctorArgs)
         protected AbilityTrackerSharedData_Base(AbilityTracker tracker)
         {
             this.tracker = tracker;

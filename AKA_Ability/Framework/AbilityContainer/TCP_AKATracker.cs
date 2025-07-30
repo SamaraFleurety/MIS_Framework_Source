@@ -28,14 +28,12 @@ namespace AKA_Ability
     public class TC_AKATracker : ThingComp
     {
         public AbilityTracker tracker;
-
-        private TCP_AKATracker Props => props as TCP_AKATracker;
+        public TCP_AKATracker Props => props as TCP_AKATracker;
         private List<AKAbilityDef> Abilities => Props.abilities;
-
-        Apparel Parent => parent as Apparel;
-
         AbilityTrackerSharedDataProperty SharedDataProp => Props.sharedDataProperty;
 
+        Apparel Parent => parent as Apparel;
+        Pawn EquipmentOwner => (EquipmentSource?.ParentHolder as Pawn_EquipmentTracker)?.pawn;
         Pawn Wearer
         {
             get
@@ -44,49 +42,29 @@ namespace AKA_Ability
                 return Parent.Wearer;
             }
         }
-
         Pawn CasterPawn
         {
             get
             {
                 if (Wearer != null) return Wearer;
-                else if (parent is Pawn p) return p;
-                else if (EquipmentSource != null && WeaponOwner != null) return WeaponOwner;
-                else return null;
+                if (parent is Pawn p) return p;
+                if (EquipmentOwner != null) return EquipmentOwner;
+                return null;
             }
         }
 
         private CompEquippable compEquippableInt;
-        private Verb verbInt;
-
         CompEquippable EquipmentSource
         {
             get
             {
-                if (compEquippableInt != null)
-                {
-                    return compEquippableInt;
-                }
+                if (compEquippableInt != null) return compEquippableInt;
                 compEquippableInt = parent.TryGetComp<CompEquippable>();
-                if (compEquippableInt == null)
-                {
-                    return null;
-                }
                 return compEquippableInt;
             }
         }
 
-        Verb Verb
-        {
-            get
-            {
-                verbInt ??= EquipmentSource.PrimaryVerb;
-                return verbInt;
-            }
-        }
-
-        Pawn WeaponOwner => Verb.CasterPawn;
-
+        //holder字段之前没用 用上了
         public override void PostPostMake()
         {
             base.PostPostMake();
@@ -113,11 +91,14 @@ namespace AKA_Ability
                         //AKAbilityMaker.MakeAKAbility(i, AKATracker);
                     }
                 }
-                return;
             }
-
-            tracker = Props.trackerGenProp.GenerateAbilityTracker(CasterPawn);
+            else
+            {
+                tracker = Props.trackerGenProp.GenerateAbilityTracker(CasterPawn);
+                tracker.holder = parent;
+            }
         }
+
         public override void Notify_Equipped(Pawn pawn)
         {
             tracker.owner = pawn;
@@ -134,12 +115,14 @@ namespace AKA_Ability
             tracker.Tick();
             return;
         }
+
         public override void CompTickLong()
         {
             if (CasterPawn == null) return;
             tracker.Tick();
             return;
         }
+
         public override void CompTickRare()
         {
             if (CasterPawn == null) return;
@@ -152,14 +135,16 @@ namespace AKA_Ability
             if (CasterPawn == null || CasterPawn.Faction != Faction.OfPlayer) return Enumerable.Empty<Gizmo>();
             return tracker.GetGizmos();
         }
+
         public override IEnumerable<Gizmo> CompGetWornGizmosExtra()
         {
             if (CasterPawn == null || CasterPawn.Faction != Faction.OfPlayer) return Enumerable.Empty<Gizmo>();
             return tracker.GetGizmos();
         }
+
         public virtual IEnumerable<Gizmo> CompGetWeaponGizmosExtra()
         {
-            if (WeaponOwner == null || WeaponOwner.Faction != Faction.OfPlayer) return Enumerable.Empty<Gizmo>();
+            if (EquipmentOwner == null || EquipmentOwner.Faction != Faction.OfPlayer) return Enumerable.Empty<Gizmo>();
             return tracker.GetGizmos();
         }
 
@@ -169,6 +154,11 @@ namespace AKA_Ability
             //Log.Message("expose tcp tracker");
             Scribe_Deep.Look(ref tracker, "AKATracker", CasterPawn);
             if (SharedDataProp != null) tracker.sharedData.props = SharedDataProp;
+
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                if (CasterPawn != null) tracker.owner = CasterPawn; //读档时不会Notify_Equipped
+            }
         }
     }
 }

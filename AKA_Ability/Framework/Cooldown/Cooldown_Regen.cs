@@ -56,6 +56,7 @@ namespace AKA_Ability.Cooldown
         public Cooldown_Regen()
         {
         }
+
         public Cooldown_Regen(CooldownProperty property, AKAbility_Base ability)
         {
             parent = ability;
@@ -68,7 +69,7 @@ namespace AKA_Ability.Cooldown
         public virtual void ExposeData()
         {
             Scribe_Values.Look(ref skillPoint, "CD");
-            Scribe_Values.Look(ref charge, "charge");
+            Scribe_Values.Look(ref charge, "charge", defaultValue: 0, forceSave: true); //必须强制存
             BackCompatibility.PostExposeData(this);
         }
 

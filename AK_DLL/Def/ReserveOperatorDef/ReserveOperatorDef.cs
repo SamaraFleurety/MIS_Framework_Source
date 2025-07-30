@@ -12,6 +12,7 @@ namespace AK_DLL
     //为预备干员或者种族之类的使用的def。此def不进招募台，也不限1，并且部分属性可以在一定范围内随机。
     public class ReserveOperatorDef : OperatorDef
     {
+        public bool ignoreFixedAge = false;
         public ReserveOperatorDef() : base()
         {
             alwaysHidden = true;
@@ -226,8 +227,12 @@ namespace AK_DLL
 
             //性别更改
             operator_Pawn.gender = (this.isMale) ? Gender.Male : Gender.Female;
-            operator_Pawn.ageTracker.AgeBiologicalTicks = this.age * (long)TimeToTick.year;
-            operator_Pawn.ageTracker.AgeChronologicalTicks = this.realAge * (long)TimeToTick.year;
+
+            if (!ignoreFixedAge)
+            {
+                operator_Pawn.ageTracker.AgeBiologicalTicks = this.age * (long)TimeToTick.year;
+                operator_Pawn.ageTracker.AgeChronologicalTicks = this.realAge * (long)TimeToTick.year;
+            }
 
             //发型与体型设置
             operator_Pawn.story.bodyType = this.BodyTypeThisPawn;

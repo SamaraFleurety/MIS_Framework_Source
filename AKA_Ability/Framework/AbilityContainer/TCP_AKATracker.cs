@@ -29,8 +29,9 @@ namespace AKA_Ability
     {
         public AbilityTracker tracker;
         public TCP_AKATracker Props => props as TCP_AKATracker;
+        //弃用字段找个日子全删了
         private List<AKAbilityDef> Abilities => Props.abilities;
-        AbilityTrackerSharedDataProperty SharedDataProp => Props.sharedDataProperty;
+        AbilityTrackerSharedDataProperty SharedDataProp => Props.sharedDataProperty ?? Props.trackerGenProp.sharedDataProperty;
 
         Apparel Parent => parent as Apparel;
         Pawn EquipmentOwner => (EquipmentSource?.ParentHolder as Pawn_EquipmentTracker)?.pawn;

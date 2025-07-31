@@ -3,6 +3,7 @@ using Verse;
 
 namespace AKA_Ability
 {
+    //用来显示放在在武器上面的技能Gizmo
     public class CompEquippable_AKAbility : CompEquippable
     {
         TC_AKATracker cachedTracker = null;
@@ -14,15 +15,10 @@ namespace AKA_Ability
                 return cachedTracker;
             }
         }
-        public override void CompTick()
-        {
-            Tracker?.CompTick();
-        }
 
         public override IEnumerable<Gizmo> CompGetEquippedGizmosExtra()
         {
-            if (!base.Holder.Drafted)
-                yield break;
+            if (!Holder.Drafted) yield break;
             foreach (Gizmo gizmo in Tracker.CompGetWeaponGizmosExtra())
             {
                 yield return (Command)gizmo;

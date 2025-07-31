@@ -7,6 +7,7 @@ using Verse;
 
 namespace AKA_Ability
 {
+    //武器用这个要改TickerType为Normal
     //放Thing上面的技能容器。可能是放在衣服上需要穿戴，也可能放在pawn上面可以直接施法
     public class TCP_AKATracker : CompProperties
     {
@@ -114,7 +115,6 @@ namespace AKA_Ability
         {
             if (CasterPawn == null) return;
             tracker.Tick();
-            return;
         }
 
         public override void CompTickLong()

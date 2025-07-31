@@ -153,7 +153,6 @@
     <Compile Include="Def\ReserveOperatorDef\ReserveOperatorDef.cs" />
     <Compile Include="Graphic\RenderNodeWorker_ExtraHair.cs" />
     <Compile Include="Graphic\RenderTreeOverride\Patch_RenderTreeOverride.cs" />
-    <Compile Include="HarmonyPatch\Patch_EquipmentTracker.cs" />
     <Compile Include="LoadingOptimizer\DynamicLoading\Audio\AudioGrain_DynaLoad_Clip.cs" />
     <Compile Include="LoadingOptimizer\DynamicLoading\Audio\SubSoundDef_DynaLoading.cs" />
     <Compile Include="LoadingOptimizer\Legacy_SkipDefAndFolder\AhoCorasick.cs" />

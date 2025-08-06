@@ -159,6 +159,7 @@
     <Compile Include="Framework\AbilityEffectsDef.cs" />
     <Compile Include="Framework\Conditioners\CastConditioner\CC_NeedFullCharge.cs" />
     <Compile Include="Framework\Comp\CompEquippable_AKAbility.cs" />
+    <Compile Include="Framework\Conditioners\CastConditioner\CC_NeedSharedCharge.cs" />
     <Compile Include="Framework\Conditioners\InertiaConditioner\IC_Grouped.cs" />
     <Compile Include="Framework\Conditioners\InertiaConditioner\IC_Manual.cs" />
     <Compile Include="Framework\Conditioners\InertiaConditioner\InertiaConditioner_Base.cs" />

@@ -24,7 +24,7 @@ namespace AKA_Ability.CastConditioner
             return res;
         }
         //比上面那个缺功能，不要再在外面用了
-        [Obsolete]
+        //public想改成internal的 积重难返了 拉倒吧
         public abstract bool Castable(AKAbility_Base instance);
     }
 }

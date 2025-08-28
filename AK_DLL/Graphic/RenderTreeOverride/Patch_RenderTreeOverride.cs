@@ -22,7 +22,7 @@ namespace AK_DLL.HarmonyPatchs
     public class Patch_RenderTreeOverride
     {
         [HarmonyTranspiler]
-        public static IEnumerable<CodeInstruction> tanspiler(IEnumerable<CodeInstruction> instructions)
+        public static IEnumerable<CodeInstruction> Tanspiler(IEnumerable<CodeInstruction> instructions)
         {
             List<CodeInstruction> list = instructions.ToList();
 
@@ -43,8 +43,8 @@ namespace AK_DLL.HarmonyPatchs
             {
                 list.InsertRange(index, new CodeInstruction[]
                 {
-                    new CodeInstruction(OpCodes.Ldarg_0),
-                    new CodeInstruction(OpCodes.Call, overrideMethod)
+                    new(OpCodes.Ldarg_0),
+                    new(OpCodes.Call, overrideMethod)
                 });
             }
 

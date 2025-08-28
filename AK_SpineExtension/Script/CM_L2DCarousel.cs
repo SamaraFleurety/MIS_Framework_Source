@@ -9,7 +9,7 @@ using Verse;
 namespace AK_SpineExtention
 {
     //通用的动态立绘切换脚本
-    public class CMP_L2DCarousel : ScriptProperties
+    public class CMP_L2DCarousel : ComponentProperties
     {
         public string Idle = "Idle";
         public string Interact = "Interact";
@@ -27,7 +27,6 @@ namespace AK_SpineExtention
     {
         #region Inspector
         private CMP_L2DCarousel Props => props as CMP_L2DCarousel;
-
         public string Idle => Props.Idle;
         public string Interact => Props.Interact;
         public string Special => Props.Special;
@@ -37,40 +36,11 @@ namespace AK_SpineExtention
 
         #endregion
         private int completeTimes = 0;
-        private int ClickCounter = 0;
-
-        protected override void OnEnable()
-        {
-            ResetAllParams();
-            if (SkeletonInstanceInt == null || props == null) return;
-
-            TrackEntry track0 = SkeletonInstanceInt.AnimationState.SetAnimation(0, Idle, false);
-            track0.Complete += CompleteTimeCounter;
-            track0.Complete += CompleteEventHandler;
-            //skeletonAnimation.AnimationState.Complete += CompleteEventHandler; //这BYD会连续调用2次
-        }
-
-        protected override void Update()
-        {
-            if (Find.World == null || Find.CurrentMap == null || Find.Selector == null || Find.Selector.AnyPawnSelected == false || Find.Selector.SelectedPawns.Count == 0) return;
-            Pawn p = Find.Selector.SelectedPawns.First();
-            if (p == null) return;
-            OperatorDocument doc = AK_Tool.GetDoc(p);
-            if (doc == null) return;
-            if (Input.GetKeyDown(KeyCode.Mouse0))
-            {
-                ClickCounter++;
-            }
-            if (ClickCounter >= 2)
-            {
-                TryDoInteract();
-                ClickCounter = 0;
-            }
-        }
+        private int clickCounter = 0;
 
         private void CompleteTimeCounter(TrackEntry trackEntry) => completeTimes++;
         private void ResetCompleteTime(TrackEntry trackEntry) => completeTimes = 0;
-        private void ResetAllParams() { completeTimes = 0; ClickCounter = 0; }
+        private void ResetAllParams() { completeTimes = 0; clickCounter = 0; }
 
         //改成单独回调了 简单好用
         private void CompleteEventHandler(TrackEntry trackEntry)
@@ -109,6 +79,35 @@ namespace AK_SpineExtention
             //track3.Start += delegate { };
             track3.Complete += CompleteTimeCounter;
             track3.Complete += CompleteEventHandler;
+        }
+
+        protected override void OnEnable()
+        {
+            ResetAllParams();
+            if (SkeletonInstanceInt == null || props == null) return;
+
+            TrackEntry track0 = SkeletonInstanceInt.AnimationState.SetAnimation(0, Idle, false);
+            track0.Complete += CompleteTimeCounter;
+            track0.Complete += CompleteEventHandler;
+            //skeletonAnimation.AnimationState.Complete += CompleteEventHandler; //这BYD会连续调用2次
+        }
+
+        protected override void Update()
+        {
+            if (Find.World == null || Find.CurrentMap == null || Find.Selector == null || Find.Selector.AnyPawnSelected == false || Find.Selector.SelectedPawns.Count == 0) return;
+            Pawn p = Find.Selector.SelectedPawns.First();
+            if (p == null) return;
+            OperatorDocument doc = AK_Tool.GetDoc(p);
+            if (doc == null) return;
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                clickCounter++;
+            }
+            if (clickCounter >= 2)
+            {
+                TryDoInteract();
+                clickCounter = 0;
+            }
         }
     }
 }

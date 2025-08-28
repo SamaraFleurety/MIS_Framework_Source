@@ -1,5 +1,6 @@
 ﻿using AK_DLL.DynaLoad;
 using AK_DLL.DynamicLoading;
+using AK_DLL.UI;
 using AK_TypeDef;
 using AKA_Ability;
 using AKM_MusicPlayer;
@@ -29,12 +30,12 @@ namespace AK_DLL
         public BackstoryDef adultHood;//成年背景故事
 
         //public List<OperatorAbilityDef> abilities = new List<OperatorAbilityDef>();
-        public List<AKAbilityDef> AKAbilities = new List<AKAbilityDef>(); //技能
+        public List<AKAbilityDef> AKAbilities = new(); //技能
 
         public int age = 16;//年龄
         public int realAge = -1; //实际年龄
         public bool isMale = false;//性别 谁jb把这玩意写成bool的
-        public List<HediffStat> hediffInate = new List<HediffStat>(); //天生自带hediff 源石病之类的
+        public List<HediffStat> hediffInate = new(); //天生自带hediff 源石病之类的
 
         public VoicePackDef voicePackDef = null;
 
@@ -49,8 +50,8 @@ namespace AK_DLL
         public HeadTypeDef headTypeDef;
         public List<SkillAndFire> skills;//技能列表；要是哪天排序卡得不行就给改成树
         private bool skillSorted = false;
-        public Color skinColor = new Color(1, 1, 1, 1); //皮肤颜色
-        public Color hairColor = new Color(1, 1, 1, 1); //头发颜色
+        public Color skinColor = new(1, 1, 1, 1); //皮肤颜色
+        public Color hairColor = new(1, 1, 1, 1); //头发颜色
         public HairDef hair;//头发类型
         public BeardDef beard;//胡须
 
@@ -67,16 +68,17 @@ namespace AK_DLL
         //标记是否启用动态加载。如果不启用会沿用旧式开局完全加载。
         public bool dynaLoadStaticStands = false;
 
+        public string animation;
         public List<string> fashionAnimation = new();//spine2d动态立绘皮肤的defName列表
 
         //换装后，体现在rw小人服装上的变化。key的int是换装在List<string> fashion中的下标+3。
         //按理说应该和上面的干员衣服整合一起，但现在已经几百个干员了，要整合工作量太大。立项的时候没考虑做换装。
-        public List<OperatorFashionSetDef> clothSets = new List<OperatorFashionSetDef>();
+        public List<OperatorFashionSetDef> clothSets = new();
         public List<string> live2dModel = new();
 
         //因为并不知道是否有某种立绘，所以用字典存。约定-1为头像，0是精0立绘，1是精2立绘，2-后面是换装
         //这里的V3，x和y是x轴和y轴的偏移，z其实是缩放
-        public Dictionary<int, Vector3> standOffsets = new Dictionary<int, Vector3>();
+        public Dictionary<int, Vector3> standOffsets = new();
         public string headPortrait;         //IMGUI主界面选中时 左下角详情栏上面的头像
 
         public ThoughtDef thoughtReceived = null;  //其他所有人都会给这个干员一个想法 当前是和弦独有
@@ -112,7 +114,7 @@ namespace AK_DLL
         public static bool currentlyGenerating = false;
 
         //缓存 招募时给的衣服。这个时候有可能还没生成doc
-        protected static List<Thing> clothTemp = new List<Thing>();
+        protected static List<Thing> clothTemp = new();
         public string Prefix
         {
             get { return AK_Tool.GetPrefixFrom(this.defName); }
@@ -232,7 +234,7 @@ namespace AK_DLL
                     if (doc.weapon != null && !doc.weapon.DestroyedOrNull()) doc.weapon.Destroy();
                     ThingWithComps weapon = (ThingWithComps)ThingMaker.MakeThing(this.weapon);
                     CompBiocodable comp = weapon.GetComp<CompBiocodable>();
-                    if (comp != null) comp.CodeFor(operator_Pawn);
+                    comp?.CodeFor(operator_Pawn);
                     operator_Pawn.equipment.AddEquipment(weapon);
                     doc.weapon = weapon;
                 }
@@ -244,7 +246,7 @@ namespace AK_DLL
                 if (set.apparelTextureIndex is int index) apparelTextureIndex = index;
                 foreach (ThingDef apparelDef in set.apparels)
                 {
-                    Apparel apparel = Recruit_Inventory_Wear(apparelDef, operator_Pawn, true);
+                    Recruit_Inventory_Wear(apparelDef, operator_Pawn, true);
                 }
                 if (set.hair != null) operator_Pawn.story.hairDef = set.hair;
                 if (set.voice != null)
@@ -260,7 +262,7 @@ namespace AK_DLL
                     }
                     ThingWithComps weapon = (ThingWithComps)ThingMaker.MakeThing(set.weapon);
                     CompBiocodable comp = weapon.GetComp<CompBiocodable>();
-                    if (comp != null) comp.CodeFor(operator_Pawn);
+                    comp?.CodeFor(operator_Pawn);
                     operator_Pawn.equipment.AddEquipment(weapon);
                     doc.weapon = weapon;
                 }
@@ -321,6 +323,8 @@ namespace AK_DLL
             Recruit_AKAbility(operatorID);
 
             Recruit_PostEffects();
+
+            Recruit_SpineModel();
             currentlyGenerating = false;
             return operator_Pawn;
         }
@@ -410,6 +414,7 @@ namespace AK_DLL
             operator_Pawn.abilities.abilities.Add(vAbility);
             return vAbility;
         }
+
         private OperatorDocument Recruit_Document(Thing weapon)
         {
             GC_OperatorDocumentation.AddPawn(this.OperatorID, this, operator_Pawn, weapon, clothTemp);
@@ -432,6 +437,7 @@ namespace AK_DLL
                 }
             }
         }
+
         protected void Recruit_AddRelations()
         {
             operator_Pawn.relations.ClearAllRelations();
@@ -490,6 +496,7 @@ namespace AK_DLL
             }
             return;
         }
+
         protected virtual void FixAlienHairColor()
         {
             if (ModLister.GetActiveModWithIdentifier("erdelf.HumanoidAlienRaces") != null)
@@ -528,7 +535,7 @@ namespace AK_DLL
             operator_Pawn.story.bodyType = this.bodyTypeDef;
             operator_Pawn.story.headType = this.headTypeDef ?? DefDatabase<HeadTypeDef>.GetNamed("Female_NarrowPointy");
             operator_Pawn.story.hairDef = hair ?? HairDefOf.Bald;
-            operator_Pawn.style.beardDef = this.beard == null ? BeardDefOf.NoBeard : this.beard;
+            operator_Pawn.style.beardDef = this.beard ?? BeardDefOf.NoBeard;
             operator_Pawn.story.skinColorOverride = this.skinColor;
             operator_Pawn.story.HairColor = this.hairColor;
 
@@ -548,7 +555,7 @@ namespace AK_DLL
             operator_Pawn.skills.skills.Clear();
             foreach (SkillAndFire skillDef in this.skills)
             {
-                SkillRecord skill = new SkillRecord(operator_Pawn, skillDef.skill)
+                SkillRecord skill = new(operator_Pawn, skillDef.skill)
                 {
                     passion = skillDef.fireLevel,
                     Level = skillDef.level
@@ -566,6 +573,7 @@ namespace AK_DLL
             }
             //从干员文档更新属性
         }
+
         protected void Recruit_Inventory()
         {
             operator_Pawn.inventoryStock ??= new();
@@ -605,7 +613,7 @@ namespace AK_DLL
                 }
                 weapon = (ThingWithComps)ThingMaker.MakeThing(this.weapon);
                 CompBiocodable comp = weapon.GetComp<CompBiocodable>();
-                if (comp != null) comp.CodeFor(operator_Pawn);
+                comp?.CodeFor(operator_Pawn);
                 operator_Pawn.equipment.AddEquipment(weapon);
             }
             return;
@@ -649,6 +657,12 @@ namespace AK_DLL
                 t.recordedSong = i;
             }
         }
+
+        protected void Recruit_SpineModel()
+        {
+            if (animation == null) return;
+            RIWindow_MainMenu.SpawnSpine2DModel(animation, operator_Pawn);
+        }
         #endregion
 
         #region AutoFillSubMethods 自动补齐相关方法
@@ -670,10 +684,7 @@ namespace AK_DLL
         }
         private void AutoFill_Weapon()
         {
-            if (this.weapon == null)
-            {
-                this.weapon = DefDatabase<ThingDef>.GetNamedSilentFail(AK_Tool.GetThingdefNameFrom(this.defName, "Weapon"));
-            }
+            this.weapon ??= DefDatabase<ThingDef>.GetNamedSilentFail(AK_Tool.GetThingdefNameFrom(this.defName, "Weapon"));
         }
         private void AutoFill_VoicePack()
         {
@@ -730,7 +741,7 @@ namespace AK_DLL
                     if (ContentFinder<Texture2D>.Get(standPath, false) != null) this.commonStand = standPath;
                     else this.commonStand = null;
                 }
-                if (fashion == null) fashion = new List<string>();
+                fashion ??= new List<string>();
                 standPath = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorIDFrom(this.defName) + "Fashion";
                 if (ContentFinder<Texture2D>.Get(standPath, false) != null) this.fashion.Add(standPath);
                 for (int i = 0; i < 10; ++i)

@@ -2,7 +2,7 @@
 
 namespace AK_DLL
 {
-    public class RenderNode_BackHair : PawnRenderNode
+    public class RenderNode_BackHair : PawnRenderNode_Hair
     {
         public RenderNode_BackHair(Pawn pawn, PawnRenderNodeProperties props, PawnRenderTree tree) : base(pawn, props, tree)
         {

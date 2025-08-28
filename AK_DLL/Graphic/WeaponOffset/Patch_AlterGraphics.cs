@@ -13,7 +13,7 @@ namespace AK_DLL.HarmonyPatchs
     public class Patch_AlterGraphics
     {
         [HarmonyTranspiler]
-        public static IEnumerable<CodeInstruction> tanspiler(IEnumerable<CodeInstruction> instructions)
+        public static IEnumerable<CodeInstruction> Tanspiler(IEnumerable<CodeInstruction> instructions)
         {
             List<CodeInstruction> list = instructions.ToList();
 
@@ -32,12 +32,12 @@ namespace AK_DLL.HarmonyPatchs
             {
                 list.InsertRange(index - 2, new CodeInstruction[]
                 {
-                    new CodeInstruction(OpCodes.Ldarg, 0),
-                    new CodeInstruction(OpCodes.Ldloca, 3),
-                    new CodeInstruction(OpCodes.Ldloca, 6),
-                    new CodeInstruction(OpCodes.Ldarg, 1),
-                    new CodeInstruction(OpCodes.Ldloc, 1),
-                    new CodeInstruction(OpCodes.Call, overrideMethod)
+                    new(OpCodes.Ldarg, 0),
+                    new(OpCodes.Ldloca, 3),
+                    new(OpCodes.Ldloca, 6),
+                    new(OpCodes.Ldarg, 1),
+                    new(OpCodes.Ldloc, 1),
+                    new(OpCodes.Call, overrideMethod)
                 });
             }
 
@@ -51,7 +51,7 @@ namespace AK_DLL.HarmonyPatchs
             if (ext == null) return;
 
             Graphic alterGraphic = ext.DefaultGraphic(eq);
-            material = ((!(alterGraphic is Graphic_StackCount graphic_StackCount)) ? alterGraphic.MatSingleFor(eq) : graphic_StackCount.SubGraphicForStackCount(1, eq.def).MatSingleFor(eq));
+            material = (alterGraphic is not Graphic_StackCount graphic_StackCount) ? alterGraphic.MatSingleFor(eq) : graphic_StackCount.SubGraphicForStackCount(1, eq.def).MatSingleFor(eq);
             matrix.SetTRS(pos: alterGraphic.DrawOffset(Rot4.South) + drawLoc, q: Quaternion.AngleAxis(rotate, Vector3.up), s: new Vector3(alterGraphic.drawSize.x, 0, alterGraphic.drawSize.y));
         }
     }

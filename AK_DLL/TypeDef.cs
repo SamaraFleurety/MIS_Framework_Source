@@ -14,7 +14,7 @@ namespace AK_DLL
         public static string[] apparelType = new string[] { "Apparel", "Hat" };
         public static string ModID = "MIS.Framework";
 
-        public static Dictionary<string, int> statType = new Dictionary<string, int>() {
+        public static Dictionary<string, int> statType = new() {
             { "Shooting", 0 },
             { "Melee", 1},
             { "Construction", 2},
@@ -29,12 +29,12 @@ namespace AK_DLL
             { "Intellectual", 11 }
         };
 
-        public static List<SkillDef> SortOrderSkill = new List<SkillDef>() { SkillDefOf.Shooting, SkillDefOf.Melee, SkillDefOf.Construction, SkillDefOf.Mining, SkillDefOf.Cooking, SkillDefOf.Plants, SkillDefOf.Animals, SkillDefOf.Crafting, SkillDefOf.Artistic, SkillDefOf.Medicine, SkillDefOf.Social, SkillDefOf.Intellectual };
+        public static List<SkillDef> SortOrderSkill = new() { SkillDefOf.Shooting, SkillDefOf.Melee, SkillDefOf.Construction, SkillDefOf.Mining, SkillDefOf.Cooking, SkillDefOf.Plants, SkillDefOf.Animals, SkillDefOf.Crafting, SkillDefOf.Artistic, SkillDefOf.Medicine, SkillDefOf.Social, SkillDefOf.Intellectual };
 
-        public static Vector3 defaultSecLoc => new Vector3(400, 0, 1);
-        public static Vector3 defaultSecLocLive => new Vector3(10010, -10, 10000);
+        public static Vector3 defaultSecLoc => new(400, 0, 1);
+        public static Vector3 defaultSecLocLive => new(10010, -10, 10000);
 
-        public static Dictionary<string, GameObject> cachedLive2DModels = new Dictionary<string, GameObject>();
+        public static Dictionary<string, GameObject> cachedLive2DModels = new();
 
         public static Texture2D iconTeleTowerChangeName => ContentFinder<Texture2D>.Get("UI/Gizmo/ChangeName");
 

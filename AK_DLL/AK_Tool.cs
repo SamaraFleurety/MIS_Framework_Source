@@ -122,18 +122,14 @@ namespace AK_DLL
         public static OperatorDocument GetDoc(this OperatorDef def)
         {
             if (GC_OperatorDocumentation.opDocArchive == null) return null;
-            OperatorDocument doc;
-            GC_OperatorDocumentation.opDocArchive.TryGetValue(def.OperatorID, out doc);
-
+            GC_OperatorDocumentation.opDocArchive.TryGetValue(def.OperatorID, out OperatorDocument doc);
             return doc;
         }
 
         public static OperatorDocument GetDoc(string ID)
         {
             if (GC_OperatorDocumentation.opDocArchive == null) return null;
-            OperatorDocument doc;
-            GC_OperatorDocumentation.opDocArchive.TryGetValue(ID, out doc);
-
+            GC_OperatorDocumentation.opDocArchive.TryGetValue(ID, out OperatorDocument doc);
             return doc;
         }
         //只有OpDocContainer才有Doc
@@ -239,10 +235,9 @@ namespace AK_DLL
 
         #region 算法（自己造轮子）
         //模式1是精确搜索，2是找第一个更大值，3是找第一个更小值
-        public static int quickSearch(int[] arr, int leftPtr, int rightPtr, int target, int mode)
+        public static int QuickSearch(int[] arr, int leftPtr, int rightPtr, int target, int mode)
         {
             int middle;
-            middle = 0;
             if (rightPtr - leftPtr < 0) return -1;
             if (target > arr[rightPtr])
             {
@@ -280,7 +275,7 @@ namespace AK_DLL
         {
             int rd = UnityEngine.Random.Range(1, arr.Last()); //值域是[min, max]
 
-            return quickSearch(arr, 0, arr.Length - 1, rd, 2);
+            return QuickSearch(arr, 0, arr.Length - 1, rd, 2);
         }
 
         public static string DescriptionManualResolve(string s, string name, Gender gender)

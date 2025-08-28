@@ -15,7 +15,7 @@ namespace AKE_OperatorExtension
         public TimeToTick intervalUnit = TimeToTick.hour;
         //public Type saveChanceByFunc = null; //优先使用概率函数。如果函数为空就用下面静态值
         public float saveChance = 0f; //有多少概率会无事发生。1就是100%。
-        public List<HediffStat> hediffStatsSet = new List<HediffStat>();
+        public List<HediffStat> hediffStatsSet = new();
 
         public HCP_RandAddHediff()
         {

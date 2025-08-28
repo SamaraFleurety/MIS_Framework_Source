@@ -7,9 +7,11 @@ using AKM_MusicPlayer;
 using FS_LivelyRim;
 using RimWorld;
 using RimWorld.Planet;
+using SpriteEvo;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
@@ -324,7 +326,7 @@ namespace AK_DLL
 
             Recruit_PostEffects();
 
-            Recruit_SpineModel();
+            if (ModLister.GetActiveModWithIdentifier("Paluto22.SpriteEvo") != null) Recruit_SpineModel();
             currentlyGenerating = false;
             return operator_Pawn;
         }
@@ -661,7 +663,10 @@ namespace AK_DLL
         protected void Recruit_SpineModel()
         {
             if (animation == null) return;
-            RIWindow_MainMenu.SpawnSpine2DModel(animation, operator_Pawn);
+
+            MethodInfo method = typeof(AnimationManager).GetMethod("RegisterPawnAnimation", BindingFlags.Public | BindingFlags.Static);
+            GameObject spine = (GameObject)method.Invoke(null, new object[] { animation, operator_Pawn });
+            spine.SetActive(true);
         }
         #endregion
 

@@ -470,14 +470,6 @@ namespace AK_DLL.UI
             return spine;
         }
 
-        public static GameObject SpawnSpine2DModel(string spineDefname, Pawn pawn) 
-        {
-            MethodInfo method = typeof(AnimationManager).GetMethod("RegisterPawnAnimation", BindingFlags.Public | BindingFlags.Static);
-            GameObject spine = (GameObject)method.Invoke(null, new object[] { spineDefname, pawn });
-            spine.SetActive(true);
-            return spine;
-        }
-
         public static RenderTexture GetOrSetSpineRenderTexture(GameObject spine, int width = 1920, int height = 1080)
         {
             Camera camera = spine.GetComponentInChildren<Camera>();

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using AK_DLL.Counter;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Verse;
@@ -14,6 +15,8 @@ namespace AK_DLL.Document
         public ConditionalWeakTable<Thing, DocumentTracker> documents = new();
         List<Thing> key = new();
         List<DocumentTracker> val = new();
+
+        public CountableManager countableManager = new();
 
         public GC_Generic(Game game)
         {

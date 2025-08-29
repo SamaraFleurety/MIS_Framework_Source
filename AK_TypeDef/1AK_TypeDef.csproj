@@ -78,6 +78,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuildingCounter\Framework\CountableManager.cs" />
+    <Compile Include="BuildingCounter\Framework\IQuantityCountable.cs" />
+    <Compile Include="BuildingCounter\Framework\QuantityLimited\Ext_QuantitySensitiveInfo.cs" />
+    <Compile Include="BuildingCounter\Framework\QuantityLimited\PW_QuantitySensitiveBuilding.cs" />
+    <Compile Include="BuildingCounter\Instance\TCP_QuantityCountable.cs" />
     <Compile Include="Document\DocumentTracker.cs" />
     <Compile Include="Document\GC_GenericDocumentation.cs" />
     <Compile Include="Document\DocumentBase.cs" />
@@ -93,5 +98,6 @@
     <Compile Include="Utilities.cs" />
     <Compile Include="Unity\Utilities_Unity.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

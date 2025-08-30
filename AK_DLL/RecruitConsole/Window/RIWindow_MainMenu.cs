@@ -465,7 +465,7 @@ namespace AK_DLL.UI
         public static GameObject DrawSpine2DModel(string spineDefname)
         {
             MethodInfo method = typeof(SkeletonGraphicUtility).GetMethod("InstantiateSpineByDefname", BindingFlags.Public | BindingFlags.Static);
-            GameObject spine = (GameObject)method.Invoke(null, new object[] { spineDefname, spineDefname, 2, true, true, true, null });
+            GameObject spine = (GameObject)method.Invoke(null, new object[] { spineDefname, spineDefname, 2, true, true, null });
             spine.SetActive(true);
             return spine;
         }

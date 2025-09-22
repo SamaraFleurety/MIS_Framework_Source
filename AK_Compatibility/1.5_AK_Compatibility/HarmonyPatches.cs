@@ -111,16 +111,23 @@ namespace PA_AKPatch
 
             OperatorDocument doc = ___pawn.GetDoc();
             if (doc == null) return;
+            if (doc.operatorDef.GetModExtension<Ext_NoFaceNL>() is { } ext) 
+            {
+                if (ext.ignoreGraphic) __result = null;
+                return;
+            }
             if (AKC_ModSettings.MIS_NoFace_Actived && !AKC_ModSettings.disable_FacialAnimation_NoFace)
             {
                 return;
             }
             __result = null;
         }
+
         public static void FashionWardrobe_Prefix(Rect inRect)
         {
             if (!OperatorDef.currentlyGenerating) OperatorDef.currentlyGenerating = true;
         }
+
         public static void FashionWardrobe_Postfix(bool doCloseSound = true)
         {
             if (OperatorDef.currentlyGenerating) OperatorDef.currentlyGenerating = false;

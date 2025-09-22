@@ -13,6 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
+    <LangVersion>9.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>false</DebugSymbols>
@@ -58,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Ext_KeepOriginal.cs" />
+    <Compile Include="Ext_NoFaceNL.cs" />
     <Compile Include="HarmonyPatches.cs" />
     <Compile Include="ModSetting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -63,10 +63,7 @@ namespace LMA_Lib.UGUI
             btn.transform.GetChild(1).GetComponentInChildren<TextMeshProUGUI>().text = label;
             btn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
-                if (previousSortBtn != null)
-                {
-                    previousSortBtn.transform.GetChild(1).gameObject.SetActive(false);  //弹出的视觉效果
-                }
+                previousSortBtn?.transform.GetChild(1).gameObject.SetActive(false);  //弹出的视觉效果
                 previousSortBtn = btn;
                 previousSortBtn.transform.GetChild(1).gameObject.SetActive(true);
             });
@@ -85,10 +82,7 @@ namespace LMA_Lib.UGUI
             btn.transform.GetChild(2).gameObject.SetActive(false);
             btn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
-                if (previousClassBtn != null)
-                {
-                    previousClassBtn.transform.GetChild(2).gameObject.SetActive(false);
-                }
+                previousClassBtn?.transform.GetChild(2).gameObject.SetActive(false);
 
                 previousClassBtn = btn;
                 btn.transform.GetChild(2).gameObject.SetActive(true);

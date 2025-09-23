@@ -19,7 +19,7 @@ namespace AKA_Ability.DelayedEffects
 
         public AKAbility_Base sourceAbility;
 
-        public DelayedEffectorBase(AbilityEffectsDef effectDef, AKAbility_Base sourceAbility, LocalTargetInfo targetInfo = default(LocalTargetInfo), GlobalTargetInfo globalTarget = default(GlobalTargetInfo))
+        public DelayedEffectorBase(AbilityEffectsDef effectDef, AKAbility_Base sourceAbility, LocalTargetInfo targetInfo = default, GlobalTargetInfo globalTarget = default)
         {
             //this.casterPawn = casterPawn;
             this.sourceAbility = sourceAbility;

@@ -63,7 +63,7 @@ namespace AK_TypeDef
             }
             else
             {
-                if (partRecord == null) partRecord = GetBodyPartRecord(target, part, customLabel);
+                partRecord ??= GetBodyPartRecord(target, part, customLabel);
                 if (partRecord == null) return null;
 
                 hediff = GetMatchedHediff(target, hediffDef, partRecord);
@@ -98,7 +98,7 @@ namespace AK_TypeDef
         {
             if (p == null || p.Dead || hDef == null) return null;
             IEnumerable<Hediff> candidate = p.health.hediffSet.hediffs;
-            candidate = candidate.Where((Hediff h) => (h.Part == partRecord && h.def == hDef));
+            candidate = candidate.Where((Hediff h) => h.Part == partRecord && h.def == hDef);
             if (candidate == null || candidate.Count() == 0) return null;
             return candidate.RandomElement();
         }
@@ -107,7 +107,7 @@ namespace AK_TypeDef
         //检索圆形范围内可到达格子 轨道交易信标同款
         public static List<IntVec3> TradeableCellsAround(IntVec3 pos, Map map, float radius)
         {
-            List<IntVec3> tradeableCells = new List<IntVec3>();
+            List<IntVec3> tradeableCells = new();
             //tradeableCells.Clear();
             if (!pos.InBounds(map))
             {

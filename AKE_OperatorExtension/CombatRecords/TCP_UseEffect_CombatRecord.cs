@@ -41,7 +41,7 @@ namespace AKE_OperatorExtension
                 case 1://初级
                     break;
                 case 2://中级
-                    int numFireSkills = user.skills.skills.Count(skillRecord => skillRecord.passion >= Passion.Major && skillRecord.passion >= Passion.Minor);
+                    int numFireSkills = user.skills.skills.Count(skillRecord => skillRecord.passion is >= Passion.Major and >= Passion.Minor);
                     if ((user.skills.PassionCount <= 5 && user.skills.GetSkill(skill).passion == Passion.None) || userName.Contains("Jessica"))
                     {
                         user.skills.GetSkill(skill).passion = Passion.Minor;

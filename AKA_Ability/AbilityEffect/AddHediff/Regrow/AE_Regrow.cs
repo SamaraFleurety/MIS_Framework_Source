@@ -23,8 +23,7 @@ namespace AKA_Ability
             if (target_Pawn != null && !target_Pawn.Dead)
             {
                 bool newlyAdded = false;
-                HediffWithComps hediffRegrow = target_Pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef) as HediffWithComps;
-                if (hediffRegrow == null)
+                if (target_Pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef) is not HediffWithComps hediffRegrow)
                 {
                     HealthUtility.AdjustSeverity(target_Pawn, this.hediffDef, 0.01f);
                     newlyAdded = true;
@@ -46,7 +45,7 @@ namespace AKA_Ability
                         hediffComp.HealInterval = this.healInterval;
                         hediffComp.HealAmount = this.healAmount;
                         hediffComp.parent.Severity = this.severity;
-                        hediffComp.isFinal = this.regrowType == RegrowType.chronic ? true : false;
+                        hediffComp.isFinal = this.regrowType == RegrowType.chronic;
                     }
                 }
             }

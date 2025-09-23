@@ -39,9 +39,9 @@ namespace AK_DLL
 
         public static void DoOptions(Rect inRect)
         {
-            Listing_Standard list = new Listing_Standard
+            Listing_Standard list = new()
             {
-                ColumnWidth = inRect.width / 2f - 20f
+                ColumnWidth = (inRect.width / 2f) - 20f
             };
             list.Begin(inRect);
             list.Gap(12f);
@@ -136,21 +136,21 @@ namespace AK_DLL
             list.CheckboxLabeled("Enable HH:MM:SS Format", ref AK_ModSettings.display_Option_HHMMSS);
             if (list.ButtonTextLabeled("AK_HealthBar_display_PawnDeathIndicator".Translate(), ("AK_HealthBar_display_PawnDeathIndicator_" + ((Option_TimeDisplay)AK_ModSettings.display_PawnDeathIndicator_Option).ToString()).Translate()))
             {
-                FloatMenu window = new FloatMenu(new List<FloatMenuOption>
+                FloatMenu window = new(new List<FloatMenuOption>
                 {
-                    new FloatMenuOption("AK_HealthBar_display_PawnDeathIndicator_None".Translate(), delegate
+                    new("AK_HealthBar_display_PawnDeathIndicator_None".Translate(), delegate
                     {
                         AK_ModSettings.display_PawnDeathIndicator_Option = 0;
                     }),
-                    new FloatMenuOption("AK_HealthBar_display_PawnDeathIndicator_DeathTimeOnly".Translate(), delegate
+                    new("AK_HealthBar_display_PawnDeathIndicator_DeathTimeOnly".Translate(), delegate
                     {
                         AK_ModSettings.display_PawnDeathIndicator_Option = 1;
                     }),
-                    new FloatMenuOption("AK_HealthBar_display_PawnDeathIndicator_BleedRateOnly".Translate(), delegate
+                    new("AK_HealthBar_display_PawnDeathIndicator_BleedRateOnly".Translate(), delegate
                     {
                         AK_ModSettings.display_PawnDeathIndicator_Option = 2;
                     }),
-                    new FloatMenuOption("AK_HealthBar_display_PawnDeathIndicator_Both".Translate(), delegate
+                    new("AK_HealthBar_display_PawnDeathIndicator_Both".Translate(), delegate
                     {
                         AK_ModSettings.display_PawnDeathIndicator_Option = 3;
                     })

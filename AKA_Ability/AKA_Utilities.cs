@@ -6,10 +6,10 @@ namespace AKA_Ability
     [StaticConstructorOnStartup]
     public static class AKA_Utilities
     {
-        public static Dictionary<Pawn, HashSet<AKAbility_Base>> pawn_NotifyStricken = new Dictionary<Pawn, HashSet<AKAbility_Base>>();
+        public static Dictionary<Pawn, HashSet<AKAbility_Base>> pawn_NotifyStricken = new();
 
         //攻击恢复sp 
-        public static Dictionary<Pawn, HashSet<AKAbility_Base>> pawn_NotifyHitTarget = new Dictionary<Pawn, HashSet<AKAbility_Base>>();
+        public static Dictionary<Pawn, HashSet<AKAbility_Base>> pawn_NotifyHitTarget = new();
 
         //写个泛型也行 估计这辈子就这两套，算了吧
         public static void RegisterAsStricken(Pawn owner, AKAbility_Base ab)

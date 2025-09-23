@@ -29,7 +29,7 @@ namespace AK_DLL
 
             GenDebug.ClearArea(overRect, Find.CurrentMap);
 
-            List<OperatorDef> opDefs = new List<OperatorDef>();
+            List<OperatorDef> opDefs = new();
 
             foreach (KeyValuePair<int, Dictionary<string, OperatorDef>> i in RIWindowHandler.operatorDefs)
             {

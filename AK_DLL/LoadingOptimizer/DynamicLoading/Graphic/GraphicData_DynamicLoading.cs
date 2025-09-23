@@ -31,10 +31,7 @@ namespace AK_DLL.DynamicLoading
         {
             if (initiated) return;
             ShaderTypeDef cutout = shaderType;
-            if (cutout == null)
-            {
-                cutout = ShaderTypeDefOf.Cutout;
-            }
+            cutout ??= ShaderTypeDefOf.Cutout;
             Shader shader = cutout.Shader;
             Texture2D textureDynamicLoading = Utilities_Unity.LoadResourceIO<Texture2D>(Utilities_Unity.DynaLoad_PathRelativeToFull<Texture2D>(texPath, modID));
             CachedGraphic = GraphicDatabase.Get(graphicClass, textureDynamicLoading, shader, drawSize, color, colorTwo, this, shaderParameters, maskPath);

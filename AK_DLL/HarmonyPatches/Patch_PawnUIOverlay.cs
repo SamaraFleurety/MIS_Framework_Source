@@ -24,8 +24,8 @@ namespace AK_DLL
             codes.RemoveRange(index + 1, 5);
             codes.InsertRange(index, new CodeInstruction[]
             {
-                new CodeInstruction(OpCodes.Ldc_R4, 1f),
-                new CodeInstruction(OpCodes.Stloc, 2)
+                new(OpCodes.Ldc_R4, 1f),
+                new(OpCodes.Stloc, 2)
             });
             return codes;
         }
@@ -50,9 +50,9 @@ namespace AK_DLL
                 MethodInfo methodInfo = typeof(DrawGUIOverlayExtras).GetMethod(nameof(DrawGUIOverlayExtras.AppendPawnGUIOverlayExtras), new[] { typeof(Pawn) });
                 codes.InsertRange(index + 9, new CodeInstruction[]
                 {
-                    new CodeInstruction(OpCodes.Ldarg_0),
-                    new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(PawnUIOverlay), "pawn")),
-                    new CodeInstruction(OpCodes.Call, methodInfo)
+                    new(OpCodes.Ldarg_0),
+                    new(OpCodes.Ldfld, AccessTools.Field(typeof(PawnUIOverlay), "pawn")),
+                    new(OpCodes.Call, methodInfo)
 
                 });
             }

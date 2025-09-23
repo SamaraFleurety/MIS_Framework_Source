@@ -5,7 +5,7 @@ namespace AKA_Ability
 {
     public class HCP_TrackerContainer : HediffCompProperties
     {
-        public List<AKAbilityDef> abilities = new List<AKAbilityDef>(); //出生时带有的技能
+        public List<AKAbilityDef> abilities = new(); //出生时带有的技能
         public HCP_TrackerContainer()
         {
             compClass = typeof(HC_TrackerContainer);

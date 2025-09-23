@@ -326,8 +326,10 @@ namespace AK_DLL.UI
             });*/
 
             temp = GameObject.Find("SBtn_Sec_ScaleUp");
-            adjustSecBtns = new List<GameObject>();
-            adjustSecBtns.Add(temp);
+            adjustSecBtns = new List<GameObject>
+            {
+                temp
+            };
             temp.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
                 Vector3 v3 = SecretaryLoc;

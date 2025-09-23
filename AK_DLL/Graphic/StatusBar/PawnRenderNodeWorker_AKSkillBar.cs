@@ -18,8 +18,8 @@ namespace AK_DLL
         private static float Width => AK_ModSettings.barWidth * 0.01f;
         private static float Height => AK_ModSettings.barHeight * 0.001f;
         private static float Margin => AK_ModSettings.barMargin * 0.01f;
-        private static Vector2 BarSize => new Vector2(Width, Height);
-        private static Vector3 BottomMargin => new Vector3(0f, 0f, Margin - Height);
+        private static Vector2 BarSize => new(Width, Height);
+        private static Vector3 BottomMargin => new(0f, 0f, Margin - Height);
         private static Vector3 TopMargin => Vector3.forward * 1f;
         //Mat
         private static Material BarFilledMat => AK_BarUITool.SkillBarFilledMat;
@@ -27,7 +27,7 @@ namespace AK_DLL
         private static Material Timer_Icon => AK_BarUITool.Timer_Icon;
         private static Material RotateRing => AK_BarUITool.RotateRingIcon;
         private static Material BurstButton => AK_BarUITool.BurstIcon;
-        private string OperatorID(Pawn p) => (p.GetDoc()?.operatorID ?? p.Label);
+        private string OperatorID(Pawn p) => p.GetDoc()?.operatorID ?? p.Label;
         private string ObjectName(Pawn p) => (p.GetDoc()?.operatorID ?? p.Label) + ".objTMP";
         private GameObject PrefabTMP => AK_Tool.PAAsset.LoadAsset<GameObject>("PrefabTMPPopup");
         //使用prefab可以避免new GameObject出来的object被回收不能用Find方法找到；
@@ -93,21 +93,21 @@ namespace AK_DLL
             GenDraw.FillableBarRequest fbr = default;
             if (CameraPlusModEnabled)
             {
-                fbr.center = drawPos + (Vector3.up * 3f) + BottomMargin * (zoomYRatio > 1.75f ? zoomYRatio * 0.9f : zoomYRatio);
+                fbr.center = drawPos + (Vector3.up * 3f) + (BottomMargin * (zoomYRatio > 1.75f ? zoomYRatio * 0.9f : zoomYRatio));
                 fbr.size = BarSize;
                 fbr.size.x *= zoomWidthRatio;
                 fbr.size.y *= zoomRatio > 1.75f ? zoomRatio * 1.5f : zoomRatio;
             }
             else if (SimpleCameraModEnabled)
             {
-                fbr.center = drawPos + (Vector3.up * 3f) + BottomMargin * (zoomYRatio > 1.75f ? zoomYRatio * 0.75f : zoomYRatio);
+                fbr.center = drawPos + (Vector3.up * 3f) + (BottomMargin * (zoomYRatio > 1.75f ? zoomYRatio * 0.75f : zoomYRatio));
                 fbr.size = BarSize;
                 fbr.size.x *= zoomWidthRatio;
                 fbr.size.y *= zoomRatio > 3f ? zoomRatio * 1.05f : zoomRatio;
             }
             else
             {
-                fbr.center = drawPos + (Vector3.up * 3f) + BottomMargin * (zoomYRatio > 1.75f ? zoomYRatio * 0.75f : zoomYRatio);
+                fbr.center = drawPos + (Vector3.up * 3f) + (BottomMargin * (zoomYRatio > 1.75f ? zoomYRatio * 0.75f : zoomYRatio));
                 fbr.size = BarSize;
                 fbr.size.x *= zoomWidthRatio;
                 fbr.size.y *= zoomRatio > 6.5f ? zoomRatio * 1.25f : zoomRatio;
@@ -117,7 +117,7 @@ namespace AK_DLL
             fbr.unfilledMat = BarUnfilledMat;
             fbr.rotation = Rot4.North;
             GenDraw.DrawFillableBar(fbr);
-            Vector3 iconPos = new Vector3(fbr.center.x - (fbr.size.x / 2) - 0.075f, fbr.center.y, fbr.center.z);
+            Vector3 iconPos = new(fbr.center.x - (fbr.size.x / 2) - 0.075f, fbr.center.y, fbr.center.z);
             DrawIcon(iconPos, new Vector3(0.25f, 1f, 0.25f), Rot4.North.AsQuat, Timer_Icon, MeshPool.plane025, 2);
         }
         private void DrawIcon(Vector3 pos, Vector3 scale, Quaternion quat, Material icon, Mesh plane, int layer)
@@ -189,7 +189,7 @@ namespace AK_DLL
             }
             DrawSkillBar(BarFilledMat, pawn, SkillPercent);
             Vector3 OriginCenter = pawn.DrawPos + TopMargin + (Vector3.up * 3f);
-            Vector3 Scale = new Vector3(0.3f, 1f, 0.3f);
+            Vector3 Scale = new(0.3f, 1f, 0.3f);
             //自动回复技能
             if (!AK_ModSettings.display_Skillbar_OnDraftedOnly && !pawn.Drafted)
             {
@@ -230,7 +230,7 @@ namespace AK_DLL
                 if (PrefabTMPInstance != null)
                 {
                     TextMeshPro tmp = PrefabTMPInstance.GetComponent<TextMeshPro>();
-                    Vector3 scale = new Vector3(0.25f, 0.25f, 1f);
+                    Vector3 scale = new(0.25f, 0.25f, 1f);
                     int ChargeTimes = ability.cooldown.charge;
                     tmp.transform.position = OriginCenter;
                     tmp.transform.localScale = scale;

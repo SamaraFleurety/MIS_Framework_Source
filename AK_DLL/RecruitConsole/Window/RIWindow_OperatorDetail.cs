@@ -581,19 +581,14 @@ namespace AK_DLL.UI
         {
             int j = (int)i.fireLevel;
 
-            switch (j)
+            return j switch
             {
-                case 1:
-                    return "\"yellow\"";
+                1 => "\"yellow\"",
                 //break;
-                case 2:
-                    return "\"red\"";
+                2 => "\"red\"",
                 //break;
-                default:
-                    return "\"white\"";
-                    //break;
-            }
-
+                _ => "\"white\"",
+            };
         }
 
         //0和2是按钮，1和3是图表本身

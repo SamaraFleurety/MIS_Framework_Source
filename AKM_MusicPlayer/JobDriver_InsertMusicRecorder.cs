@@ -53,10 +53,7 @@ namespace AKM_MusicPlayer
             {
                 GC_MusicMuseum.EnableSong(thingRecord.recordedSong);
                 thingRecord.Destroy();
-                if (pawn.skills != null)
-                {
-                    pawn.skills.GetSkill(SkillDefOf.Artistic).Learn(ThingClass_MusicRecord.XPGain);
-                }
+                pawn.skills?.GetSkill(SkillDefOf.Artistic).Learn(ThingClass_MusicRecord.XPGain);
             };
             insertRecordIntoPlayer.defaultCompleteMode = ToilCompleteMode.Instant;
             yield return insertRecordIntoPlayer;

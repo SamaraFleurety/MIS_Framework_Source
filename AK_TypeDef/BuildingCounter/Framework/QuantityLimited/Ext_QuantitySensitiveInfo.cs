@@ -1,9 +1,5 @@
 ﻿using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Verse;
 
 namespace AK_DLL.Counter
@@ -32,7 +28,7 @@ namespace AK_DLL.Counter
             else goto LABEL_NOT_ALLOW;
 
             LABEL_NOT_ALLOW:
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             sb.Append("[AK.BC] QuantitySensitiveBuildingFailReason".Translate());
             sb.Append(" ");
             sb.Append("[AK.BC] QSBFR_Require".Translate());

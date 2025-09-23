@@ -9,7 +9,7 @@ namespace AKA_Ability
     {
         #region 属性 
 
-        private HCP_SelfExplosion exactProps = new HCP_SelfExplosion();
+        private HCP_SelfExplosion exactProps = new();
         public HCP_SelfExplosion Props
         {
             get { return (HCP_SelfExplosion)base.props; }
@@ -61,7 +61,7 @@ namespace AKA_Ability
         {
             get
             {
-                return ($"{base.Pawn}将会在{this.AfterTick}后产生一个爆炸!");
+                return $"{base.Pawn}将会在{this.AfterTick}后产生一个爆炸!";
             }
         }
 

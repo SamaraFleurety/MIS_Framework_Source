@@ -43,10 +43,7 @@ namespace AKS_Shield.Extension
             }
             else
             {
-                if (partRecord == null)
-                {
-                    partRecord = GetBodyPartRecord(target, part);
-                }
+                partRecord ??= GetBodyPartRecord(target, part);
 
                 if (partRecord == null)
                 {

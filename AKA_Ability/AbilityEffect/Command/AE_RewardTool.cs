@@ -15,7 +15,7 @@ namespace AKA_Ability
             get { return Setdelaytime; }
             set { Setdelaytime = value; }
         }
-        public static Dictionary<RewardCategory, List<RewardDef>> rewardsPerCat = new Dictionary<RewardCategory, List<RewardDef>>
+        public static Dictionary<RewardCategory, List<RewardDef>> rewardsPerCat = new()
         {
             {
                 RewardCategory.Poor,
@@ -81,14 +81,14 @@ namespace AKA_Ability
                     }
                 }
             }
-            List<Thing> thingsToSend = new List<Thing>();
+            List<Thing> thingsToSend = new();
             GenerateRandomItems(reward, ref thingsToSend);
             GenerateItems(reward, ref thingsToSend);
             if (thingsToSend.Count > 0)
             {
-                if (map == null) { map = Find.CurrentMap; }
+                map ??= Find.CurrentMap;
                 // 生成空投舱的位置必须是空的且无障碍
-                IntVec3 dropCenter = ((dropSpot != IntVec3.Invalid) ? dropSpot : DropCellFinder.TryFindSafeLandingSpotCloseToColony(map, ThingDefOf.DropPodIncoming.Size, map.ParentFaction));
+                IntVec3 dropCenter = (dropSpot != IntVec3.Invalid) ? dropSpot : DropCellFinder.TryFindSafeLandingSpotCloseToColony(map, ThingDefOf.DropPodIncoming.Size, map.ParentFaction);
                 DropPodUtility.DropThingsNear(dropCenter, map, thingsToSend, Delaytimer, canInstaDropDuringInit: false, leaveSlag: true, canRoofPunch: false, forbid: false);
                 //Log.Message("空投 成功");
             }
@@ -103,9 +103,9 @@ namespace AKA_Ability
                 ThingDef thing = itemReward.thing;
                 while (num > 0)
                 {
-                    Thing thingpack = ((thing.CostStuffCount <= 0) ? ThingMaker.MakeThing(thing) : ThingMaker.MakeThing(thing, GenStuff.RandomStuffFor(thing)));
+                    Thing thingpack = (thing.CostStuffCount <= 0) ? ThingMaker.MakeThing(thing) : ThingMaker.MakeThing(thing, GenStuff.RandomStuffFor(thing));
                     thingpack.TryGetComp<CompQuality>()?.SetQuality(((int)itemReward.quality > 0) ? itemReward.quality : QualityUtility.GenerateQualityRandomEqualChance(), ArtGenerationContext.Outsider);
-                    num -= (thingpack.stackCount = Math.Min(num, thing.stackLimit));
+                    num -= thingpack.stackCount = Math.Min(num, thing.stackLimit);
                     if (thingpack.def.minifiedDef != null)
                     {
                         thingpack = thingpack.MakeMinified();
@@ -123,7 +123,7 @@ namespace AKA_Ability
             for (int i = 0; i < reward.randomItems.Count; i++)
             {
                 RandItemReward item = reward.randomItems[i];
-                List<ThingDef> list = (item.randomFrom.NullOrEmpty() ? DefDatabase<ThingDef>.AllDefsListForReading.FindAll((ThingDef t) => item.thingCategories.Any((ThingCategoryDef c) => t.IsWithinCategory(c)) && t.tradeability != 0 && !t.destroyOnDrop && t.BaseMarketValue > 0f) : item.randomFrom);
+                List<ThingDef> list = item.randomFrom.NullOrEmpty() ? DefDatabase<ThingDef>.AllDefsListForReading.FindAll((ThingDef t) => item.thingCategories.Any((ThingCategoryDef c) => t.IsWithinCategory(c)) && t.tradeability != 0 && !t.destroyOnDrop && t.BaseMarketValue > 0f) : item.randomFrom;
                 if (!item.excludeThingCategories.NullOrEmpty())
                 {
                     list.RemoveAll((ThingDef t) => item.excludeThingCategories.Any((ThingCategoryDef c) => t.IsWithinCategory(c)));
@@ -132,9 +132,9 @@ namespace AKA_Ability
                 while (num > 0)
                 {
                     ThingDef thingDef = list.RandomElement();
-                    Thing thing = ((thingDef.CostStuffCount <= 0) ? ThingMaker.MakeThing(thingDef) : ThingMaker.MakeThing(thingDef, GenStuff.RandomStuffFor(thingDef)));
+                    Thing thing = (thingDef.CostStuffCount <= 0) ? ThingMaker.MakeThing(thingDef) : ThingMaker.MakeThing(thingDef, GenStuff.RandomStuffFor(thingDef));
                     thing.TryGetComp<CompQuality>()?.SetQuality(((int)item.quality > 0) ? item.quality : QualityUtility.GenerateQualityRandomEqualChance(), ArtGenerationContext.Outsider);
-                    num = (thingDef.isTechHediff ? (num - 1) : (num - (thing.stackCount = Math.Min(num, thing.def.stackLimit))));
+                    num = thingDef.isTechHediff ? (num - 1) : (num - (thing.stackCount = Math.Min(num, thing.def.stackLimit)));
                     if (thing.def.minifiedDef != null)
                     {
                         thing = thing.MakeMinified();

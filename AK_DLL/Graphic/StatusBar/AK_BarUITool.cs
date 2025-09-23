@@ -25,7 +25,7 @@ namespace AK_DLL
         public static Material EnemyHealthBarFilledMat => SolidColorMaterials.SimpleSolidColorMaterial(BarColor_enemy);
         public static Material SkillBarFilledMat;
 
-        internal static Dictionary<string, GameObject> PrefabTMPInstancesDictionary = new Dictionary<string, GameObject>();
+        internal static Dictionary<string, GameObject> PrefabTMPInstancesDictionary = new();
 
         private static readonly string HP_IconTexPath = "UI/Abilities/icon_sort_hp";
         private static readonly string DEF_IconTexPath = "UI/Abilities/icon_sort_def";
@@ -76,7 +76,7 @@ namespace AK_DLL
         }
         internal static void DrawSimpleRectBar(SimpleRectBarRequest r)
         {
-            Vector3 s = new Vector3(r.size.x, 1f, r.size.y);
+            Vector3 s = new(r.size.x, 1f, r.size.y);
             Matrix4x4 matrix = default;
             matrix.SetTRS(r.center, r.rotation, s);
             Graphics.DrawMesh(MeshPool.plane10, matrix, r.filledMat, 0);
@@ -161,7 +161,7 @@ namespace AK_DLL
             {
                 return false;
             }
-            if (pawn.Faction?.PlayerGoodwill >= 0 && pawn.Faction?.PlayerGoodwill < 75)
+            if (pawn.Faction?.PlayerGoodwill is >= 0 and < 75)
             {
                 return true;
             }

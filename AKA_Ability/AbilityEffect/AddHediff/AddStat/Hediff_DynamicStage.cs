@@ -44,9 +44,11 @@ namespace AKA_Ability
 
             RefreshStageProperty();
 
-            cachedStage = new HediffStage();
-            cachedStage.statOffsets = new();
-            cachedStage.statFactors = new();
+            cachedStage = new HediffStage
+            {
+                statOffsets = new(),
+                statFactors = new()
+            };
 
             foreach (StatDef stat in stageProperty.statOffsets.Keys)
             {

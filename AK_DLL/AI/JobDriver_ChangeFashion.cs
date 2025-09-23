@@ -12,22 +12,24 @@ namespace AK_DLL
         protected override IEnumerable<Toil> MakeNewToils()
         {
             yield return Toils_Goto.GotoCell(TargetIndex.A, PathEndMode.InteractionCell);
-            Toil t = new Toil();
-            /*t.initAction = delegate
+            Toil t = new()
             {
-                OperatorDocument doc = pawn.GetDoc();
-                if (doc == null) return;
-                doc.operatorDef.ChangeFashion(doc.pendingFashion, pawn);
-            };  */
-            t.initAction = delegate
-            {
-                OperatorDocument doc = pawn.GetDoc();
-                if (doc == null) return;
-                doc.operatorDef.ChangeFashion(doc.pendingFashionDef, pawn);
-                if (doc.pendingFashionDef == null) doc.preferedSkin = 1;
-                else if (doc.pendingFashionDef.standIndex is int standIndexInt) doc.preferedSkin = standIndexInt;
+                /*t.initAction = delegate
+   {
+       OperatorDocument doc = pawn.GetDoc();
+       if (doc == null) return;
+       doc.operatorDef.ChangeFashion(doc.pendingFashion, pawn);
+   };  */
+                initAction = delegate
+                {
+                    OperatorDocument doc = pawn.GetDoc();
+                    if (doc == null) return;
+                    doc.operatorDef.ChangeFashion(doc.pendingFashionDef, pawn);
+                    if (doc.pendingFashionDef == null) doc.preferedSkin = 1;
+                    else if (doc.pendingFashionDef.standIndex is int standIndexInt) doc.preferedSkin = standIndexInt;
+                },
+                defaultCompleteMode = ToilCompleteMode.Instant
             };
-            t.defaultCompleteMode = ToilCompleteMode.Instant;
             yield return t;
             yield break;
         }

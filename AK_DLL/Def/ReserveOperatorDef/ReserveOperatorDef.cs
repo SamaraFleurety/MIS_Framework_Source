@@ -226,7 +226,7 @@ namespace AK_DLL
             //operator_Pawn.Name = new NameTriple(this.name, this.nickname, this.surname);//“名”“简”“姓”
 
             //性别更改
-            operator_Pawn.gender = (this.isMale) ? Gender.Male : Gender.Female;
+            operator_Pawn.gender = this.isMale ? Gender.Male : Gender.Female;
 
             if (!ignoreFixedAge)
             {

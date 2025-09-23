@@ -2,7 +2,6 @@
 using RimWorld;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using Verse;
 
 namespace SFLib
@@ -41,7 +40,7 @@ namespace SFLib
         [HarmonyPostfix]
         public static void Postfix(ref List<PawnGraphicDrawRequest> ___drawRequests, PawnDrawParms parms)
         {
-            if (forceHideHead || registeredPawns.Contains(parms.pawn)) 
+            if (forceHideHead || registeredPawns.Contains(parms.pawn))
             {
                 ___drawRequests.RemoveAll(req => req.node.Props.skipFlag == RenderSkipFlagDefOf.Head);
             }

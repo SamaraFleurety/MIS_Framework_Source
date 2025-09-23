@@ -38,7 +38,7 @@ namespace AKA_Ability
         public bool reqLineofSight = false;     //是否需要视线
 
         //释放技能后会播放的音效
-        public List<SoundDef> useSounds = new List<SoundDef>();
+        public List<SoundDef> useSounds = new();
 
         //每10tick判定一次技能是否可用
         public int castConditionJudgeInterval = 10;

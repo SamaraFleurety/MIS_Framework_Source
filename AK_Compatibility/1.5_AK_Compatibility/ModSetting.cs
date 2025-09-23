@@ -31,7 +31,7 @@ namespace PA_AKPatch
         }
         public override void DoSettingsWindowContents(Rect inRect)
         {
-            Listing_Standard list = new Listing_Standard();
+            Listing_Standard list = new();
             list.Begin(inRect);
             list.CheckboxLabeled("禁用种族修复补丁".Translate(), ref AKC_ModSettings.disable_PawnKindDef, "招募干员时禁用PawnKind强制修复，非测试请勿打开");
             //list.CheckboxLabeled("禁用衣物隐藏头部".Translate(), ref AKC_ModSettings.disable_HideHead, "招募后的干员禁用方舟衣物的隐藏头部功能，非测试请勿打开");

@@ -1,10 +1,5 @@
 ﻿using AK_DLL.Document;
-using RimWorld;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Verse;
 
 namespace AK_DLL.Counter
@@ -20,7 +15,7 @@ namespace AK_DLL.Counter
         {
             { CountLevel.Global, new() },
             { CountLevel.Local, new() },
-        };  
+        };
 
         //返回是否成功添加
         public bool TryAddCountable(IQuantityCountable countable, Map map = null)

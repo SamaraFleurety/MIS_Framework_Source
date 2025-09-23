@@ -60,9 +60,9 @@ namespace AK_DLL
         private static void DrawPawnLabel(Pawn pawn, Vector2 pos, float alpha = 1f, GameFont font = GameFont.Tiny, bool alwaysDrawBg = true, bool alignCenter = true)
         {
             float pawnLabelNameWidth = GetPawnLabelTextWidth(pawn, font);
-            float num = (Prefs.DisableTinyText ? 6f : 4f);
-            float height = (Prefs.DisableTinyText ? 16f : 12f);
-            Rect bgRect = new Rect(pos.x - pawnLabelNameWidth / 2f - num, pos.y, pawnLabelNameWidth + num * 2f, height);
+            float num = Prefs.DisableTinyText ? 6f : 4f;
+            float height = Prefs.DisableTinyText ? 16f : 12f;
+            Rect bgRect = new(pos.x - (pawnLabelNameWidth / 2f) - num, pos.y, pawnLabelNameWidth + (num * 2f), height);
             DrawPawnLabel(pawn, bgRect, alpha, font, alwaysDrawBg, alignCenter);
         }
         private static void DrawPawnLabel(Pawn pawn, Rect bgRect, float alpha = 1f, GameFont font = GameFont.Tiny, bool alwaysDrawBg = true, bool alignCenter = true)
@@ -84,12 +84,12 @@ namespace AK_DLL
             if (alignCenter)
             {
                 Text.Anchor = TextAnchor.UpperCenter;
-                rect = new Rect(bgRect.center.x - pawnLabelNameWidth / 2f, bgRect.y - 15f, pawnLabelNameWidth, 100f);
+                rect = new Rect(bgRect.center.x - (pawnLabelNameWidth / 2f), bgRect.y - 15f, pawnLabelNameWidth, 100f);
             }
             else
             {
                 Text.Anchor = TextAnchor.UpperLeft;
-                rect = new Rect(bgRect.x + 2f, bgRect.center.y - Text.CalcSize(pawnLabel).y / 2f, pawnLabelNameWidth, 100f);
+                rect = new Rect(bgRect.x + 2f, bgRect.center.y - (Text.CalcSize(pawnLabel).y / 2f), pawnLabelNameWidth, 100f);
             }
             Widgets.Label(rect, pawnLabel);
             GUI.color = Color.white;
@@ -100,7 +100,7 @@ namespace AK_DLL
             GameFont font2 = Text.Font;
             Text.Font = font;
             string pawnLabel = GetPawnLabel(pawn, font);
-            float num = ((font != 0) ? Text.CalcSize(pawnLabel).x : pawnLabel.GetWidthCached());
+            float num = (font != 0) ? Text.CalcSize(pawnLabel).x : pawnLabel.GetWidthCached();
             if (Math.Abs(Math.Round(Prefs.UIScale) - (double)Prefs.UIScale) > 1.401298464324817E-45)
             {
                 num += 0.5f;

@@ -22,13 +22,13 @@ namespace AK_DLL.UI
 
 
         //<干员职业数字序， <干员ID, 干员Def> >
-        public static Dictionary<int, Dictionary<string, OperatorDef>> operatorDefs = new Dictionary<int, Dictionary<string, OperatorDef>>();
+        public static Dictionary<int, Dictionary<string, OperatorDef>> operatorDefs = new();
 
         //<唯一数字序(sortingOrder)， 干员职业Def>
-        public static Dictionary<int, OperatorClassDef> operatorClasses = new Dictionary<int, OperatorClassDef>();
+        public static Dictionary<int, OperatorClassDef> operatorClasses = new();
 
         //包含所有系列 这个想不到有什么离散检索的需求。系列内有写包含职业。
-        public static List<OperatorSeriesDef> operatorSeries = new List<OperatorSeriesDef>();
+        public static List<OperatorSeriesDef> operatorSeries = new();
 
         #region 方舟信息窗口
         /*public static void OpenRIWindow()
@@ -140,7 +140,7 @@ namespace AK_DLL.UI
                 }
                 catch (Exception ex)
                 {
-                    Log.Error("MIS. 自动补全失败:" + i.nickname + $"at {ex.ToString()}\n{ex.StackTrace}");
+                    Log.Error("MIS. 自动补全失败:" + i.nickname + $"at {ex}\n{ex.StackTrace}");
                 }
 
                 try
@@ -150,7 +150,7 @@ namespace AK_DLL.UI
                 }
                 catch (Exception ex)
                 {
-                    Log.Error("[MIS] 添加失败: " + i.nickname + $"at {ex.ToString()}\n{ex.StackTrace}");
+                    Log.Error("[MIS] 添加失败: " + i.nickname + $"at {ex}\n{ex.StackTrace}");
                 }
             }
         }

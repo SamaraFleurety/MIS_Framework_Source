@@ -72,15 +72,12 @@ namespace LMA_Lib.UGUI
         {
             int j = (int)i.fireLevel;
 
-            switch (j)
+            return j switch
             {
-                default:
-                    return "\"black\"";
-                case 1:
-                    return "#d9b341";  //黄
-                case 2:
-                    return "#f66539";  //红
-            }
+                1 => "#d9b341",//黄
+                2 => "#f66539",//红
+                _ => "\"black\"",
+            };
         }
 
         protected override void ChangeVanillaSkillChartTo(int val)

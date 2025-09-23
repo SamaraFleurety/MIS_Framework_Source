@@ -12,13 +12,13 @@ namespace AKA_Ability.AbilityEffect
         {
             if (caster.CasterPawn == null) return false;
 
-            AME_Worker<Pawn> worker = new AME_Worker<Pawn>(this, doEffect_SingleTarget: delegate (AKAbility_Base ab, Pawn victim)
+            AME_Worker<Pawn> worker = new(this, doEffect_SingleTarget: delegate (AKAbility_Base ab, Pawn victim)
             {
                 if (victim.Destroyed) return;
 
                 if (victim.GetUniqueLoadID() == ab.CasterPawn.GetUniqueLoadID()) return;
 
-                DamageInfo absDmgInfo = new DamageInfo(damageDef, DAMAGE_HEAL_PER_PAWN, 999, instigator: ab.CasterPawn, instigatorGuilty: false);
+                DamageInfo absDmgInfo = new(damageDef, DAMAGE_HEAL_PER_PAWN, 999, instigator: ab.CasterPawn, instigatorGuilty: false);
                 if (victim.def.useHitPoints)
                 {
                     victim.HitPoints -= (int)DAMAGE_HEAL_PER_PAWN;

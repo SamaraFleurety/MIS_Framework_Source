@@ -9,7 +9,7 @@ namespace AKE_OperatorExtension.HarmonyPatchs
     {
         static PatchMain()
         {
-            Harmony instance = new Harmony("AKE_Operator");
+            Harmony instance = new("AKE_Operator");
             instance.PatchAll(Assembly.GetExecutingAssembly());
         }
     }

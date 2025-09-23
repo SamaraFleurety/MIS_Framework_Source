@@ -11,16 +11,15 @@ namespace AK_DLL
         [HarmonyPostfix]
         public static void postfix(Rect cardRect, Dialog_InfoCard __instance, Thing ___thing)
         {
-            Pawn p = ___thing as Pawn;
             OperatorDocument doc;
 
-            if (p != null && ((doc = p.GetDoc()) != null) && !doc.operatorDef.alwaysHideStand)
+            if (___thing is Pawn p && ((doc = p.GetDoc()) != null) && !doc.operatorDef.alwaysHideStand)
             {
                 Rect position = cardRect.AtZero();
                 position.width = 384f;
                 position.height = 384f;
-                position.x = cardRect.width * 0.75f - position.width / 2f + 18f;
-                position.y = cardRect.center.y + 136f - position.height / 2f;
+                position.x = (cardRect.width * 0.75f) - (position.width / 2f) + 18f;
+                position.y = cardRect.center.y + 136f - (position.height / 2f);
                 Texture2D stand = doc.operatorDef.PreferredStand(0); /*ContentFinder<Texture2D>.Get(doc.operatorDef.stand);*/
                 GUI.DrawTexture(position, stand, ScaleMode.ScaleAndCrop, true);
             }

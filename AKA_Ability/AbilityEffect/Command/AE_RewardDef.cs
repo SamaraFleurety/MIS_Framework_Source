@@ -24,11 +24,8 @@ namespace AKA_Ability
             {
                 if (rewardIcon is null)
                 {
-                    rewardIcon = ((texPath == null) ? null : ContentFinder<Texture2D>.Get(texPath, reportFailure: false));
-                    if (rewardIcon is null)
-                    {
-                        rewardIcon = BaseContent.BadTex;
-                    }
+                    rewardIcon = (texPath == null) ? null : ContentFinder<Texture2D>.Get(texPath, reportFailure: false);
+                    rewardIcon ??= BaseContent.BadTex;
                 }
                 return rewardIcon;
             }
@@ -62,19 +59,19 @@ namespace AKA_Ability
         };*/
         public void DrawCard(Rect rect, AECommand_Window window)
         {
-            Rect rect2 = new Rect(rect.x, rect.y, rect.width, rect.width);
+            Rect rect2 = new(rect.x, rect.y, rect.width, rect.width);
             GUI.DrawTexture(rect2.ContractedBy(25f), RewardIcon);
             TextAnchor anchor = Text.Anchor;
             Text.Anchor = TextAnchor.UpperCenter;
             Text.Font = GameFont.Small;
-            Rect rect3 = new Rect(rect.x, rect2.yMax + 5f, rect.width, 20f);
+            Rect rect3 = new(rect.x, rect2.yMax + 5f, rect.width, 20f);
             Widgets.Label(rect3, label);
             Text.Font = GameFont.Tiny;
-            Rect rect4 = new Rect(rect.x, rect3.yMax + 10f, rect.width, 20f);
+            Rect rect4 = new(rect.x, rect3.yMax + 10f, rect.width, 20f);
             Widgets.Label(rect4, "AKA.Reward".Translate(Category));
-            Rect rect5 = new Rect(rect.x, rect4.yMax + 5f, rect.width, 70f);
+            Rect rect5 = new(rect.x, rect4.yMax + 5f, rect.width, 70f);
             Widgets.Label(rect5.ContractedBy(5f), description);
-            Rect rect6 = new Rect(rect.x, rect5.yMax - 15f, rect.width, 45f);
+            Rect rect6 = new(rect.x, rect5.yMax - 15f, rect.width, 45f);
             Rect rect7 = rect6.ContractedBy(5f);
             if (Widgets.ButtonText(rect7, "AKA.SelectReward".Translate()))
             {

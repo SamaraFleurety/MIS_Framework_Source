@@ -17,7 +17,7 @@ namespace AKA_Ability
             Pawn user = caster.CasterPawn;
             Pawn targetPawn = target.Pawn;
 
-            if (targetPawn == null || !(targetPawn is Pawn p))
+            if (targetPawn == null || targetPawn is not Pawn p)
             {
                 return false;
             }

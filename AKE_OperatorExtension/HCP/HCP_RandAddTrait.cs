@@ -23,7 +23,7 @@ namespace AKE_OperatorExtension
     {
         #region
         public HCP_RandAddTrait Props => (HCP_RandAddTrait)base.props;
-        private HCP_RandAddTrait exactProps = new HCP_RandAddTrait();
+        private HCP_RandAddTrait exactProps = new();
         //保存随机修正模板 & 正面特性修正的List
         public List<TraitAndDegree> TraitSets
         {
@@ -48,7 +48,7 @@ namespace AKE_OperatorExtension
         public TimeToTick intervalUnit = TimeToTick.day;
         //储存TraitSet的索引
         //private HashSet<int> UsedIndex = new HashSet<int>();
-        private Dictionary<List<TraitAndDegree>, HashSet<int>> usedIndices = new Dictionary<List<TraitAndDegree>, HashSet<int>>();
+        private Dictionary<List<TraitAndDegree>, HashSet<int>> usedIndices = new();
 
         private static int index = 0;
         private int tick = 0;

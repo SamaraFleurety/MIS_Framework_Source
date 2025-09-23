@@ -49,12 +49,12 @@ namespace AK_DLL
         public static bool zoomWithCamera = true;
         public static bool drawOutOfCameraZoom = true;
         //RGB
-        internal static Color32 Color_RGB => new Color32((byte)r, (byte)g, (byte)b, (byte)a);
+        internal static Color32 Color_RGB => new((byte)r, (byte)g, (byte)b, (byte)a);
         public static int r = 105;
         public static int g = 180;
         public static int b = 210;
         public static int a = 200;
-        internal static Color32 Color_RGB_enemy => new Color32((byte)r_enemy, (byte)g_enemy, (byte)b_enemy, (byte)a_enemy);
+        internal static Color32 Color_RGB_enemy => new((byte)r_enemy, (byte)g_enemy, (byte)b_enemy, (byte)a_enemy);
         public static int r_enemy = 220;
         public static int g_enemy = 40;
         public static int b_enemy = 0;
@@ -81,7 +81,7 @@ namespace AK_DLL
         //主菜单
         public static string secretary = "Amiya";
         public static int secretarySkin = 1;
-        public static Vector3 secretaryLoc = new Vector3(400, 0, 1); //(x坐标, y坐标, 缩放倍率)。坐标使用unity体系，即左下角是(0,0)，上右为正。
+        public static Vector3 secretaryLoc = new(400, 0, 1); //(x坐标, y坐标, 缩放倍率)。坐标使用unity体系，即左下角是(0,0)，上右为正。
         public static int secLocSensitive = 1; //调整主界面秘书位置时，每次按钮移动的像素数量；实际效果是值*10
         public static string font = "AK_Font_YouYuan";
         public static FontDef Font
@@ -196,7 +196,7 @@ namespace AK_DLL
         {
             ParseHelper.Parsers<ItemOnSpawn>.Register(ItemOnSpawn.Parser);
             settings = GetSettings<AK_ModSettings>();
-            Harmony instance = new Harmony("AK_DLL");
+            Harmony instance = new("AK_DLL");
             instance.PatchAll(Assembly.GetExecutingAssembly());
             if (ModLister.GetActiveModWithIdentifier("Nals.FacialAnimation") == null)
             {
@@ -205,7 +205,7 @@ namespace AK_DLL
         }
         public override void DoSettingsWindowContents(Rect inRect)
         {
-            Listing_Standard listingStandard = new Listing_Standard();
+            Listing_Standard listingStandard = new();
             listingStandard.Begin(inRect);
             if (Prefs.DevMode) listingStandard.CheckboxLabeled("测试模式", ref AK_ModSettings.debugOverride, "开启明日方舟MOD的测试模式。如果您不是测试人员请勿勾选此选项。");
             if (Prefs.DevMode || AK_ModSettings.allowManualRegister) listingStandard.CheckboxLabeled("AK_Option_AllowReg".Translate(), ref AK_ModSettings.allowManualRegister, "AK_Option_AllowRegDesc".Translate());
@@ -229,7 +229,7 @@ namespace AK_DLL
             List<FontDef> allFontDefs = DefDatabase<FontDef>.AllDefsListForReading;
             if (listingStandard.ButtonTextLabeled("AK_Option_selectFont".Translate(), AK_ModSettings.Font.label.Translate()))
             {
-                List<FloatMenuOption> list = new List<FloatMenuOption>();
+                List<FloatMenuOption> list = new();
                 foreach (FontDef i in allFontDefs)
                 {
                     FontDef j = i;

@@ -30,7 +30,7 @@ namespace AK_DLL
 
             int skinIndex = doc.preferedSkin;
             //Log.Message($"{doc.operatorDef.label} has skin {skinIndex}");
-            if (skinIndex >= 1000 && skinIndex < 2000) return; //没做支持l2d
+            if (skinIndex is >= 1000 and < 2000) return; //没做支持l2d
 
             Color color = GUI.color;
             GUI.color = new Color(1f, 1f, 1f, AK_ModSettings.opacity / 100f);

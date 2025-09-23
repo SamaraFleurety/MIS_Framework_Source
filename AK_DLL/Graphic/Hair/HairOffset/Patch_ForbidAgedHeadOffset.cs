@@ -35,9 +35,9 @@ namespace AK_DLL.HarmonyPatchs
             {
                 list.InsertRange(index + 1, new CodeInstruction[]
                 {
-                    new CodeInstruction(OpCodes.Ldarg_0),
-                    new CodeInstruction(OpCodes.Ldfld, fieldPawnInsideRender),
-                    new CodeInstruction(OpCodes.Call, overrideMethod)
+                    new(OpCodes.Ldarg_0),
+                    new(OpCodes.Ldfld, fieldPawnInsideRender),
+                    new(OpCodes.Call, overrideMethod)
                 });
             }
 

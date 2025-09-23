@@ -86,7 +86,7 @@ namespace AK_DLL
         }
         public string GetUniqueLoadID()
         {
-            return (this.operatorID + "Doc");
+            return this.operatorID + "Doc";
         }
 
         public void ExposeData()

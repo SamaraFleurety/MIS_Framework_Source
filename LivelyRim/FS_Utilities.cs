@@ -148,7 +148,7 @@ namespace FS_LivelyRim
         /// <returns></returns>
         public static GameObject ChangeDefaultModel(LiveModelDef def)
         {
-            if (defaultModelInstance != null) defaultModelInstance.SetActive(false);
+            defaultModelInstance?.SetActive(false);
             GameObject obj = FS_Tool.InstantiateLive2DModel(def, null, true, def.defName);
             if (obj != null)
             {

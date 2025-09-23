@@ -8,18 +8,18 @@ namespace AKA_Ability.AbilityEffect
     public class AE_Illustrious_Dilapidate : AbilityEffectBase
     {
         public DamageDef damageDef;
-        static List<float> damageOnCharge = new List<float>() { 0, 1, 2, 50, 100, 225, 550 };
+        static List<float> damageOnCharge = new() { 0, 1, 2, 50, 100, 225, 550 };
 
         public HediffDef hediffDef; //下面两个加攻击力用的 必须是Hediff_DynamicStage
         public float buffDuration = 96; //hour
-        static List<float> statCDFactorOnCharge = new List<float>() { 0, 0, 0.91f, 0.91f, 0.625f, 0.625f, 0.556f };
-        static List<float> statAtkDmgFactorOnCharge = new List<float>() { 0, 0, 0.1f, 0.1f, 0.1f, 0.6f, 0.8f };
+        static List<float> statCDFactorOnCharge = new() { 0, 0, 0.91f, 0.91f, 0.625f, 0.625f, 0.556f };
+        static List<float> statAtkDmgFactorOnCharge = new() { 0, 0, 0.1f, 0.1f, 0.1f, 0.6f, 0.8f };
 
         //public HediffDef stunDef;
-        static List<float> stunTimeOnCharge = new List<float>() { 0, 0, 0, 0, 0, 3, 6 };  //second
+        static List<float> stunTimeOnCharge = new() { 0, 0, 0, 0, 0, 3, 6 };  //second
 
         public HediffDef cloakDef;
-        static List<float> cloakTimeOnCharge = new List<float>() { 0, 0, 0, 0, 2, 5, 9 };
+        static List<float> cloakTimeOnCharge = new() { 0, 0, 0, 0, 2, 5, 9 };
         protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
             if (caster.CasterPawn == null) return false;
@@ -45,7 +45,7 @@ namespace AKA_Ability.AbilityEffect
                         float damage = damageOnCharge[charge] / 5;
                         for (int i = 0; i < 5; ++i)
                         {
-                            DamageInfo absDmgInfo = new DamageInfo(damageDef, damage, 999, instigator: casterPawn, instigatorGuilty: true);
+                            DamageInfo absDmgInfo = new(damageDef, damage, 999, instigator: casterPawn, instigatorGuilty: true);
                             absDmgInfo.Def.Worker.Apply(absDmgInfo, targetPawn);
                         }
                     }

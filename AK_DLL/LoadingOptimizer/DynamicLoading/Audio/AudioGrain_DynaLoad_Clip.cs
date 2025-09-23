@@ -8,7 +8,7 @@ namespace AK_DLL.DynaLoad
     public class AudioGrain_DynaLoad_Clip : AudioGrain_Clip
     {
         //有哪些语音包 硬编译的，以后非要动态加就写个config def啥的
-        List<string> soundsModPackageID = new List<string>() { "MIS.SoundCN", "MIS.SoundEN" };
+        List<string> soundsModPackageID = new() { "MIS.SoundCN", "MIS.SoundEN" };
         bool? hasAnySoundPack = null;
         //挺蠢的，拿不到父类
         public static string ModID => SubSoundDef_DynaLoading.loadingFromMod;

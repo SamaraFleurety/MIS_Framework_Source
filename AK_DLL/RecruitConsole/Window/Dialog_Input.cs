@@ -18,7 +18,7 @@ namespace AK_DLL
 
         protected virtual int MaxNameLength => 96;
 
-        public override Vector2 InitialSize => new Vector2(280f, 175f);
+        public override Vector2 InitialSize => new(280f, 175f);
 
         public Dialog_Input(Action<string> eventOnOk, Func<string, bool> valCb, string defVal = "")
         {

@@ -8,7 +8,7 @@ namespace AKA_Ability
     {
 
         #region 属性
-        private HCP_DpsEnhance_Melee exactProps = new HCP_DpsEnhance_Melee();
+        private HCP_DpsEnhance_Melee exactProps = new();
         public HCP_DpsEnhance_Melee Props
         {
             get { return (HCP_DpsEnhance_Melee)base.props; }

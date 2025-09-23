@@ -15,12 +15,14 @@ namespace LMA_Lib.AI
         protected override IEnumerable<Toil> MakeNewToils()
         {
             yield return Toils_Goto.GotoCell(TargetIndex.A, PathEndMode.InteractionCell);
-            Toil t = new Toil();
-            t.initAction = delegate
+            Toil t = new()
+            {
+                initAction = delegate
             {
                 Find.TickManager.Pause();
-                RIWindowHandler.continuousRecruit = TargetThingB == null ? false : true;    //用target B做标记，要是不为null就是连续招募模式
+                RIWindowHandler.continuousRecruit = TargetThingB != null;    //用target B做标记，要是不为null就是连续招募模式
                 RIWindowHandler.OpenRIWindow(AzurDefOf.LMA_Prefab_MainMenu, TargetThingA, pawn, OpDetailType.Recruit);
+            }
             };
             yield return t;
             yield break;

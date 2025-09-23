@@ -35,7 +35,7 @@ namespace AKA_Ability
         private readonly Pawn User;
         private readonly int width = 620;
         private SkillRecord ChoosenSkill;
-        public override Vector2 InitialSize => new Vector2(620f, 420f);
+        public override Vector2 InitialSize => new(620f, 420f);
         public Dialog_ChoseSkill(Pawn target, Pawn user)
         {
             forcePause = true;
@@ -55,24 +55,24 @@ namespace AKA_Ability
             Widgets.DrawWindowBackground(rect);
             Text.Anchor = TextAnchor.MiddleLeft;
             Text.Font = GameFont.Small;
-            Rect rectLeftTopLabel = new Rect(rect.x + 20f, rect.y + 10f, rect.width / 2, 20f);
+            Rect rectLeftTopLabel = new(rect.x + 20f, rect.y + 10f, rect.width / 2, 20f);
             Widgets.Label(rectLeftTopLabel, "AKA.CopySkillTextTarget".Translate() + Target.Label);
             Text.Font = GameFont.Small;
-            Rect rectRightTopLabel = new Rect(rect.x + 250f, rect.y + 10f, rect.width / 2, 20f);
+            Rect rectRightTopLabel = new(rect.x + 250f, rect.y + 10f, rect.width / 2, 20f);
             Widgets.Label(rectRightTopLabel, "AKA.CopySkillTextUser".Translate() + User.Label);
-            Rect rect1 = new Rect(rect.x + 20f, rect.y + 40f, rect.width / 2, rect.height);
-            Rect rect2 = new Rect(rect.x + 250f, rect.y + 40f, rect.width / 2, rect.height);
+            Rect rect1 = new(rect.x + 20f, rect.y + 40f, rect.width / 2, rect.height);
+            Rect rect2 = new(rect.x + 250f, rect.y + 40f, rect.width / 2, rect.height);
             Widgets.BeginGroup(rect1);
             SkillUI.DrawSkillsOf(Target, offset: Vector2.zero, mode: (Current.ProgramState != ProgramState.Playing) ? SkillUI.SkillDrawMode.Menu : SkillUI.SkillDrawMode.Gameplay, container: rect1);
             Widgets.EndGroup();
             Widgets.BeginGroup(rect2);
             SkillUI.DrawSkillsOf(User, offset: Vector2.zero, mode: (Current.ProgramState != ProgramState.Playing) ? SkillUI.SkillDrawMode.Menu : SkillUI.SkillDrawMode.Gameplay, container: rect2);
             Widgets.EndGroup();
-            Rect rectButton = new Rect(rect.x + 500f, rect.y + 38f, 80f, 25f);
+            Rect rectButton = new(rect.x + 500f, rect.y + 38f, 80f, 25f);
             List<SkillRecord> TargetSkills = Target.skills.skills;
             for (int i = 0; i < TargetSkills.Count; i++)
             {
-                Rect Button = new Rect(rectButton.x, rectButton.y + 27.2f * i, rectButton.width, rectButton.height);
+                Rect Button = new(rectButton.x, rectButton.y + (27.2f * i), rectButton.width, rectButton.height);
                 if (Widgets.ButtonText(Button, "AKA.CopySkillSelect".Translate()))
                 {
                     ChoosenSkill = TargetSkills[i];

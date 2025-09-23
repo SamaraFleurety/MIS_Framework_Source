@@ -91,14 +91,14 @@ namespace AK_DLL
         {
             if (this.recruitSound != null) return;
             this.recruitSound = DefDatabase<SoundDef>.GetNamedSilentFail(AK_Tool.GetThingdefNameFrom(operatorName, prefix, "Voice_Recruit"));
-            if (this.recruitSound == null) this.recruitSound = DefDatabase<SoundDef>.GetNamed("AK_Voice_Recruit_Default");
+            this.recruitSound ??= DefDatabase<SoundDef>.GetNamed("AK_Voice_Recruit_Default");
         }
 
         private void AutoFillDiedSound(string prefix, string operatorName)
         {
             if (this.diedSound != null) return;
             this.diedSound = DefDatabase<SoundDef>.GetNamedSilentFail(AK_Tool.GetThingdefNameFrom(operatorName, prefix, "Voice_Die"));
-            if (this.diedSound == null) this.diedSound = DefDatabase<SoundDef>.GetNamed("AK_Voice_Die_Default");
+            this.diedSound ??= DefDatabase<SoundDef>.GetNamed("AK_Voice_Die_Default");
         }
     }
 }

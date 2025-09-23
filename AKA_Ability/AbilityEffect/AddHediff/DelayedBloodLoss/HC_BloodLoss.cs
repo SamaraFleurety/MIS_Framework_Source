@@ -5,7 +5,7 @@ namespace AKA_Ability
     public class HC_BloodLoss : HediffComp
     {
         #region 属性
-        private HCP_BloodLoss exactProps = new HCP_BloodLoss();
+        private HCP_BloodLoss exactProps = new();
         private int tick = 5000;
         public HCP_BloodLoss Props
         {

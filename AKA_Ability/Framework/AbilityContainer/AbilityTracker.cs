@@ -261,7 +261,7 @@ namespace AKA_Ability
 
         public T TryGetSharedData<T>() where T : AbilityTrackerSharedData_Base
         {
-            if (sharedData != null && sharedData is T data) return data;
+            if (sharedData is not null and T data) return data;
             return null;
         }
 

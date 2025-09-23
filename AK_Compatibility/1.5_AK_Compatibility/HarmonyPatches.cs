@@ -17,7 +17,7 @@ namespace PA_AKPatch
         static AKPatches()
         {
             //手动Patch才可以调用MakeByRefType
-            Harmony harmony = new Harmony("paluto22.ak.compatibility");
+            Harmony harmony = new("paluto22.ak.compatibility");
             /*harmony.Patch(AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn), new[] { typeof(PawnGenerationRequest) }),
                  prefix: new HarmonyMethod(patchType, nameof(NewGeneratePawn_Prefix)));*/
             harmony.PatchAll(Assembly.GetExecutingAssembly());
@@ -111,7 +111,7 @@ namespace PA_AKPatch
 
             OperatorDocument doc = ___pawn.GetDoc();
             if (doc == null) return;
-            if (doc.operatorDef.GetModExtension<Ext_NoFaceNL>() is { } ext) 
+            if (doc.operatorDef.GetModExtension<Ext_NoFaceNL>() is { } ext)
             {
                 if (ext.ignoreGraphic) __result = null;
                 return;

@@ -34,7 +34,7 @@ namespace AK_DLL
         public static void PlaySound(this Pawn pawn)
         {
             OperatorDocument doc = pawn.GetDoc();
-            if (doc != null) doc.voicePack.abilitySounds.RandomElement().PlaySound();
+            doc?.voicePack.abilitySounds.RandomElement().PlaySound();
         }
     }
 }

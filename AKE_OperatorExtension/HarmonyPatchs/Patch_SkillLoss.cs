@@ -12,7 +12,7 @@ namespace AKE_OperatorExtension.HarmonyPatchs
     [HarmonyPatch(typeof(SkillRecord), "Interval")]
     public static class Patch_SkillLoss
     {
-        private static Dictionary<Pawn, float> colonistsMap = new Dictionary<Pawn, float>();
+        private static Dictionary<Pawn, float> colonistsMap = new();
         [HarmonyTranspiler]
         public static IEnumerable<CodeInstruction> transpiler(IEnumerable<CodeInstruction> instructions)
         {
@@ -41,10 +41,10 @@ namespace AKE_OperatorExtension.HarmonyPatchs
 
             list.InsertRange(index + 1, new CodeInstruction[]
                 {
-                    new CodeInstruction(OpCodes.Ldloca_S, 0),
-                    new CodeInstruction(OpCodes.Ldarg, 0),
-                    new CodeInstruction(OpCodes.Ldfld, fieldPawn),
-                    new CodeInstruction(OpCodes.Call, overrideMethod)
+                    new(OpCodes.Ldloca_S, 0),
+                    new(OpCodes.Ldarg, 0),
+                    new(OpCodes.Ldfld, fieldPawn),
+                    new(OpCodes.Call, overrideMethod)
                 });
 
             return list;

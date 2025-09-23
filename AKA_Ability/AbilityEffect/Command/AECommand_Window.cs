@@ -15,7 +15,7 @@ namespace AKA_Ability
         private int width = 750;
         private readonly string OPID;
         public IntVec3 spot = IntVec3.Invalid;
-        public override Vector2 InitialSize => new Vector2(850f, 400f);
+        public override Vector2 InitialSize => new(850f, 400f);
         public bool randomRewardMod = false;
         private List<RewardDef> rewards;
         private readonly List<RewardDef> rewardPool;

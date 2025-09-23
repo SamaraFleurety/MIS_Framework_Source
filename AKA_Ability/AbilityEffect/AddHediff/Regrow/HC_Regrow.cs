@@ -25,7 +25,7 @@ namespace AKA_Ability
             }
         }
 
-        private HCP_Regrow exactProps = new HCP_Regrow();
+        private HCP_Regrow exactProps = new();
 
         public int HealInterval
         {
@@ -64,7 +64,7 @@ namespace AKA_Ability
         {
             get
             {
-                return ($"\n剩余:{(base.parent.Severity * 10).ToString("0.0")}环时\n间隔:{this.HealInterval / 60}秒\n强度{this.HealAmount}");
+                return $"\n剩余:{base.parent.Severity * 10:0.0}环时\n间隔:{this.HealInterval / 60}秒\n强度{this.HealAmount}";
             }
         }
 

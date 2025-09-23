@@ -5,8 +5,8 @@ namespace AK_DLL
 {
     public class HCP_ForceColors : HediffCompProperties
     {
-        public Color skinColor = new Color();
-        public Color hairColor = new Color();
+        public Color skinColor = new();
+        public Color hairColor = new();
 
         public HCP_ForceColors()
         {
@@ -17,7 +17,7 @@ namespace AK_DLL
     {
         public HCP_ForceColors Props => (HCP_ForceColors)this.props;
 
-        public HCP_ForceColors exactProps = new HCP_ForceColors();
+        public HCP_ForceColors exactProps = new();
 
         public override string CompLabelInBracketsExtra
         {

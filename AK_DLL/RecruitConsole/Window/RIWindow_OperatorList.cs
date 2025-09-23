@@ -130,7 +130,7 @@ namespace AK_DLL.UI
         protected static Transform sorterColumnLoc = null;
         //干员面板
         protected static Transform opListPanel = null;
-        private static List<GameObject> opList = new List<GameObject>();
+        private static List<GameObject> opList = new();
         //相当投机取巧地在名字里面存储数据 字符串内可以随便填。现在的值是12。
         public static int orderInName = "FSUI_whatev_".Length;
 
@@ -420,7 +420,7 @@ namespace AK_DLL.UI
             if (cnt <= MaxOperatorPerPage)
             {
                 GameObject silder = GameObject.Find("OpReg_Scrollbar");
-                if (silder != null) silder.SetActive(false);
+                silder?.SetActive(false);
             }
 
             while (cnt < opList.Count)
@@ -636,7 +636,7 @@ namespace AK_DLL.UI
                         {
                             foreach (ExtraDamage j in i.extraMeleeDamages)
                             {
-                                localDPS += (j.amount * Math.Min(1.0, j.chance));
+                                localDPS += j.amount * Math.Min(1.0, j.chance);
                             }
                         }
                         localDPS /= i.cooldownTime;
@@ -656,7 +656,7 @@ namespace AK_DLL.UI
                     FieldInfo damage = bullet.GetType().GetField("damageAmountBase", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
                     //单发伤害
                     rangedDPS = (int)damage.GetValue(bullet);
-                    if (bullet.extraDamages != null) foreach (ExtraDamage l in bullet.extraDamages) rangedDPS += (l.amount * Math.Min(l.chance, 1.0));
+                    if (bullet.extraDamages != null) foreach (ExtraDamage l in bullet.extraDamages) rangedDPS += l.amount * Math.Min(l.chance, 1.0);
 
                     double realCD = verb.warmupTime;
                     foreach (StatModifier k in w.statBases)
@@ -698,7 +698,7 @@ namespace AK_DLL.UI
         private void Merge<T>(int i, int j, int k, Func<T, T, bool> comparer, Func<OperatorDef, T> compraree)
         {
             int mergedSize = k - i + 1;
-            List<OperatorDef> mergedOps = new List<OperatorDef>(new OperatorDef[mergedSize]);
+            List<OperatorDef> mergedOps = new(new OperatorDef[mergedSize]);
 
             int mergePos = 0, leftPos = i, rightPos = j + 1;
 
@@ -806,9 +806,9 @@ namespace AK_DLL.UI
             set => AK_ModSettings.lastViewedClass = value;
         }
 
-        static List<Transform> sorterBtns = new List<Transform>();
+        static List<Transform> sorterBtns = new();
 
-        protected static List<OperatorDef> cachedOperatorList = new List<OperatorDef>();
+        protected static List<OperatorDef> cachedOperatorList = new();
         public Thing RecruitConsole
         {
             get { return RIWindowHandler.RecruitConsole; }

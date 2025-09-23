@@ -54,7 +54,7 @@ namespace AK_DLL
 
 
         //存所有mod的路径 <packageID(原生), 路径>
-        public static Dictionary<string, string> modPath = new Dictionary<string, string>();
+        public static Dictionary<string, string> modPath = new();
         static void LoadAllModPath()
         {
             List<ModContentPack> Mods = LoadedModManager.RunningMods.ToList();
@@ -79,7 +79,7 @@ namespace AK_DLL
 
         #region AB包
         //用来缓存ab包。ab包重复从路径读是null。外部不应该直接读这个
-        private static Dictionary<string, AssetBundle> cachedAssetBundle = new Dictionary<string, AssetBundle>();
+        private static Dictionary<string, AssetBundle> cachedAssetBundle = new();
 
         //从随便一个模型/prefab的def，仅读其ab包
         public static AssetBundle LoadAssetBundle(AssetDef assetDef)
@@ -98,7 +98,7 @@ namespace AK_DLL
         {
             AssetBundle assetBundle;
 
-            if (AssetBundleID == null) AssetBundleID = AssetBundlePath;
+            AssetBundleID ??= AssetBundlePath;
 
             if (cachedAssetBundle.ContainsKey(AssetBundleID)) return cachedAssetBundle[AssetBundleID];
 
@@ -168,8 +168,7 @@ namespace AK_DLL
         public static Dictionary<string, Texture2D> dynamicLoadingTextures = new();
         public static Texture2D GetDynamicLoadTexture(string itemFullHardwarePath, bool cacheIntoDictionary = false)
         {
-            Texture2D texture;
-            dynamicLoadingTextures.TryGetValue(itemFullHardwarePath, out texture);
+            dynamicLoadingTextures.TryGetValue(itemFullHardwarePath, out Texture2D texture);
             if (texture != null) return texture;
 
             texture = LoadResourceIO<Texture2D>(itemFullHardwarePath);
@@ -247,7 +246,7 @@ namespace AK_DLL
         //自动分类和加载路径中的文件。完整路径需要用上面的函数获得
         public static T LoadResourceIO<T>(string fileFullPath) where T : class
         {
-            if (!File.Exists(@fileFullPath)) return default(T);
+            if (!File.Exists(@fileFullPath)) return default;
             T val = null;
             if (typeof(T) == typeof(Texture2D))
             {

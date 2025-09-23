@@ -1,6 +1,5 @@
 ﻿using AK_DLL.DynaLoad;
 using AK_DLL.DynamicLoading;
-using AK_DLL.UI;
 using AK_TypeDef;
 using AKA_Ability;
 using AKM_MusicPlayer;
@@ -344,10 +343,9 @@ namespace AK_DLL
         {
             Pawn result = null;
             currentlyGenerating = true;
-            IntVec3 intVec;
             if (map != null)
             {
-                if (RCellFinder.TryFindRandomPawnEntryCell(out intVec, map, 0.2f, false, null))
+                if (RCellFinder.TryFindRandomPawnEntryCell(out IntVec3 intVec, map, 0.2f, false, null))
                 {
                     result = Recruit(intVec, map);
                 }
@@ -529,7 +527,7 @@ namespace AK_DLL
             operator_Pawn.Name = new NameTriple(this.name, this.nickname, this.surname);//“名”“简”“姓”
 
             //性别更改
-            operator_Pawn.gender = (this.isMale) ? Gender.Male : Gender.Female;
+            operator_Pawn.gender = this.isMale ? Gender.Male : Gender.Female;
             operator_Pawn.ageTracker.AgeBiologicalTicks = this.age * (long)TimeToTick.year;
             operator_Pawn.ageTracker.AgeChronologicalTicks = this.realAge * (long)TimeToTick.year;
 

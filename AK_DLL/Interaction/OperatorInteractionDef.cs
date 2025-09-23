@@ -5,6 +5,6 @@ namespace AK_DLL
 {
     public class OperatorInteractionDef : InteractionDef
     {
-        public List<string> involvedPawns = new List<string>();
+        public List<string> involvedPawns = new();
     }
 }

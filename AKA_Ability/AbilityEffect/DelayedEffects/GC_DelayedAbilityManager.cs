@@ -7,7 +7,7 @@ namespace AKA_Ability
 {
     public class GC_DelayedAbilityManager : GameComponent
     {
-        public static RedBlackTree<int, DelayedEffectorBase> delayedAbilities = new RedBlackTree<int, DelayedEffectorBase>(); //key:被执行时的tick
+        public static RedBlackTree<int, DelayedEffectorBase> delayedAbilities = new(); //key:被执行时的tick
         private static int first = 0;
 
         static int CurrentTick => Find.TickManager.TicksGame;

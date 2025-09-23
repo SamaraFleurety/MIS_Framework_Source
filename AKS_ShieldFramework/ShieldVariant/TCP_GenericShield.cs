@@ -31,8 +31,8 @@ namespace AKS_Shield
         public float meleeDodgeChanceFactor = 1;   //会乘以pawn的近战闪避  我靠，好像dinfo不能区分近战远程伤害
         //public float rangedDodgeChance = 0;        //0-1，躲避子弹的概率。原版并不能演黑客帝国。
 
-        public List<Type> postBreakEffects = new List<Type>();              //仅当命中并且本次命中导致护盾破碎时调用
-        public List<Type> postAbsorbDmgEffects = new List<Type>();          //命中后调用 是否闪避是参数
+        public List<Type> postBreakEffects = new();              //仅当命中并且本次命中导致护盾破碎时调用
+        public List<Type> postAbsorbDmgEffects = new();          //命中后调用 是否闪避是参数
 
         public TCP_GenericShield()
         {
@@ -305,7 +305,7 @@ namespace AKS_Shield
             }
         }
         private static Vector2 BarSize => new(Width, Height);
-        private static Vector3 BottomMargin => new(0f, 0f, Margin - Height * 2);
+        private static Vector3 BottomMargin => new(0f, 0f, Margin - (Height * 2));
 
         const string DEF_IconTexPath = "UI/Abilities/icon_sort_def";
         private Material iconDefend = null;
@@ -340,21 +340,21 @@ namespace AKS_Shield
             GenDraw.FillableBarRequest fbr = default;
             if (CameraPlusModEnabled)
             {
-                fbr.center = drawPos + (Vector3.up * 3f) + BottomMargin * (zoomYRatio > 1.75f ? zoomYRatio * 0.9f : zoomYRatio);
+                fbr.center = drawPos + (Vector3.up * 3f) + (BottomMargin * (zoomYRatio > 1.75f ? zoomYRatio * 0.9f : zoomYRatio));
                 fbr.size = BarSize;
                 fbr.size.x *= zoomWidthRatio;
                 fbr.size.y *= zoomRatio > 1.75f ? zoomRatio * 1.5f : zoomRatio;
             }
             else if (SimpleCameraModEnabled)
             {
-                fbr.center = drawPos + (Vector3.up * 3f) + BottomMargin * (zoomYRatio > 1.75f ? zoomYRatio * 0.75f : zoomYRatio);
+                fbr.center = drawPos + (Vector3.up * 3f) + (BottomMargin * (zoomYRatio > 1.75f ? zoomYRatio * 0.75f : zoomYRatio));
                 fbr.size = BarSize;
                 fbr.size.x *= zoomWidthRatio;
                 fbr.size.y *= zoomRatio > 3f ? zoomRatio * 1.05f : zoomRatio;
             }
             else
             {
-                fbr.center = drawPos + (Vector3.up * 3f) + BottomMargin * (zoomYRatio > 1.75f ? zoomYRatio * 0.75f : zoomYRatio);
+                fbr.center = drawPos + (Vector3.up * 3f) + (BottomMargin * (zoomYRatio > 1.75f ? zoomYRatio * 0.75f : zoomYRatio));
                 fbr.size = BarSize;
                 fbr.size.x *= zoomWidthRatio;
                 fbr.size.y *= zoomRatio > 6.5f ? zoomRatio * 1.25f : zoomRatio;
@@ -441,7 +441,7 @@ namespace AKS_Shield
             effector?.PostAbsorbDamage(wearer, shield, ref dinfo, dodged);
         }
 
-        static Dictionary<Type, AbsorbDamageEffector_Base> effectorMaps = new Dictionary<Type, AbsorbDamageEffector_Base>();
+        static Dictionary<Type, AbsorbDamageEffector_Base> effectorMaps = new();
         static AbsorbDamageEffector_Base GetEffectorInstance(Type effectorType)
         {
             if (effectorMaps.ContainsKey(effectorType)) { return effectorMaps[effectorType]; }

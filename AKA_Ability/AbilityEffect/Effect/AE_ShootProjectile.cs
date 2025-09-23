@@ -11,7 +11,7 @@ namespace AKA_Ability.AbilityEffect
             if (caster.CasterPawn == null) return false;
 
             Pawn casterPawn = caster.CasterPawn;
-            ShootLine shootLine = new ShootLine(casterPawn.Position, target.Cell);
+            ShootLine shootLine = new(casterPawn.Position, target.Cell);
 
             Projectile proj = (Projectile)GenSpawn.Spawn(projectile, shootLine.Source, casterPawn.Map, WipeMode.Vanish);
             proj.Launch(casterPawn, casterPawn.DrawPos, target, target, ProjectileHitFlags.All, false, null, null);

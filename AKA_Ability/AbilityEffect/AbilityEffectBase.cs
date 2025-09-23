@@ -9,7 +9,7 @@ namespace AKA_Ability
         //无视目标参数 永远指定自己为目标
         public bool forceTargetSelf = false;
 
-        public virtual bool DoEffect(AKAbility_Base caster, GlobalTargetInfo globalTargetInfo = default(GlobalTargetInfo), LocalTargetInfo localTargetInfo = default(LocalTargetInfo))
+        public virtual bool DoEffect(AKAbility_Base caster, GlobalTargetInfo globalTargetInfo = default, LocalTargetInfo localTargetInfo = default)
         {
             if (caster.CasterPawn == null) return false;
 

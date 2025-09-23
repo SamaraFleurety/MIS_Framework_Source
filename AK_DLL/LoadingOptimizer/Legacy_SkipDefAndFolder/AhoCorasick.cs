@@ -74,7 +74,7 @@ namespace AK_DLL.AhoCorasick
         /// <summary>
         /// Root of the trie. It has no value and no parent.
         /// </summary>
-        private readonly Node<T, TValue> root = new Node<T, TValue>();
+        private readonly Node<T, TValue> root = new();
 
         /// <summary>
         /// Adds a word to the tree.
@@ -98,8 +98,7 @@ namespace AK_DLL.AhoCorasick
             {
                 var child = node[c];
 
-                if (child == null)
-                    child = node[c] = new Node<T, TValue>(c, node);
+                child ??= node[c] = new Node<T, TValue>(c, node);
 
                 node = child;
             }
@@ -178,8 +177,8 @@ namespace AK_DLL.AhoCorasick
         {
             private readonly TNode word;
             private readonly Node<TNode, TNodeValue> parent;
-            private readonly Dictionary<TNode, Node<TNode, TNodeValue>> children = new Dictionary<TNode, Node<TNode, TNodeValue>>();
-            private readonly List<TNodeValue> values = new List<TNodeValue>();
+            private readonly Dictionary<TNode, Node<TNode, TNodeValue>> children = new();
+            private readonly List<TNodeValue> values = new();
 
             /// <summary>
             /// Constructor for the root node.

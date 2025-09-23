@@ -40,7 +40,7 @@ namespace AKA_Ability
             }
             else
             {
-                if (comp.Enhances == null) comp.Enhances = new List<toolEnhance>();
+                comp.Enhances ??= new List<toolEnhance>();
                 comp.Enhances = this.enhances;
                 comp.Interval = this.interval;
                 comp.ProcedureCount = this.procedureCount;

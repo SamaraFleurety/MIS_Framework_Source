@@ -13,7 +13,7 @@ namespace SFLib
     }
 
     [DefOf]
-    public static class SFDefOf 
+    public static class SFDefOf
     {
         static SFDefOf()
         {

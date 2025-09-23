@@ -6,7 +6,7 @@ namespace AK_DLL
     public class TCP_DrawOverlay : CompProperties
     {
         public GraphicData overlay;
-        public Vector3 offset = new Vector3(0, 0, 0);
+        public Vector3 offset = new(0, 0, 0);
         public TCP_DrawOverlay()
         {
             compClass = typeof(TC_DrawOverlay);

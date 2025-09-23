@@ -23,7 +23,7 @@ namespace AK_DLL
         public override void DoEditInterface(Listing_ScenEdit listing)
         {
             Rect scenPartRect = listing.GetScenPartRect(this, ScenPart.RowHeight * 2f);
-            Rect rect = new Rect(scenPartRect.x, scenPartRect.y, scenPartRect.width, scenPartRect.height / 2f);
+            Rect rect = new(scenPartRect.x, scenPartRect.y, scenPartRect.width, scenPartRect.height / 2f);
             if (operatorDef == null)
             {
                 Widgets.ButtonText(rect, "No operator exist");
@@ -32,7 +32,7 @@ namespace AK_DLL
             //IMGUI，选择干员职业
             if (Widgets.ButtonText(rect, RIWindowHandler.operatorClasses[operatorClass].label.Translate()))
             {
-                List<FloatMenuOption> list = new List<FloatMenuOption>();
+                List<FloatMenuOption> list = new();
                 foreach (OperatorClassDef i in RIWindowHandler.operatorClasses.Values)
                 {
                     OperatorClassDef localClass = i;
@@ -49,7 +49,7 @@ namespace AK_DLL
             rect.y += scenPartRect.height / 2f;
             if (Widgets.ButtonText(rect, operatorDef.nickname.Translate()))
             {
-                List<FloatMenuOption> list = new List<FloatMenuOption>();
+                List<FloatMenuOption> list = new();
                 foreach (OperatorDef i in RIWindowHandler.operatorDefs[operatorClass].Values)
                 {
                     OperatorDef localOp = i;
@@ -81,7 +81,7 @@ namespace AK_DLL
         //游戏开始后，删掉所有原生pawn
         public override void PostGameStart()
         {
-            List<Pawn> colonists = new List<Pawn>(PawnsFinder.AllMapsCaravansAndTravellingTransporters_Alive_Colonists /*PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_Colonists*/);
+            List<Pawn> colonists = new(PawnsFinder.AllMapsCaravansAndTravellingTransporters_Alive_Colonists /*PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_Colonists*/);
             //Log.Message($"pgs {colonists.Count}");
             operatorDef.Recruit(Find.CurrentMap);
             foreach (Pawn p in colonists)

@@ -11,7 +11,7 @@ namespace AKA_Ability.Cooldown
         int tick = 0;
 
         //到达每层后，需要多少能量才能获得下一级充能
-        static List<int> spToNextCharge = new List<int>
+        static List<int> spToNextCharge = new()
         {
             40,
             40,
@@ -95,8 +95,10 @@ namespace AKA_Ability.Cooldown
         {
             if (cumulativeSpAtCharge != null) return;
 
-            cumulativeSpAtCharge = new List<int>(spToNextCharge.Count + 1);
-            cumulativeSpAtCharge.Add(0);
+            cumulativeSpAtCharge = new List<int>(spToNextCharge.Count + 1)
+            {
+                0
+            };
             for (int i = 0; i < spToNextCharge.Count; ++i)
             {
                 cumulativeSpAtCharge.Add(cumulativeSpAtCharge[i] + spToNextCharge[i]);  //注意，加在cumulativeSpAtCharge[j]，j = i+1

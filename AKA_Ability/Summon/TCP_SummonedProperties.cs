@@ -36,8 +36,7 @@ namespace AKA_Ability.Summon
             base.PostPostMake();
             if (Props.allowDraft)
             {
-                Pawn summonedPawn = parent as Pawn;
-                if (summonedPawn != null && summonedPawn.drafter == null) summonedPawn.drafter = new Pawn_DraftController(summonedPawn);
+                if (parent is Pawn summonedPawn && summonedPawn.drafter == null) summonedPawn.drafter = new Pawn_DraftController(summonedPawn);
             }
         }
 
@@ -47,8 +46,7 @@ namespace AKA_Ability.Summon
             base.PostSpawnSetup(respawningAfterLoad);
             if (Props.allowDraft)
             {
-                Pawn summonedPawn = parent as Pawn;
-                if (summonedPawn != null && summonedPawn.drafter == null) summonedPawn.drafter = new Pawn_DraftController(summonedPawn);
+                if (parent is Pawn summonedPawn && summonedPawn.drafter == null) summonedPawn.drafter = new Pawn_DraftController(summonedPawn);
             }
         }
 

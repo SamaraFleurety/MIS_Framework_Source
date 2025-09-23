@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AKA_Ability.CastConditioner
+﻿namespace AKA_Ability.CastConditioner
 {
     public class CC_NeedCharge : CastConditioner_Base
     {

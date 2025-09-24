@@ -113,7 +113,7 @@ namespace PA_AKPatch
             if (doc == null) return;
             if (doc.operatorDef.GetModExtension<Ext_MarkNLIncompatible>() is { } ext)
             {
-                 __result = null;
+                __result = null;
                 return;
             }
             /*if (AKC_ModSettings.MIS_NoFace_Actived && !AKC_ModSettings.disable_FacialAnimation_NoFace)

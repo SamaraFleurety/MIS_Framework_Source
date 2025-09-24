@@ -59,7 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Ext_KeepOriginal.cs" />
-    <Compile Include="Ext_NoFaceNL.cs" />
+    <Compile Include="Ext_MarkNLIncompatible.cs" />
     <Compile Include="HarmonyPatches.cs" />
     <Compile Include="ModSetting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

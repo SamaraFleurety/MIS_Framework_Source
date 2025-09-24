@@ -66,6 +66,7 @@ namespace AKA_Ability
                 if (ae is ITargetingValidator validator)
                 {
                     if (!validator.TargetingValidator(info)) return false;
+
                 }
             }
             return true;

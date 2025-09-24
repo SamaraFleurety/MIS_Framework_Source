@@ -138,19 +138,10 @@ namespace AK_DLL
             if (OperatorDef.currentlyGenerating) return null;
             if (p == null) return null;
 
-            /*DocumentBase document = p.TryGetDoc<DocumentBase>();
-            OpDocContainer opdoc = document as OpDocContainer;
-            OperatorDocument doc = opdoc?.va?.Document;*/
             OperatorDocument doc = p.TryGetDoc<OpDocContainer>()?.va?.Document;
 
             if (doc != null) return doc;
-            /*if (document is not OpDocContainer) 
-            {
-                Log.Message("document is not OpDocContainer");
-                return null;//对非干员档案的判断
-            }*/
 
-            //(doc == null)
             if (p.abilities == null) return null;
             if (!p.IsColonist) return null;
             if (GC_OperatorDocumentation.cachedOperators.ContainsKey(p))

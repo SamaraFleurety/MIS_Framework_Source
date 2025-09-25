@@ -19,12 +19,16 @@ namespace AK_DLL
                 {
                     DisabledAlienWarning_NewColony = true;
                     SteamUtility.OpenWorkshopPage(new PublishedFileId_t(3204702080));
+                },
+                delegate
+                {
+                    DisabledAlienWarning_NewColony = true;
                 }
                 ));
-
             }
         }
     }
+
     [HarmonyPatch(typeof(Dialog_SaveFileList_Load), "DoFileInteraction")]
     public class Patch_AlienLoadGameDialog
     {
@@ -38,6 +42,10 @@ namespace AK_DLL
                 {
                     DisabledAlienWarning_LoadGame = true;
                     SteamUtility.OpenWorkshopPage(new PublishedFileId_t(3204702080));
+                },
+                delegate
+                {
+                    DisabledAlienWarning_LoadGame = true;
                 }
                 ));
             }

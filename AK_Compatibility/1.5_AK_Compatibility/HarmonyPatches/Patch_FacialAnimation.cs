@@ -8,68 +8,48 @@ using Verse;
 
 namespace PA_AKPatch
 {
-    [HarmonyPatch]
     public class Patch_FacialAnimation
     {
         public static Type DrawFaceGraphicsComp => AKPatches.FacialAnimation?.FirstOrDefault(t => t.Name == "DrawFaceGraphicsComp");
         public static Type FAHelper => AKPatches.FacialAnimation?.FirstOrDefault(t => t.Name == "FAHelper");
 
-        [HarmonyPrepare]
-        public static bool Prepare()
+        public static readonly HashSet<Pawn> cachedPawn = new();
+
+        internal static void PatchAll(Harmony harmony)
         {
-            return ModLister.GetActiveModWithIdentifier("Nals.FacialAnimation") != null;
+            if (ModLister.GetActiveModWithIdentifier("Nals.FacialAnimation") == null) return;
+
+            MethodBase method1 = DrawFaceGraphicsComp?.GetMethod("CompRenderNodes");
+            MethodBase method2 = FAHelper?.GetMethod("ShouldDrawPawn");
+
+            harmony.Patch(method1, postfix: new HarmonyMethod(typeof(Patch_FacialAnimation), nameof(Postfix_CompRenderNodes)));
+            harmony.Patch(method2, postfix: new HarmonyMethod(typeof(Patch_FacialAnimation), nameof(Postfix_ShouldDrawPawn)));
         }
 
-        [HarmonyPatch]
-        public class ParallelPreDraw
+        public static void Postfix_CompRenderNodes(ref List<PawnRenderNode> __result, Pawn ___pawn)
         {
-            public static HashSet<Pawn> cachedPawn = new();
+            if (AKC_ModSettings.disable_FacialAnimation) return;
 
-            [HarmonyTargetMethod]
-            public static MethodBase TargetMethod()
+            var ext = ___pawn.kindDef.GetModExtension<Ext_MarkNLIncompatible>();
+            var doc = ___pawn.GetDoc();
+            if (ext != null || doc?.operatorDef.GetModExtension<Ext_MarkNLIncompatible>() != null)
             {
-                return FAHelper?.GetMethod("ShouldDrawPawn", BindingFlags.Static | BindingFlags.Public);
-            }
-
-            [HarmonyPostfix]
-            public static bool Postfix(bool value, Pawn pawn)
-            {
-                if (cachedPawn.Contains(pawn)) return false;
-
-                var ext = pawn.kindDef.GetModExtension<Ext_MarkNLIncompatible>();
-                if (ext != null)
-                {
-                    cachedPawn.Add(pawn);
-                    return false;
-                }
-                return value;
+                __result = null;
+                return;
             }
         }
 
-
-        [HarmonyPatch]
-        public class CompRenderNodes
+        public static bool Postfix_ShouldDrawPawn(bool value, Pawn pawn)
         {
-            [HarmonyTargetMethod]
-            public static MethodBase TargetMethod()
-            {
-                return DrawFaceGraphicsComp?.GetMethod("CompRenderNodes");
-            }
+            if (cachedPawn.Contains(pawn)) return false;
 
-            [HarmonyPostfix]
-            public static void Postfix(ref List<PawnRenderNode> __result, Pawn ___pawn)
+            var ext = pawn.kindDef.GetModExtension<Ext_MarkNLIncompatible>();
+            if (ext != null)
             {
-                if (AKC_ModSettings.disable_FacialAnimation) return;
-
-                var ext = ___pawn.kindDef.GetModExtension<Ext_MarkNLIncompatible>();
-                var doc = ___pawn.GetDoc();
-                if (ext != null || doc?.operatorDef.GetModExtension<Ext_MarkNLIncompatible>() != null)
-                {
-                    __result = null;
-                    return;
-                }
+                cachedPawn.Add(pawn);
+                return false;
             }
+            return value;
         }
-
     }
 }

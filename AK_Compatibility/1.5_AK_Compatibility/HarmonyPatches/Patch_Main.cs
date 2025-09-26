@@ -16,6 +16,8 @@ namespace PA_AKPatch
             //手动Patch才可以调用MakeByRefType
             Harmony harmony = new("paluto22.ak.compatibility");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
+            Patch_FacialAnimation.PatchAll(harmony);
+            Patch_FashionWardrobe.PatchAll(harmony);
             Log.Message("[Arknights Compability] Initialized");
         }
     }

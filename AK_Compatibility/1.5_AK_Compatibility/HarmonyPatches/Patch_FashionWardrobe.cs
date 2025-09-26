@@ -3,52 +3,33 @@ using HarmonyLib;
 using System;
 using System.Linq;
 using System.Reflection;
-using UnityEngine;
 using Verse;
 
 namespace PA_AKPatch
 {
-    [HarmonyPatch]
     public class Patch_FashionWardrobe
     {
         public static Type SelApparelWindow => AKPatches.FashionWardrobe?.FirstOrDefault(t => t.FullName == "Fashion_Wardrobe.FW_Windows+SelApparelWindow");
 
-        [HarmonyPrepare]
-        public static bool Prepare()
+        internal static void PatchAll(Harmony harmony)
         {
-            return ModLister.GetActiveModWithIdentifier("aedbia.fashionwardrobe") != null;
+            if (ModLister.GetActiveModWithIdentifier("aedbia.fashionwardrobe") == null) return;
+
+            MethodBase method1 = SelApparelWindow?.GetMethod("DoWindowContents");
+            MethodBase method2 = SelApparelWindow?.GetMethod("Close");
+
+            harmony.Patch(method1, prefix: new HarmonyMethod(typeof(Patch_FashionWardrobe), nameof(Prefix)));
+            harmony.Patch(method2, prefix: new HarmonyMethod(typeof(Patch_FashionWardrobe), nameof(Postfix)));
         }
 
-        [HarmonyPatch]
-        public class DoWindowContents
+        public static void Prefix()
         {
-            [HarmonyTargetMethod]
-            public static MethodBase TargetMethod()
-            {
-                return SelApparelWindow?.GetMethod("DoWindowContents");
-            }
-
-            [HarmonyPrefix]
-            public static void Prefix(Rect inRect)
-            {
-                if (!OperatorDef.currentlyGenerating) OperatorDef.currentlyGenerating = true;
-            }
+            if (!OperatorDef.currentlyGenerating) OperatorDef.currentlyGenerating = true;
         }
 
-        [HarmonyPatch]
-        public class Close
+        public static void Postfix()
         {
-            [HarmonyTargetMethod]
-            public static MethodBase TargetMethod()
-            {
-                return SelApparelWindow?.GetMethod("Close");
-            }
-
-            [HarmonyPrefix]
-            public static void Postfix(bool doCloseSound = true)
-            {
-                if (OperatorDef.currentlyGenerating) OperatorDef.currentlyGenerating = false;
-            }
+            if (OperatorDef.currentlyGenerating) OperatorDef.currentlyGenerating = false;
         }
     }
 }

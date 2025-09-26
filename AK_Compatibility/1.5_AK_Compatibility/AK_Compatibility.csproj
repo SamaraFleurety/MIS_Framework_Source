@@ -58,9 +58,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Ext_KeepOriginal.cs" />
-    <Compile Include="Ext_MarkNLIncompatible.cs" />
-    <Compile Include="HarmonyPatches.cs" />
+    <Compile Include="DefExt\Ext_KeepOriginal.cs" />
+    <Compile Include="DefExt\Ext_MarkNLIncompatible.cs" />
+    <Compile Include="HarmonyPatches\Patch_FacialAnimation.cs" />
+    <Compile Include="HarmonyPatches\Patch_FashionWardrobe.cs" />
+    <Compile Include="HarmonyPatches\Patch_Main.cs" />
+    <Compile Include="HarmonyPatches\Patch_AlienRace.cs" />
     <Compile Include="ModSetting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -83,6 +86,7 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

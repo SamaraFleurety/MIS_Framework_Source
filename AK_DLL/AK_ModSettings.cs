@@ -127,7 +127,7 @@ namespace AK_DLL
         public override void ExposeData()
         {
             //自动填充
-            Scribe_Values.Look(ref enable_HealthBar, "displayBar", defaultValue: true);
+            Scribe_Values.Look(ref enable_HealthBar, "displayBar", defaultValue: false);
             Scribe_Values.Look(ref display_PlayerFaction, "display_PlayerFaction", defaultValue: true);
             Scribe_Values.Look(ref display_AllyFaction, "display_AllyFaction", defaultValue: false);
             Scribe_Values.Look(ref display_AllyFaction_InjuryedOnly, "display_AllyFaction_InjuryedOnly", defaultValue: false);

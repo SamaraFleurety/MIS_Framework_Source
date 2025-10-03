@@ -196,10 +196,10 @@ namespace AK_DLL
             }
             Scribe.mode = LoadSaveMode.Inactive;
 
-            LongEventHandler.ExecuteWhenFinished(delegate
+            /*LongEventHandler.ExecuteWhenFinished(delegate
             {
                 SubSoundDef_DynaLoading.shouldResolve = true;
-            });
+            });*/
             foreach (KeyValuePair<string, OperatorDocument> node in opDocArchive)
             {
                 node.Value.RecordSkills();
@@ -207,10 +207,10 @@ namespace AK_DLL
 
                 if (AK_ModSettings.debugOverride) Log.Message($"当前已招募 {node.Value.operatorID}");
             }
-            LongEventHandler.ExecuteWhenFinished(delegate
+            /*LongEventHandler.ExecuteWhenFinished(delegate
             {
                 SubSoundDef_DynaLoading.shouldResolve = false;
-            });
+            });*/
         }
 
         public static void AddPawn(string ID, OperatorDef operatorDef, Pawn pawn, Thing weapon, List<Thing> fashionSet)

@@ -3,7 +3,8 @@
 namespace AK_DLL.DynaLoad
 {
     //仅在干员存在时，从硬盘加载音频文件。取代原版的开局装载所有音频(会有1g)
-    public class SubSoundDef_DynaLoading : SubSoundDef
+    //原版已经是动态加载了。已废弃。
+    /*public class SubSoundDef_DynaLoading : SubSoundDef
     {
         public string modID = "MIS.Arknights";
 
@@ -19,5 +20,5 @@ namespace AK_DLL.DynaLoad
             base.ResolveReferences();
             resolved = true;
         }
-    }
+    }*/
 }

@@ -882,7 +882,7 @@ namespace AK_DLL
 
             if (voicePackDef != null)
             {
-                SubSoundDef_DynaLoading.shouldResolve = true;
+                //SubSoundDef_DynaLoading.shouldResolve = true;
 
                 List<SoundDef> allSounds = new();
                 if (voicePackDef.recruitSound != null) allSounds.Add(voicePackDef.recruitSound);
@@ -892,9 +892,9 @@ namespace AK_DLL
                 if (!voicePackDef.selectSounds.NullOrEmpty()) allSounds.AddRange(voicePackDef.selectSounds);
                 if (!voicePackDef.abilitySounds.NullOrEmpty()) allSounds.AddRange(voicePackDef.abilitySounds);
 
-                List<SubSoundDef_DynaLoading> allSubSounds = new();
+                //List<SubSoundDef_DynaLoading> allSubSounds = new();
 
-                foreach (SoundDef def in allSounds)
+                /*foreach (SoundDef def in allSounds)
                 {
                     foreach (SubSoundDef sub in def.subSounds)
                     {
@@ -907,7 +907,7 @@ namespace AK_DLL
                     dyna.ResolveReferences();
                 }
 
-                SubSoundDef_DynaLoading.shouldResolve = false;
+                SubSoundDef_DynaLoading.shouldResolve = false;*/
             }
         }
 

@@ -40,30 +40,6 @@ namespace AKE_OperatorExtension
             }
         }
 
-        /* public string WornGraphicPathByHP
-         {
-             get
-             {
-                 ext ??= def.GetModExtension<Ext_ApparelBreakGraphic>();
-                 if (ext == null)
-                 {
-                     Log.Error($"[AKE] {def.defName}是可大破的衣服，但是无对应ext");
-                     return def.apparel.wornGraphicPath;
-                 }
-
-                 cachedWornGraphicPath = ext.WornGraphicPathByHPRatio(HPRatio, out lastIndex);
-
-                 //hp不同但是使用的图相同也没必要刷新
-                 //好像不用刷新，是先刷新才会触发这个
-                 /*if (index != lastIndex && Map != null)
-                 {
-                     lastIndex = index;
-                     DirtyMapMesh(Map);
-                 }*//*
-                 return cachedWornGraphicPath;
-             }
-         }*/
-
         public void Notify_HPChanged()
         {
             if (HPRatio == lastHPRatio) return;
@@ -111,6 +87,12 @@ namespace AKE_OperatorExtension
                     }
                 };
             }
+        }
+
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Values.Look(ref cachedWornGraphicPath, "cachedPath");   //不知道读档的什么b地方会调用 没这个缓存会报错
         }
     }
 }

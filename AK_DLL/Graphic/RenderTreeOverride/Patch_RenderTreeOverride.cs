@@ -7,6 +7,8 @@ using Verse;
 
 namespace AK_DLL.HarmonyPatchs
 {
+    //怎么没jb写注释
+    //干员可以替换为别的渲染树
     /*
 		if (Resolved)
 		{
@@ -56,9 +58,11 @@ namespace AK_DLL.HarmonyPatchs
         {
             Pawn p = tree.pawn;
             OperatorDocument doc = p.GetDoc();
-            if (doc == null) return original;
+            if (doc == null || doc.operatorDef.renderTreeOverride == null) return original;
 
-            return doc.operatorDef.renderTreeOverride == null ? original : doc.operatorDef.renderTreeOverride.root;
+            //doc.operatorDef.renderTreeOverride.root.EnsureInitialized();
+
+            return doc.operatorDef.renderTreeOverride.root;
         }
     }
 }

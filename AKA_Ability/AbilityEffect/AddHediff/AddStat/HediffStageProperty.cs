@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using Verse;
 
@@ -24,6 +25,11 @@ namespace AKA_Ability
 
         public Dictionary<PawnCapacityDef, PawnCapacityModifier_Exposable> capacities;
 
+        //对于HediffStage里面的字段，以字符串检索，并直接设定值。
+        //如果不懂这个的意义就不要用这个，或者后果自负。
+        public Dictionary<string, float> miscFieldsValue;
+
+        [Obsolete("Use miscFieldsValue instead")]
         public float regeneration = 0;
 
         public HediffStageProperty(Hediff_DynamicStage parent)
@@ -32,6 +38,7 @@ namespace AKA_Ability
             statOffsets = new();
             statFactors = new();
             capacities = new();
+            miscFieldsValue = new();
         }
 
         //offset是往offset叠加，factor是往postFactor叠乘
@@ -94,12 +101,22 @@ namespace AKA_Ability
             parent.Notify_StageDirty();
         }
 
+        public void TryAssignFieldValue(string key, float value)
+        {
+            if (miscFieldsValue.ContainsKey(key))
+            {
+                miscFieldsValue[key] = value;
+            }
+            else miscFieldsValue.Add(key, value);
+        }
+
         public virtual void ExposeData()
         {
             Scribe_Collections.Look(ref statOffsets, "statOffset", LookMode.Def, LookMode.Value);
             Scribe_Collections.Look(ref statFactors, "statFactor", LookMode.Def, LookMode.Value);
             Scribe_Collections.Look(ref capacities, "capMod", LookMode.Def, LookMode.Deep);
             Scribe_Values.Look(ref regeneration, "regen", 0);
+            Scribe_Collections.Look(ref miscFieldsValue, "misc", LookMode.Value, LookMode.Value);
         }
     }
 }

@@ -10,12 +10,6 @@ namespace AKA_Ability.Gizmos
 
         private Cooldown_Regen Cooldown => parent.cooldown;
 
-        //private TargetMode TargetMode => ability.def.targetMode;
-
-        //private bool Toggled => (ability as AKAbility_Toggle).AutoCast;
-
-        //public Action Action;
-
         public override void DrawIcon(Rect rect, Material buttonMat, GizmoRenderParms parms)
         {
             Texture2D badTex = this.icon as Texture2D;
@@ -45,23 +39,13 @@ namespace AKA_Ability.Gizmos
             GUI.color = Color.white;
         }
 
-        /*protected virtual float CooldownBarFillPercent()
-        {
-            if (Cooldown.charge == Cooldown.maxCharge) return 0;
-            return (float)this.Cooldown.CDCurrent / (float)this.Cooldown.CDPerCharge;
-        }*/
-
         public override void ProcessInput(Event ev)
         {
             base.ProcessInput(ev);
         }
 
-        //public override Color IconDrawColor => defaultIconColor;
-
-
         public override void GizmoUpdateOnMouseover()
         {
-            //if (TargetMode != TargetMode.VerbSingle) return;
             base.GizmoUpdateOnMouseover();
             parent.DrawAbilityRadiusRing();
         }

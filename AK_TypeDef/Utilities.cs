@@ -20,6 +20,7 @@ namespace AK_TypeDef
             return res as T;
         }
 
+        //添加文档，如果已经存在则报错
         public static void AddDoc<T>(this Thing t, T doc, string givenID = null) where T : DocumentBase
         {
             GC_Generic.instance.documents.TryGetValue(t, out DocumentTracker manager);
@@ -36,6 +37,17 @@ namespace AK_TypeDef
             }
             manager.documents.Add(givenID, doc);
         }
+
+        //尝试添加文档，如果已经存在则返回false
+        public static bool TryAddDoc<T>(this Thing t, T doc, string givenID = null ) where T : DocumentBase
+        {
+            T docExisting = t.TryGetDoc<T>(givenID);
+            if (docExisting != null) return false; //已经存在
+
+            t.AddDoc(doc, givenID);
+            return true;
+        }
+
         #endregion
 
         #region 检索Hediff

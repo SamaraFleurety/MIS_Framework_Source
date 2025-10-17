@@ -103,6 +103,7 @@
     <Compile Include="AbilityEffect\AddHediff\AbilityEffect_AddHediff.cs" />
     <Compile Include="AbilityEffect\AddHediff\AddStat\HediffStageProperty.cs" />
     <Compile Include="AbilityEffect\AddHediff\AddStat\Hediff_DynamicStage.cs" />
+    <Compile Include="AbilityEffect\AddHediff\AddStat\Hediff_DynamicStage_Stacks.cs" />
     <Compile Include="AbilityEffect\AddHediff\AddStat\Patch_BulletDmgFactor.cs" />
     <Compile Include="AbilityEffect\AddHediff\DelayedBloodLoss\AE_DelayedBloodLoss.cs" />
     <Compile Include="AbilityEffect\AddHediff\DelayedBloodLoss\HCP_BloodLoss.cs" />
@@ -157,6 +158,7 @@
     <Compile Include="AbilityEffect\Summon\AE_SummonThings_Radius.cs" />
     <Compile Include="Framework\AbilityContainer\HCP_TrackerContainer.cs" />
     <Compile Include="Framework\AbilityEffectsDef.cs" />
+    <Compile Include="Framework\Conditioners\CastConditioner\CC_HPThresholdOrDowned.cs" />
     <Compile Include="Framework\Conditioners\CastConditioner\CC_NeedFullCharge.cs" />
     <Compile Include="Framework\Comp\CompEquippable_AKAbility.cs" />
     <Compile Include="Framework\Conditioners\CastConditioner\CC_NeedSharedCharge.cs" />
@@ -172,6 +174,7 @@
     <Compile Include="Framework\SharedData\SD_SharedCharge.cs" />
     <Compile Include="Framework\Conditioners\TickCondition\TickCondion_Base.cs" />
     <Compile Include="Framework\Conditioners\TickCondition\TiC_ColonistOnly.cs" />
+    <Compile Include="Harmony\Patch_CraftQualityOffset.cs" />
     <Compile Include="Summon\Patch_AllowTakeOrder.cs" />
     <Compile Include="AKA_Algorithm.cs" />
     <Compile Include="AKA_Utilities.cs" />

@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using Verse;
 
@@ -23,7 +24,6 @@ namespace AKA_Ability.AbilityEffect
         protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
             if (caster.CasterPawn == null) return false;
-
             Pawn casterPawn = caster.CasterPawn;
             int charge = caster.cooldown.charge;
 

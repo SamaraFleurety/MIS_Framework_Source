@@ -5,7 +5,7 @@ using Verse;
 
 namespace AK_DLL
 {
-    public static class FS_DebugAction
+    public static class MIS_DebugAction
     {
         private static Map Map => Find.CurrentMap;
         private static BoolGrid usedCells;
@@ -62,6 +62,27 @@ namespace AK_DLL
                 OperatorDocument doc = GC_OperatorDocumentation.opDocArchive[id];
 
                 Log.Message($"[AK] 已招募 {id} - {doc.operatorDef.nickname}, 存活:{!doc.pawn.Dead}");
+            }
+        }
+
+        [DebugAction("MIS-AK Actions", "Print Operator Voice Defs", false, false, false, false, false, 0, false, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+        public static void PrintVoicePacks()
+        {
+            var doc = Find.Selector.SelectedPawns?.FirstOrDefault((Pawn x) => true).GetDoc();
+            if (doc == null || doc.voicePack is not VoicePackDef voicePackDef) return;
+
+            List<SoundDef> sounds = new()
+            {
+                voicePackDef.recruitSound,
+                voicePackDef.undraftSound,
+                voicePackDef.diedSound,
+            };
+            sounds.AddRange(voicePackDef.selectSounds);
+            sounds.AddRange(voicePackDef.draftSounds);
+            sounds.AddRange(voicePackDef.abilitySounds);
+            foreach (SoundDef sound in sounds)
+            {
+                Log.Message($"[AK] {doc.pawn.Name} bound sound: {sound.defName}");
             }
         }
     }

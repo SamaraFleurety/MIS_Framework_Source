@@ -157,7 +157,7 @@ namespace AK_DLL
             {
                 if (i is VAbility_Operator vab)
                 {
-                    Log.Message($"g1 at {p.Name}, {i.GetType()}, {i.def.defName}");
+                    //Log.Message($"g1 at {p.Name}, {i.GetType()}, {i.def.defName}");
                     va = vab;
                     GC_OperatorDocumentation.cachedOperators.Add(p, va.Document);
                     p.AddDoc(new OpDocContainer() { parent = p, va = vab });

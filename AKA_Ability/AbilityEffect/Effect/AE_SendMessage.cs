@@ -1,6 +1,8 @@
 ﻿using RimWorld;
 using RimWorld.Planet;
+using System.Security.Cryptography;
 using Verse;
+using Verse.Sound;
 
 namespace AKA_Ability.AbilityEffect
 {
@@ -8,11 +10,13 @@ namespace AKA_Ability.AbilityEffect
     public class AE_SendMessage : AbilityEffectBase
     {
         public string content;
-        public MessageTypeDef messageType = MessageTypeDefOf.CautionInput;
+        public MessageTypeDef messageType;
         public override bool DoEffect(AKAbility_Base caster, GlobalTargetInfo globalTargetInfo = default, LocalTargetInfo localTargetInfo = default)
         {
-            Messages.Message(content, caster.CasterPawn, messageType);
+            messageType ??= MessageTypeDefOf.NegativeHealthEvent;
+            Messages.Message(content, caster.CasterPawn, messageType, false);
             return true;
         }
+
     }
 }

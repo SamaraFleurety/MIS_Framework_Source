@@ -25,8 +25,8 @@ namespace AK_DLL
         {
             base.Notify_AbilityCasted(ability);
 
-            if (VoicePlayer.CanPlayNow()) return;
-            doc?.voicePack.abilitySounds?.RandomElement().PlaySound();
+            if (!VoicePlayer.CanPlayNow()) return;
+            doc?.voicePack.abilitySounds?.RandomElement()?.PlaySound();
         }
 
         /*public override void AbilityPostEffect_PlayAbilitySound(AKAbility ability)

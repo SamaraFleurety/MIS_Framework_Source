@@ -1,0 +1,18 @@
+﻿using RimWorld;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Verse;
+
+namespace AKA_Ability.CastConditioner
+{
+    public class CC_HPThresholdOrDowned : CC_HPThreshold
+    {
+        public override bool Castable(AKAbility_Base instance)
+        {
+            return base.Castable(instance) || instance.CasterPawn.Downed;
+        }
+    }
+}

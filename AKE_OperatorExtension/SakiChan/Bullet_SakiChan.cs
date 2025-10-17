@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
+using AK_DLL;
 
 namespace AKE_OperatorExtension
 {
@@ -27,7 +28,9 @@ namespace AKE_OperatorExtension
             {
                 if (mygo_BulletWithTrail == null)
                 {
-
+                    GameObject prefab = AKEDefOf.AK_Prefab_BulletTrailSaki.LoadPrefab();
+                    mygo_BulletWithTrail = GameObject.Instantiate(prefab);
+                    mygo_BulletWithTrail.transform.position = this.DrawPos;
                 }
 
                 return mygo_BulletWithTrail;
@@ -44,6 +47,7 @@ namespace AKE_OperatorExtension
                 {
                     ucomp_Trail = Mygo_Bullet.GetComponent<TrailRenderer>();
                     cacedTrailRender.Add(ucomp_Trail, null);
+                    ucomp_Trail.time = int.MaxValue;
                 }
                 return ucomp_Trail;
             }
@@ -66,12 +70,20 @@ namespace AKE_OperatorExtension
 
         protected override void Tick()
         {
+            if (!Spawned || Destroyed) return;
             ++tickAfterSpawned;
-            return;
+            //return;
             allowChangeTime = true;
             UComp_Trail.time += REAL_TIME_PER_TICK;
             Mygo_Bullet.transform.position = this.DrawPos;
             allowChangeTime = false;
+        }
+
+        public override void Destroy(DestroyMode mode = DestroyMode.Vanish)
+        {
+            base.Destroy(mode);
+            GameObject.Destroy(mygo_BulletWithTrail);
+            
         }
 
         public override void ExposeData()

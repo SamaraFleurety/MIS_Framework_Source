@@ -1,45 +1,33 @@
 ﻿using RimWorld;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Verse;
 
 namespace AKA_Ability
 {
-    //加成是动态的Hediff
-    public class Hediff_DynamicStage : HediffWithComps
+    //每一层的加成固定，但是可以整数叠加
+    //见过小日子写的类似功能hediff，真的用原版方式挨着写了几十个stage，太逆天了
+    public class Hediff_DynamicStage_Stacks : Hediff_DynamicStage
     {
-        public HediffStageProperty stageProperty;  //当前加成
+        //public HediffStageProperty stageProp_SingleStack;  //单层的加成
+        //单层的加成就是父类的stageProperty
 
-        protected HediffStage cachedStage = null;
-
-        public Hediff_DynamicStage()
+        public int stacks = 1; //层数
+        public Hediff_DynamicStage_Stacks() : base()
         {
-            stageProperty = new HediffStageProperty(this);
-        }
-
-        public override HediffStage CurStage
-        {
-            get
-            {
-                RefreshStage();
-                return cachedStage;
-            }
+            //stageProp_SingleStack = new HediffStageProperty(this);
         }
 
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Deep.Look(ref stageProperty, "stage", this);
+            Scribe_Values.Look(ref stacks, "stacks", 1);
         }
 
-        public void Notify_StageDirty()
-        {
-            cachedStage = null;
-        }
-
-        protected virtual void RefreshStageProperty()
-        {
-        }
-
-        protected virtual void RefreshStage()
+        protected override void RefreshStage()
         {
             if (cachedStage != null) return;
 
@@ -56,7 +44,7 @@ namespace AKA_Ability
                 cachedStage.statOffsets.Add(new StatModifier
                 {
                     stat = stat,
-                    value = stageProperty.statOffsets[stat]
+                    value = stageProperty.statOffsets[stat] * stacks
                 });
             }
 
@@ -65,14 +53,26 @@ namespace AKA_Ability
                 cachedStage.statFactors.Add(new StatModifier
                 {
                     stat = stat,
-                    value = stageProperty.statFactors[stat]
+                    value = stageProperty.statFactors[stat] * stacks    
                 });
             }
 
             foreach (PawnCapacityModifier modifier in stageProperty.capacities.Values)
             {
-                cachedStage.capMods.Add(modifier);
+                PawnCapacityModifier modifierWithStacks = new PawnCapacityModifier
+                {
+                    capacity = modifier.capacity,
+                    offset = modifier.offset * stacks,
+                    postFactor = modifier.postFactor * stacks,
+                    statFactorMod = modifier.statFactorMod,
+                    setMaxCurveOverride = modifier.setMaxCurveOverride,
+                    setMaxCurveEvaluateStat = modifier.setMaxCurveEvaluateStat
+                    //不包含setmax
+                };
+                cachedStage.capMods.Add(modifierWithStacks);
             }
+
+            cachedStage.regeneration = stageProperty.regeneration;
 
             foreach (var pair in stageProperty.miscFieldsValue)
             {
@@ -84,7 +84,7 @@ namespace AKA_Ability
                         bool flag = pair.Value != 0 ? true : false;  //bool转int，非0为true，0是false
                         field.SetValue(cachedStage, flag);
                     }
-                    field.SetValue(cachedStage, pair.Value);
+                    field.SetValue(cachedStage, pair.Value * stacks);
                 }
                 else
                 {
@@ -92,17 +92,9 @@ namespace AKA_Ability
                 }
             }
 
-            cachedStage.regeneration = stageProperty.regeneration;
-
             //刷新
             pawn.health.hediffSet.DirtyCache();
             pawn.health.Notify_HediffChanged(this);
-        }
-
-        public void ForceRefreshStage()
-        {
-            cachedStage = null;
-            RefreshStage();
         }
     }
 }

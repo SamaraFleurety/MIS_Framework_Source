@@ -23,7 +23,7 @@ namespace AK_DLL
 
         public static void PlaySound(this SoundDef sound)
         {
-            if (!CanPlayNow()) return;
+            if (sound == null || !CanPlayNow()) return;
             lastVoiceLength = sound.Duration.max;
             sound.PlayOneShotOnCamera(null);
             lastVoiceTime = Time.realtimeSinceStartup;

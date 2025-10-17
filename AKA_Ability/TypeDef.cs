@@ -16,7 +16,8 @@ namespace AKA_Ability
         public static SoundDef AK_SFX_Healboost;
         public static SoundDef AK_SFX_Tactboost;*/
 
-        public static StatDef AKA_Stat_RangedDamageFactor;
+        public static StatDef AKA_Stat_RangedDamageFactor; //远程伤害倍率
+        public static StatDef AK_Stat_CraftQualityOffset;  //制作质量偏移（整数）
 
     }
 

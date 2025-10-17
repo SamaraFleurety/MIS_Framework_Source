@@ -105,15 +105,16 @@
     <Compile Include="HCP\HCP_RandAddHediff.cs" />
     <Compile Include="HCP\HCP_RandAddTrait.cs" />
     <Compile Include="HCP\HCP_SkillUpbyTime.cs" />
+    <Compile Include="Phrolova\Pawn_Phrolova.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SakiChan\Bullet_SakiChan.cs" />
     <Compile Include="SakiChan\Patch_TrailRenderAlternativeTimeScale.cs" />
+    <Compile Include="TypeDef.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AKA_Ability\AKA_Ability.csproj">
       <Project>{92cfb99e-4d93-47f2-a4ad-dd0668efe739}</Project>
       <Name>AKA_Ability</Name>
-      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\AKS_ShieldFramework\AKS_ShieldFramework.csproj">
       <Project>{8c33efd6-9006-4cf3-8c33-50cc0418238c}</Project>

@@ -10,7 +10,7 @@ using Verse;
 
 namespace AKE_OperatorExtension.HarmonyPatchs
 {
-    [HarmonyPatch(typeof(TrailRenderer), "time")]
+    /*[HarmonyPatch(typeof(TrailRenderer), "time")]
     public class Patch_TrailRenderAlternativeTimeScale
     {
         [HarmonyPatch(MethodType.Setter)]
@@ -19,9 +19,10 @@ namespace AKE_OperatorExtension.HarmonyPatchs
         {
             if (Bullet_SakiChan.cacedTrailRender.TryGetValue(__instance, out var _) && !Bullet_SakiChan.allowChangeTime)
             {
+                Log.Message($"skip");
                 return HarmonyPrefixRet.skipOriginal;
             }
             return HarmonyPrefixRet.keepOriginal;
         }
-    }
+    }*/
 }

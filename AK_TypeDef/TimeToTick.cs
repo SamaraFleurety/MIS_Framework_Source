@@ -16,14 +16,14 @@ namespace AK_DLL
 
     public static class TimeToTickDirect
     {
-        public static int tick = 1;          //游戏中
-        public static int tickRare = 250;
-        public static int tickLong = 2000;
-        public static int hour = 2500;
-        public static int day = hour * 24;   //60k
-        public static int season = day * 15; //0.9M
-        public static int year = season * 4; //3.6M
-        public static int rSecond = 60;       //现实中的1秒
+        public const int tick = 1;          //游戏中
+        public const int tickRare = 250;
+        public const int tickLong = 2000;
+        public const int hour = 2500;
+        public const int day = hour * 24;   //60k
+        public const int season = day * 15; //0.9M
+        public const int year = season * 4; //3.6M
+        public const int rSecond = 60;       //现实中的1秒
     }
 
     //现实中的系统时间

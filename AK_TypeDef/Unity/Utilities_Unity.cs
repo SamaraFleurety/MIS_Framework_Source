@@ -82,7 +82,7 @@ namespace AK_DLL
         private static Dictionary<string, AssetBundle> cachedAssetBundle = new();
 
         //从随便一个模型/prefab的def，仅读其ab包
-        public static AssetBundle LoadAssetBundle(AssetDef assetDef)
+        public static AssetBundle LoadAssetBundle(this AssetDef assetDef)
         {
             return LoadAssetBundle(assetDef.modID, assetDef.assetBundle);
         }
@@ -139,6 +139,27 @@ namespace AK_DLL
                 Log.Error($"[FS.UGUI] Unable to load assetbundle named {AssetBundleID}");
                 return null;
             }
+        }
+
+        /// <summary>
+        /// 对于一个asset def，获取其model name字段中的物体（通常是prefab）
+        /// </summary>
+        /// <param name="def"></param>
+        /// <returns></returns>
+        public static GameObject LoadPrefab(this AssetDef def)
+        {
+            AssetBundle ab = def.LoadAssetBundle();
+            if (ab == null)
+            {
+                Log.Error($"[AK.Unity]未找到ab包 {def.assetBundle} 于mod {def.modID}");
+                return null;
+            }
+            GameObject prefab = ab.LoadAsset<GameObject>(def.modelName);
+            if (prefab == null)
+            {
+                Log.Error($"[AK.Unity]未成功初始化prefab 于 {def.defName}");
+            }
+            return prefab;
         }
         #endregion
 

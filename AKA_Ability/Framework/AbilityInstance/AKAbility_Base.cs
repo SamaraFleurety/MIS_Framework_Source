@@ -95,11 +95,6 @@ namespace AKA_Ability
             if (cachedGizmo == null) InitializeGizmoInnate();
             UpdateGizmoInnate();
 
-            /*foreach (ExtraGizmoDrawer_Base EGD in def.extraGizmos)
-            {
-                EGD.UpdateExtraGizmo();
-                yield return EGD.GetExtraGizmo();
-            }*/
             yield return cachedGizmo;
         }
 

@@ -14,6 +14,7 @@ namespace AKA_Ability
         //写个泛型也行 估计这辈子就这两套，算了吧
         public static void RegisterAsStricken(Pawn owner, AKAbility_Base ab)
         {
+            //Log.Message($"reg {ab.def.label} as stricken cd");
             if (!pawn_NotifyStricken.ContainsKey(owner)) pawn_NotifyStricken.Add(owner, new HashSet<AKAbility_Base>());
 
             if (!pawn_NotifyStricken[owner].Contains(ab)) pawn_NotifyStricken[owner].Add(ab);

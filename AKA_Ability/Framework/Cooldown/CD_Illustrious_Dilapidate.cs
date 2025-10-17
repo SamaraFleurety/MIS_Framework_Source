@@ -124,7 +124,7 @@ namespace AKA_Ability.Cooldown
         {
             int amt = (int)dinfo.Amount;
             if (amt <= 0) amt = 1;
-            Log.Message($"receive dmg {dinfo.Amount} at {parent.CasterPawn.Name}");
+            //Log.Message($"receive dmg {dinfo.Amount} at {parent.CasterPawn.Name}");
             cumulativeSp += amt;
             RefreshChargeAndSP();
         }

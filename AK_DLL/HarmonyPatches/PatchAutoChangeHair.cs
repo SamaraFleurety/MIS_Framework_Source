@@ -9,7 +9,7 @@ namespace AK_DLL
     public static class PatchAutoChangeHair
     {
         [HarmonyPrefix]
-        public static bool prefix(Pawn pawn, ref Job __result)
+        public static bool Prefix(Pawn pawn, ref Job __result)
         {
             if (pawn.GetDoc() != null)
             {

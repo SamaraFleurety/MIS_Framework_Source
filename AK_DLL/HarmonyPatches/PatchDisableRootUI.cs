@@ -6,89 +6,59 @@ namespace AK_DLL
 {
     //要么用这种低级的办法禁止IMGUI，要么自己去写个shader改掉unityengine.GUI里面的4个material
 
-    [HarmonyPatch(typeof(UIRoot), "UIRootOnGUI")]
+    [HarmonyPatch(typeof(UIRoot))]
     public static class PatchDisableUIRootOnGUI
     {
         [HarmonyPrefix]
-        public static bool prefix()
+        [HarmonyPatch(nameof(UIRoot.UIRootOnGUI))]
+        public static bool Prefix_UIRootOnGUI()
         {
-            if (AK_Tool.disableIMGUI)
-            {
-                return false;
-            }
-            return true;
+            return !AK_Tool.disableIMGUI;
         }
-    }
 
-    [HarmonyPatch(typeof(UIRoot), "UIRootUpdate")]
-    public static class PatchDisableUIRootUpdate
-    {
         [HarmonyPrefix]
-        public static bool prefix()
+        [HarmonyPatch(nameof(UIRoot.UIRootUpdate))]
+        public static bool Prefix_UIRootUpdate()
         {
-            if (AK_Tool.disableIMGUI)
-            {
-                return false;
-
-            }
-            return true;
+            return !AK_Tool.disableIMGUI;
         }
     }
 
-    [HarmonyPatch(typeof(UIRoot_Entry), "UIRootOnGUI")]
+
+    [HarmonyPatch(typeof(UIRoot_Entry))]
     public static class PatchDisableUIRootOnGUIE
     {
         [HarmonyPrefix]
-        public static bool prefix()
+        [HarmonyPatch(nameof(UIRoot_Entry.UIRootOnGUI))]
+        public static bool Prefix_UIRootOnGUI()
         {
-            if (AK_Tool.disableIMGUI)
-            {
-                return false;
-            }
-            return true;
+            return !AK_Tool.disableIMGUI;
         }
-    }
 
-    [HarmonyPatch(typeof(UIRoot_Entry), "UIRootUpdate")]
-    public static class PatchDisableUIRootUpdateE
-    {
         [HarmonyPrefix]
-        public static bool prefix()
+        [HarmonyPatch(nameof(UIRoot_Entry.UIRootUpdate))]
+        public static bool Prefix_UIRootUpdate()
         {
-            if (AK_Tool.disableIMGUI)
-            {
-                return false;
-
-            }
-            return true;
+            return !AK_Tool.disableIMGUI;
         }
     }
+
     [HarmonyPatch(typeof(UIRoot_Play), "UIRootOnGUI")]
     public static class PatchDisableUIRootOnGUIP
     {
         [HarmonyPrefix]
-        public static bool prefix()
+        [HarmonyPatch(nameof(UIRoot_Play.UIRootOnGUI))]
+        public static bool Prefix_UIRootOnGUI()
         {
-            if (AK_Tool.disableIMGUI)
-            {
-                return false;
-            }
-            return true;
+            return !AK_Tool.disableIMGUI;
         }
-    }
 
-    [HarmonyPatch(typeof(UIRoot_Play), "UIRootUpdate")]
-    public static class PatchDisableUIRootUpdateP
-    {
         [HarmonyPrefix]
-        public static bool prefix()
+        [HarmonyPatch(nameof(UIRoot_Play.UIRootUpdate))]
+        public static bool Prefix_UIRootUpdate()
         {
-            if (AK_Tool.disableIMGUI)
-            {
-                return false;
-
-            }
-            return true;
+            return !AK_Tool.disableIMGUI;
         }
     }
+
 }

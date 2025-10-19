@@ -17,6 +17,7 @@ namespace AK_DLL
             BleedRateOnly = 2,
             Both = 3
         }
+
         public DoBarSetting_Window()
         {
             forcePause = false;
@@ -32,19 +33,20 @@ namespace AK_DLL
             onlyOneOfTypeAllowed = true;
             resizeable = false;
         }
+
         public override void DoWindowContents(Rect inRect)
         {
             DoOptions(inRect);
         }
 
-        public static void DoOptions(Rect inRect)
+        private static void DoOptions(Rect inRect)
         {
             Listing_Standard list = new()
             {
                 ColumnWidth = (inRect.width / 2f) - 20f
             };
             list.Begin(inRect);
-            list.Gap(12f);
+            list.Gap();
             Text.Font = GameFont.Medium;
             list.Label("AK_HealthBar_Option_TitleSwitches".Translate());
             Text.Font = GameFont.Small;

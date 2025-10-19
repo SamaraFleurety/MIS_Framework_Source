@@ -169,28 +169,20 @@
     <Compile Include="Def\OperatorDef\OperatorFashionSetDef.cs" />
     <Compile Include="GC_AKManager.cs" />
     <Compile Include="Graphic\Hair\HairOffset\Patch_ForbidAgedHeadOffset.cs" />
-    <Compile Include="Graphic\StatusBar\AK_BarUITool.cs" />
     <Compile Include="Graphic\ApparelOffset\Patch_ApparelOffset.cs" />
     <Compile Include="Graphic\Hair\BackHair\Ext_BackHair.cs" />
     <Compile Include="Graphic\Hair\BackHair\RenderNode_BackHair.cs" />
     <Compile Include="Graphic\Hair\BackHair\RenderNodeWorker_BackHair.cs" />
     <Compile Include="Graphic\StatusBar\DoBarSetting_Window.cs" />
-    <Compile Include="Graphic\StatusBar\DrawGUIOverlayExtras.cs" />
     <Compile Include="Graphic\Hair\BackHair\Ext_ExtraGraphicData.cs" />
     <Compile Include="Graphic\Hair\FrontHair\RenderNodeWorker_FrontHair.cs" />
     <Compile Include="Graphic\Hair\FrontHair\RenderNode_FrontHair.cs" />
-    <Compile Include="Graphic\StatusBar\GlobalFactor_Accumulator.cs" />
-    <Compile Include="Graphic\StatusBar\PawnRenderNodeWorker_AKHealthBar.cs" />
-    <Compile Include="Graphic\StatusBar\PawnRenderNodeWorker_AKSkillBar.cs" />
-    <Compile Include="Graphic\StatusBar\PawnRenderNode_AKHealthBar.cs" />
-    <Compile Include="Graphic\StatusBar\PawnRenderNode_AKSkillBar.cs" />
     <Compile Include="Graphic\Hair\FrontHair\Ext_FrontHair.cs" />
     <Compile Include="Graphic\WeaponOffset\Ext_WeaponWieldGraphics.cs" />
     <Compile Include="Graphic\WeaponOffset\Patch_AlterGraphics.cs" />
     <Compile Include="HarmonyPatches\PatchTest.cs" />
     <Compile Include="HarmonyPatches\Patch_AlienWarning.cs" />
     <Compile Include="HarmonyPatches\Patch_ObeliskCopyAbility.cs" />
-    <Compile Include="HarmonyPatches\Patch_PawnUIOverlay.cs" />
     <Compile Include="Hediff\Comps\HCP_AddTrait.cs" />
     <Compile Include="Hediff\Comps\HCP_RemoveMe.cs" />
     <Compile Include="Interaction\OperatorInteractionDef.cs" />
@@ -256,4 +248,8 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>DEL "$(SolutionDir)\输出\AK_DLL.dll"
+COPY "$(TargetPath)" "$(SolutionDir)\输出\AK_DLL.dll"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

@@ -1,6 +1,4 @@
-﻿using Verse.Sound;
-
-namespace AK_DLL.DynaLoad
+﻿namespace AK_DLL.DynaLoad
 {
     //仅在干员存在时，从硬盘加载音频文件。取代原版的开局装载所有音频(会有1g)
     //原版已经是动态加载了。已废弃。

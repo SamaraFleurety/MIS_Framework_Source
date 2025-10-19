@@ -90,4 +90,8 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>DEL "$(SolutionDir)\输出\2AKR_WeightedRandomUnified.dll"
+COPY "$(TargetPath)" "$(SolutionDir)\输出\2AKR_WeightedRandomUnified.dll"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

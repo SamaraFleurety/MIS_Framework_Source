@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Verse;
 
-namespace AK_DLL
+namespace AKE_OperatorExtension
 {
     //渲染节点的xmls属性字段接口，保持默认
     //如果节点需要渲染，GraphicFor和MeshSetFor是必须实现的
@@ -13,6 +13,7 @@ namespace AK_DLL
             workerClass = typeof(PawnRenderNodeWorker_AKHealthBar);
         }
     }
+
     public class PawnRenderNode_AKHealthBar : PawnRenderNode
     {
         public PawnRenderNode_AKHealthBar(Pawn pawn, PawnRenderNodeProperties props, PawnRenderTree tree) : base(pawn, props, tree)
@@ -21,16 +22,13 @@ namespace AK_DLL
 
         protected override void EnsureMeshesInitialized()
         {
-            return;
         }
-        public override Mesh GetMesh(PawnDrawParms parms)
-        {
-            return base.GetMesh(parms);
-        }
+
         public override Graphic GraphicFor(Pawn pawn)
         {
             return new Graphic();
         }
+
         public override GraphicMeshSet MeshSetFor(Pawn pawn)
         {
             return new GraphicMeshSet(new Mesh());

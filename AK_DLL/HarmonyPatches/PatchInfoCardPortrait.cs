@@ -9,7 +9,7 @@ namespace AK_DLL
     public class PatchInfoCardPortrait
     {
         [HarmonyPostfix]
-        public static void postfix(Rect cardRect, Dialog_InfoCard __instance, Thing ___thing)
+        public static void Postfix(Rect cardRect, Dialog_InfoCard __instance, Thing ___thing)
         {
             OperatorDocument doc;
 

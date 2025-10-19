@@ -27,7 +27,7 @@ namespace AKE_OperatorExtension
         public override void CompPostTick(ref float severityAdjustment)
         {
             tick++;
-            if (tick >= (int)Interval_year)
+            if (tick >= Interval_year)
             {
                 tick = 0;
                 if (!parent.pawn.HasSkillTracker())

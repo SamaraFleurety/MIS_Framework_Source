@@ -1,11 +1,4 @@
-﻿using HarmonyLib;
-using RimWorld;
-using System;
-using System.Collections.Generic;
-using Verse;
-using Verse.Sound;
-
-namespace AK_DLL
+﻿namespace AK_DLL
 {
     /*[HarmonyPatch(typeof(Messages), "Message", new Type[] { typeof(Message), typeof(bool) })]
     public class PatchTest

@@ -1,16 +1,15 @@
-﻿using RimWorld;
+﻿using AK_DLL;
+using RimWorld;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
-namespace AK_DLL
+namespace AKE_OperatorExtension
 {
     [StaticConstructorOnStartup]
-    public static class AK_BarUITool
+    public static class AKE_BarUITool
     {
-        public static bool CameraPlusModEnabled = false;
-        public static bool SimpleCameraModEnabled = false;
         public static Color32 BarColor => AK_ModSettings.Color_RGB;
         public static Color32 BarColor_enemy => AK_ModSettings.Color_RGB_enemy;
 
@@ -27,53 +26,44 @@ namespace AK_DLL
 
         internal static Dictionary<string, GameObject> PrefabTMPInstancesDictionary = new();
 
-        private static readonly string HP_IconTexPath = "UI/Abilities/icon_sort_hp";
-        private static readonly string DEF_IconTexPath = "UI/Abilities/icon_sort_def";
-        private static readonly string Timer_IconTexPath = "UI/Abilities/icon_sort_respawn";
-        private static readonly string BurstIconTexPath = "UI/Abilities/Burst";
-        private static readonly string RotateRingIconTexPath = "UI/Abilities/RotateRing";
-        static AK_BarUITool()
+        private const string HP_IconTexPath = "UI/Abilities/icon_sort_hp";
+        private const string DEF_IconTexPath = "UI/Abilities/icon_sort_def";
+        private const string Timer_IconTexPath = "UI/Abilities/icon_sort_respawn";
+        private const string BurstIconTexPath = "UI/Abilities/Burst";
+        private const string RotateRingIconTexPath = "UI/Abilities/RotateRing";
+
+        static AKE_BarUITool()
         {
             try
             {
                 InitializeIcons();
-                if (ModLister.GetActiveModWithIdentifier("brrainz.cameraplus") != null)
-                {
-                    CameraPlusModEnabled = true;
-                }
-                else if (ModLister.GetActiveModWithIdentifier("ray1203.SimpleCameraSetting") != null)
-                {
-                    SimpleCameraModEnabled = true;
-                }
             }
             catch
             {
                 Log.Error("MIS. Critical Error: Initialization fail");
             }
         }
+
         internal static VAbility_Operator GetVAbility(this Pawn p)
         {
-            if (p == null) return null;
-            if (p.abilities == null) return null;
+            if (p?.abilities == null) return null;
             VAbility_Operator va = null;
-            Ability ability = p?.abilities?.abilities.Find((Ability a) => a.def == AKDefOf.AK_VAbility_Operator);
+            Ability ability = p?.abilities?.abilities.Find(a => a.def == AKDefOf.AK_VAbility_Operator);
             if (ability != null)
             {
                 va = ability as VAbility_Operator;
             }
             return va;
         }
+
         internal struct SimpleRectBarRequest
         {
             public Vector3 center;
-
             public Vector2 size;
-
             public Material filledMat;
-
             public Quaternion rotation;
-
         }
+
         internal static void DrawSimpleRectBar(SimpleRectBarRequest r)
         {
             Vector3 s = new(r.size.x, 1f, r.size.y);
@@ -81,6 +71,7 @@ namespace AK_DLL
             matrix.SetTRS(r.center, r.rotation, s);
             Graphics.DrawMesh(MeshPool.plane10, matrix, r.filledMat, 0);
         }
+
         private static void InitializeIcons()
         {
             HP_Icon = MaterialPool.MatFrom(HP_IconTexPath, ShaderDatabase.Transparent);
@@ -93,78 +84,62 @@ namespace AK_DLL
             Material[] checkList = { HP_Icon, DEF_Icon, Timer_Icon, BurstIcon, RotateRingIcon };
             foreach (Material mat in checkList)
             {
-                if (mat == null)
+                if (!mat)
                 {
                     Log.Error("MIS. Critical Error: Missing UI Texture in file path: UI/Abilities/" + mat.name);
                 }
             }
 
         }
-        internal static string FormatTicksToHHMMSS(this int tick)
+
+        internal static string FormatTicksToDate(this int tick)
         {
             TimeSpan timespan;
-            string result;
             //float TynanFactor = 2500 / 600;
-            if (tick < 2500 && (tick < 600 || Math.Round((float)tick / 2500f, 1) == 0.0))
+            if (tick < 2500 && (tick < 600 || Math.Round(tick / 2500f, 1) == 0.0))
             {
                 float seconds = (float)Math.Round(tick / 60f, 1);
                 timespan = TimeSpan.FromSeconds(seconds);
-                result = string.Format("{0:D2}H: {1:D2}M: {2:D2}S", timespan.Hours, timespan.Minutes, timespan.Seconds);
-                return result;
             }
-            if (tick < 60000)
+            else if (tick < 60000)
             {
-                float hours;
-                hours = (float)Math.Round(tick / 2500f, 1);
+                float hours = (float)Math.Round(tick / 2500f, 1);
                 timespan = TimeSpan.FromHours(hours);
-                result = string.Format("{0:D2}H: {1:D2}M: {2:D2}S", timespan.Hours, timespan.Minutes, timespan.Seconds);
-                return result;
             }
             else//360000
             {
                 float days = (float)Math.Round(tick / 60000f, 1);
                 timespan = TimeSpan.FromDays(days);
-                result = string.Format("{0:D2}H: {1:D2}M: {2:D2}S", timespan.Hours, timespan.Minutes, timespan.Seconds);
-                return result;
             }
+            string result = $"{timespan.Hours:D2}H: {timespan.Minutes:D2}M: {timespan.Seconds:D2}S";
+            return result;
         }
-        internal static float GetHealthPercent(this Pawn pawn)
+
+        internal static float HealthPercentage(this Pawn pawn)
         {
-            float HealthPercent = pawn.health?.summaryHealth?.SummaryHealthPercent ?? (-1f);
-            return HealthPercent;
+            float healthPercent = pawn.health?.summaryHealth?.SummaryHealthPercent ?? -1f;
+            return healthPercent;
         }
+
         internal static bool IsAlly(this Pawn pawn)
         {
-            if (pawn == null) return false;
-            if (pawn.Faction == null || pawn.Faction == Faction.OfPlayer)
-            {
+            if (pawn?.Faction == null || pawn.Faction == Faction.OfPlayer)
                 return false;
-            }
-            if (pawn.RaceProps == null || !pawn.RaceProps.Humanlike || pawn.HostileTo(Faction.OfPlayer))
-            {
+            if (pawn.RaceProps is not { Humanlike: true } || pawn.HostileTo(Faction.OfPlayer))
                 return false;
-            }
             if (pawn.Faction?.PlayerGoodwill >= 75)
-            {
                 return true;
-            }
             return false;
         }
+
         internal static bool IsNeutral(this Pawn pawn)
         {
-            if (pawn == null) return false;
-            if (pawn.Faction == null || pawn.Faction == Faction.OfPlayer)
-            {
+            if (pawn?.Faction == null || pawn.Faction == Faction.OfPlayer)
                 return false;
-            }
-            if (pawn.RaceProps == null || !pawn.RaceProps.Humanlike || pawn.HostileTo(Faction.OfPlayer))
-            {
+            if (pawn.RaceProps is not { Humanlike: true } || pawn.HostileTo(Faction.OfPlayer))
                 return false;
-            }
             if (pawn.Faction?.PlayerGoodwill is >= 0 and < 75)
-            {
                 return true;
-            }
             return false;
         }
     }

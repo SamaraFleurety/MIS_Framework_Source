@@ -1,62 +1,46 @@
-﻿using RimWorld;
+﻿using AK_DLL;
+using RimWorld;
 using System;
 using UnityEngine;
 using Verse;
 
-namespace AK_DLL
+namespace AKE_OperatorExtension
 {
+    //有空再写进转译器里，这是个大工作量的事情
     public static class DrawGUIOverlayExtras
     {
-        public static void AppendPawnGUIOverlayExtras(Pawn pawn)
+        public static void DrawBleedLabel(Pawn pawn)
         {
-            DrawBleedLabel(pawn);
-        }
-        private static void DrawBleedLabel(Pawn pawn)
-        {
-            if (!AK_ModSettings.Display_PawnDeathIndicator)
-            {
-                return;
-            }
-            if (!AK_ModSettings.display_AllyFaction && pawn.IsAlly())
-            {
-                return;
-            }
-            if (!AK_ModSettings.display_NeutralFaction && pawn.IsNeutral())
-            {
-                return;
-            }
-            if (!AK_ModSettings.display_Enemy && pawn.HostileTo(Faction.OfPlayer))
-            {
-                return;
-            }
+            if (!AK_ModSettings.Display_PawnDeathIndicator) return;
+
+            if (!AK_ModSettings.display_AllyFaction && pawn.IsAlly()) return;
+
+            if (!AK_ModSettings.display_NeutralFaction && pawn.IsNeutral()) return;
+
+            if (!AK_ModSettings.display_Enemy && pawn.HostileTo(Faction.OfPlayer)) return;
+
             float bleedRateTotal = pawn.health.hediffSet.BleedRateTotal;
-            if (bleedRateTotal < 0.01f)
-            {
-                return;
-            }
+            if (bleedRateTotal < 0.01f) return;
+
             Vector2 pos = LabelDrawPosFor(pawn, 0.6f);
             DrawPawnLabel(pawn, pos);
-            return;
         }
+
         private static Vector2 LabelDrawPosFor(Thing thing, float worldOffsetZ)
         {
             Vector3 drawPos = thing.DrawPos;
             drawPos.z += worldOffsetZ;
             Vector2 result = Find.Camera.WorldToScreenPoint(drawPos) / Prefs.UIScale;
-            result.y = (float)Verse.UI.screenHeight - result.y;
-            if (thing is Pawn pawn)
-            {
-                if (!pawn.RaceProps.Humanlike)
-                {
-                    result.y += 4f;
-                }
-                else if (pawn.DevelopmentalStage.Baby())
-                {
-                    result.y += 8f;
-                }
-            }
+            result.y = UI.screenHeight - result.y;
+            if (thing is not Pawn pawn) return result;
+
+            if (!pawn.RaceProps.Humanlike) result.y += 4f;
+
+            else if (pawn.DevelopmentalStage.Baby()) result.y += 8f;
+
             return result;
         }
+
         private static void DrawPawnLabel(Pawn pawn, Vector2 pos, float alpha = 1f, GameFont font = GameFont.Tiny, bool alwaysDrawBg = true, bool alignCenter = true)
         {
             float pawnLabelNameWidth = GetPawnLabelTextWidth(pawn, font);
@@ -65,6 +49,7 @@ namespace AK_DLL
             Rect bgRect = new(pos.x - (pawnLabelNameWidth / 2f) - num, pos.y, pawnLabelNameWidth + (num * 2f), height);
             DrawPawnLabel(pawn, bgRect, alpha, font, alwaysDrawBg, alignCenter);
         }
+
         private static void DrawPawnLabel(Pawn pawn, Rect bgRect, float alpha = 1f, GameFont font = GameFont.Tiny, bool alwaysDrawBg = true, bool alignCenter = true)
         {
             GUI.color = new Color(1f, 1f, 1f, alpha);
@@ -95,6 +80,7 @@ namespace AK_DLL
             GUI.color = Color.white;
             Text.Anchor = TextAnchor.UpperLeft;
         }
+
         private static float GetPawnLabelTextWidth(Pawn pawn, GameFont font)
         {
             GameFont font2 = Text.Font;
@@ -112,6 +98,7 @@ namespace AK_DLL
             Text.Font = font2;
             return num;
         }
+
         private static string GetPawnLabel(Pawn pawn, GameFont font)
         {
             GameFont font2 = Text.Font;
@@ -124,7 +111,7 @@ namespace AK_DLL
                 //流血率
                 string text = string.Concat("BleedingRate".Translate(), ": ", bleedRateTotal.ToStringPercent(), " / ", "Day".Translate());
                 int num = HealthUtility.TicksUntilDeathDueToBloodLoss(pawn);
-                string text2 = "TimeToDeath".Translate().Formatted(AK_ModSettings.display_Option_HHMMSS ? num.FormatTicksToHHMMSS() : num.ToStringTicksToPeriod());
+                string text2 = "TimeToDeath".Translate().Formatted(AK_ModSettings.display_Option_HHMMSS ? num.FormatTicksToDate() : num.ToStringTicksToPeriod());
                 if (num >= 60000)
                 {
                     result = (string)(text + " (" + "WontBleedOutSoon".Translate() + ")");

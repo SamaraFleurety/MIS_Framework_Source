@@ -219,4 +219,8 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>DEL "$(SolutionDir)\输出\AK_Ability.dll"
+COPY "$(TargetPath)" "$(SolutionDir)\输出\AK_Ability.dll"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

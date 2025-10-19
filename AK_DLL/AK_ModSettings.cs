@@ -49,12 +49,12 @@ namespace AK_DLL
         public static bool zoomWithCamera = true;
         public static bool drawOutOfCameraZoom = true;
         //RGB
-        internal static Color32 Color_RGB => new((byte)r, (byte)g, (byte)b, (byte)a);
+        public static Color32 Color_RGB => new((byte)r, (byte)g, (byte)b, (byte)a);
         public static int r = 105;
         public static int g = 180;
         public static int b = 210;
         public static int a = 200;
-        internal static Color32 Color_RGB_enemy => new((byte)r_enemy, (byte)g_enemy, (byte)b_enemy, (byte)a_enemy);
+        public static Color32 Color_RGB_enemy => new((byte)r_enemy, (byte)g_enemy, (byte)b_enemy, (byte)a_enemy);
         public static int r_enemy = 220;
         public static int g_enemy = 40;
         public static int b_enemy = 0;
@@ -185,42 +185,47 @@ namespace AK_DLL
     public class AK_Mod : Mod
     {
         public static AK_ModSettings settings;
-        public enum Option_TimeDisplay
+
+        public static readonly bool ArknightsEnabled;
+        public static readonly bool CameraPlusModEnabled;
+        public static readonly bool SimpleCameraModEnabled;
+
+        static AK_Mod()
         {
-            None = 0,
-            DeathTimeOnly = 1,
-            BleedRateOnly = 2,
-            Both = 3
+            if (ModLister.GetActiveModWithIdentifier("brrainz.cameraplus") != null) CameraPlusModEnabled = true;
+            if (ModLister.GetActiveModWithIdentifier("ray1203.SimpleCameraSetting") != null) SimpleCameraModEnabled = true;
+            if (ModLister.GetActiveModWithIdentifier("MIS.Arknights") != null) ArknightsEnabled = true;
         }
+
         public AK_Mod(ModContentPack content) : base(content)
         {
             ParseHelper.Parsers<ItemOnSpawn>.Register(ItemOnSpawn.Parser);
             settings = GetSettings<AK_ModSettings>();
             Harmony instance = new("AK_DLL");
             instance.PatchAll(Assembly.GetExecutingAssembly());
-            if (ModLister.GetActiveModWithIdentifier("Nals.FacialAnimation") == null)
-            {
-                instance.Patch(original: AccessTools.Method(typeof(PawnRenderer), "ParallelGetPreRenderResults"), prefix: new HarmonyMethod(typeof(Patch_PreRenderResults), nameof(Patch_PreRenderResults.Prefix_ParallelGetPreRenderResults)));
-            }
         }
+
         public override void DoSettingsWindowContents(Rect inRect)
         {
             Listing_Standard listingStandard = new();
             listingStandard.Begin(inRect);
             if (Prefs.DevMode) listingStandard.CheckboxLabeled("测试模式", ref AK_ModSettings.debugOverride, "开启明日方舟MOD的测试模式。如果您不是测试人员请勿勾选此选项。");
             if (Prefs.DevMode || AK_ModSettings.allowManualRegister) listingStandard.CheckboxLabeled("AK_Option_AllowReg".Translate(), ref AK_ModSettings.allowManualRegister, "AK_Option_AllowRegDesc".Translate());
-            if (listingStandard.ButtonTextLabeled("AK_GUIBar_Setting".Translate(), "Open".Translate()))
+
+            //舟血条
+            if (ArknightsEnabled && listingStandard.ButtonTextLabeled("AK_GUIBar_Setting".Translate(), "Open".Translate()))
             {
                 Find.WindowStack.Add(new DoBarSetting_Window());
             }
+
             listingStandard.CheckboxLabeled("AK_Option_Play".Translate(), ref AK_ModSettings.playOperatorVoice, "AK_Option_PlayD".Translate()); ;
-            AK_ModSettings.voiceIntervalTime = (int)listingStandard.SliderLabeled("AK_Option_Interval".Translate() + $"{(float)AK_ModSettings.voiceIntervalTime / 2.0}", AK_ModSettings.voiceIntervalTime, 0, 60f);
+            AK_ModSettings.voiceIntervalTime = (int)listingStandard.SliderLabeled("AK_Option_Interval".Translate() + $"{AK_ModSettings.voiceIntervalTime / 2.0}", AK_ModSettings.voiceIntervalTime, 0, 60f);
 
             listingStandard.CheckboxLabeled("AK_Option_DisP".Translate(), ref AK_ModSettings.displayBottomLeftPortrait);
             listingStandard.CheckboxLabeled("AK_Option_DisPAnimation".Translate(), ref AK_ModSettings.displayAnimationLeftPortrait, "AK_Option_DisPAnimationD".Translate());
             AK_ModSettings.xOffset = (int)listingStandard.SliderLabeled("AK_Option_xOffset".Translate() + $"{AK_ModSettings.xOffset * 5}", AK_ModSettings.xOffset, 0, 600);
             AK_ModSettings.yOffset = (int)listingStandard.SliderLabeled("AK_Option_yOffset".Translate() + $"{AK_ModSettings.yOffset * 5}", AK_ModSettings.yOffset, 0, 600);
-            AK_ModSettings.ratio = (int)listingStandard.SliderLabeled("AK_Option_ratio".Translate() + $"{(float)AK_ModSettings.ratio * 0.05f}", AK_ModSettings.ratio, 1, 40);
+            AK_ModSettings.ratio = (int)listingStandard.SliderLabeled("AK_Option_ratio".Translate() + $"{AK_ModSettings.ratio * 0.05f}", AK_ModSettings.ratio, 1, 40);
             AK_ModSettings.opacity = (int)listingStandard.SliderLabeled("AK_Option_opacity".Translate(AK_ModSettings.opacity), AK_ModSettings.opacity, 0, 100);
 
             AK_ModSettings.secLocSensitive = (int)listingStandard.SliderLabeled("AK_Option_SecSensetive".Translate() + $"{(float)AK_ModSettings.secLocSensitive * 10}", AK_ModSettings.secLocSensitive, 1, 10);

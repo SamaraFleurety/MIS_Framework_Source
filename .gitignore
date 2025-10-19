@@ -4,7 +4,10 @@
 */bin/*
 */obj/*
 *.pdb
-/AK_Compatibility/AlienRace_Compatibility/obj
+/AK_Compatibility/1.4_AK_Compatibility/bin
+/AK_Compatibility/1.5_AK_Compatibility/bin
 /AK_Compatibility/1.4_AK_Compatibility/obj
 /AK_Compatibility/1.5_AK_Compatibility/obj
 /AK_Compatibility/AlienRace_Compatibility/bin
+/AK_Compatibility/AlienRace_Compatibility/obj
+/输出

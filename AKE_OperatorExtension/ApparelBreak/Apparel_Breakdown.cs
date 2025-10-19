@@ -25,7 +25,7 @@ namespace AKE_OperatorExtension
         float lastHPRatio = -1;
         string cachedWornGraphicPath = null;
 
-        float HPRatio => (float)HitPoints / (float)MaxHitPoints;
+        float HPRatio => HitPoints / (float)MaxHitPoints;
 
         public string WornGraphicPathByHP
         {

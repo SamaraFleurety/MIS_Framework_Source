@@ -92,4 +92,8 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>DEL "$(SolutionDir)\输出\AKS_Shield.dll"
+COPY "$(TargetPath)" "$(SolutionDir)\输出\AKS_Shield.dll"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

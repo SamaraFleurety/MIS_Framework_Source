@@ -1,14 +1,4 @@
-﻿using HarmonyLib;
-using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-using Verse;
-
-namespace AKE_OperatorExtension.HarmonyPatchs
+﻿namespace AKE_OperatorExtension.HarmonyPatchs
 {
     /*[HarmonyPatch(typeof(TrailRenderer), "time")]
     public class Patch_TrailRenderAlternativeTimeScale

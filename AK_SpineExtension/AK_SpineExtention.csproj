@@ -90,4 +90,8 @@
     <Compile Include="Script\CM_L2DCarousel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>DEL "$(SolutionDir)\输出\AK_SpineExtention.dll"
+COPY "$(TargetPath)" "$(SolutionDir)\输出\AK_SpineExtention.dll"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

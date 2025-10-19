@@ -236,7 +236,7 @@ namespace AKS_Shield
         {
             get
             {
-                if (AKLibActived) return AK_BarUITool.CameraPlusModEnabled;
+                if (AKLibActived) return AK_Mod.CameraPlusModEnabled;
                 cachedCameraPlusModActiveStatue ??= ModLister.GetActiveModWithIdentifier("brrainz.cameraplus") != null;
                 return (bool)cachedCameraPlusModActiveStatue;
             }
@@ -246,7 +246,7 @@ namespace AKS_Shield
         {
             get
             {
-                if (AKLibActived) return AK_BarUITool.SimpleCameraModEnabled;
+                if (AKLibActived) return AK_Mod.SimpleCameraModEnabled;
                 cachedSimpleCameraModActiveStatue ??= ModLister.GetActiveModWithIdentifier("ray1203.SimpleCameraSetting") != null;
                 return (bool)cachedSimpleCameraModActiveStatue;
             }

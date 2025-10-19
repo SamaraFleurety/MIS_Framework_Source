@@ -38,7 +38,7 @@ namespace AK_DLL
             if (skinIndex < 1000)
             {
                 Texture2D texture = doc.operatorDef.PreferredStand(doc.preferedSkin);
-                Widgets.DrawTextureFitted(new Rect(AK_ModSettings.xOffset * 5, AK_ModSettings.yOffset * 5, 408, 408), texture, (float)AK_ModSettings.ratio * 0.05f);
+                Widgets.DrawTextureFitted(new Rect(AK_ModSettings.xOffset * 5, AK_ModSettings.yOffset * 5, 408, 408), texture, AK_ModSettings.ratio * 0.05f);
                 lastSpineInstance?.SetActive(false);
                 lastSpineInstance = null;
             }
@@ -54,7 +54,7 @@ namespace AK_DLL
                 lastSpineInstance ??= RIWindow_MainMenu.DrawSpine2DModel(spineDefname);
                 if (!lastSpineInstance.activeSelf) lastSpineInstance.SetActive(true);
 
-                Widgets.DrawTextureFitted(new Rect(AK_ModSettings.xOffset * 5, AK_ModSettings.yOffset * 5, 408, 408), RIWindow_MainMenu.GetOrSetSpineRenderTexture(lastSpineInstance, 1080, 1080), (float)AK_ModSettings.ratio * 0.05f);
+                Widgets.DrawTextureFitted(new Rect(AK_ModSettings.xOffset * 5, AK_ModSettings.yOffset * 5, 408, 408), RIWindow_MainMenu.GetOrSetSpineRenderTexture(lastSpineInstance, 1080, 1080), AK_ModSettings.ratio * 0.05f);
             }
 
             GUI.color = color;

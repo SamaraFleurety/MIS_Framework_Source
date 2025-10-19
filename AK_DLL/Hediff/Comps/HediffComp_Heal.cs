@@ -12,7 +12,7 @@ namespace AK_DLL
             age++;
             if (age > this.Props.healOncePer)
             {
-                float heal = (float)this.Props.healPoint;
+                float heal = Props.healPoint;
                 for (int i = 0; i < parent.pawn.health.hediffSet.hediffs.Count; ++i)
                 {
                     Hediff injury = parent.pawn.health.hediffSet.hediffs[i];

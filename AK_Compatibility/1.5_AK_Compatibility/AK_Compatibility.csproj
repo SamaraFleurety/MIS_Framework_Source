@@ -92,4 +92,8 @@
     <PreBuildEvent>
     </PreBuildEvent>
   </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>DEL "$(SolutionDir)\输出\Arknights Compability.dll"
+COPY "$(TargetPath)" "$(SolutionDir)\输出\Arknights Compability.dll"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

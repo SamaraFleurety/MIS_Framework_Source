@@ -573,7 +573,7 @@ namespace AK_DLL.UI
             for (int i = 0; i < TypeDef.SortOrderSkill.Count; ++i)
             {
                 radarChart.vertexLabelValues[i] = $"<color={GetSkillLabelColor(OperatorDef.SortedSkills[i])}>{OperatorDef.SortedSkills[i].skill.label.Translate()}</color>";
-                radarChart.data[0].values.Add((float)OperatorDef.SortedSkills[i].level / 20.0f);
+                radarChart.data[0].values.Add(OperatorDef.SortedSkills[i].level / 20.0f);
             }
         }
 

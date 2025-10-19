@@ -9,20 +9,21 @@ namespace AK_DLL
     [HarmonyPatch(typeof(Page_SelectScenario), "BeginScenarioConfiguration")]
     public class Patch_AlienNewGameDialog
     {
-        public static bool DisabledAlienWarning_NewColony = false;
+        private static bool _disabledAlienWarningNewColony;
+
         [HarmonyPostfix]
         public static void NewColonyPostfix()
         {
-            if (ModLister.GetActiveModWithIdentifier("erdelf.HumanoidAlienRaces") != null && ModLister.GetActiveModWithIdentifier("Paluto22.AK.Compatibility") == null && !DisabledAlienWarning_NewColony)
+            if (ModLister.GetActiveModWithIdentifier("erdelf.HumanoidAlienRaces") != null && ModLister.GetActiveModWithIdentifier("Paluto22.AK.Compatibility") == null && !_disabledAlienWarningNewColony)
             {
                 Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("AK_AlienModWarnings".Translate(), delegate
                 {
-                    DisabledAlienWarning_NewColony = true;
+                    _disabledAlienWarningNewColony = true;
                     SteamUtility.OpenWorkshopPage(new PublishedFileId_t(3204702080));
                 },
                 delegate
                 {
-                    DisabledAlienWarning_NewColony = true;
+                    _disabledAlienWarningNewColony = true;
                 }
                 ));
             }
@@ -32,20 +33,21 @@ namespace AK_DLL
     [HarmonyPatch(typeof(Dialog_SaveFileList_Load), "DoFileInteraction")]
     public class Patch_AlienLoadGameDialog
     {
-        public static bool DisabledAlienWarning_LoadGame = false;
+        private static bool _disabledAlienWarningLoadGame;
+
         [HarmonyPostfix]
         public static void LoadGamePostfix()
         {
-            if (ModLister.GetActiveModWithIdentifier("erdelf.HumanoidAlienRaces") != null && ModLister.GetActiveModWithIdentifier("Paluto22.AK.Compatibility") == null && !DisabledAlienWarning_LoadGame)
+            if (ModLister.GetActiveModWithIdentifier("erdelf.HumanoidAlienRaces") != null && ModLister.GetActiveModWithIdentifier("Paluto22.AK.Compatibility") == null && !_disabledAlienWarningLoadGame)
             {
                 Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("AK_AlienModWarnings".Translate(), delegate
                 {
-                    DisabledAlienWarning_LoadGame = true;
+                    _disabledAlienWarningLoadGame = true;
                     SteamUtility.OpenWorkshopPage(new PublishedFileId_t(3204702080));
                 },
                 delegate
                 {
-                    DisabledAlienWarning_LoadGame = true;
+                    _disabledAlienWarningLoadGame = true;
                 }
                 ));
             }

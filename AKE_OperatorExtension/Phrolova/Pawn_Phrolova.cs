@@ -1,11 +1,5 @@
 ﻿using AK_DLL;
 using AKA_Ability;
-using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Verse;
 
 namespace AKE_OperatorExtension
@@ -29,9 +23,9 @@ namespace AKE_OperatorExtension
             if (Find.TickManager.TicksGame % REPRODUCE_INTERVAL == 0)
             {
                 //原版没做缓存 好啥比
-                foreach(var part in this.health.hediffSet.hediffs)
+                foreach (var part in this.health.hediffSet.hediffs)
                 {
-                    if (part is Hediff_MissingPart missing) 
+                    if (part is Hediff_MissingPart missing)
                     {
                         health.hediffSet.hediffs.Remove(missing);
                         break;

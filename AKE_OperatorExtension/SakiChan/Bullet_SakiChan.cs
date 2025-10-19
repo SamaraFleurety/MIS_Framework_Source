@@ -1,13 +1,8 @@
-﻿using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using AK_DLL;
+using RimWorld;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
-using AK_DLL;
 
 namespace AKE_OperatorExtension
 {
@@ -62,9 +57,9 @@ namespace AKE_OperatorExtension
                 Vector3 direction = (destination - origin).normalized;
                 //入参是弧度
                 float pendulum = Mathf.Sin(tickAfterSpawned * Mathf.Deg2Rad * FREQUENCY) * 1;
-                
-                Vector3 perpendicular = new Vector3(-direction.y, 0, direction.x);
-                return base.DrawPos + perpendicular * pendulum;
+
+                Vector3 perpendicular = new(-direction.y, 0, direction.x);
+                return base.DrawPos + (perpendicular * pendulum);
             }
         }
 
@@ -83,7 +78,7 @@ namespace AKE_OperatorExtension
         {
             base.Destroy(mode);
             GameObject.Destroy(mygo_BulletWithTrail);
-            
+
         }
 
         public override void ExposeData()

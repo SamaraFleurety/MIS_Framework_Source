@@ -1,20 +1,17 @@
-﻿using AKA_Ability;
+﻿using AK_DLL;
+using AKA_Ability;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using Verse;
 
-namespace AK_DLL
+namespace AKE_OperatorExtension
 {
     //泰南我草你妈 Draw方法是交替执行的 Worker还是唯一实例
     public class PawnRenderNodeWorker_AKSkillBar : PawnRenderNodeWorker
     {
         //locOffset
-        private ProgramState CurrentProgramState => Current.ProgramState;
-        private static bool CameraPlusModEnabled => AK_BarUITool.CameraPlusModEnabled;
-        private static bool SimpleCameraModEnabled => AK_BarUITool.SimpleCameraModEnabled;
-        private float ZoomRootSize => Find.CameraDriver.ZoomRootSize;
         private static float Width => AK_ModSettings.barWidth * 0.01f;
         private static float Height => AK_ModSettings.barHeight * 0.001f;
         private static float Margin => AK_ModSettings.barMargin * 0.01f;
@@ -22,16 +19,16 @@ namespace AK_DLL
         private static Vector3 BottomMargin => new(0f, 0f, Margin - Height);
         private static Vector3 TopMargin => Vector3.forward * 1f;
         //Mat
-        private static Material BarFilledMat => AK_BarUITool.SkillBarFilledMat;
-        private static Material BarUnfilledMat => AK_BarUITool.BarUnfilledMat;
-        private static Material Timer_Icon => AK_BarUITool.Timer_Icon;
-        private static Material RotateRing => AK_BarUITool.RotateRingIcon;
-        private static Material BurstButton => AK_BarUITool.BurstIcon;
+        private static Material BarFilledMat => AKE_BarUITool.SkillBarFilledMat;
+        private static Material BarUnfilledMat => AKE_BarUITool.BarUnfilledMat;
+        private static Material Timer_Icon => AKE_BarUITool.Timer_Icon;
+        private static Material RotateRing => AKE_BarUITool.RotateRingIcon;
+        private static Material BurstButton => AKE_BarUITool.BurstIcon;
         private string OperatorID(Pawn p) => p.GetDoc()?.operatorID ?? p.Label;
         private string ObjectName(Pawn p) => (p.GetDoc()?.operatorID ?? p.Label) + ".objTMP";
         private GameObject PrefabTMP => AK_Tool.PAAsset.LoadAsset<GameObject>("PrefabTMPPopup");
         //使用prefab可以避免new GameObject出来的object被回收不能用Find方法找到；
-        private Dictionary<string, GameObject> PrefabTMPInstancesDictionary => AK_BarUITool.PrefabTMPInstancesDictionary;
+        private Dictionary<string, GameObject> PrefabTMPInstancesDictionary => AKE_BarUITool.PrefabTMPInstancesDictionary;
         private void InitObjectOnce(Pawn p)
         {
             if (PrefabTMPInstancesDictionary.NullOrEmpty() || !PrefabTMPInstancesDictionary.ContainsKey(OperatorID(p)))
@@ -69,7 +66,7 @@ namespace AK_DLL
         {
             if (AK_ModSettings.zoomWithCamera)
             {
-                return Mathf.Max(ZoomRootSize, 11) / 11;
+                return Mathf.Max(Find.CameraDriver.ZoomRootSize, 11) / 11;
             }
             return 1f;
         }
@@ -79,7 +76,7 @@ namespace AK_DLL
             float zoomRatio = GetZoomRatio();
             float zoomWidthRatio;
             float zoomYRatio;
-            if (CameraPlusModEnabled || SimpleCameraModEnabled)
+            if (AK_Mod.CameraPlusModEnabled || AK_Mod.SimpleCameraModEnabled)
             {
                 zoomWidthRatio = zoomRatio > 4.35f ? 4.35f : zoomRatio;
                 zoomYRatio = zoomRatio > 5f ? 5f : zoomRatio;
@@ -91,14 +88,14 @@ namespace AK_DLL
             }
             //
             GenDraw.FillableBarRequest fbr = default;
-            if (CameraPlusModEnabled)
+            if (AK_Mod.CameraPlusModEnabled)
             {
                 fbr.center = drawPos + (Vector3.up * 3f) + (BottomMargin * (zoomYRatio > 1.75f ? zoomYRatio * 0.9f : zoomYRatio));
                 fbr.size = BarSize;
                 fbr.size.x *= zoomWidthRatio;
                 fbr.size.y *= zoomRatio > 1.75f ? zoomRatio * 1.5f : zoomRatio;
             }
-            else if (SimpleCameraModEnabled)
+            else if (AK_Mod.SimpleCameraModEnabled)
             {
                 fbr.center = drawPos + (Vector3.up * 3f) + (BottomMargin * (zoomYRatio > 1.75f ? zoomYRatio * 0.75f : zoomYRatio));
                 fbr.size = BarSize;
@@ -129,7 +126,7 @@ namespace AK_DLL
         public override bool CanDrawNow(PawnRenderNode node, PawnDrawParms parms)
         {
             Pawn pawn = parms.pawn;
-            if (CurrentProgramState != ProgramState.Playing || pawn == null)
+            if (Current.ProgramState != ProgramState.Playing || pawn == null)
             {
                 return false;
             }
@@ -207,16 +204,16 @@ namespace AK_DLL
                 }
                 DrawIcon(OriginCenter, Scale, Rot4.North.AsQuat, BurstButton, MeshPool.plane10, 2);
                 //闪烁
-                float BurstFlashFactor = GlobalFactor_Accumulator.GetBurstFlashFactor;
+                float BurstFlashFactor = GlobalFactor_Accumulator.BurstFlashFactor;
                 //float factor = Mathf.Sqrt(BurstFlashFactor);
                 float transparency = 120 - (BurstFlashFactor / 1.2f * 70);
                 //float transparency = Mathf.Lerp(150, 0, factor);
-                AK_BarUITool.SimpleRectBarRequest sbr = default;
+                AKE_BarUITool.SimpleRectBarRequest sbr = default;
                 sbr.center = OriginCenter + Vector3.down;
                 sbr.filledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(255, 255, 0, (byte)Mathf.Max(transparency, 20f))); ;
                 sbr.rotation = Quaternion.AngleAxis(45f, Vector3.up);
                 sbr.size = new Vector2(0.25f * BurstFlashFactor, 0.25f * BurstFlashFactor);
-                AK_BarUITool.DrawSimpleRectBar(sbr);
+                AKE_BarUITool.DrawSimpleRectBar(sbr);
             }
             //充能技能
             if (IsGrouped)
@@ -225,7 +222,7 @@ namespace AK_DLL
                 {
                     return;
                 }
-                DrawIcon(OriginCenter, Scale, Quaternion.AngleAxis(GlobalFactor_Accumulator.GetRotateAngle, Vector3.up), RotateRing, MeshPool.plane10, 1);
+                DrawIcon(OriginCenter, Scale, Quaternion.AngleAxis(GlobalFactor_Accumulator.RotateAngle, Vector3.up), RotateRing, MeshPool.plane10, 1);
                 InitObjectOnce(pawn);
                 if (PrefabTMPInstance != null)
                 {

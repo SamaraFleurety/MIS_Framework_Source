@@ -16,7 +16,7 @@ namespace AK_DLL
             //this.compPower = this.GetComp<CompPowerTrader>();
             //this.compRefuelable = this.GetComp<CompRefuelable>();
             //不可以使用
-            if (CompPower != null && !CompPower.PowerOn)
+            if (CompPower is { PowerOn: false })
             {
                 yield return new FloatMenuOption("CannotUseNoPower".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0); yield break;
             }
@@ -30,13 +30,13 @@ namespace AK_DLL
             {
                 foreach (OperatorDocument docu in GC_OperatorDocumentation.opDocArchive.Values)
                 {
-                    OperatorDef opdef = docu.operatorDef;
-                    if (selPawn.Name.ToString().Equals(new NameTriple(opdef.name, opdef.nickname, opdef.surname).ToString()))
+                    OperatorDef operatorDef = docu.operatorDef;
+                    if (selPawn.Name.ToString().Equals(new NameTriple(operatorDef.name, operatorDef.nickname, operatorDef.surname).ToString()))
                     {
-                        yield return new FloatMenuOption("AK_ManualRegOp".Translate(opdef.nickname), delegate
+                        yield return new FloatMenuOption("AK_ManualRegOp".Translate(operatorDef.nickname), delegate
                         {
                             OperatorDocument doc1 = docu;
-                            Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("AK_ManualRegConfirm".Translate(opdef.nickname), delegate
+                            Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("AK_ManualRegConfirm".Translate(operatorDef.nickname), delegate
                             {
                                 doc1.ManualRegister(selPawn);
                             }));
@@ -113,8 +113,7 @@ namespace AK_DLL
             get
             {
                 TC_TeleportTowerSuperior comp = GetComp<TC_TeleportTowerSuperior>();
-                if (comp != null) return comp.Alias;
-                return base.Label;
+                return comp != null ? comp.Alias : base.Label;
             }
         }
     }

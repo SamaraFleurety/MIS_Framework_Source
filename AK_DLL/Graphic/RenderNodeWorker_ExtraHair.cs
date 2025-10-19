@@ -23,7 +23,7 @@ namespace AK_DLL
         }
 
         //碧蓝有些舰娘比较矮，睡觉的时候头位置偏低
-        bool SleepingOffset(PawnDrawParms parms)
+        private bool SleepingOffset(PawnDrawParms parms)
         {
             if (!parms.Portrait)
             {

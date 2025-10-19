@@ -21,7 +21,7 @@ namespace AK_DLL
 
         public Dictionary<SkillDef, int> skillLevel;
         public VoicePackDef voicePack;
-        public int preferedAbility = 0;
+        public int preferedAbility;
         public OperatorDef operatorDef;
         //public int oripathySeverity = 0;
 
@@ -111,16 +111,16 @@ namespace AK_DLL
 
             Scribe_Defs.Look(ref this.pendingFashionDef, "fashionDef");
 
-            Scribe_Values.Look(ref this.forceDisableNL, "disableNL", false);
+            Scribe_Values.Look(ref this.forceDisableNL, "disableNL");
         }
 
         //记录当前干员所有技能
         public void RecordSkills()
         {
-            if (this.pawn == null || this.pawn.skills == null) return;
+            if (this.pawn?.skills == null) return;
             foreach (SkillRecord i in this.pawn.skills.skills)
             {
-                if (this.skillLevel.ContainsKey(i.def) == false)
+                if (!this.skillLevel.ContainsKey(i.def))
                 {
                     this.skillLevel.Add(i.def, i.levelInt);
                 }
@@ -149,7 +149,7 @@ namespace AK_DLL
             base.StartedNewGame();
             if (ModLister.GetActiveModWithIdentifier("MIS.Arknights") != null)
             {
-                Find.LetterStack.ReceiveLetter(LetterMaker.MakeLetter(Translator.Translate("AK_StartLabel"), Translator.Translate("AK_StartDesc"), LetterDefOf.NeutralEvent, null, null));
+                Find.LetterStack.ReceiveLetter(LetterMaker.MakeLetter("AK_StartLabel".Translate(), "AK_StartDesc".Translate(), LetterDefOf.NeutralEvent));
             }
             opDocArchive ??= new Dictionary<string, OperatorDocument>();
         }
@@ -215,14 +215,14 @@ namespace AK_DLL
         public static void AddPawn(string ID, OperatorDef operatorDef, Pawn pawn, Thing weapon, List<Thing> fashionSet)
         {
             OperatorDocument doc;
-            if (opDocArchive.ContainsKey(ID) == false)
+            if (!opDocArchive.TryGetValue(ID, out OperatorDocument document))
             {
                 doc = new OperatorDocument(ID, pawn, weapon, operatorDef);
                 opDocArchive.Add(ID, doc);
             }
             else
             {
-                doc = opDocArchive[ID];
+                doc = document;
                 DestroyHeritage(doc);
                 ReRecruit(doc, ID, pawn, weapon);
             }

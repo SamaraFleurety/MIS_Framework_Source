@@ -1,4 +1,5 @@
 ﻿using AKA_Ability;
+using AKA_Ability.TickCondition;
 using AKR_Random;
 using AKR_Random.RewardSet;
 using RimWorld;
@@ -21,16 +22,10 @@ namespace AK_DLL
 
         //生成新人时，使用这个
         public PawnKindDef pawnkind;
-        public PawnKindDef RecruitPawnkind
-        {
-            get
-            {
-                return pawnkind ?? PawnKindDefOf.Colonist;
-            }
-        }
+        public PawnKindDef RecruitPawnkind => pawnkind ?? PawnKindDefOf.Colonist;
 
         public FactionDef faction = null;
-        public Faction cachedFaction = null;
+        public Faction cachedFaction;
         public Faction RecruitFaction
         {
             get
@@ -60,7 +55,7 @@ namespace AK_DLL
         //可以让生成出来的角色仅在一定范围内随机
 
         public List<DefWithWeight> bodyTypeRange = null;
-        public RandomizerNode_Rewards randNode_BodyType = null;
+        public RandomizerNode_Rewards randNode_BodyType;
         //随机一个bodytypedef给当前正在刷的任务。下面类似名字的属性同理。
         public BodyTypeDef BodyTypeThisPawn
         {
@@ -74,7 +69,7 @@ namespace AK_DLL
         }
 
         public List<DefWithWeight> headTypeRange = null;
-        public RandomizerNode_Rewards randNode_HeadType = null;
+        public RandomizerNode_Rewards randNode_HeadType;
         public HeadTypeDef HeadTypeThisPawn
         {
             get
@@ -87,7 +82,7 @@ namespace AK_DLL
         }
 
         public List<DefWithWeight> hairRange = null;
-        public RandomizerNode_Rewards randNode_Hair = null;
+        public RandomizerNode_Rewards randNode_Hair;
         public HairDef HairThisPawn
         {
             get
@@ -114,7 +109,7 @@ namespace AK_DLL
         public List<DefWithWeight> backstoryChildRange = null;
         public List<DefWithWeight> backstoryAdultRange = null;
 
-        public RandomizerNode_Rewards randNode_storyChild = null;
+        public RandomizerNode_Rewards randNode_storyChild;
         public BackstoryDef BackStoryChildThisPawn
         {
             get
@@ -207,14 +202,13 @@ namespace AK_DLL
         protected override VAbility_AKATrackerContainer Recruit_VAB()
         {
             VAbility_AKATrackerContainer res = base.Recruit_VAB();
-            res.AKATracker = new(operator_Pawn);
-            res.AKATracker.tickCondition = new(res.AKATracker);
+            res.AKATracker = new AbilityTracker(operator_Pawn);
+            res.AKATracker.tickCondition = new TickCondion_Base(res.AKATracker);
             return res;
         }
 
         protected override void Recruit_OperatorID(VAbility_AKATrackerContainer vab)
         {
-            return;
         }
 
         protected override void Recruit_PersonalStat()
@@ -238,7 +232,7 @@ namespace AK_DLL
             operator_Pawn.story.bodyType = this.BodyTypeThisPawn;
             operator_Pawn.story.headType = this.HeadTypeThisPawn ?? DefDatabase<HeadTypeDef>.GetNamed("Female_NarrowPointy");
             operator_Pawn.story.hairDef = HairThisPawn ?? HairDefOf.Bald;
-            operator_Pawn.style.beardDef = this.beard == null ? BeardDefOf.NoBeard : this.beard;
+            operator_Pawn.style.beardDef = this.beard ?? BeardDefOf.NoBeard;
             operator_Pawn.story.skinColorOverride = this.skinColor;
             operator_Pawn.story.HairColor = HairColorThisPawn;
 

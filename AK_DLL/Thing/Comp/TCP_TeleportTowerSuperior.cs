@@ -27,7 +27,7 @@ namespace AK_DLL
 
         //private Command_Action cachedChangeAliasGizmo = null;
 
-        private static HashSet<TC_TeleportTowerSuperior> AllTowers => GC_AKManager.superiorRecruitTowers;
+        private static HashSet<TC_TeleportTowerSuperior> AllTowers => GC_AkManager.SuperiorRecruitTowers;
 
         private Command_Action CachedChangeAliasGizmo
         {
@@ -63,7 +63,7 @@ namespace AK_DLL
         {
             if (!AllTowers.Contains(this))
             {
-                GC_AKManager.superiorRecruitTowers.Add(this);
+                GC_AkManager.SuperiorRecruitTowers.Add(this);
             }
             base.PostSpawnSetup(respawningAfterLoad);
         }

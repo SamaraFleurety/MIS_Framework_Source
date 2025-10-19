@@ -17,20 +17,19 @@ namespace AK_SpineExtention
         {
             cachedOpSkinAnimation = new();
         }
+
         public override void StartedNewGame()
         {
             base.StartedNewGame();
             cachedOpSkinAnimation = new Dictionary<OperatorDocument, Dictionary<int, GameObject>>();
         }
+
         public override void LoadedGame()
         {
             base.LoadedGame();
             cachedOpSkinAnimation = new Dictionary<OperatorDocument, Dictionary<int, GameObject>>();
         }
-        public override void ExposeData()
-        {
-            base.ExposeData();
-        }
+
         public override void FinalizeInit()
         {
         }

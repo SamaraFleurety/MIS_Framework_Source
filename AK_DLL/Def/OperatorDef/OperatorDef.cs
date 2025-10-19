@@ -1,6 +1,7 @@
 ﻿using AK_DLL.DynamicLoading;
 using AK_TypeDef;
 using AKA_Ability;
+using AKA_Ability.TickCondition;
 using AKM_MusicPlayer;
 using FS_LivelyRim;
 using RimWorld;
@@ -114,14 +115,10 @@ namespace AK_DLL
 
         //缓存 招募时给的衣服。这个时候有可能还没生成doc
         protected static List<Thing> clothTemp = new();
-        public string Prefix
-        {
-            get { return AK_Tool.GetPrefixFrom(this.defName); }
-        }
-        public string OperatorID
-        {
-            get { return AK_Tool.GetOperatorIDFrom(this.defName); }
-        }
+        public string Prefix => AK_Tool.GetPrefixFrom(this.defName);
+
+        public string OperatorID => AK_Tool.GetOperatorIDFrom(this.defName);
+
         public List<SkillAndFire> SortedSkills
         {
             get
@@ -193,7 +190,7 @@ namespace AK_DLL
             get
             {
                 OperatorDocument doc = GC_OperatorDocumentation.opDocArchive[this.OperatorID];
-                return doc == null || !doc.currentExist;
+                return doc is not { currentExist: true };
             }
         }
         #endregion
@@ -219,7 +216,7 @@ namespace AK_DLL
             {
                 foreach (ItemOnSpawn apparelDef in this.apparels)
                 {
-                    Apparel apparel = Recruit_Inventory_Wear(apparelDef.item, operator_Pawn, true, apparelDef.stuff);
+                    _ = Recruit_Inventory_Wear(apparelDef.item, operator_Pawn, true, apparelDef.stuff);
                 }
 
                 operator_Pawn.story.hairDef = hair ?? HairDefOf.Bald;
@@ -241,34 +238,33 @@ namespace AK_DLL
             }
             else
             {
-                OperatorFashionSetDef set = def;
-                if (set.apparelTextureIndex is int index) apparelTextureIndex = index;
-                foreach (ThingDef apparelDef in set.apparels)
+                if (def.apparelTextureIndex is { } textureIndex) apparelTextureIndex = textureIndex;
+                foreach (ThingDef apparelDef in def.apparels)
                 {
                     Recruit_Inventory_Wear(apparelDef, operator_Pawn, true);
                 }
-                if (set.hair != null) operator_Pawn.story.hairDef = set.hair;
-                if (set.voice != null)
+                if (def.hair != null) operator_Pawn.story.hairDef = def.hair;
+                if (def.voice != null)
                 {
-                    doc.voicePack = set.voice;
+                    doc.voicePack = def.voice;
                 }
-                if (set.weapon != null)
+                if (def.weapon != null)
                 {
                     if (doc.weapon != null && !doc.weapon.DestroyedOrNull()) doc.weapon.Destroy();
                     if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null && ModLister.GetActiveModWithIdentifier("paluto22.ak.combatextended") == null)
                     {
                         return;
                     }
-                    ThingWithComps weapon = (ThingWithComps)ThingMaker.MakeThing(set.weapon);
-                    CompBiocodable comp = weapon.GetComp<CompBiocodable>();
+                    ThingWithComps weaponEq = (ThingWithComps)ThingMaker.MakeThing(def.weapon);
+                    CompBiocodable comp = weaponEq.GetComp<CompBiocodable>();
                     comp?.CodeFor(operator_Pawn);
-                    operator_Pawn.equipment.AddEquipment(weapon);
-                    doc.weapon = weapon;
+                    operator_Pawn.equipment.AddEquipment(weaponEq);
+                    doc.weapon = weaponEq;
                 }
-                doc.forceDisableNL = set.forceDisableNL;
+                doc.forceDisableNL = def.forceDisableNL;
             }
 
-            foreach (var apparel in operator_Pawn.apparel.WornApparel)
+            foreach (Apparel apparel in operator_Pawn.apparel.WornApparel)
             {
                 if (apparel is Apparel_Operator ap)
                 {
@@ -463,21 +459,20 @@ namespace AK_DLL
                 doc = document,
                 owner = operator_Pawn,
             };
-            vAbility.AKATracker.tickCondition = new(vAbility.AKATracker);
+            vAbility.AKATracker.tickCondition = new TickCondion_Base(vAbility.AKATracker);
 
             //这不是干员文档。这是通用的全局注册系统。这是用来调用干员文档，而非直接存储干员数据。
             operator_Pawn.AddDoc(new OpDocContainer(operator_Pawn) { va = vAbility });
-            return;
         }
 
         protected void Recruit_Hediff()
         {
             operator_Pawn.health.hediffSet.Clear();
-            foreach (Hediff hediff_Pawn in operator_Pawn.health.hediffSet.hediffs)
+            foreach (Hediff hediffPawn in operator_Pawn.health.hediffSet.hediffs)
             {
-                if (hediff_Pawn.def.isBad)
+                if (hediffPawn.def.isBad)
                 {
-                    operator_Pawn.health.RemoveHediff(hediff_Pawn);
+                    operator_Pawn.health.RemoveHediff(hediffPawn);
                 }
             }
 
@@ -485,14 +480,13 @@ namespace AK_DLL
 
             FixAlienHairColor();
 
-            if (this.hediffInate != null && this.hediffInate.Count > 0)
+            if (this.hediffInate is { Count: > 0 })
             {
                 foreach (HediffStat i in this.hediffInate)
                 {
                     AbilityEffect_AddHediff.AddHediff(operator_Pawn, i.hediff, i.part, customLabel: i.partCustomLabel, severity: i.serverity);
                 }
             }
-            return;
         }
 
         protected virtual void FixAlienHairColor()
@@ -539,9 +533,9 @@ namespace AK_DLL
 
             //特性更改
             operator_Pawn.story.traits.allTraits.Clear();
-            foreach (TraitAndDegree TraitAndDegree in this.traits)
+            foreach (TraitAndDegree traitAndDegree in this.traits)
             {
-                operator_Pawn.story.traits.GainTrait(new Trait(TraitAndDegree.def, TraitAndDegree.degree));
+                operator_Pawn.story.traits.GainTrait(new Trait(traitAndDegree.def, traitAndDegree.degree));
             }
             operator_Pawn.story.Childhood = childHood;
             operator_Pawn.story.Adulthood = this.age < BackstoryAdultAgeThreshold ? null : adultHood;
@@ -563,10 +557,10 @@ namespace AK_DLL
             //技能属性更改
             if (GC_OperatorDocumentation.opDocArchive.ContainsKey(AK_Tool.GetOperatorIDFrom(this.defName)))
             {
-                Dictionary<SkillDef, int> skills = GC_OperatorDocumentation.opDocArchive[AK_Tool.GetOperatorIDFrom(this.defName)].skillLevel;
+                Dictionary<SkillDef, int> skillLevels = GC_OperatorDocumentation.opDocArchive[AK_Tool.GetOperatorIDFrom(this.defName)].skillLevel;
                 foreach (SkillRecord i in operator_Pawn.skills.skills)
                 {
-                    i.Level = skills[i.def];
+                    i.Level = skillLevels[i.def];
                 }
             }
             //从干员文档更新属性
@@ -574,10 +568,10 @@ namespace AK_DLL
 
         protected void Recruit_Inventory()
         {
-            operator_Pawn.inventoryStock ??= new();
+            operator_Pawn.inventoryStock ??= new Pawn_InventoryStockTracker();
             operator_Pawn.inventoryStock.stockEntries.Clear();
             //增加物品
-            if (this.items != null && this.items.Count > 0)
+            if (this.items is { Count: > 0 })
             {
                 foreach (ItemOnSpawn i in this.items)
                 {
@@ -602,19 +596,17 @@ namespace AK_DLL
                 }
             }
             //装备武器
-            ThingWithComps weapon = null;
             if (this.weapon != null)
             {
                 if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null && ModLister.GetActiveModWithIdentifier("paluto22.ak.combatextended") == null)
                 {
                     return;
                 }
-                weapon = (ThingWithComps)ThingMaker.MakeThing(this.weapon);
-                CompBiocodable comp = weapon.GetComp<CompBiocodable>();
+                ThingWithComps weaponEq = (ThingWithComps)ThingMaker.MakeThing(this.weapon);
+                CompBiocodable comp = weaponEq.GetComp<CompBiocodable>();
                 comp?.CodeFor(operator_Pawn);
-                operator_Pawn.equipment.AddEquipment(weapon);
+                operator_Pawn.equipment.AddEquipment(weaponEq);
             }
-            return;
         }
 
         protected Apparel Recruit_Inventory_Wear(ThingDef apparelDef, Pawn p, bool isFashion = true, ThingDef stuff = null)
@@ -643,16 +635,15 @@ namespace AK_DLL
         {
             DefExt_ArkSong ext = this.GetModExtension<DefExt_ArkSong>();
             if (ext == null) return;
+
             ThingDef recordDef = DefDatabase<ThingDef>.GetNamed("AKM_Item_Record");
             if (ext.arkSong != null)
             {
-                ThingClass_MusicRecord t = Recruit_Inventory_Additem(recordDef, 1) as ThingClass_MusicRecord;
-                t.recordedSong = ext.arkSong;
+                if (Recruit_Inventory_Additem(recordDef, 1) is ThingClass_MusicRecord record) record.recordedSong = ext.arkSong;
             }
             foreach (ArkSongDef i in ext.arkSongs)
             {
-                ThingClass_MusicRecord t = Recruit_Inventory_Additem(recordDef, 1) as ThingClass_MusicRecord;
-                t.recordedSong = i;
+                if (Recruit_Inventory_Additem(recordDef, 1) is ThingClass_MusicRecord record) record.recordedSong = i;
             }
         }
 

@@ -24,7 +24,6 @@ namespace AK_DLL
             }
             };
             yield return t;
-            yield break;
         }
     }
 }

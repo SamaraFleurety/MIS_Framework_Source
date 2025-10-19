@@ -11,8 +11,7 @@ namespace AK_DLL
         public override Graphic GraphicFor(Pawn pawn)
         {
             Ext_BackHair ext_BackHair = pawn.story?.hairDef?.GetModExtension<Ext_BackHair>();
-            if (ext_BackHair == null) return null;
-            return ext_BackHair.graphicData.GraphicColoredFor(pawn);
+            return ext_BackHair?.graphicData.GraphicColoredFor(pawn);
         }
     }
 }

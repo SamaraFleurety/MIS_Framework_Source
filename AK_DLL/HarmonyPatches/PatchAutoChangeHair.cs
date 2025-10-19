@@ -6,7 +6,7 @@ namespace AK_DLL
 {
     //禁止随机变化发型
     [HarmonyPatch(typeof(JobGiver_UseStylingStationAutomatic), "TryGiveJob")]
-    public static class PatchAutoChangeHair
+    public static class Patch_AutoChangeHair
     {
         [HarmonyPrefix]
         public static bool Prefix(Pawn pawn, ref Job __result)

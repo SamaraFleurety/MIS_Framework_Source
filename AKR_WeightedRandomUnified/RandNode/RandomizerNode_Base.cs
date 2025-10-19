@@ -21,10 +21,9 @@ namespace AKR_Random
             {
                 if (inheritCandidatesWeight)
                 {
-                    CaculateWeightArray();
+                    CalculateWeightArray();
                     weight = weightCached[weightCached.Length - 1];
                 }
-
                 return weight;
             }
         }
@@ -42,20 +41,20 @@ namespace AKR_Random
         //返回随机结果-reward的下标
         public virtual int RandRewardIndex()
         {
-            this.CaculateWeightArray();
+            this.CalculateWeightArray();
             return Algorithm.WeightArrayRand(weightCached);
         }
 
         //对于节点i，缓存从0到i求权重的和。随机时，从0到全权重和中抽一个x，并搜索>= x的值，并返回被选中的节点的下标。显然必有结果并且权重越大被选中概率越大。
-        protected virtual void CaculateWeightArray()
+        protected virtual void CalculateWeightArray()
         {
             if (arrayCached) return;
-            List<IWeightedRandomable> cand = Candidates.ToList();
-            this.weightCached = new int[cand.Count];
-            this.weightCached[0] = cand[0].Weight;
-            for (int i = 1; i < cand.Count; ++i)
+            List<IWeightedRandomable> candidates = Candidates.ToList();
+            this.weightCached = new int[candidates.Count];
+            this.weightCached[0] = candidates[0].Weight;
+            for (int i = 1; i < candidates.Count; ++i)
             {
-                this.weightCached[i] = this.weightCached[i - 1] + cand[i].Weight;
+                this.weightCached[i] = this.weightCached[i - 1] + candidates[i].Weight;
             }
             //arraySum = this.weight.Last();
             this.arrayCached = true;

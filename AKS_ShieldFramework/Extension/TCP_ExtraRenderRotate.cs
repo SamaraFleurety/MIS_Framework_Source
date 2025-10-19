@@ -17,9 +17,9 @@ namespace AKS_Shield.Extension
 
     public class TC_ExtraRenderRotate : TC_ShieldExtension_Base
     {
-        TCP_ExtraRenderRotate Props => props as TCP_ExtraRenderRotate;
+        public TCP_ExtraRenderRotate Props => props as TCP_ExtraRenderRotate;
 
-        private Material rotateBubble = null;
+        private Material rotateBubble;
 
         private Material RotateBubble
         {
@@ -32,8 +32,8 @@ namespace AKS_Shield.Extension
         public override void CompDrawWornExtras()
         {
             if (!CompShield.ShouldDisplay) return;
-            var num = 2f;
-            var vector = CompShield.Wearer.Drawer.DrawPos;
+            float num = 2f;
+            Vector3 vector = CompShield.Wearer.Drawer.DrawPos;
             vector.y = AltitudeLayer.Blueprint.AltitudeFor();
             vector += Props.bubbleRotateOffsets;
 
@@ -44,9 +44,8 @@ namespace AKS_Shield.Extension
             angle /= 10;
 
             //Log.Message($"angle {DateTime.Now.Ticks} - {angle}");
-
-            var s = new Vector3(num, 1f, num);
-            var matrix = default(Matrix4x4);
+            Vector3 s = new Vector3(num, 1f, num);
+            Matrix4x4 matrix = default(Matrix4x4);
 
             matrix.SetTRS(vector, Quaternion.AngleAxis(angle, Vector3.up), s);
             Graphics.DrawMesh(MeshPool.plane10, matrix, RotateBubble, 1);

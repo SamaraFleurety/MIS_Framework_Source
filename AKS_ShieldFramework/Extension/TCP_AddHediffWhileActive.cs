@@ -16,7 +16,7 @@ namespace AKS_Shield.Extension
 
     public class TC_AddHediffWhileActive : TC_ShieldExtension_Base
     {
-        const int INTERVAL = 1250;
+        private const int INTERVAL = 1250;
 
         public TCP_AddHediffWhileActive Props => props as TCP_AddHediffWhileActive;
         public override void Tick(int amt)

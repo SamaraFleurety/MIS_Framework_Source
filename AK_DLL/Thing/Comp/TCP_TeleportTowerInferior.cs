@@ -21,7 +21,7 @@ namespace AK_DLL
         private TCP_TeleportTowerInferior Props => props as TCP_TeleportTowerInferior;
         protected virtual float Radius => Props.radius + 1;
 
-        private static HashSet<TC_TeleportTowerSuperior> AllTowers => GC_AKManager.superiorRecruitTowers;
+        private static HashSet<TC_TeleportTowerSuperior> AllTowers => GC_AkManager.SuperiorRecruitTowers;
         public override IEnumerable<FloatMenuOption> CompFloatMenuOptions(Pawn selPawn)
         {
             float distance = selPawn.Position.DistanceTo(parent.Position);

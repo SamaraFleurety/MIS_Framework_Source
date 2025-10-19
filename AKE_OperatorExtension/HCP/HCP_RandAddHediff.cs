@@ -74,7 +74,7 @@ namespace AKE_OperatorExtension
                 tick = 0;
                 if (UnityEngine.Random.Range(0f, 1f) <= SaveChance) return;
 
-                HediffStat hediff = HediffStats[AK_Tool.weightArrayRand(weight)];
+                HediffStat hediff = HediffStats[AK_Tool.WeightArrayRand(weight)];
                 AbilityEffect_AddHediff.AddHediff(this.Pawn, hediff.hediff, hediff.part, severity: hediff.serverity);
             }
         }

@@ -12,13 +12,11 @@ namespace AK_DLL
         public OperatorDocument Document => AK_Tracker.doc;
 
         //需要保留这个来使用原版的读档机制
-        public VAbility_Operator(Pawn pawn)
-            : base(pawn)
+        public VAbility_Operator(Pawn pawn) : base(pawn)
         {
         }
 
-        public VAbility_Operator(Pawn pawn, AbilityDef def)
-            : base(pawn, def)
+        public VAbility_Operator(Pawn pawn, AbilityDef def) : base(pawn, def)
         {
         }
 

@@ -24,7 +24,7 @@ namespace AK_DLL.HarmonyPatchs
     public class Patch_RenderTreeOverride
     {
         [HarmonyTranspiler]
-        public static IEnumerable<CodeInstruction> Tanspiler(IEnumerable<CodeInstruction> instructions)
+        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             List<CodeInstruction> list = instructions.ToList();
 

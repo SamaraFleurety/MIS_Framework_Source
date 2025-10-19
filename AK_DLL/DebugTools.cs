@@ -8,8 +8,8 @@ namespace AK_DLL
     public static class MIS_DebugAction
     {
         private static Map Map => Find.CurrentMap;
-        private static BoolGrid usedCells;
-        private static CellRect overRect;
+        private static BoolGrid _usedCells;
+        private static CellRect _overRect;
 
         [DebugAction("MIS-AK Actions", "Make colony (Operators)", false, false, false, false, false, 0, false, allowedGameStates = AllowedGameStates.PlayingOnMap)]
         public static void MakeColonyWeapon()
@@ -17,17 +17,17 @@ namespace AK_DLL
             bool godMode = DebugSettings.godMode;
             DebugSettings.godMode = true;
             Thing.allowDestroyNonDestroyable = true;
-            if (usedCells == null)
+            if (_usedCells == null)
             {
-                usedCells = new BoolGrid(Map);
+                _usedCells = new BoolGrid(Map);
             }
             else
             {
-                usedCells.ClearAndResizeTo(Map);
+                _usedCells.ClearAndResizeTo(Map);
             }
-            overRect = new CellRect(Map.Center.x - 50, Map.Center.z - 50, 100, 100);
+            _overRect = new CellRect(Map.Center.x - 50, Map.Center.z - 50, 100, 100);
 
-            GenDebug.ClearArea(overRect, Find.CurrentMap);
+            GenDebug.ClearArea(_overRect, Find.CurrentMap);
 
             List<OperatorDef> opDefs = new();
 
@@ -37,7 +37,7 @@ namespace AK_DLL
             }
 
             int num = 0;
-            foreach (IntVec3 item in overRect)
+            foreach (IntVec3 item in _overRect)
             {
                 if (item.x % 6 != 0 && item.z % 6 != 0)
                 {
@@ -68,8 +68,8 @@ namespace AK_DLL
         [DebugAction("MIS-AK Actions", "Print Operator Voice Defs", false, false, false, false, false, 0, false, allowedGameStates = AllowedGameStates.PlayingOnMap)]
         public static void PrintVoicePacks()
         {
-            var doc = Find.Selector.SelectedPawns?.FirstOrDefault((Pawn x) => true).GetDoc();
-            if (doc == null || doc.voicePack is not VoicePackDef voicePackDef) return;
+            OperatorDocument doc = Find.Selector.SelectedPawns?.FirstOrDefault((Pawn x) => true).GetDoc();
+            if (doc is not { voicePack: { } voicePackDef }) return;
 
             List<SoundDef> sounds = new()
             {

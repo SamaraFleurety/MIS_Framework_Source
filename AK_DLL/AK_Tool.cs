@@ -61,7 +61,7 @@ namespace AK_DLL
                     break;
                 }
             }
-            if (FSAsset == null || PAAsset == null)
+            if (!FSAsset || !PAAsset)
             {
                 Log.Error("MIS. Critical Error: Missing Assets");
             }
@@ -262,7 +262,7 @@ namespace AK_DLL
             else return -1;
         }
 
-        public static int weightArrayRand(int[] arr)
+        public static int WeightArrayRand(int[] arr)
         {
             int rd = UnityEngine.Random.Range(1, arr.Last()); //值域是[min, max]
 

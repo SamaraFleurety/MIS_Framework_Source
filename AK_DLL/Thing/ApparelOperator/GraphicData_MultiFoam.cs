@@ -12,17 +12,13 @@ namespace AK_DLL
         public Dictionary<int, string> innerGraphicPath_Worn = new(); //穿身上的贴图的路径，同wornGraphicPath
         public virtual Graphic GetGraphicWithIndex(int key, Thing source)
         {
-            if (!innerGraphicData_Drop.ContainsKey(key)) return Graphic;
-
-            return innerGraphicData_Drop[key].Graphic;
+            return !innerGraphicData_Drop.TryGetValue(key, out GraphicData data) ? Graphic : data.Graphic;
         }
 
         public virtual string GetWornGraphicPathWithIndex(int key, Apparel source)
         {
-            bool flag = innerGraphicPath_Worn.TryGetValue(key, out var path);
-            if (!flag) return source.WornGraphicPath;
-
-            return path;
+            bool flag = innerGraphicPath_Worn.TryGetValue(key, out string path);
+            return flag ? path : source.WornGraphicPath;
         }
     }
 }

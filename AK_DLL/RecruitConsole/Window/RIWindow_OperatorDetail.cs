@@ -243,45 +243,35 @@ namespace AK_DLL.UI
     {
         public static OpDetailType windowPurpose = OpDetailType.Recruit;
 
-        protected OperatorDocument doc = null;
+        protected OperatorDocument doc;
 
-        static string recruitText;
+        private static string recruitText;
 
         private bool canRecruit;
 
         //0~999是静态立绘，1000-1999是l2d，2000-2999是spine
-        int preferredSkin = 0;  //当前选中皮肤。同时存储于干员文档（如果有）来实现主界面左下角显示立绘，和mod设置的秘书选择。
+        private int preferredSkin;  //当前选中皮肤。同时存储于干员文档（如果有）来实现主界面左下角显示立绘，和mod设置的秘书选择。
 
-        static int preferredVanillaSkillChart = OperatorStandType.Elite2;
+        private static int preferredVanillaSkillChart = OperatorStandType.Elite2;
 
         protected Dictionary<int, GameObject> fashionBtns;
 
-        List<GameObject> vanillaSkillBtns;  //0,1: 条形图; 2,3: 雷达图
+        private List<GameObject> vanillaSkillBtns;  //0,1: 条形图; 2,3: 雷达图
 
         protected List<GameObject> opSkills = new();  //只有可选技能被加进来。
 
-        GameObject floatingBubbleInstance;
+        private GameObject floatingBubbleInstance;
 
         public GameObject OpStand; //干员静态立绘的渲染目标
         public GameObject OpL2DRenderTarget;   //干员动态立绘的渲染目标（不是模型本身）
-        static string OpL2DRenderTargetName = "L2DRenderTarget";  //干员动态立绘的渲染目标的名字
+        private const string OpL2DRenderTargetName = "L2DRenderTarget"; //干员动态立绘的渲染目标的名字
 
         #region 快捷属性
-        protected OperatorDef OperatorDef
-        {
-            get { return RIWindowHandler.def; }
-        }
-        public Thing RecruitConsole
-        {
-            get { return RIWindowHandler.RecruitConsole; }
-        }
-        private GameObject ClickedBtn
-        {
-            get
-            {
-                return EventSystem.current.currentSelectedGameObject;
-            }
-        }
+        protected static OperatorDef OperatorDef => RIWindowHandler.def;
+
+        public static Thing RecruitConsole => RIWindowHandler.RecruitConsole;
+
+        private static GameObject ClickedBtn => EventSystem.current.currentSelectedGameObject;
 
         /*private GameObject ClickedBtnParent
         {
@@ -291,15 +281,15 @@ namespace AK_DLL.UI
             }
         }*/
 
-        private int btnOrder(GameObject clickedBtn)
+        private int BtnOrder(GameObject clickedBtn)
         {
             return int.Parse(clickedBtn.name.Substring(RIWindow_OperatorList.orderInName));
         }
 
         protected int PreferredAbility
         {
-            get { return doc.preferedAbility; }
-            set { doc.preferedAbility = value; }
+            get => doc.preferedAbility;
+            set => doc.preferedAbility = value;
         }
 
         #endregion
@@ -336,7 +326,7 @@ namespace AK_DLL.UI
             canRecruit = false;
             if (RecruitConsole.TryGetComp<CompRefuelable>().Fuel >= OperatorDef.ticketCost - 0.01)
             {
-                if (doc == null || !doc.currentExist)
+                if (doc is not { currentExist: true })
                 {
                     canRecruit = true;
                     recruitText = "可以招募"; //残留
@@ -794,7 +784,7 @@ namespace AK_DLL.UI
                     opAbilityInstance.transform.GetChild(1).gameObject.SetActive(false);
                     opAbilityInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
                     {
-                        SwitchGroupedSkillTo(btnOrder(ClickedBtn));
+                        SwitchGroupedSkillTo(BtnOrder(ClickedBtn));
                     });
                 }
 
@@ -885,7 +875,6 @@ namespace AK_DLL.UI
 
         protected void ChangeStandTo(int val, bool forceChange = false, StandType standType = StandType.Static)
         {
-            GameObject fBtn;
             if (!forceChange && val == preferredSkin) return;
 
             if (doc != null)
@@ -896,8 +885,9 @@ namespace AK_DLL.UI
                     doc.preferedSkin = val;
                 }*/
             }
+
             //禁用之前的换装按钮
-            fBtn = fashionBtns[preferredSkin];
+            GameObject fBtn = fashionBtns[preferredSkin];
             fBtn.transform.GetChild(0).gameObject.SetActive(true);
             fBtn.transform.GetChild(1).gameObject.SetActive(false);
 
@@ -931,7 +921,7 @@ namespace AK_DLL.UI
         }
 
         //鼠标指上去的悬浮窗 
-        void DrawFloatingBubble(string text)
+        private void DrawFloatingBubble(string text)
         {
             floatingBubbleInstance.GetComponentInChildren<TextMeshProUGUI>().text = text;
             Vector3 mousepos = Input.mousePosition;

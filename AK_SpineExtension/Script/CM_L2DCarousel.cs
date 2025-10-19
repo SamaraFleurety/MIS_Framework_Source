@@ -55,14 +55,7 @@ namespace AK_SpineExtention
             if (IdleInterval != 0 && (completeTimes == (2 * IdleInterval) + 1))
             {
                 TrackEntry track1;
-                if (PlayInteract)
-                {
-                    track1 = SkeletonInstanceInt.AnimationState.AddAnimation(0, Interact, false, 0f);
-                }
-                else
-                {
-                    track1 = SkeletonInstanceInt.AnimationState.AddAnimation(0, Special, false, 0f);
-                }
+                track1 = SkeletonInstanceInt.AnimationState.AddAnimation(0, PlayInteract ? Interact : Special, false, 0f);
                 track1.Complete += ResetCompleteTime;
                 track1.Complete += CompleteEventHandler;
                 return;

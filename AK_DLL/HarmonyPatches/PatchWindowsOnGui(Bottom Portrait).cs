@@ -7,10 +7,10 @@ using Verse;
 namespace AK_DLL
 {
     [HarmonyPatch(typeof(Window), "WindowOnGUI")]
-    public class PatchWindowOnGUI
+    public class Patch_WindowOnGUI
     {
-        static string lastSpineDefname = "";
-        public static GameObject lastSpineInstance = null;
+        private static string _lastSpineDefName = "";
+        public static GameObject LastSpineInstance;
 
         [HarmonyPrefix]
         public static void Prefix()
@@ -21,11 +21,11 @@ namespace AK_DLL
 
         public static void DrawBottomLeftPortrait()
         {
-            if (AK_ModSettings.displayBottomLeftPortrait == false) return;
-            if (Find.World == null || Find.CurrentMap == null || Find.Selector == null || Find.Selector.AnyPawnSelected == false || Find.Selector.SelectedPawns.Count == 0) return;
+            if (!AK_ModSettings.displayBottomLeftPortrait) return;
+            if (Find.World == null || Find.CurrentMap == null || Find.Selector == null || !Find.Selector.AnyPawnSelected || Find.Selector.SelectedPawns.Count == 0) return;
             Pawn p = Find.Selector.SelectedPawns.First();
-            if (p == null) return;
-            OperatorDocument doc = AK_Tool.GetDoc(p);
+
+            OperatorDocument doc = p?.GetDoc();
             if (doc == null || doc.operatorDef.alwaysHideStand) return;
 
             int skinIndex = doc.preferedSkin;
@@ -39,22 +39,22 @@ namespace AK_DLL
             {
                 Texture2D texture = doc.operatorDef.PreferredStand(doc.preferedSkin);
                 Widgets.DrawTextureFitted(new Rect(AK_ModSettings.xOffset * 5, AK_ModSettings.yOffset * 5, 408, 408), texture, AK_ModSettings.ratio * 0.05f);
-                lastSpineInstance?.SetActive(false);
-                lastSpineInstance = null;
+                LastSpineInstance?.SetActive(false);
+                LastSpineInstance = null;
             }
             else if (skinIndex >= 2000 && ModLister.GetActiveModWithIdentifier("Paluto22.SpriteEvo") != null) //spine立绘渲染
             {
                 string spineDefname = doc.operatorDef.fashionAnimation[doc.preferedSkin - 2000];
-                if (spineDefname != lastSpineDefname)
+                if (spineDefname != _lastSpineDefName)
                 {
-                    lastSpineInstance?.SetActive(false);
-                    lastSpineInstance = null;
-                    lastSpineDefname = spineDefname;
+                    LastSpineInstance?.SetActive(false);
+                    LastSpineInstance = null;
+                    _lastSpineDefName = spineDefname;
                 }
-                lastSpineInstance ??= RIWindow_MainMenu.DrawSpine2DModel(spineDefname);
-                if (!lastSpineInstance.activeSelf) lastSpineInstance.SetActive(true);
+                LastSpineInstance ??= RIWindow_MainMenu.DrawSpine2DModel(spineDefname);
+                if (!LastSpineInstance.activeSelf) LastSpineInstance.SetActive(true);
 
-                Widgets.DrawTextureFitted(new Rect(AK_ModSettings.xOffset * 5, AK_ModSettings.yOffset * 5, 408, 408), RIWindow_MainMenu.GetOrSetSpineRenderTexture(lastSpineInstance, 1080, 1080), AK_ModSettings.ratio * 0.05f);
+                Widgets.DrawTextureFitted(new Rect(AK_ModSettings.xOffset * 5, AK_ModSettings.yOffset * 5, 408, 408), RIWindow_MainMenu.GetOrSetSpineRenderTexture(LastSpineInstance, 1080, 1080), AK_ModSettings.ratio * 0.05f);
             }
 
             GUI.color = color;

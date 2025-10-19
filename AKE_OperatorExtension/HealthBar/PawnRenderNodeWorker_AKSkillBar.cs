@@ -33,24 +33,23 @@ namespace AKE_OperatorExtension
         {
             if (PrefabTMPInstancesDictionary.NullOrEmpty() || !PrefabTMPInstancesDictionary.ContainsKey(OperatorID(p)))
             {
-                GameObject PrefabTMPInstance = GameObject.Instantiate(PrefabTMP);
-                PrefabTMPInstance.name = ObjectName(p);
-                PrefabTMPInstance.layer = 2;
-                PrefabTMPInstance.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
-                PrefabTMPInstancesDictionary.Add(OperatorID(p), PrefabTMPInstance);
+                GameObject prefabTMPInstance = Object.Instantiate(PrefabTMP);
+                prefabTMPInstance.name = ObjectName(p);
+                prefabTMPInstance.layer = 2;
+                prefabTMPInstance.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+                PrefabTMPInstancesDictionary.Add(OperatorID(p), prefabTMPInstance);
             }
             else
             {
                 if (p.Dead || !p.IsColonist)
                 {
-                    GameObject PrefabTMPInstance = PrefabTMPInstancesDictionary.TryGetValue(OperatorID(p));
-                    if (PrefabTMPInstance == GameObject.Find(ObjectName(p)))
+                    GameObject prefabTMPInstance = PrefabTMPInstancesDictionary.TryGetValue(OperatorID(p));
+                    if (prefabTMPInstance == GameObject.Find(ObjectName(p)))
                     {
-                        GameObject.DestroyImmediate(PrefabTMPInstance);
+                        Object.DestroyImmediate(prefabTMPInstance);
                         PrefabTMPInstancesDictionary.Remove(OperatorID(p));
                     }
                 }
-                return;
             }
         }
         private float CooldownPercent(AKAbility_Base ability)
@@ -148,98 +147,81 @@ namespace AKE_OperatorExtension
                 return;
             }*/
             //倒地销毁TMP物件D
-            GameObject PrefabTMPInstance = PrefabTMPInstancesDictionary.TryGetValue(OperatorID(pawn));
+            GameObject prefabTMPInstance = PrefabTMPInstancesDictionary.TryGetValue(OperatorID(pawn));
             if (!AK_ModSettings.enable_Skillbar || !pawn.IsColonist || pawn.Downed || pawn.Dead)
             {
-                if (PrefabTMPInstance == GameObject.Find(ObjectName(pawn)))
+                if (prefabTMPInstance == GameObject.Find(ObjectName(pawn)))
                 {
-                    GameObject.Destroy(PrefabTMPInstance);
+                    Object.Destroy(prefabTMPInstance);
                     PrefabTMPInstancesDictionary.Remove(OperatorID(pawn));
                 }
             }
             //征召开关显示图标
-            if (PrefabTMPInstance != null)
+            if (prefabTMPInstance)
             {
-                PrefabTMPInstance?.SetActive(pawn.Drafted || pawn.Downed);
+                prefabTMPInstance.SetActive(pawn.Drafted || pawn.Downed);
             }
             if (!AK_ModSettings.enable_Skillbar || (AK_ModSettings.display_Skillbar_OnDraftedOnly && !pawn.Drafted) || (pawn.CurJob != null && pawn.jobs.curDriver.asleep))
             {
                 return;
             }
-            bool IsGrouped = false;
+            bool isGrouped = false;
             VAbility_Operator operatorID = pawn.GetVAbility();
             AKAbility_Base ability = operatorID?.AKATracker?.innateAbilities.FirstOrDefault();
             if (ability == null)
             {
                 ability = operatorID?.AKATracker?.groupedAbilities.FirstOrDefault();
-                IsGrouped = true;
+                isGrouped = true;
             }
             //有AKA技能的Pawn才会显示技能CD进度，否则全为空
-            float SkillPercent;
-            if (ability != null)
-            {
-                SkillPercent = CooldownPercent(ability);
-            }
-            else
-            {
-                SkillPercent = 0f;
-            }
-            DrawSkillBar(BarFilledMat, pawn, SkillPercent);
-            Vector3 OriginCenter = pawn.DrawPos + TopMargin + (Vector3.up * 3f);
-            Vector3 Scale = new(0.3f, 1f, 0.3f);
+            float skillPercent = ability != null ? CooldownPercent(ability) : 0f;
+
+            DrawSkillBar(BarFilledMat, pawn, skillPercent);
+            Vector3 originCenter = pawn.DrawPos + TopMargin + Vector3.up * 3f;
+            Vector3 scale = new(0.3f, 1f, 0.3f);
             //自动回复技能
-            if (!AK_ModSettings.display_Skillbar_OnDraftedOnly && !pawn.Drafted)
+            if (!AK_ModSettings.display_Skillbar_OnDraftedOnly && !pawn.Drafted) return;
+
+            if (ability == null) return;
+
+            if (!isGrouped & (ability.cooldown.charge == ability.cooldown.MaxCharge))
             {
-                return;
-            }
-            if (ability == null)
-            {
-                return;
-            }
-            if (!IsGrouped & ability.cooldown.charge == ability.cooldown.MaxCharge)
-            {
-                if (BurstButton == null)
-                {
-                    return;
-                }
-                DrawIcon(OriginCenter, Scale, Rot4.North.AsQuat, BurstButton, MeshPool.plane10, 2);
+                if (!BurstButton) return;
+
+                DrawIcon(originCenter, scale, Rot4.North.AsQuat, BurstButton, MeshPool.plane10, 2);
                 //闪烁
-                float BurstFlashFactor = GlobalFactor_Accumulator.BurstFlashFactor;
+                float burstFlashFactor = GlobalFactor_Accumulator.BurstFlashFactor;
                 //float factor = Mathf.Sqrt(BurstFlashFactor);
-                float transparency = 120 - (BurstFlashFactor / 1.2f * 70);
+                float transparency = 120 - (burstFlashFactor / 1.2f * 70);
                 //float transparency = Mathf.Lerp(150, 0, factor);
                 AKE_BarUITool.SimpleRectBarRequest sbr = default;
-                sbr.center = OriginCenter + Vector3.down;
+                sbr.center = originCenter + Vector3.down;
                 sbr.filledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color32(255, 255, 0, (byte)Mathf.Max(transparency, 20f))); ;
                 sbr.rotation = Quaternion.AngleAxis(45f, Vector3.up);
-                sbr.size = new Vector2(0.25f * BurstFlashFactor, 0.25f * BurstFlashFactor);
+                sbr.size = new Vector2(0.25f * burstFlashFactor, 0.25f * burstFlashFactor);
                 AKE_BarUITool.DrawSimpleRectBar(sbr);
             }
             //充能技能
-            if (IsGrouped)
+            if (isGrouped)
             {
-                if (RotateRing == null)
+                if (!RotateRing)
                 {
                     return;
                 }
-                DrawIcon(OriginCenter, Scale, Quaternion.AngleAxis(GlobalFactor_Accumulator.RotateAngle, Vector3.up), RotateRing, MeshPool.plane10, 1);
+                DrawIcon(originCenter, scale, Quaternion.AngleAxis(GlobalFactor_Accumulator.RotateAngle, Vector3.up), RotateRing, MeshPool.plane10, 1);
                 InitObjectOnce(pawn);
-                if (PrefabTMPInstance != null)
+                if (prefabTMPInstance != null)
                 {
-                    TextMeshPro tmp = PrefabTMPInstance.GetComponent<TextMeshPro>();
-                    Vector3 scale = new(0.25f, 0.25f, 1f);
-                    int ChargeTimes = ability.cooldown.charge;
-                    tmp.transform.position = OriginCenter;
-                    tmp.transform.localScale = scale;
+                    TextMeshPro tmp = prefabTMPInstance.GetComponent<TextMeshPro>();
+                    Vector3 textScale = new(0.25f, 0.25f, 1f);
+                    int chargeTimes = ability.cooldown.charge;
+                    tmp.transform.position = originCenter;
+                    tmp.transform.localScale = textScale;
                     tmp.fontSize = 6;
-                    tmp.SetText(ChargeTimes.ToString());
-                    if (!PrefabTMPInstance.activeSelf)
+                    tmp.SetText(chargeTimes.ToString());
+                    if (!prefabTMPInstance.activeSelf)
                     {
-                        PrefabTMPInstance.SetActive(true);
-                    }
-                    else
-                    {
-                        return;
+                        prefabTMPInstance.SetActive(true);
                     }
                 }
             }

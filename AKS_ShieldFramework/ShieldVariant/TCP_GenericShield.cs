@@ -49,9 +49,8 @@ namespace AKS_Shield
 
         public virtual float Energy
         {
-            get { return energy; }
-
-            set { energy = value; }
+            get => energy;
+            set => energy = value;
         }
 
         protected int ticksReset = 0;
@@ -64,7 +63,7 @@ namespace AKS_Shield
             get
             {
                 Pawn wearer = Wearer;
-                return wearer != null && wearer.Spawned && !wearer.Destroyed && !wearer.Dead && !wearer.Downed && Energy > 0 && wearer.Drafted;
+                return wearer is { Spawned: true, Destroyed: false, Dead: false, Downed: false } && Energy > 0 && wearer.Drafted;
             }
         }
 
@@ -221,7 +220,7 @@ namespace AKS_Shield
         #endregion
 
         #region 舟味护盾条
-        private static bool? cachedAKLibActiveStatue = null;
+        private static bool? cachedAKLibActiveStatue;
         private static bool AKLibActived
         {
             get
@@ -231,7 +230,7 @@ namespace AKS_Shield
             }
         }
 
-        private static bool? cachedCameraPlusModActiveStatue = null;
+        private static bool? cachedCameraPlusModActiveStatue;
         private static bool CameraPlusModEnabled
         {
             get
@@ -241,7 +240,7 @@ namespace AKS_Shield
                 return (bool)cachedCameraPlusModActiveStatue;
             }
         }
-        private static bool? cachedSimpleCameraModActiveStatue = null;
+        private static bool? cachedSimpleCameraModActiveStatue;
         private static bool SimpleCameraModEnabled
         {
             get
@@ -252,7 +251,7 @@ namespace AKS_Shield
             }
         }
 
-        private Material barFillMat = null;
+        private Material barFillMat;
         private Material BarFilledMat
         {
             get
@@ -262,7 +261,7 @@ namespace AKS_Shield
             }
         }
 
-        private Material barUnfilledMat = null;
+        private Material barUnfilledMat;
         private Material BarUnfilledMat
         {
             get
@@ -271,15 +270,16 @@ namespace AKS_Shield
                 return barUnfilledMat;
             }
         }
-        private float ZoomRootSize => Find.CameraDriver.ZoomRootSize;
-        private float GetZoomRatio()
+
+        private static float GetZoomRatio()
         {
             if (AKLibActived && AK_ModSettings.zoomWithCamera)
             {
-                return Mathf.Max(ZoomRootSize, 11) / 11;
+                return Mathf.Max(Find.CameraDriver.ZoomRootSize, 11) / 11;
             }
             return 1f;
         }
+
         private static float Width
         {
             get
@@ -288,6 +288,7 @@ namespace AKS_Shield
                 return 150 * 0.01f;
             }
         }
+
         private static float Height
         {
             get
@@ -296,6 +297,7 @@ namespace AKS_Shield
                 return 75 * 0.01f;
             }
         }
+
         private static float Margin
         {
             get
@@ -304,11 +306,12 @@ namespace AKS_Shield
                 return -100 * 0.01f;
             }
         }
+
         private static Vector2 BarSize => new(Width, Height);
         private static Vector3 BottomMargin => new(0f, 0f, Margin - (Height * 2));
 
         const string DEF_IconTexPath = "UI/Abilities/icon_sort_def";
-        private Material iconDefend = null;
+        private Material iconDefend;
         private Material IconDefend
         {
             get
@@ -317,6 +320,7 @@ namespace AKS_Shield
                 return iconDefend;
             }
         }
+
         public override void CompDrawWornExtras()
         {
             if (!ShouldDisplay)
@@ -416,6 +420,7 @@ namespace AKS_Shield
                 c.Notify_Reset();
             }
         }
+
         //被攻击后特效 抄的
         protected virtual void HittedFleck(DamageInfo dinfo)
         {
@@ -423,11 +428,11 @@ namespace AKS_Shield
             {
                 SoundDefOf.EnergyShield_AbsorbDamage.PlayOneShot(new TargetInfo(Wearer.Position, Wearer.Map));
                 impactAngleVect = Vector3Utility.HorizontalVectorFromAngle(dinfo.Angle);
-                var loc = Wearer.TrueCenter() + (impactAngleVect.RotatedBy(180f) * 0.5f);
-                var num = Mathf.Min(10f, 2f + (dinfo.Amount / 10f));
+                Vector3 loc = Wearer.TrueCenter() + (impactAngleVect.RotatedBy(180f) * 0.5f);
+                float num = Mathf.Min(10f, 2f + (dinfo.Amount / 10f));
                 FleckMaker.Static(loc, Wearer.Map, FleckDefOf.ExplosionFlash, num);
-                var num2 = (int)num;
-                for (var i = 0; i < num2; i++)
+                int num2 = (int)num;
+                for (int i = 0; i < num2; i++)
                 {
                     FleckMaker.ThrowDustPuff(loc, Wearer.Map, Rand.Range(0.8f, 1.2f));
                 }
@@ -435,14 +440,16 @@ namespace AKS_Shield
         }
 
         #region 效果器处理 以后要是有别的分类方法可以移走
-        static void DoAbsorbDamageEffect(Type effectorType, Pawn wearer, TC_GenericShield shield, ref DamageInfo dinfo, bool dodged = false)
+
+        private static void DoAbsorbDamageEffect(Type effectorType, Pawn wearer, TC_GenericShield shield, ref DamageInfo dinfo, bool dodged = false)
         {
             AbsorbDamageEffector_Base effector = GetEffectorInstance(effectorType);
             effector?.PostAbsorbDamage(wearer, shield, ref dinfo, dodged);
         }
 
-        static Dictionary<Type, AbsorbDamageEffector_Base> effectorMaps = new();
-        static AbsorbDamageEffector_Base GetEffectorInstance(Type effectorType)
+        private static Dictionary<Type, AbsorbDamageEffector_Base> effectorMaps = new();
+
+        private static AbsorbDamageEffector_Base GetEffectorInstance(Type effectorType)
         {
             if (effectorMaps.ContainsKey(effectorType)) { return effectorMaps[effectorType]; }
             AbsorbDamageEffector_Base effector = (AbsorbDamageEffector_Base)Activator.CreateInstance(effectorType);

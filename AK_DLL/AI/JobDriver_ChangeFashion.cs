@@ -26,12 +26,11 @@ namespace AK_DLL
                     if (doc == null) return;
                     doc.operatorDef.ChangeFashion(doc.pendingFashionDef, pawn);
                     if (doc.pendingFashionDef == null) doc.preferedSkin = 1;
-                    else if (doc.pendingFashionDef.standIndex is int standIndexInt) doc.preferedSkin = standIndexInt;
+                    else if (doc.pendingFashionDef.standIndex is { } standIndexInt) doc.preferedSkin = standIndexInt;
                 },
                 defaultCompleteMode = ToilCompleteMode.Instant
             };
             yield return t;
-            yield break;
         }
     }
 }

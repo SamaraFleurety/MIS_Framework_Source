@@ -34,12 +34,12 @@ namespace AKS_Shield.Extension
     //让护盾有额外充能。在护盾破碎时消耗充能然后马上把能量回复满。
     public class TC_ExtraCharges : TC_ShieldExtension_PostEffects_Base
     {
-        int tick = 0;
+        private int tick;
 
-        public int charges = 0;
+        public int charges;
         TCP_ExtraCharges Prop => props as TCP_ExtraCharges;
-        int ChargeInterval => Prop.chargeInterval;
-        int MaxCharge => Prop.maxExtraCharges;
+        private int ChargeInterval => Prop.chargeInterval;
+        private int MaxCharge => Prop.maxExtraCharges;
 
         public override IEnumerable<Gizmo> CompGetWornGizmosExtra()
         {

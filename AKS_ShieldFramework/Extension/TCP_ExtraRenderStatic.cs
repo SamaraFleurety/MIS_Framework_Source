@@ -14,7 +14,7 @@ namespace AKS_Shield.Extension
 
     public class TC_ExtraRenderStatic : TC_ShieldExtension_Base
     {
-        TCP_ExtraRenderStatic Props => props as TCP_ExtraRenderStatic;
+        public TCP_ExtraRenderStatic Props => props as TCP_ExtraRenderStatic;
 
         public override void PostDraw()
         {

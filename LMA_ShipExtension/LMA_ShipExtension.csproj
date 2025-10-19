@@ -118,7 +118,7 @@
       <Name>AKA_Ability</Name>
     </ProjectReference>
     <ProjectReference Include="..\AK_DLL\AK_Library.csproj">
-      <Project>{25a323a4-a832-487c-9ab2-32e14c56e148}</Project>
+      <Project>{7b4c58f6-3566-4dec-927f-9d30bdaf8d22}</Project>
       <Name>AK_Library</Name>
       <Private>False</Private>
     </ProjectReference>

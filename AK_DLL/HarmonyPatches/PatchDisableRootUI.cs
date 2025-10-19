@@ -7,7 +7,7 @@ namespace AK_DLL
     //要么用这种低级的办法禁止IMGUI，要么自己去写个shader改掉unityengine.GUI里面的4个material
 
     [HarmonyPatch(typeof(UIRoot))]
-    public static class PatchDisableUIRootOnGUI
+    public static class Patch_DisableUIRootOnGUI
     {
         [HarmonyPrefix]
         [HarmonyPatch(nameof(UIRoot.UIRootOnGUI))]
@@ -26,7 +26,7 @@ namespace AK_DLL
 
 
     [HarmonyPatch(typeof(UIRoot_Entry))]
-    public static class PatchDisableUIRootOnGUIE
+    public static class PatchDisableUIRootOnGUIEntry
     {
         [HarmonyPrefix]
         [HarmonyPatch(nameof(UIRoot_Entry.UIRootOnGUI))]
@@ -44,7 +44,7 @@ namespace AK_DLL
     }
 
     [HarmonyPatch(typeof(UIRoot_Play), "UIRootOnGUI")]
-    public static class PatchDisableUIRootOnGUIP
+    public static class PatchDisableUIRootOnGUIPlay
     {
         [HarmonyPrefix]
         [HarmonyPatch(nameof(UIRoot_Play.UIRootOnGUI))]

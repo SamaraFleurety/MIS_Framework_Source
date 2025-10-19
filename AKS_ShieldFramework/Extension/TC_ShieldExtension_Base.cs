@@ -2,7 +2,6 @@
 
 namespace AKS_Shield.Extension
 {
-
     public abstract class TC_ShieldExtension_Base : ThingComp
     {
         private TC_GenericShield compShield = null;
@@ -22,7 +21,8 @@ namespace AKS_Shield.Extension
 
         protected Pawn Wearer => CompShield.Wearer;
 
-        protected int TickNow => Find.TickManager.TicksGame;
+        protected static int TickNow => Find.TickManager.TicksGame;
+
         public override void CompTick()
         {
             Tick(1);

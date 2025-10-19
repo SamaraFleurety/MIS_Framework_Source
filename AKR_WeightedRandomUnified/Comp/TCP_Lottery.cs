@@ -24,7 +24,7 @@ namespace AKR_Random
 
     public class TC_Lottery : ThingComp
     {
-        TCP_Lottery Prop => props as TCP_Lottery;
+        public TCP_Lottery Prop => props as TCP_Lottery;
 
         public override IEnumerable<FloatMenuOption> CompFloatMenuOptions(Pawn selPawn)
         {

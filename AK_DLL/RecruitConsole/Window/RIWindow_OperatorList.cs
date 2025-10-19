@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Verse;
+using Object = UnityEngine.Object;
 
 //记得给干员页面写下拉 series
 //sortOperator可能封装一下更好 特别是按字母排序
@@ -125,27 +126,21 @@ namespace AK_DLL.UI
     {
         #region 属性，字段，快捷属性
         private static int sortType = (int)OperatorSortType.Alphabet;
-        private static bool sortReverseOrder = false;
+        private static bool sortReverseOrder;
         //排序按钮的面板（通用父类）
-        protected static Transform sorterColumnLoc = null;
+        protected static Transform sorterColumnLoc;
         //干员面板
-        protected static Transform opListPanel = null;
-        private static List<GameObject> opList = new();
+        protected static Transform opListPanel;
+        private static readonly List<GameObject> opList = new();
         //相当投机取巧地在名字里面存储数据 字符串内可以随便填。现在的值是12。
         public static int orderInName = "FSUI_whatev_".Length;
 
-        private List<OperatorSeriesDef> AllSeries => RIWindowHandler.operatorSeries;
-        private List<int> ActiveClasses => AllSeries[Series].includedClasses;
+        private static List<OperatorSeriesDef> AllSeries => RIWindowHandler.operatorSeries;
+        private static List<int> ActiveClasses => AllSeries[Series].includedClasses;
 
-        private bool choosingSeries = false;
+        private bool choosingSeries;
 
-        private GameObject ClickedBtn
-        {
-            get
-            {
-                return EventSystem.current.currentSelectedGameObject;
-            }
-        }
+        private static GameObject ClickedBtn => EventSystem.current.currentSelectedGameObject;
 
         protected virtual int MaxOperatorPerPage => 24;
 
@@ -154,7 +149,7 @@ namespace AK_DLL.UI
             get
             {
                 GameObject opRectPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("OperatorTemplate");
-                return GameObject.Instantiate(opRectPrefab, opListPanel);
+                return Object.Instantiate(opRectPrefab, opListPanel);
             }
         }
 
@@ -806,13 +801,9 @@ namespace AK_DLL.UI
             set => AK_ModSettings.lastViewedClass = value;
         }
 
-        static List<Transform> sorterBtns = new();
+        private static readonly List<Transform> sorterBtns = new();
 
         protected static List<OperatorDef> cachedOperatorList = new();
-        public Thing RecruitConsole
-        {
-            get { return RIWindowHandler.RecruitConsole; }
-        }
-
+        public Thing RecruitConsole => RIWindowHandler.RecruitConsole;
     }
 }

@@ -24,7 +24,6 @@ namespace AK_DLL
         {
             Log.Message("expos");
             Scribe_Values.Look(ref this.autoCast, "auto", true);
-            return;
         }
     }
 }

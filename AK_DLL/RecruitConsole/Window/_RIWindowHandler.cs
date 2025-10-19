@@ -69,7 +69,7 @@ namespace AK_DLL.UI
         public static void OpenRIWindow(UIPrefabDef prefab, Thing console = null, Pawn pawn = null, OpDetailType purpose = OpDetailType.Recruit)
         {
             Find.Selector.ClearSelection();
-            PatchWindowOnGUI.lastSpineInstance?.SetActive(false);
+            Patch_WindowOnGUI.LastSpineInstance?.SetActive(false);
 
             RIWindow_OperatorDetail.windowPurpose = purpose;
 

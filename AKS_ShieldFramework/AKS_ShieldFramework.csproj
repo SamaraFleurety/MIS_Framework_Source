@@ -86,7 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AK_DLL\AK_Library.csproj">
-      <Project>{25A323A4-A832-487C-9AB2-32E14C56E148}</Project>
+      <Project>{7b4c58f6-3566-4dec-927f-9d30bdaf8d22}</Project>
       <Name>AK_Library</Name>
       <Private>False</Private>
     </ProjectReference>

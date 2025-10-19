@@ -10,7 +10,7 @@ namespace AK_DLL
     {
         public override Vector2 InitialSize => new(800f, 650f);
         private static string ValueSpacing => "  ";
-        public enum Option_TimeDisplay
+        public enum OptionTimeDisplay
         {
             None = 0,
             DeathTimeOnly = 1,
@@ -136,7 +136,7 @@ namespace AK_DLL
             list.CheckboxLabeled("AK_HealthBar_disable_displayPawnLabelHealth".Translate(), ref AK_ModSettings.disable_displayPawnLabelHealth, "AK_HealthBar_disable_displayPawnLabelHealthD".Translate());
             list.GapLine();
             list.CheckboxLabeled("Enable HH:MM:SS Format", ref AK_ModSettings.display_Option_HHMMSS);
-            if (list.ButtonTextLabeled("AK_HealthBar_display_PawnDeathIndicator".Translate(), ("AK_HealthBar_display_PawnDeathIndicator_" + ((Option_TimeDisplay)AK_ModSettings.display_PawnDeathIndicator_Option).ToString()).Translate()))
+            if (list.ButtonTextLabeled("AK_HealthBar_display_PawnDeathIndicator".Translate(), ("AK_HealthBar_display_PawnDeathIndicator_" + ((OptionTimeDisplay)AK_ModSettings.display_PawnDeathIndicator_Option).ToString()).Translate()))
             {
                 FloatMenu window = new(new List<FloatMenuOption>
                 {
@@ -160,7 +160,7 @@ namespace AK_DLL
                 Find.WindowStack.Add(window);
             }
             list.NewColumn();
-            list.Gap(12f);
+            list.Gap();
             Text.Font = GameFont.Medium;
             list.Label("AK_HealthBar_Option_TitlePositon".Translate());
             Text.Font = GameFont.Small;
@@ -170,7 +170,7 @@ namespace AK_DLL
             AK_ModSettings.barMargin = (int)list.SliderLabeled("AK_HealthBar_Option_barMargin".Translate() + ValueSpacing + $"{AK_ModSettings.barMargin}", AK_ModSettings.barMargin, -150, 150);
             list.CheckboxLabeled("AK_HealthBar_Option_zoomWithCamera".Translate(), ref AK_ModSettings.zoomWithCamera, "AK_HealthBar_Option_zoomWithCameraD".Translate());
             list.CheckboxLabeled("AK_HealthBar_Option_drawOutOfCameraZoom".Translate(), ref AK_ModSettings.drawOutOfCameraZoom, "AK_HealthBar_Option_drawOutOfCameraZoomD".Translate());
-            list.Gap(12f);
+            list.Gap();
             //SubTitle
             Text.Font = GameFont.Medium;
             list.Label("AK_HealthBar_Option_TitleRGB".Translate());

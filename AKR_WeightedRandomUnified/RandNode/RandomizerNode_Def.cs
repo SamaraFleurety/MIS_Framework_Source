@@ -11,7 +11,6 @@ namespace AKR_Random
             get
             {
                 if (!inheritCandidatesWeight) return weight;
-
                 return subDef.root.Weight;  //从def继承权重
             }
         }
@@ -29,7 +28,7 @@ namespace AKR_Random
         }
 
         //sub def自己会算
-        protected override void CaculateWeightArray()
+        protected override void CalculateWeightArray()
         {
             return;
         }

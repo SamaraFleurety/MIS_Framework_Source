@@ -3,16 +3,17 @@ using Verse;
 
 namespace AK_DLL
 {
-    public class GC_AKManager : GameComponent
+    public class GC_AkManager : GameComponent
     {
-        public static HashSet<TC_TeleportTowerSuperior> superiorRecruitTowers = new();
+        public static HashSet<TC_TeleportTowerSuperior> SuperiorRecruitTowers = new();
 
-        public static GC_AKManager instance = null;
-        public GC_AKManager(Game game)
+        public static GC_AkManager Instance;
+
+        public GC_AkManager(Game game)
         {
-            instance = this;
-            superiorRecruitTowers = new HashSet<TC_TeleportTowerSuperior>();
-            PatchWindowOnGUI.lastSpineInstance = null;
+            Instance = this;
+            SuperiorRecruitTowers = new HashSet<TC_TeleportTowerSuperior>();
+            Patch_WindowOnGUI.LastSpineInstance = null;
         }
 
         public override void ExposeData()

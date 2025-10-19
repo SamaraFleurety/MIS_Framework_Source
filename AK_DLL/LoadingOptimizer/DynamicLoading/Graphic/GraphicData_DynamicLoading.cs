@@ -7,20 +7,14 @@ namespace AK_DLL.DynamicLoading
 {
     public class GraphicData_DynamicLoading : GraphicData
     {
-        FieldInfo field_cachedGraphic = typeof(GraphicData).GetField("cachedGraphic", BindingFlags.Instance | BindingFlags.NonPublic);
+        private readonly FieldInfo fieldCachedGraphic = typeof(GraphicData).GetField("cachedGraphic", BindingFlags.Instance | BindingFlags.NonPublic);
 
-        public bool initiated = false;
+        public bool initiated;
 
         public Graphic CachedGraphic
         {
-            get
-            {
-                return (Graphic)field_cachedGraphic.GetValue(this);
-            }
-            set
-            {
-                field_cachedGraphic.SetValue(this, value);
-            }
+            get => (Graphic)fieldCachedGraphic.GetValue(this);
+            set => fieldCachedGraphic.SetValue(this, value);
         }
         public GraphicData_DynamicLoading()
         {
@@ -30,11 +24,13 @@ namespace AK_DLL.DynamicLoading
         public void ForceLoad(string modID)
         {
             if (initiated) return;
+
             ShaderTypeDef cutout = shaderType;
             cutout ??= ShaderTypeDefOf.Cutout;
             Shader shader = cutout.Shader;
             Texture2D textureDynamicLoading = Utilities_Unity.LoadResourceIO<Texture2D>(Utilities_Unity.DynaLoad_PathRelativeToFull<Texture2D>(texPath, modID));
             CachedGraphic = GraphicDatabase.Get(graphicClass, textureDynamicLoading, shader, drawSize, color, colorTwo, this, shaderParameters, maskPath);
+
             if (onGroundRandomRotateAngle > 0.01f)
             {
                 CachedGraphic = new Graphic_RandomRotated(CachedGraphic, onGroundRandomRotateAngle);

@@ -3,9 +3,9 @@
 namespace AK_DLL
 {
     [StaticConstructorOnStartup]
-    public class PatchMain
+    public class Patch_Main
     {
-        static PatchMain()
+        static Patch_Main()
         {
             /*Harmony instance = new Harmony("AK_DLL");
             instance.PatchAll(Assembly.GetExecutingAssembly());

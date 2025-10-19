@@ -46,10 +46,10 @@ namespace AK_DLL
         {
             string defNameBase = AK_Tool.GetThingdefNameFrom(operatorName, prefix, "Voice_Select");
             SoundDef temp = DefDatabase<SoundDef>.GetNamedSilentFail(defNameBase);
-            if (temp != null && this.selectSounds.Contains(temp) == false) this.selectSounds.Add(temp);
+            if (temp != null && !this.selectSounds.Contains(temp)) this.selectSounds.Add(temp);
             for (int i = 0; i <= 10 && (temp = DefDatabase<SoundDef>.GetNamedSilentFail(defNameBase + TypeDef.romanNumber[i])) != null; ++i)
             {
-                if (this.selectSounds.Contains(temp) == false)
+                if (!this.selectSounds.Contains(temp))
                     this.selectSounds.Add(temp);
             }
             if (this.selectSounds.Count == 0) this.selectSounds.Add(DefDatabase<SoundDef>.GetNamed("AK_Voice_Select_Default"));
@@ -59,10 +59,10 @@ namespace AK_DLL
         {
             string defNameBase = AK_Tool.GetThingdefNameFrom(operatorName, prefix, "Voice_Draft");
             SoundDef temp = DefDatabase<SoundDef>.GetNamedSilentFail(defNameBase);
-            if (temp != null && this.draftSounds.Contains(temp) == false) this.draftSounds.Add(temp);
+            if (temp != null && !this.draftSounds.Contains(temp)) this.draftSounds.Add(temp);
             for (int i = 0; i < 10 && (temp = DefDatabase<SoundDef>.GetNamedSilentFail(defNameBase + TypeDef.romanNumber[i])) != null; ++i)
             {
-                if (this.draftSounds.Contains(temp) == false)
+                if (!this.draftSounds.Contains(temp))
                     this.draftSounds.Add(temp);
             }
             if (this.draftSounds.Count == 0) this.draftSounds.Add(DefDatabase<SoundDef>.GetNamed("AK_Voice_Draft_Default"));
@@ -72,10 +72,10 @@ namespace AK_DLL
         {
             string defNameBase = AK_Tool.GetThingdefNameFrom(operatorName, prefix, "Voice_Ability");
             SoundDef temp = DefDatabase<SoundDef>.GetNamedSilentFail(defNameBase);
-            if (temp != null && this.abilitySounds.Contains(temp) == false) this.abilitySounds.Add(temp);
+            if (temp != null && !this.abilitySounds.Contains(temp)) this.abilitySounds.Add(temp);
             for (int i = 0; i <= 10 && (temp = DefDatabase<SoundDef>.GetNamedSilentFail(defNameBase + TypeDef.romanNumber[i])) != null; ++i)
             {
-                if (this.abilitySounds.Contains(temp) == false)
+                if (!this.abilitySounds.Contains(temp))
                     this.abilitySounds.Add(temp);
             }
             if (this.abilitySounds.Count == 0) this.abilitySounds.Add(DefDatabase<SoundDef>.GetNamed("AK_Voice_Ability_Default"));

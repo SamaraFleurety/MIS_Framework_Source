@@ -2,13 +2,13 @@
 using System;
 using Verse;
 
-namespace AK_DLL.HarmonyPatchs
+namespace AK_DLL
 {
     [HarmonyPatch(typeof(PawnGenerator), "GeneratePawn", new Type[] { typeof(PawnGenerationRequest) })]
     public class Patch_OverridePawnGeneration
     {
         [HarmonyPrefix]
-        public static bool prefix(PawnGenerationRequest request, ref Pawn __result)
+        public static bool Prefix(PawnGenerationRequest request, ref Pawn __result)
         {
             if (OperatorDef.currentlyGenerating || request.KindDef.GetModExtension<Ext_LinkedReservedOperatorDef>() is not Ext_LinkedReservedOperatorDef ext)
             {

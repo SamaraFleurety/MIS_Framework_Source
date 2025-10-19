@@ -34,11 +34,7 @@ namespace AK_DLL
 
         protected virtual AcceptanceReport NameIsValid(string name)
         {
-            if (name.Length == 0)
-            {
-                return false;
-            }
-            return true;
+            return name.Length != 0;
         }
 
         public override void DoWindowContents(Rect inRect)
@@ -79,10 +75,7 @@ namespace AK_DLL
             }
             else if (validationCb(curName))
             {
-                if (onOkCb != null)
-                {
-                    onOkCb(curName);
-                }
+                onOkCb?.Invoke(curName);
                 Find.WindowStack.TryRemove(this);
             }
         }

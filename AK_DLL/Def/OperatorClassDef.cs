@@ -10,9 +10,6 @@ namespace AK_DLL
         public string iconPath = null;
         public string textureFolder;
 
-        public Texture2D Icon
-        {
-            get { return iconPath == null ? null : ContentFinder<Texture2D>.Get(iconPath); }
-        }
+        public Texture2D Icon => iconPath == null ? null : ContentFinder<Texture2D>.Get(iconPath);
     }
 }

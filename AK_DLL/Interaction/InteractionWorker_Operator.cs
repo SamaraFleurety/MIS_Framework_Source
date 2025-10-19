@@ -6,10 +6,7 @@ namespace AK_DLL
 {
     public class InteractionWorker_Operator : InteractionWorker
     {
-        public List<string> InvolvedPawns
-        {
-            get { return (this.interaction as OperatorInteractionDef).involvedPawns; }
-        }
+        public List<string> InvolvedPawns => (this.interaction as OperatorInteractionDef)?.involvedPawns;
 
         public override float RandomSelectionWeight(Pawn initiator, Pawn recipient)
         {
@@ -19,7 +16,8 @@ namespace AK_DLL
             {
                 return 0f;
             }
-            else if (this.interaction is OperatorInteractionDef)
+
+            if (this.interaction is OperatorInteractionDef)
             {
                 if (!this.InvolvedPawns.Contains(initiatorDoc.operatorID) || !this.InvolvedPawns.Contains(recipientDoc.operatorID))
                 {

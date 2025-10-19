@@ -1,255 +1,103 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{25A323A4-A832-487C-9AB2-32E14C56E148}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AK_DLL</RootNamespace>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>9.0</LangVersion>
     <AssemblyName>AK_DLL</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
-    <LangVersion>9.0</LangVersion>
+    <RootNamespace>AK_DLL</RootNamespace>
+    <Copyright>Copyright ©  2021</Copyright>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>9.0</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>9.0</LangVersion>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="0Harmony, Version=2.3.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <ProjectReference Include="..\AKA_Ability\AKA_Ability.csproj">
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\AKM_MusicPlayer\AKM_MusicPlayer.csproj" />
+    <ProjectReference Include="..\AKR_WeightedRandomUnified\AKR_WeightedRandomUnified.csproj">
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\AK_TypeDef\1AK_TypeDef.csproj">
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\LivelyRim\FS_LivelyRim.csproj">
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="0Harmony">
       <HintPath>..\Rely\0Harmony.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="1AK_TypeDef, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\AK_TypeDef\bin\Debug\1AK_TypeDef.dll</HintPath>
-    </Reference>
-    <Reference Include="AKA_Ability">
-      <HintPath>..\AKA_Ability\bin\Debug\AKA_Ability.dll</HintPath>
-    </Reference>
-    <Reference Include="AKM_MusicPlayer">
-      <HintPath>..\AKM_MusicPlayer\bin\Debug\AKM_MusicPlayer.dll</HintPath>
-    </Reference>
-    <Reference Include="AlienRace, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="AlienRace">
       <HintPath>..\Rely\AlienRace.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="Assembly-CSharp, Version=1.6.9293.12164, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Assembly-CSharp">
       <HintPath>..\Rely\1.6\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="com.rlabrecque.steamworks.net, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="com.rlabrecque.steamworks.net">
       <HintPath>..\Rely\com.rlabrecque.steamworks.net.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="FSUI, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="FSUI">
       <HintPath>..\Rely\FSUI.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="FS_UGUIFramework">
       <HintPath>..\Rely\FS_UGUIFramework.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="SpriteEvo">
       <HintPath>..\Rely\SpriteEvo.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>..\Rely\Unity.TextMeshPro.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.Timeline">
-      <HintPath>..\Rely\Unity.Timeline.dll</HintPath>
+      <HintPath>..\Rely\1.6\Unity.TextMeshPro.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\Rely\UnityEngine.dll</HintPath>
+      <HintPath>..\Rely\1.6\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.AssetBundleModule">
-      <HintPath>..\Rely\UnityEngine.AssetBundleModule.dll</HintPath>
+      <HintPath>..\Rely\1.6\UnityEngine.AssetBundleModule.dll</HintPath>
       <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.AudioModule">
-      <HintPath>..\Rely\UnityEngine.AudioModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\Rely\UnityEngine.CoreModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.ImageConversionModule">
-      <HintPath>..\Rely\UnityEngine.ImageConversionModule.dll</HintPath>
+      <HintPath>..\Rely\1.6\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>..\Rely\UnityEngine.IMGUIModule.dll</HintPath>
+      <HintPath>..\Rely\1.6\UnityEngine.IMGUIModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>..\Rely\UnityEngine.InputLegacyModule.dll</HintPath>
+      <HintPath>..\Rely\1.6\UnityEngine.InputLegacyModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.InputModule">
-      <HintPath>..\Rely\UnityEngine.InputModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.ProfilerModule">
-      <HintPath>..\Rely\UnityEngine.ProfilerModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.TextCoreModule">
-      <HintPath>..\Rely\UnityEngine.TextCoreModule.dll</HintPath>
+      <HintPath>..\Rely\1.6\UnityEngine.InputModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule">
-      <HintPath>..\Rely\UnityEngine.TextRenderingModule.dll</HintPath>
+      <HintPath>..\Rely\1.6\UnityEngine.TextRenderingModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>..\Rely\UnityEngine.UI.dll</HintPath>
+      <HintPath>..\Rely\1.6\UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UIElementsModule">
-      <HintPath>..\Rely\UnityEngine.UIElementsModule.dll</HintPath>
+      <HintPath>..\Rely\1.6\UnityEngine.UIElementsModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UIModule">
-      <HintPath>..\Rely\UnityEngine.UIModule.dll</HintPath>
+      <HintPath>..\Rely\1.6\UnityEngine.UIModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AK_Algorithm.cs" />
-    <Compile Include="AK_Tool4Unity.cs" />
-    <Compile Include="Def\ReserveOperatorDef\Ext_LinkedReservedOperatorDef.cs" />
-    <Compile Include="Def\ReserveOperatorDef\Patch_OverridePawnGeneration.cs" />
-    <Compile Include="Def\ReserveOperatorDef\ReserveOperatorDef.cs" />
-    <Compile Include="Graphic\RenderNodeWorker_ExtraHair.cs" />
-    <Compile Include="Graphic\RenderTreeOverride\Patch_RenderTreeOverride.cs" />
-    <Compile Include="LoadingOptimizer\DynamicLoading\Audio\AudioGrain_DynaLoad_Clip.cs" />
-    <Compile Include="LoadingOptimizer\DynamicLoading\Audio\SubSoundDef_DynaLoading.cs" />
-    <Compile Include="LoadingOptimizer\Legacy_SkipDefAndFolder\AhoCorasick.cs" />
-    <Compile Include="LoadingOptimizer\DynamicLoading\Graphic\GraphicData_DynamicLoading.cs" />
-    <Compile Include="LoadingOptimizer\DynamicLoading\patchtest.cs" />
-    <Compile Include="LoadingOptimizer\Legacy_SkipDefAndFolder\LoadFolderDef.cs" />
-    <Compile Include="LoadingOptimizer\Legacy_SkipDefAndFolder\Patch_DefsInMod.cs" />
-    <Compile Include="LoadingOptimizer\Legacy_SkipDefAndFolder\Patch_ForbidCrossRef.cs" />
-    <Compile Include="LoadingOptimizer\Legacy_SkipDefAndFolder\Patch_ForbidLoadFiles.cs" />
-    <Compile Include="LoadingOptimizer\Legacy_SkipDefAndFolder\Patch_SkipXmlLoad.cs" />
-    <Compile Include="DebugTools.cs" />
-    <Compile Include="Def\OperatorClassDef.cs" />
-    <Compile Include="Def\OperatorDef\HediffStat.cs" />
-    <Compile Include="Def\OperatorDef\OperatorFashionSetDef.cs" />
-    <Compile Include="GC_AKManager.cs" />
-    <Compile Include="Graphic\Hair\HairOffset\Patch_ForbidAgedHeadOffset.cs" />
-    <Compile Include="Graphic\ApparelOffset\Patch_ApparelOffset.cs" />
-    <Compile Include="Graphic\Hair\BackHair\Ext_BackHair.cs" />
-    <Compile Include="Graphic\Hair\BackHair\RenderNode_BackHair.cs" />
-    <Compile Include="Graphic\Hair\BackHair\RenderNodeWorker_BackHair.cs" />
-    <Compile Include="Graphic\StatusBar\DoBarSetting_Window.cs" />
-    <Compile Include="Graphic\Hair\BackHair\Ext_ExtraGraphicData.cs" />
-    <Compile Include="Graphic\Hair\FrontHair\RenderNodeWorker_FrontHair.cs" />
-    <Compile Include="Graphic\Hair\FrontHair\RenderNode_FrontHair.cs" />
-    <Compile Include="Graphic\Hair\FrontHair\Ext_FrontHair.cs" />
-    <Compile Include="Graphic\WeaponOffset\Ext_WeaponWieldGraphics.cs" />
-    <Compile Include="Graphic\WeaponOffset\Patch_AlterGraphics.cs" />
-    <Compile Include="HarmonyPatches\PatchTest.cs" />
-    <Compile Include="HarmonyPatches\Patch_AlienWarning.cs" />
-    <Compile Include="HarmonyPatches\Patch_ObeliskCopyAbility.cs" />
-    <Compile Include="Hediff\Comps\HCP_AddTrait.cs" />
-    <Compile Include="Hediff\Comps\HCP_RemoveMe.cs" />
-    <Compile Include="Interaction\OperatorInteractionDef.cs" />
-    <Compile Include="Def\OperatorSeriesDef.cs" />
-    <Compile Include="HarmonyPatches\PatchAutoChangeHair.cs" />
-    <Compile Include="HarmonyPatches\PatchDisableRootUI.cs" />
-    <Compile Include="HarmonyPatches\PatchHairOffset.cs" />
-    <Compile Include="HarmonyPatches\PatchInfoCardPortrait.cs" />
-    <Compile Include="HarmonyPatches\PatchWindowsOnGui%28Bottom Portrait%29.cs" />
-    <Compile Include="Misc\Gacha\Randomizer_Reward_OperatorOrDef.cs" />
-    <Compile Include="Misc\Gacha\Rewards_Operator.cs" />
-    <Compile Include="OpAbility\AbilityTracker.cs" />
-    <Compile Include="OpAbility\Comp\TCP_Ability.cs" />
-    <Compile Include="AK_Tool.cs" />
-    <Compile Include="Hediff\Comps\HC_ForceColors.cs" />
-    <Compile Include="Hediff\Comps\HediffComp_Heal.cs" />
-    <Compile Include="Hediff\CompProperties\HediffCompProperties_Heal.cs" />
-    <Compile Include="Misc\Project Galleria Stellaria\ScenPart_Designated Op Start.cs" />
-    <Compile Include="AI\JobDriver_ChangeFashion.cs" />
-    <Compile Include="AI\JobDriver_UseRecruitTable.cs" />
-    <Compile Include="AK_ModSettings.cs" />
-    <Compile Include="Def\OperatorDef\OperatorDef.cs" />
-    <Compile Include="OpDocument\GC_Documentation.cs" />
-    <Compile Include="OpDocument\OpDocContainer.cs" />
-    <Compile Include="RecruitConsole\Window\Dialog_Input.cs" />
-    <Compile Include="Def\RecruitPostEffectWorker\RecruitPostEffectWorker_Base.cs" />
-    <Compile Include="Thing\ApparelOperator\Apparel_Operator.cs" />
-    <Compile Include="Thing\ApparelOperator\GraphicData_MultiFoam.cs" />
-    <Compile Include="Thing\ApparelOperator\Patch_WornGraphic.cs" />
-    <Compile Include="Thing\Comp\TCP_DrawOverlay.cs" />
-    <Compile Include="Thing\Comp\TCP_TeleportTowerInferior.cs" />
-    <Compile Include="Thing\Comp\TCP_TeleportTowerSuperior.cs" />
-    <Compile Include="Misc\ThoughtWorker\ThoughtWorker_OpinionToTrait.cs" />
-    <Compile Include="RecruitConsole\Window\RIWindow.cs" />
-    <Compile Include="RecruitConsole\Window\RIWindow_MainMenu.cs" />
-    <Compile Include="RecruitConsole\Window\_RIWindowHandler.cs" />
-    <Compile Include="Thing\Comp\TCP_RemoveMe.cs" />
-    <Compile Include="OpDocument\VAbility_Operator.cs" />
-    <Compile Include="VoicePlayer\HarmonyPatch\PatchDraftSound.cs" />
-    <Compile Include="VoicePlayer\HarmonyPatch\PatchSelectSound.cs" />
-    <Compile Include="HarmonyPatches\Patch\PatchMain.cs" />
-    <Compile Include="HarmonyPatches\Patch\Patch_OperatorPostDeadEffect.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Def\OperatorDef\SkillAndFire.cs" />
-    <Compile Include="RecruitConsole\RecruitConsole.cs" />
-    <Compile Include="Def\OperatorDef\TraitAndDegree.cs" />
-    <Compile Include="Interaction\InteractionWorker_Operator.cs" />
-    <Compile Include="TypeDef.cs" />
-    <Compile Include="Def\VoicePackDef.cs" />
-    <Compile Include="RecruitConsole\Window\RIWindow_OperatorDetail.cs" />
-    <Compile Include="RecruitConsole\Window\RIWindow_OperatorList.cs" />
-    <Compile Include="VoicePlayer\VoicePlayer.cs" />
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <ProjectReference Include="..\AKR_WeightedRandomUnified\AKR_WeightedRandomUnified.csproj">
-      <Project>{CE31C711-E3F1-43D2-AD6A-216097EE20AB}</Project>
-      <Name>AKR_WeightedRandomUnified</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LivelyRim\FS_LivelyRim.csproj">
-      <Project>{ca2d2594-7051-4fc9-b1e1-ef077f439fcf}</Project>
-      <Name>FS_LivelyRim</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>DEL "$(SolutionDir)\输出\AK_DLL.dll"
-COPY "$(TargetPath)" "$(SolutionDir)\输出\AK_DLL.dll"</PostBuildEvent>
-  </PropertyGroup>
+
 </Project>

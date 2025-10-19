@@ -7,24 +7,18 @@ namespace AK_DLL
     //当前不需要支持变参数
     public class Apparel_Operator : Apparel
     {
-        public int graphicIndex = 0;
-        private Graphic cachedGraphic = null;
+        public int graphicIndex;
+        private Graphic cachedGraphic;
         public override Graphic Graphic
         {
             get
             {
-                cachedGraphic ??= (def.graphicData as GraphicData_MultiFoam).GetGraphicWithIndex(graphicIndex, this);
+                cachedGraphic ??= (def.graphicData as GraphicData_MultiFoam)?.GetGraphicWithIndex(graphicIndex, this);
                 return cachedGraphic;
             }
         }
 
-        public virtual string WornGraphicPath_MultiFoam
-        {
-            get
-            {
-                return (def.graphicData as GraphicData_MultiFoam).GetWornGraphicPathWithIndex(graphicIndex, this);
-            }
-        }
+        public virtual string WornGraphicPath_MultiFoam => (def.graphicData as GraphicData_MultiFoam)?.GetWornGraphicPathWithIndex(graphicIndex, this);
 
         public virtual void SetGraphicIndex(int newIndex)
         {
@@ -46,7 +40,7 @@ namespace AK_DLL
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Values.Look(ref graphicIndex, "gIndex", 0);
+            Scribe_Values.Look(ref graphicIndex, "gIndex");
         }
     }
 }

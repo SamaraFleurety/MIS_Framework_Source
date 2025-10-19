@@ -6,7 +6,7 @@ namespace AK_DLL
 {
     //个人详细属性界面显示立绘
     [HarmonyPatch(typeof(Dialog_InfoCard), "FillCard")]
-    public class PatchInfoCardPortrait
+    public class Patch_InfoCardPortrait
     {
         [HarmonyPostfix]
         public static void Postfix(Rect cardRect, Dialog_InfoCard __instance, Thing ___thing)

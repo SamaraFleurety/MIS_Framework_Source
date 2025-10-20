@@ -37,19 +37,19 @@ namespace AK_DLL
         public bool isMale = false;//性别 谁jb把这玩意写成bool的
         public List<HediffStat> hediffInate = new(); //天生自带hediff 源石病之类的
 
-        public VoicePackDef voicePackDef = null;
+        public VoicePackDef voicePackDef;
 
         public Dictionary<string, PawnRelationDef> relations;
 
         public List<TraitAndDegree> traits;//干员特性
-        public ThingDef weapon = null;//干员武器                                                  
+        public ThingDef weapon;//干员武器                                                  
         public List<ItemOnSpawn> apparels = new();//干员衣服
         public List<ThingDef> accessory = new(); //干员配件。和衣服的区别是在换装时不会丢掉。适合填入比如护盾。
         public List<ItemOnSpawn> items;
         public BodyTypeDef bodyTypeDef;//干员的体型
         public HeadTypeDef headTypeDef;
         public List<SkillAndFire> skills;//技能列表；要是哪天排序卡得不行就给改成树
-        private bool skillSorted = false;
+        private bool skillSorted;
         public Color skinColor = new(1, 1, 1, 1); //皮肤颜色
         public Color hairColor = new(1, 1, 1, 1); //头发颜色
         public HairDef hair;//头发类型
@@ -58,7 +58,7 @@ namespace AK_DLL
         public OperatorClassDef operatorType;//干员类型/职业
 
         public string stand;//精2立绘
-        public string commonStand = null;  //精0立绘
+        public string commonStand;  //精0立绘
         public List<string> fashion; //换装立绘的路径 和小人身上的衣服无关
 
         //新式的静态立绘列表，支持动态加载。其中，-1是头像，0是精2，1是精0，2~1000是静态换装。
@@ -97,7 +97,7 @@ namespace AK_DLL
 
         public Type documentType = typeof(OperatorDocument);   //写了碧蓝之后发现档案甚至都可以扩充
 
-        public bool ignoreAutoFill = false; //跳过自动填充
+        public bool ignoreAutoFill; //跳过自动填充
 
         //如果不为空，获取render tree时会使用这个值
         public PawnRenderTreeDef renderTreeOverride = null;
@@ -111,7 +111,7 @@ namespace AK_DLL
         protected const int BackstoryAdultAgeThreshold = 20;
         #region 快捷属性
 
-        public static bool currentlyGenerating = false;
+        public static bool currentlyGenerating;
 
         //缓存 招募时给的衣服。这个时候有可能还没生成doc
         protected static List<Thing> clothTemp = new();
@@ -228,11 +228,11 @@ namespace AK_DLL
                 else if (this.weapon != null)
                 {
                     if (doc.weapon != null && !doc.weapon.DestroyedOrNull()) doc.weapon.Destroy();
-                    ThingWithComps weapon = (ThingWithComps)ThingMaker.MakeThing(this.weapon);
-                    CompBiocodable comp = weapon.GetComp<CompBiocodable>();
+                    ThingWithComps weaponEq = (ThingWithComps)ThingMaker.MakeThing(this.weapon);
+                    CompBiocodable comp = weaponEq.GetComp<CompBiocodable>();
                     comp?.CodeFor(operator_Pawn);
-                    operator_Pawn.equipment.AddEquipment(weapon);
-                    doc.weapon = weapon;
+                    operator_Pawn.equipment.AddEquipment(weaponEq);
+                    doc.weapon = weaponEq;
                 }
                 doc.forceDisableNL = this.forceDisableNL;
             }
@@ -241,7 +241,7 @@ namespace AK_DLL
                 if (def.apparelTextureIndex is { } textureIndex) apparelTextureIndex = textureIndex;
                 foreach (ThingDef apparelDef in def.apparels)
                 {
-                    Recruit_Inventory_Wear(apparelDef, operator_Pawn, true);
+                    Recruit_Inventory_Wear(apparelDef, operator_Pawn);
                 }
                 if (def.hair != null) operator_Pawn.story.hairDef = def.hair;
                 if (def.voice != null)
@@ -308,14 +308,14 @@ namespace AK_DLL
             this.voicePackDef?.recruitSound.PlaySound();
 
             //档案系统
-            VAbility_Operator operatorID = Recruit_VAB() as VAbility_Operator;
+            VAbility_Operator operatorVabID = Recruit_VAB() as VAbility_Operator;
 
             //对vab容器进行aka技能以外的处理
-            Recruit_OperatorID(operatorID);
+            Recruit_OperatorID(operatorVabID);
             //(operatorID.AKATracker as AK_AbilityTracker).doc = doc;
             clothTemp.Clear();
 
-            Recruit_AKAbility(operatorID);
+            Recruit_AKAbility(operatorVabID);
 
             Recruit_PostEffects();
 
@@ -339,7 +339,7 @@ namespace AK_DLL
             currentlyGenerating = true;
             if (map != null)
             {
-                if (RCellFinder.TryFindRandomPawnEntryCell(out IntVec3 intVec, map, 0.2f, false, null))
+                if (RCellFinder.TryFindRandomPawnEntryCell(out IntVec3 intVec, map, 0.2f))
                 {
                     result = Recruit(intVec, map);
                 }
@@ -409,9 +409,9 @@ namespace AK_DLL
             return vAbility;
         }
 
-        private OperatorDocument Recruit_Document(Thing weapon)
+        private OperatorDocument Recruit_Document(Thing newWeapon)
         {
-            GC_OperatorDocumentation.AddPawn(this.OperatorID, this, operator_Pawn, weapon, clothTemp);
+            GC_OperatorDocumentation.AddPawn(this.OperatorID, this, operator_Pawn, newWeapon, clothTemp);
             OperatorDocument document = GC_OperatorDocumentation.opDocArchive[this.OperatorID];
             document.voicePack = voicePackDef;
             return document;
@@ -614,7 +614,7 @@ namespace AK_DLL
             Apparel apparel = (Apparel)ThingMaker.MakeThing(apparelDef, stuff);
             CompBiocodable comp = apparel.GetComp<CompBiocodable>();
             comp?.CodeFor(p);
-            p.apparel.Wear(apparel, true, false);
+            p.apparel.Wear(apparel);
             p.outfits.forcedHandler.SetForced(apparel, true);
             if (isFashion)
             {
@@ -639,11 +639,11 @@ namespace AK_DLL
             ThingDef recordDef = DefDatabase<ThingDef>.GetNamed("AKM_Item_Record");
             if (ext.arkSong != null)
             {
-                if (Recruit_Inventory_Additem(recordDef, 1) is ThingClass_MusicRecord record) record.recordedSong = ext.arkSong;
+                if (Recruit_Inventory_Additem(recordDef) is ThingClass_MusicRecord record) record.recordedSong = ext.arkSong;
             }
             foreach (ArkSongDef i in ext.arkSongs)
             {
-                if (Recruit_Inventory_Additem(recordDef, 1) is ThingClass_MusicRecord record) record.recordedSong = i;
+                if (Recruit_Inventory_Additem(recordDef) is ThingClass_MusicRecord record) record.recordedSong = i;
             }
         }
 
@@ -652,8 +652,8 @@ namespace AK_DLL
             if (animation == null) return;
 
             MethodInfo method = typeof(AnimationManager).GetMethod("RegisterPawnAnimation", BindingFlags.Public | BindingFlags.Static);
-            GameObject spine = (GameObject)method.Invoke(null, new object[] { animation, operator_Pawn });
-            spine.SetActive(true);
+            GameObject spine = (GameObject)method?.Invoke(null, new object[] { animation, operator_Pawn });
+            spine?.SetActive(true);
         }
         #endregion
 
@@ -763,8 +763,7 @@ namespace AK_DLL
                     temp = Utilities_Unity.DynaLoad_PathRelativeToFull<Texture2D>(standPath, modPackageID);
                     if (File.Exists(temp))
                     {
-                        string stand = standPath;
-                        staticStands.Add(0, stand);
+                        staticStands.Add(0, standPath);
                     }
                     else
                     {

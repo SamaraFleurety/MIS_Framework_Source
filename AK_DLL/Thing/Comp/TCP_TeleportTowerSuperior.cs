@@ -1,5 +1,4 @@
-﻿using RimWorld;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Verse;
 
 namespace AK_DLL
@@ -14,7 +13,7 @@ namespace AK_DLL
 
     public class TC_TeleportTowerSuperior : TC_TeleportTowerInferior
     {
-        public string alias = null;
+        public string alias;
 
         public string Alias
         {
@@ -38,15 +37,12 @@ namespace AK_DLL
                     icon = TypeDef.iconTeleTowerChangeName,
                     defaultDesc = "AK_ChangeRecruitTowerAliasDesc".Translate(),
                     defaultLabel = "AK_ChangeRecruitTowerAliasLabel".Translate(),
-                    action = delegate ()
+                    action = delegate
                     {
-                        Find.WindowStack.Add(new Dialog_Input(delegate (string alias)
+                        Find.WindowStack.Add(new Dialog_Input(delegate (string newAlias)
                         {
-                            this.alias = alias;
-                        }, delegate (string alias)
-                        {
-                            return true;
-                        }, this.alias));
+                            this.alias = newAlias;
+                        }, _ => true, this.alias));
                     }
                 };
                 //return cachedChangeAliasGizmo;
@@ -77,7 +73,7 @@ namespace AK_DLL
         public override void PostDeSpawn(Map map, DestroyMode mode = DestroyMode.Vanish)
         {
             if (AllTowers.Contains(this)) AllTowers.Remove(this);
-            base.PostDeSpawn(map);
+            base.PostDeSpawn(map, mode);
         }
 
         public override void PostExposeData()

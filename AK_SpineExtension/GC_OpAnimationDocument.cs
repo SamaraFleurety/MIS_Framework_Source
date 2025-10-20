@@ -15,7 +15,7 @@ namespace AK_SpineExtention
 
         public GC_OpAnimationDocument(Game game)
         {
-            cachedOpSkinAnimation = new();
+            cachedOpSkinAnimation = new Dictionary<OperatorDocument, Dictionary<int, GameObject>>();
         }
 
         public override void StartedNewGame()

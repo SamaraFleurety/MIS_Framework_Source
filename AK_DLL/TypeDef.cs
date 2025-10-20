@@ -69,12 +69,12 @@ namespace AK_DLL
         Fashion
     }
 
-    public enum StandType : Byte
+    public enum StandType : byte
     {
         Static = 0,
         Live2D
     }
-    public enum SkinType : int
+    public enum SkinType
     {
         HeadPortrait = -1,
         Vanilla = 1,

@@ -34,7 +34,7 @@ namespace AK_DLL
                 Pawn_MindState mindState = parms.pawn.mindState;
                 if (mindState != null && mindState.duty?.def?.drawBodyOverride.HasValue == true)
                 {
-                    return !parms.pawn.mindState.duty.def.drawBodyOverride.Value;
+                    return parms.pawn.mindState.duty.def.drawBodyOverride != null && !parms.pawn.mindState.duty.def.drawBodyOverride.Value;
                 }
                 if (parms.bed != null && parms.pawn.RaceProps.Humanlike)
                 {

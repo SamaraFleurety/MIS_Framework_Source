@@ -13,7 +13,7 @@ namespace AK_DLL
 
     public class TC_Ability : ThingComp, IExposable
     {
-        public bool autoCast = false;
+        public bool autoCast;
         public override void CompTick()
         {
             base.CompTick();

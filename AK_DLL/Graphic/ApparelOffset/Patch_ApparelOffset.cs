@@ -28,7 +28,7 @@ namespace AK_DLL.HarmonyPatchs
             Ext_ExtraGraphicData ext = n.apparel.def.GetModExtension<Ext_ExtraGraphicData>();
             if (ext != null)
             {
-                Rot4 rot = parms.pawn.Rotation;
+                //Rot4 rot = parms.pawn.Rotation;
                 __result.x *= ext.graphicData.drawSize.x;
                 //__result.y += ext.graphicData.drawSize.y;
                 __result.z *= ext.graphicData.drawSize.y;

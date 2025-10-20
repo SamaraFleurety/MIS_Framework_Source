@@ -1,5 +1,4 @@
 ﻿using RimWorld;
-using RimWorld.Planet;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
@@ -18,7 +17,7 @@ namespace AK_DLL
             //不可以使用
             if (CompPower is { PowerOn: false })
             {
-                yield return new FloatMenuOption("CannotUseNoPower".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0); yield break;
+                yield return new FloatMenuOption("CannotUseNoPower".Translate(), null); yield break;
             }
             if (selPawn.health.Dead || (selPawn == null && selPawn.CanReach(this, PathEndMode.Touch, Danger.Deadly)))
             {
@@ -28,14 +27,14 @@ namespace AK_DLL
             //手动注册干员
             if (AK_ModSettings.allowManualRegister)
             {
-                foreach (OperatorDocument docu in GC_OperatorDocumentation.opDocArchive.Values)
+                foreach (OperatorDocument document in GC_OperatorDocumentation.opDocArchive.Values)
                 {
-                    OperatorDef operatorDef = docu.operatorDef;
+                    OperatorDef operatorDef = document.operatorDef;
                     if (selPawn.Name.ToString().Equals(new NameTriple(operatorDef.name, operatorDef.nickname, operatorDef.surname).ToString()))
                     {
                         yield return new FloatMenuOption("AK_ManualRegOp".Translate(operatorDef.nickname), delegate
                         {
-                            OperatorDocument doc1 = docu;
+                            OperatorDocument doc1 = document;
                             Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("AK_ManualRegConfirm".Translate(operatorDef.nickname), delegate
                             {
                                 doc1.ManualRegister(selPawn);
@@ -79,7 +78,7 @@ namespace AK_DLL
             //可以招募
             if (CompRefuelable.Fuel < 0.1)
             {
-                yield return new FloatMenuOption("AK_NoTicket".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null, true, 0);
+                yield return new FloatMenuOption("AK_NoTicket".Translate(), null);
                 yield break;
             }
 

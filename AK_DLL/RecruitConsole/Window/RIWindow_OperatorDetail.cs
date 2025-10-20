@@ -245,7 +245,7 @@ namespace AK_DLL.UI
 
         protected OperatorDocument doc;
 
-        private static string recruitText;
+        private static string _recruitText;
 
         private bool canRecruit;
 
@@ -329,16 +329,16 @@ namespace AK_DLL.UI
                 if (doc is not { currentExist: true })
                 {
                     canRecruit = true;
-                    recruitText = "可以招募"; //残留
+                    _recruitText = "可以招募"; //残留
                 }
                 else
                 {
-                    recruitText = "AK_CanntRecruitOperator".Translate();
+                    _recruitText = "AK_CanntRecruitOperator".Translate();
                 }
             }
             else
             {
-                recruitText = "AK_NoTicket".Translate();
+                _recruitText = "AK_NoTicket".Translate();
             }
             floatingBubbleInstance = GameObject.Find("FloatingInfPanel");
             floatingBubbleInstance.SetActive(false);
@@ -381,13 +381,13 @@ namespace AK_DLL.UI
                 weaponIconObj.SetActive(false);
                 return;
             }
-            GameObject WeaponPanel = GameObject.Find("WeaponPanel");
+            GameObject weaponPanel = GameObject.Find("WeaponPanel");
             Texture2D weaponIcon = ContentFinder<Texture2D>.Get(OperatorDef.weapon.graphicData.texPath);
             weaponIconObj.GetComponent<Image>().sprite = Sprite.Create(weaponIcon, new Rect(0, 0, weaponIcon.width, weaponIcon.height), Vector2.zero);
 
             EventTrigger.Entry entry = weaponIconObj.GetComponent<EventTrigger>().triggers.Find(e => e.eventID == EventTriggerType.PointerEnter);
 
-            entry.callback.AddListener((data) =>
+            entry.callback.AddListener(data =>
             {
                 DrawFloatingBubble(OperatorDef.weapon.description.Translate());
             });
@@ -399,24 +399,23 @@ namespace AK_DLL.UI
             get
             {
                 GameObject fashionIconPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("FashionIcon");
-                return GameObject.Instantiate(fashionIconPrefab, fashionPanel);
+                return Object.Instantiate(fashionIconPrefab, fashionPanel);
             }
         }
         protected virtual void DrawFashionBtn()
         {
             fashionPanel = GameObject.Find("FashionPanel").transform;  //切换换装按钮的面板。因为做的时候不会用Grid，所以需要手动设置按钮位置，乐
             GameObject fashionIconPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("FashionIcon");
-            GameObject fashionIcon;
             Vector3 v3;
 
             fashionBtns = new Dictionary<int, GameObject>();
 
             //精0/精1立绘 切换按钮
-            fashionIcon = GameObject.Find("Elite0");
+            GameObject fashionIcon = GameObject.Find("Elite0");
             fashionBtns.Add(1, fashionIcon);
             if ((!OperatorDef.dynaLoadStaticStands && OperatorDef.commonStand != null) || (OperatorDef.dynaLoadStaticStands && OperatorDef.staticStands.ContainsKey(OperatorStandType.Elite0)))
             {
-                fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+                fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate
                 {
                     ChangeStandTo(OperatorStandType.Elite0);
                 });
@@ -426,7 +425,7 @@ namespace AK_DLL.UI
             //精2立绘按钮。因为历史问题，这是默认立绘，必须有。
             fashionIcon = GameObject.Find("Elite2");
             fashionBtns.Add(0, fashionIcon);
-            fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate
             {
                 ChangeStandTo(OperatorStandType.Elite2);
             });
@@ -445,7 +444,7 @@ namespace AK_DLL.UI
                     fashionIcon.SetActive(true);
                     fashionIcon.name = "FSUI_FashIc_" + logicOrder;
                     int j = logicOrder;
-                    fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+                    fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate
                     {
                         //ChangeStandTo(btnOrder(ClickedBtn));
                         ChangeStandTo(j);
@@ -467,7 +466,7 @@ namespace AK_DLL.UI
                         fashionIcon.SetActive(true);
                         fashionIcon.name = "FSUI_FashIc_" + logicOrder;
                         int j = logicOrder;
-                        fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+                        fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate
                         {
                             //ChangeStandTo(btnOrder(ClickedBtn));
                             ChangeStandTo(j);
@@ -483,10 +482,10 @@ namespace AK_DLL.UI
                 v3 = fashionIconPrefab.transform.localPosition;
                 for (int i = 0; i < OperatorDef.live2dModel.Count; ++i)
                 {
-                    fashionIcon = GameObject.Instantiate(fashionIconPrefab, fashionPanel);
+                    fashionIcon = Object.Instantiate(fashionIconPrefab, fashionPanel);
                     fashionIcon.transform.localPosition = new Vector3(v3.x * logicOrder, v3.y);
                     int j = i + 1000; //用j来标记选中的哪个l2d。+1000代表选的l2d而不是静态换装。
-                    fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+                    fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate
                     {
                         ChangeStandTo(j);
                     });
@@ -500,7 +499,7 @@ namespace AK_DLL.UI
                 v3 = fashionIconPrefab.transform.localPosition;
                 for (int i = 0; i < OperatorDef.fashionAnimation.Count; ++i)
                 {
-                    fashionIcon = GameObject.Instantiate(fashionIconPrefab, fashionPanel);
+                    fashionIcon = Object.Instantiate(fashionIconPrefab, fashionPanel);
                     fashionIcon.transform.localPosition = new Vector3(v3.x * logicOrder, v3.y);
                     int k = i + 2000;
                     fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate
@@ -522,7 +521,7 @@ namespace AK_DLL.UI
             {
                 skillTypeBtn
             };
-            skillTypeBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            skillTypeBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate
             {
                 preferredVanillaSkillChart = 0;
                 ChangeVanillaSkillChartTo(0);
@@ -547,7 +546,7 @@ namespace AK_DLL.UI
             skillTypeBtn = GameObject.Find("BtnRadarChart");
             vanillaSkillBtns.Add(skillTypeBtn);
 
-            skillTypeBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            skillTypeBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate
             {
                 preferredVanillaSkillChart = 2;
                 ChangeVanillaSkillChartTo(2);
@@ -608,42 +607,42 @@ namespace AK_DLL.UI
             }
             else
             {
-                GameObject.Find("_DPlus").GetComponent<Button>().onClick.AddListener(delegate ()
+                GameObject.Find("_DPlus").GetComponent<Button>().onClick.AddListener(delegate
                 {
                     Transform loc = GameObject.Find("OpStand").transform;
                     Vector3 v3 = loc.localScale;
                     loc.localScale = new Vector3(v3.z + 0.1f, v3.z + 0.1f, v3.z + 0.1f);
                     Log.Message($"MIS. {OperatorDef.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
                 });
-                GameObject.Find("_DMinus").GetComponent<Button>().onClick.AddListener(delegate ()
+                GameObject.Find("_DMinus").GetComponent<Button>().onClick.AddListener(delegate
                 {
                     Transform loc = GameObject.Find("OpStand").transform;
                     Vector3 v3 = loc.localScale;
                     loc.localScale = new Vector3(v3.z - 0.1f, v3.z - 0.1f, v3.z - 0.1f);
                     Log.Message($"MIS. {OperatorDef.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
                 });
-                GameObject.Find("_DUP").GetComponent<Button>().onClick.AddListener(delegate ()
+                GameObject.Find("_DUP").GetComponent<Button>().onClick.AddListener(delegate
                 {
                     Transform loc = GameObject.Find("OpStand").transform;
                     Vector3 v3 = loc.localPosition;
                     loc.localPosition = new Vector3(v3.x, v3.y + 10f, v3.z);
                     Log.Message($"MIS. {OperatorDef.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
                 });
-                GameObject.Find("_DDown").GetComponent<Button>().onClick.AddListener(delegate ()
+                GameObject.Find("_DDown").GetComponent<Button>().onClick.AddListener(delegate
                 {
                     Transform loc = GameObject.Find("OpStand").transform;
                     Vector3 v3 = loc.localPosition;
                     loc.localPosition = new Vector3(v3.x, v3.y - 10f, v3.z);
                     Log.Message($"MIS. {OperatorDef.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
                 });
-                GameObject.Find("_DLeft").GetComponent<Button>().onClick.AddListener(delegate ()
+                GameObject.Find("_DLeft").GetComponent<Button>().onClick.AddListener(delegate
                 {
                     Transform loc = GameObject.Find("OpStand").transform;
                     Vector3 v3 = loc.localPosition;
                     loc.localPosition = new Vector3(v3.x - 10f, v3.y, v3.z);
                     Log.Message($"MIS. {OperatorDef.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
                 });
-                GameObject.Find("_DRight").GetComponent<Button>().onClick.AddListener(delegate ()
+                GameObject.Find("_DRight").GetComponent<Button>().onClick.AddListener(delegate
                 {
                     Transform loc = GameObject.Find("OpStand").transform;
                     Vector3 v3 = loc.localPosition;
@@ -660,7 +659,7 @@ namespace AK_DLL.UI
         protected virtual GameObject DrawNavBtn_Home()
         {
             GameObject navBtn = GameObject.Find("BtnHome");
-            navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate
             {
                 this.Close(false);
                 RIWindow_OperatorDetail.windowPurpose = OpDetailType.Recruit;
@@ -677,7 +676,7 @@ namespace AK_DLL.UI
             DrawNavBtn_Home();
             //取消
             navBtn = GameObject.Find("BtnCancel");
-            navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate
             {
                 this.ReturnToParent(false);
             });
@@ -688,7 +687,7 @@ namespace AK_DLL.UI
             {
                 GameObject.Find("TexChangeSec").SetActive(false);
                 //FIXME: 更换贴图
-                button.onClick.AddListener(delegate ()
+                button.onClick.AddListener(delegate
                 {
                     //如果招募曾经招过的干员
                     if (doc != null && !doc.currentExist)
@@ -697,11 +696,11 @@ namespace AK_DLL.UI
                     //如果干员未招募过，或已死亡
                     if (canRecruit)
                     {
-                        this.Close(true);
+                        this.Close();
                         RecruitConsole.TryGetComp<CompRefuelable>().ConsumeFuel(OperatorDef.ticketCost);
                         Pawn resultPawn = OperatorDef.Recruit(RecruitConsole.Map);
-                        OperatorDocument doc = resultPawn.GetDoc();
-                        doc.preferedSkin = this.preferredSkin;
+                        OperatorDocument document = resultPawn.GetDoc();
+                        document.preferedSkin = this.preferredSkin;
                         if (RIWindowHandler.continuousRecruit) //连续招募
                         {
                             ReturnToParent(closeEV: false);
@@ -714,7 +713,7 @@ namespace AK_DLL.UI
             else if (windowPurpose == OpDetailType.Secretary)
             {
                 //fixme
-                button.onClick.AddListener(delegate ()
+                button.onClick.AddListener(delegate
                 {
                     windowPurpose = OpDetailType.Recruit;
                     AK_ModSettings.secretary = OperatorDef.defName;
@@ -745,7 +744,7 @@ namespace AK_DLL.UI
             get
             {
                 GameObject opAbilityPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("OpAbilityIcon");
-                return GameObject.Instantiate(opAbilityPrefab, opAbilityPanel);
+                return Object.Instantiate(opAbilityPrefab, opAbilityPanel);
             }
         }
         //FIXME:切换技能逻辑不对 需要大修
@@ -782,7 +781,7 @@ namespace AK_DLL.UI
                     opSkills.Add(opAbilityInstance);
                     logicOrder++;
                     opAbilityInstance.transform.GetChild(1).gameObject.SetActive(false);
-                    opAbilityInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+                    opAbilityInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate
                     {
                         SwitchGroupedSkillTo(BtnOrder(ClickedBtn));
                     });
@@ -808,7 +807,7 @@ namespace AK_DLL.UI
             get
             {
                 GameObject traitPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("TraitTemplate");
-                GameObject traitInstance = GameObject.Instantiate(traitPrefab, traitPanel);
+                GameObject traitInstance = Object.Instantiate(traitPrefab, traitPanel);
                 return traitInstance;
             }
         }
@@ -905,7 +904,7 @@ namespace AK_DLL.UI
         {
             EventTrigger.Entry entry = ev.triggers.Find(e => e.eventID == EventTriggerType.PointerEnter);
 
-            entry.callback.AddListener((data) =>
+            entry.callback.AddListener(data =>
             {
                 DrawFloatingBubble(text);
             });
@@ -913,7 +912,7 @@ namespace AK_DLL.UI
             entry = ev.triggers.Find(e => e.eventID == EventTriggerType.PointerExit);
 
 
-            entry.callback.AddListener((data) =>
+            entry.callback.AddListener(data =>
             {
                 floatingBubbleInstance.SetActive(false);
             });
@@ -924,10 +923,10 @@ namespace AK_DLL.UI
         private void DrawFloatingBubble(string text)
         {
             floatingBubbleInstance.GetComponentInChildren<TextMeshProUGUI>().text = text;
-            Vector3 mousepos = Input.mousePosition;
+            Vector3 mousePosition = Input.mousePosition;
             Vector2 pivot;
-            if (mousepos.x < Screen.currentResolution.width / 2) pivot = new Vector2(0, 1);
-            else pivot = new Vector2(1, 1);
+            pivot = mousePosition.x < Screen.currentResolution.width / 2 ? new Vector2(0, 1) : new Vector2(1, 1);
+
             ((RectTransform)floatingBubbleInstance.transform).pivot = pivot;
             floatingBubbleInstance.transform.position = Input.mousePosition;
 

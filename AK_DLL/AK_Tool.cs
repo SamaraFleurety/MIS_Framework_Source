@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
 using Verse;
+using Object = UnityEngine.Object;
 
 namespace AK_DLL
 {
@@ -204,7 +205,7 @@ namespace AK_DLL
                 offset = def.standOffsets[preferredSkin];
             }
 
-            if (offset is Vector3 rOffset)
+            if (offset is { } rOffset)
             {
                 containerLoc.localPosition = new Vector3(rOffset.x, rOffset.y);
                 containerLoc.localScale = new Vector3(rOffset.z, rOffset.z, rOffset.z);
@@ -217,7 +218,7 @@ namespace AK_DLL
         {
             if (value)
             {
-                if (EVSystemInstance == null) EVSystemInstance = GameObject.Instantiate(EVSystem);
+                if (!EVSystemInstance) EVSystemInstance = Object.Instantiate(EVSystem);
                 EVSystemInstance.SetActive(true);
             }
             else EVSystemInstance.SetActive(false);

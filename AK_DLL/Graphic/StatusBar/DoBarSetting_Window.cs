@@ -177,7 +177,7 @@ namespace AK_DLL
             Text.Font = GameFont.Small;
             list.GapLine();
             list.Gap(4f);
-            Rect rectLabel = list.GetRect(12f, 1f);
+            Rect rectLabel = list.GetRect(12f);
             rectLabel.height *= 2;
             Widgets.Label(rectLabel, "AK_HealthBar_Label_Colony".Translate());
             //颜色1
@@ -191,7 +191,7 @@ namespace AK_DLL
             AK_ModSettings.a = (int)list.SliderLabeled("AK_HealthBar_Option_a".Translate() + ValueSpacing + $"{AK_ModSettings.a}", AK_ModSettings.a, 0, 255);
             list.Gap(6f);
             //颜色2
-            Rect rectLabel2 = list.GetRect(12f, 1f);
+            Rect rectLabel2 = list.GetRect(12f);
             rectLabel2.height *= 2;
             Widgets.Label(rectLabel2, "AK_HealthBar_Label_Enemy".Translate());
             Rect rectColor2 = list.GetRect(12f, 0.5f);

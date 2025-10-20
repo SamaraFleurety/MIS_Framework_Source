@@ -6,8 +6,8 @@ namespace AK_DLL
 {
     public static class VoicePlayer
     {
-        public static float lastVoiceLength = 0;
-        static float lastVoiceTime = 0;
+        public static float lastVoiceLength;
+        static float lastVoiceTime;
         //public static SoundDef[] abilitySFX = new SoundDef[4] { DefDatabase<SoundDef>.GetNamed("AK_SFX_Atkboost"), DefDatabase<SoundDef>.GetNamed("AK_SFX_Defboost"), DefDatabase<SoundDef>.GetNamed("AK_SFX_Healboost"), DefDatabase<SoundDef>.GetNamed("AK_SFX_Tactboost") };
         public static void LoadedGame()
         {
@@ -25,9 +25,8 @@ namespace AK_DLL
         {
             if (sound == null || !CanPlayNow()) return;
             lastVoiceLength = sound.Duration.max;
-            sound.PlayOneShotOnCamera(null);
+            sound.PlayOneShotOnCamera();
             lastVoiceTime = Time.realtimeSinceStartup;
-            return;
         }
 
         //随机播放技能语音

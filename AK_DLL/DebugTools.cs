@@ -68,7 +68,7 @@ namespace AK_DLL
         [DebugAction("MIS-AK Actions", "Print Operator Voice Defs", false, false, false, false, false, 0, false, allowedGameStates = AllowedGameStates.PlayingOnMap)]
         public static void PrintVoicePacks()
         {
-            OperatorDocument doc = Find.Selector.SelectedPawns?.FirstOrDefault((Pawn x) => true).GetDoc();
+            OperatorDocument doc = Find.Selector.SelectedPawns?.FirstOrDefault(pawn => true).GetDoc();
             if (doc is not { voicePack: { } voicePackDef }) return;
 
             List<SoundDef> sounds = new()

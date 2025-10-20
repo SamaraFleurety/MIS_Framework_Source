@@ -36,7 +36,7 @@ namespace AK_DLL
                 foreach (OperatorClassDef i in RIWindowHandler.operatorClasses.Values)
                 {
                     OperatorClassDef localClass = i;
-                    list.Add(new FloatMenuOption(i.label.Translate(), delegate ()
+                    list.Add(new FloatMenuOption(i.label.Translate(), delegate
                     {
                         operatorClass = localClass.sortingOrder;
                         operatorDef = RIWindowHandler.operatorDefs[operatorClass].Values.RandomElement();
@@ -52,8 +52,8 @@ namespace AK_DLL
                 List<FloatMenuOption> list = new();
                 foreach (OperatorDef i in RIWindowHandler.operatorDefs[operatorClass].Values)
                 {
-                    OperatorDef localOp = i;
-                    list.Add(new FloatMenuOption(i.nickname.Translate(), delegate ()
+                    //OperatorDef localOp = i;
+                    list.Add(new FloatMenuOption(i.nickname.Translate(), delegate
                     {
                         operatorDef = i;
                     }));

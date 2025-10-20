@@ -14,7 +14,7 @@ namespace AK_DLL
     public class ReserveOperatorDef : OperatorDef
     {
         public bool ignoreFixedAge = false;
-        public ReserveOperatorDef() : base()
+        public ReserveOperatorDef()
         {
             alwaysHidden = true;
             ignoreAutoFill = true;
@@ -183,14 +183,14 @@ namespace AK_DLL
             this.voicePackDef?.recruitSound.PlaySound();
 
             //档案系统
-            VAbility_AKATrackerContainer operatorID = Recruit_VAB();
+            VAbility_AKATrackerContainer operatorVabID = Recruit_VAB();
 
             //对vab容器进行aka技能以外的处理
-            Recruit_OperatorID(operatorID);
+            Recruit_OperatorID(operatorVabID);
             //(operatorID.AKATracker as AK_AbilityTracker).doc = doc;
             clothTemp.Clear();
 
-            Recruit_AKAbility(operatorID);
+            Recruit_AKAbility(operatorVabID);
 
             Recruit_PostEffects();
 

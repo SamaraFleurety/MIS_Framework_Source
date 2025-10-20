@@ -20,7 +20,7 @@ namespace AK_DLL
             {
                 Find.TickManager.Pause();
                 RIWindowHandler.continuousRecruit = TargetThingB != null;    //用target B做标记，要是不为null就是连续招募模式
-                UI.RIWindowHandler.OpenRIWindow(AKDefOf.AK_Prefab_yccMainMenu, TargetThingA, pawn, OpDetailType.Recruit /*RIWindowType.MainMenu,TargetThingA*/);
+                RIWindowHandler.OpenRIWindow(AKDefOf.AK_Prefab_yccMainMenu, TargetThingA, pawn /*RIWindowType.MainMenu,TargetThingA*/);
             }
             };
             yield return t;

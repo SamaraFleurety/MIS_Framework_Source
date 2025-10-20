@@ -54,7 +54,7 @@ namespace AK_DLL
                 LastSpineInstance ??= RIWindow_MainMenu.DrawSpine2DModel(spineDefname);
                 if (!LastSpineInstance.activeSelf) LastSpineInstance.SetActive(true);
 
-                Widgets.DrawTextureFitted(new Rect(AK_ModSettings.xOffset * 5, AK_ModSettings.yOffset * 5, 408, 408), RIWindow_MainMenu.GetOrSetSpineRenderTexture(LastSpineInstance, 1080, 1080), AK_ModSettings.ratio * 0.05f);
+                Widgets.DrawTextureFitted(new Rect(AK_ModSettings.xOffset * 5, AK_ModSettings.yOffset * 5, 408, 408), RIWindow_MainMenu.GetOrSetSpineRenderTexture(LastSpineInstance, 1080), AK_ModSettings.ratio * 0.05f);
             }
 
             GUI.color = color;

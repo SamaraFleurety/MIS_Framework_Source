@@ -8,11 +8,11 @@ namespace AK_DLL
     public class PatchDraftSound
     {
         [HarmonyPostfix]
-        public static void postfix(bool value, Pawn_DraftController __instance)
+        public static void Postfix(bool value, Pawn_DraftController __instance)
         {
             OperatorDocument doc = __instance.pawn.GetDoc();
-            if (doc == null) return;
-            if (doc.voicePack == null) return;
+            if (doc?.voicePack == null) return;
+
             if (__instance.Drafted)
                 doc.voicePack.draftSounds.RandomElement().PlaySound();
             else

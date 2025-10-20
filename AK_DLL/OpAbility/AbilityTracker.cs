@@ -7,7 +7,7 @@ namespace AK_DLL
     {
         public OperatorDocument doc;
 
-        public AK_AbilityTracker() : base()
+        public AK_AbilityTracker()
         {
         }
 

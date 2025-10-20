@@ -177,13 +177,13 @@ namespace AK_DLL.UI
             });*/
             //主界面按钮
             navBtn = GameObject.Find("btnHome");
-            navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate
             {
                 this.ReturnToParent(false);
             });
             //退出按钮
             navBtn = GameObject.Find("btnEscape");
-            navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate
             {
                 RIWindow_OperatorDetail.windowPurpose = OpDetailType.Recruit;
                 this.Close();
@@ -210,7 +210,7 @@ namespace AK_DLL.UI
             get
             {
                 GameObject classBtnPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("btnClassTemplate");
-                return GameObject.Instantiate(classBtnPrefab, classColumn);
+                return Object.Instantiate(classBtnPrefab, classColumn);
             }
         }
         /// <summary>
@@ -228,14 +228,14 @@ namespace AK_DLL.UI
                 classColumn = GameObject.Find("seriesSelectPanel").transform;
             }
             else classColumn = GameObject.Find("btnClassColumn").transform;
-            GameObject classBtnInstance;
+
             Utilities_Unity.ClearAllChild(classColumn); //直接清空所有老的职业图标 懒得复用了，感觉占不到几个性能
             int i = 0; //FIXME：晚点给删了
             foreach (int node in ActiveClasses)
             {
                 OperatorClassDef opClass = RIWindowHandler.operatorClasses[node];
                 // classBtnInstance = ClassButtonInstance;
-                classBtnInstance = DrawOneClassBtn(node);
+                GameObject classBtnInstance = DrawOneClassBtn(node);
                 //位置
                 Vector3 pos = classBtnInstance.transform.localPosition;
                 classBtnInstance.transform.localPosition = new Vector3(pos.x, pos.y * i);
@@ -278,7 +278,7 @@ namespace AK_DLL.UI
             GameObject btnCurrentSeries = GameObject.Find("btnSeries");
             RefreshSeriesBtnTexture();
             //btnCurrentSeries.GetComponent<Image>().sprite = Utilities_Unity.Image2Spirit(AllSeries[Series].Icon);
-            btnCurrentSeries.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            btnCurrentSeries.GetComponentInChildren<Button>().onClick.AddListener(delegate
             {
                 choosingSeries = !choosingSeries;
                 DrawSeriesPanel();
@@ -316,7 +316,7 @@ namespace AK_DLL.UI
             GameObject seriesBtn = DrawOneClassBtn_Functionless(AllSeries[seriesIndex].Icon, AllSeries[seriesIndex].label);
 
             int j = seriesIndex;
-            seriesBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            seriesBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate
             {
                 choosingSeries = false;
                 Series = j;
@@ -337,7 +337,7 @@ namespace AK_DLL.UI
             GameObject classBtnInstance = DrawOneClassBtn_Functionless(icon, label);
             //按钮 非实时
             int j = classIndex;
-            classBtnInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            classBtnInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate
             {
                 OperatorClass = j;
                 cachedOperatorList = RIWindowHandler.operatorDefs[OperatorClass].Values.ToList();
@@ -453,7 +453,7 @@ namespace AK_DLL.UI
             }
             int k = i;
             opPortraitInstance.GetComponentInChildren<Button>().onClick.RemoveAllListeners();
-            opPortraitInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            opPortraitInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate
             {
                 OpPortraitBtnOnClickListener(k);
                 /*RIWindowHandler.OpenRIWindow_OpDetail(AKDefOf.AK_Prefab_OpDetail, cachedOperatorList[k]);
@@ -483,7 +483,7 @@ namespace AK_DLL.UI
             get
             {
                 GameObject sortBtnPrefab = Bundle.LoadAsset<GameObject>("btnSortTemplate");
-                return GameObject.Instantiate(sortBtnPrefab, sorterColumnLoc);
+                return Object.Instantiate(sortBtnPrefab, sorterColumnLoc);
             }
         }
 
@@ -495,7 +495,7 @@ namespace AK_DLL.UI
             //按钮的显示文字
             textTMP.text = label;
             int k = sortID;
-            sortBtnInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            sortBtnInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate
             {
                 sortBtnInstance = ClickedBtn;
                 if (NeedSortTo(k))
@@ -615,7 +615,7 @@ namespace AK_DLL.UI
         {
             double meleeDPS = 0;
             double rangedDPS = 0;
-            double localDPS = 0;    //计算中间值
+            double localDPS;    //计算中间值
             ThingDef w = def.weapon;
             if (w != null)
             {
@@ -648,10 +648,16 @@ namespace AK_DLL.UI
                     VerbProperties verb = w.Verbs[0];
                     ProjectileProperties bullet = verb.defaultProjectile.projectile;
                     if (bullet == null) goto LABEL_NoRanged;
-                    FieldInfo damage = bullet.GetType().GetField("damageAmountBase", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                    FieldInfo damage = bullet.GetType().GetField("damageAmountBase", BindingFlags.NonPublic | BindingFlags.Instance);
                     //单发伤害
                     rangedDPS = (int)damage.GetValue(bullet);
-                    if (bullet.extraDamages != null) foreach (ExtraDamage l in bullet.extraDamages) rangedDPS += l.amount * Math.Min(l.chance, 1.0);
+                    if (bullet.extraDamages != null)
+                    {
+                        foreach (ExtraDamage l in bullet.extraDamages)
+                        {
+                            rangedDPS += l.amount * Math.Min(l.chance, 1.0);
+                        }
+                    }
 
                     double realCD = verb.warmupTime;
                     foreach (StatModifier k in w.statBases)
@@ -671,7 +677,7 @@ namespace AK_DLL.UI
                     rangedDPS /= realCD;
                 }
             }
-            return Math.Max(meleeDPS, rangedDPS); ;
+            return Math.Max(meleeDPS, rangedDPS);
         LABEL_NoRanged:
             return meleeDPS;
         }
@@ -735,10 +741,9 @@ namespace AK_DLL.UI
 
         private void MergeSort<T>(int lp, int rp, Func<T, T, bool> comparer, Func<OperatorDef, T> compraree)
         {
-            int middle;
             if (lp < rp)
             {
-                middle = (lp + rp) / 2;
+                int middle = (lp + rp) / 2;
 
                 MergeSort(lp, middle, comparer, compraree);
                 MergeSort(middle + 1, rp, comparer, compraree);
@@ -758,33 +763,15 @@ namespace AK_DLL.UI
         {
             if (sortType == (int)OperatorSortType.Alphabet)
             {
-                SortOperator<string>(delegate (string a, string b)
-                {
-                    return string.Compare(a, b) <= 0;
-                }, delegate (OperatorDef def)
-                {
-                    return AK_Tool.GetOperatorIDFrom(def.defName);
-                });
+                SortOperator((string a, string b) => string.CompareOrdinal(a, b) <= 0, (OperatorDef def) => AK_Tool.GetOperatorIDFrom(def.defName));
             }
             else if (sortType == (int)OperatorSortType.Dps)
             {
-                SortOperator<double>(delegate (double a, double b)
-                {
-                    return !(a <= b);
-                }, delegate (OperatorDef def)
-                {
-                    return DPSCalculator(def);
-                });
+                SortOperator((double a, double b) => !(a <= b), DPSCalculator);
             }
             else
             {
-                SortOperator<int>(delegate (int a, int b)
-                {
-                    return !(a <= b);
-                }, delegate (OperatorDef def)
-                {
-                    return def.SortedSkills[sortType].level;
-                });
+                SortOperator((int a, int b) => !(a <= b), (OperatorDef def) => def.SortedSkills[sortType].level);
             }
         }
         #endregion

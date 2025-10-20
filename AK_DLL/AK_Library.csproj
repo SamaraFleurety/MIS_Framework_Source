@@ -100,4 +100,8 @@
     </Reference>
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="DEL &quot;$(SolutionDir)\输出\AK_DLL.dll&quot;&#xD;&#xA;COPY &quot;$(TargetPath)&quot; &quot;$(SolutionDir)\输出\AK_DLL.dll&quot;" />
+  </Target>
+
 </Project>

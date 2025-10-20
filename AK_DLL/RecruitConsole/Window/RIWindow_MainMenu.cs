@@ -274,7 +274,7 @@ namespace AK_DLL.UI
 
         protected virtual void DrawNavBtn()
         {
-            GameObject.Find("BtnBack").GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            GameObject.Find("BtnBack").GetComponentInChildren<Button>().onClick.AddListener(delegate
             {
                 this.ReturnToParent();
             });
@@ -283,7 +283,7 @@ namespace AK_DLL.UI
         //左边6个主要功能
         protected virtual void DrawMainFeature()
         {
-            GameObject.Find("MBtn_Recruit").GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            GameObject.Find("MBtn_Recruit").GetComponentInChildren<Button>().onClick.AddListener(delegate
             {
                 //RIWindow_OperatorDetail.windowPurpose = OpDetailType.Recruit;
                 RIWindowHandler.OpenRIWindow(AKDefOf.AK_Prefab_yccOpList, purpose: OpDetailType.Recruit);
@@ -299,7 +299,7 @@ namespace AK_DLL.UI
 
         protected virtual void DrawSubFeature_ChangeSecretary()
         {
-            GameObject.Find("SBtn_ChangeSecretary").GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            GameObject.Find("SBtn_ChangeSecretary").GetComponentInChildren<Button>().onClick.AddListener(delegate
             {
                 RIWindowHandler.OpenRIWindow(AKDefOf.AK_Prefab_yccOpList, purpose: OpDetailType.Secretary);
                 this.Close(false);
@@ -330,7 +330,7 @@ namespace AK_DLL.UI
             {
                 temp
             };
-            temp.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            temp.GetComponentInChildren<Button>().onClick.AddListener(delegate
             {
                 Vector3 v3 = SecretaryLoc;
                 v3.z += 0.05f;
@@ -340,7 +340,7 @@ namespace AK_DLL.UI
 
             temp = GameObject.Find("SBtn_Sec_ScaleDown");
             adjustSecBtns.Add(temp);
-            temp.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            temp.GetComponentInChildren<Button>().onClick.AddListener(delegate
             {
                 Vector3 v3 = SecretaryLoc;
                 v3.z -= 0.05f;

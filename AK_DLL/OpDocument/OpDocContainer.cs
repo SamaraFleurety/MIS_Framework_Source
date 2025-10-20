@@ -7,7 +7,7 @@ namespace AK_DLL
     {
         public VAbility_Operator va;
 
-        public OpDocContainer() : base()
+        public OpDocContainer()
         {
         }
 

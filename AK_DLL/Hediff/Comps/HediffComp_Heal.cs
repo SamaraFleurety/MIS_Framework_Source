@@ -26,7 +26,7 @@ namespace AK_DLL
                         else
                         {
                             injury.Heal(heal);
-                            heal -= heal;
+                            //heal -= heal;
                             break;
                         }
                     }
@@ -55,6 +55,6 @@ namespace AK_DLL
             Scribe_Values.Look(ref age, "age");
         }
 
-        public int age = 0;
+        public int age;
     }
 }

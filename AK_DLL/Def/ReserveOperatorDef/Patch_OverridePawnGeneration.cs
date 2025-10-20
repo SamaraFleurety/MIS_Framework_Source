@@ -1,16 +1,15 @@
 ﻿using HarmonyLib;
-using System;
 using Verse;
 
 namespace AK_DLL
 {
-    [HarmonyPatch(typeof(PawnGenerator), "GeneratePawn", new Type[] { typeof(PawnGenerationRequest) })]
+    [HarmonyPatch(typeof(PawnGenerator), "GeneratePawn", new[] { typeof(PawnGenerationRequest) })]
     public class Patch_OverridePawnGeneration
     {
         [HarmonyPrefix]
         public static bool Prefix(PawnGenerationRequest request, ref Pawn __result)
         {
-            if (OperatorDef.currentlyGenerating || request.KindDef.GetModExtension<Ext_LinkedReservedOperatorDef>() is not Ext_LinkedReservedOperatorDef ext)
+            if (OperatorDef.currentlyGenerating || request.KindDef.GetModExtension<Ext_LinkedReservedOperatorDef>() is not { } ext)
             {
                 return HarmonyPrefixRet.keepOriginal;
             }

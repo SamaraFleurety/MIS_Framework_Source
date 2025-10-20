@@ -25,11 +25,11 @@ namespace AK_DLL
         public OperatorDef operatorDef;
         //public int oripathySeverity = 0;
 
-        public bool forceDisableNL = false;
+        public bool forceDisableNL;
 
         public int preferedSkin = OperatorStandType.Elite2;    //选定立绘,0是精2, 1是精0, 后面是换装
 
-        public OperatorFashionSetDef pendingFashionDef = null;
+        public OperatorFashionSetDef pendingFashionDef;
 
         public OperatorDocument()
         {
@@ -63,7 +63,7 @@ namespace AK_DLL
             if (apparel == null || apparel.Count == 0) return;
             foreach (Thing i in apparel)
             {
-                if (i != null && !i.Destroyed) i.Destroy(DestroyMode.Vanish);
+                if (i != null && !i.Destroyed) i.Destroy();
             }
             apparel.Clear();
         }
@@ -97,7 +97,7 @@ namespace AK_DLL
             Scribe_Defs.Look(ref this.voicePack, "voicePackDef");
             Scribe_Values.Look(ref this.operatorID, "defName");
             Scribe_Values.Look(ref this.currentExist, "alive");
-            Scribe_References.Look<Pawn>(ref this.pawn, "operator", true);
+            Scribe_References.Look(ref this.pawn, "operator", true);
             Scribe_References.Look(ref this.weapon, "weapon", true);
 
             Scribe_Values.Look(ref this.preferredFashionSet, "fashionSet", -1);
@@ -105,9 +105,9 @@ namespace AK_DLL
 
             Scribe_Collections.Look(ref this.skillLevel, "skill", LookMode.Def, LookMode.Value);
             Scribe_Defs.Look(ref this.operatorDef, "def");
-            Scribe_Values.Look<int>(ref this.preferedAbility, "preferedAbility", 0, true);
+            Scribe_Values.Look(ref this.preferedAbility, "preferedAbility", 0, true);
             //Scribe_Values.Look<int>(ref this.oripathySeverity, "oriSev", 0, true);
-            Scribe_Values.Look<int>(ref this.preferedSkin, "skin");
+            Scribe_Values.Look(ref this.preferedSkin, "skin");
 
             Scribe_Defs.Look(ref this.pendingFashionDef, "fashionDef");
 

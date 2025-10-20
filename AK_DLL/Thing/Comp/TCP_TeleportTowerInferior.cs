@@ -43,7 +43,7 @@ namespace AK_DLL
                     continue;
                 }*/
                 TC_TeleportTowerSuperior j = towers[i];
-                yield return new FloatMenuOption("AK_TeleportToTower".Translate() + j.Alias, delegate ()
+                yield return new FloatMenuOption("AK_TeleportToTower".Translate() + j.Alias, delegate
                 {
                     //selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AKDefOf.AK_Job_UseTeleportTower, this.parent, j.parent));
                     selPawn.DeSpawn(DestroyMode.QuestLogic);

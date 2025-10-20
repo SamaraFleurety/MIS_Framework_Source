@@ -35,8 +35,8 @@ namespace AK_SpineExtention
         public int IdleInterval => Props.IdleInterval;
 
         #endregion
-        private int completeTimes = 0;
-        private int clickCounter = 0;
+        private int completeTimes;
+        private int clickCounter;
 
         private void CompleteTimeCounter(TrackEntry trackEntry) => completeTimes++;
         private void ResetCompleteTime(TrackEntry trackEntry) => completeTimes = 0;
@@ -67,7 +67,7 @@ namespace AK_SpineExtention
 
         private void TryDoInteract()
         {
-            if (SkeletonInstanceInt?.AnimationState.GetCurrent(0).Animation.Name == "Interact") return;
+            if (!SkeletonInstanceInt || SkeletonInstanceInt.AnimationState.GetCurrent(0).Animation.Name == "Interact") return;
             TrackEntry track3 = SkeletonInstanceInt.AnimationState.SetAnimation(0, Interact, false);
             //track3.Start += delegate { };
             track3.Complete += CompleteTimeCounter;
@@ -77,7 +77,7 @@ namespace AK_SpineExtention
         protected override void OnEnable()
         {
             ResetAllParams();
-            if (SkeletonInstanceInt == null || props == null) return;
+            if (!SkeletonInstanceInt || props == null) return;
 
             TrackEntry track0 = SkeletonInstanceInt.AnimationState.SetAnimation(0, Idle, false);
             track0.Complete += CompleteTimeCounter;

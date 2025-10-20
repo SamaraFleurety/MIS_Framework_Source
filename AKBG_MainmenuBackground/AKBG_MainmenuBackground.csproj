@@ -77,7 +77,7 @@
     <Compile Include="Window_BackgroundMod.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AKR_WeightedRandomUnified\AKR_WeightedRandomUnified.csproj">
+    <ProjectReference Include="..\AKR_WeightedRandomUnified\2AKR_WeightedRandomUnified.csproj">
       <Project>{ce31c711-e3f1-43d2-ad6a-216097ee20ab}</Project>
       <Name>AKR_WeightedRandomUnified</Name>
     </ProjectReference>

@@ -127,11 +127,10 @@
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\AK_TypeDef\1AK_TypeDef.csproj">
-      <Project>{ff2ece8f-73b3-49f0-82e6-bc15c45e33a6}</Project>
+      <Project>{87b869da-d76d-4eba-9f83-9da19451c202}</Project>
       <Name>1AK_TypeDef</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

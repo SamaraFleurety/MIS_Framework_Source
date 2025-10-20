@@ -81,7 +81,8 @@ namespace AK_DLL.Bezier
 
         public Vector3 GetPoint (float t)
         {
-            return BezierUtil.GetPointCubic(start, control1, control2, end, t);
+            //return BezierUtil.GetPointCubic(start, control1, control2, end, t);
+            return Vector3.zero;
         }
         public void ExposeData()
         {

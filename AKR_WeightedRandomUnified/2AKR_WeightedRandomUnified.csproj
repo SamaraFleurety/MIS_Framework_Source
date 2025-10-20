@@ -3,15 +3,10 @@
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
     <LangVersion>9.0</LangVersion>
-    <AssemblyName>AKA_Ability</AssemblyName>
-    <RootNamespace>AKA_Ability</RootNamespace>
-    <Copyright>Copyright ©  2023</Copyright>
+    <AssemblyTitle>AKR_WeightedRandomUnified</AssemblyTitle>
+    <RootNamespace>AKR_Random</RootNamespace>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Folder Include="Framework\SharedData\Range\" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\AK_TypeDef\1AK_TypeDef.csproj">
@@ -28,10 +23,6 @@
       <HintPath>..\Rely\1.6\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="System.Collections.Generic.RedBlack">
-      <HintPath>..\Rely\System.Collections.Generic.RedBlack.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\Rely\1.6\UnityEngine.dll</HintPath>
       <Private>False</Private>
@@ -44,14 +35,10 @@
       <HintPath>..\Rely\1.6\UnityEngine.IMGUIModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.TextRenderingModule">
-      <HintPath>..\Rely\1.6\UnityEngine.TextRenderingModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="DEL &quot;$(SolutionDir)\输出\AK_Ability.dll&quot;&#xD;&#xA;COPY &quot;$(TargetPath)&quot; &quot;$(SolutionDir)\输出\AK_Ability.dll&quot;" />
+    <Exec Command="DEL &quot;$(SolutionDir)\输出\2AKR_WeightedRandomUnified.dll&quot;&#xD;&#xA;COPY &quot;$(TargetPath)&quot; &quot;$(SolutionDir)\输出\2AKR_WeightedRandomUnified.dll&quot;" />
   </Target>
 
 </Project>

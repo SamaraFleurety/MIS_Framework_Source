@@ -16,7 +16,7 @@
     <ProjectReference Include="..\AKM_MusicPlayer\AKM_MusicPlayer.csproj">
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\AKR_WeightedRandomUnified\AKR_WeightedRandomUnified.csproj">
+    <ProjectReference Include="..\AKR_WeightedRandomUnified\2AKR_WeightedRandomUnified.csproj">
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\AK_TypeDef\1AK_TypeDef.csproj">

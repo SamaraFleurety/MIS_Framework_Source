@@ -44,9 +44,11 @@
     </Reference>
     <Reference Include="FSUI">
       <HintPath>..\Rely\FSUI.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="FS_UGUIFramework">
       <HintPath>..\Rely\FS_UGUIFramework.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -70,6 +72,7 @@
     </Reference>
     <Reference Include="UnityEngine.AssetBundleModule">
       <HintPath>..\Rely\UnityEngine.AssetBundleModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\Rely\UnityEngine.CoreModule.dll</HintPath>
@@ -114,8 +117,9 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AKA_Ability\AKA_Ability.csproj">
-      <Project>{92CFB99E-4D93-47F2-A4AD-DD0668EFE739}</Project>
+      <Project>{6a8ad42a-d718-4c82-88dc-617aec6af753}</Project>
       <Name>AKA_Ability</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\AK_DLL\AK_Library.csproj">
       <Project>{7b4c58f6-3566-4dec-927f-9d30bdaf8d22}</Project>

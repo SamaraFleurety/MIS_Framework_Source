@@ -82,6 +82,7 @@ namespace AKA_Ability
             Text.Anchor = anchor;
         }
     }
+
     public class ItemReward
     {
         public ThingDef thing;
@@ -90,6 +91,7 @@ namespace AKA_Ability
 
         public int count;
     }
+
     public class RandItemReward
     {
         public List<ThingCategoryDef> thingCategories;
@@ -102,6 +104,7 @@ namespace AKA_Ability
 
         public List<ThingDef> randomFrom;
     }
+
     public enum RewardCategory
     {
         Poor,

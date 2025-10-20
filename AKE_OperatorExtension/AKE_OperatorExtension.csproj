@@ -65,6 +65,7 @@
     <Reference Include="UnityEngine.AssetBundleModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Rely\UnityEngine.AssetBundleModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\Rely\UnityEngine.CoreModule.dll</HintPath>
@@ -125,8 +126,9 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AKA_Ability\AKA_Ability.csproj">
-      <Project>{92cfb99e-4d93-47f2-a4ad-dd0668efe739}</Project>
+      <Project>{6a8ad42a-d718-4c82-88dc-617aec6af753}</Project>
       <Name>AKA_Ability</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\AKS_ShieldFramework\AKS_ShieldFramework.csproj">
       <Project>{8c33efd6-9006-4cf3-8c33-50cc0418238c}</Project>

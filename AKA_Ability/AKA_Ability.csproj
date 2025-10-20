@@ -1,226 +1,55 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{92CFB99E-4D93-47F2-A4AD-DD0668EFE739}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AKA_Ability</RootNamespace>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>9.0</LangVersion>
     <AssemblyName>AKA_Ability</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-    <LangVersion>9.0</LangVersion>
+    <RootNamespace>AKA_Ability</RootNamespace>
+    <Copyright>Copyright ©  2023</Copyright>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>9.0</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>9.0</LangVersion>
-  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Framework\SharedData\Range\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AK_TypeDef\1AK_TypeDef.csproj" />
+  </ItemGroup>
+
   <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>..\Rely\0Harmony.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="1AK_TypeDef">
-      <HintPath>..\AK_TypeDef\bin\Debug\1AK_TypeDef.dll</HintPath>
-    </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\Rely\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\Rely\1.6\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="System" />
     <Reference Include="System.Collections.Generic.RedBlack">
       <HintPath>..\Rely\System.Collections.Generic.RedBlack.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>..\Rely\Unity.TextMeshPro.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\Rely\UnityEngine.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.AIModule">
-      <HintPath>..\Rely\UnityEngine.AIModule.dll</HintPath>
+      <HintPath>..\Rely\1.6\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\Rely\UnityEngine.CoreModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.ImageConversionModule">
-      <HintPath>..\Rely\UnityEngine.ImageConversionModule.dll</HintPath>
+      <HintPath>..\Rely\1.6\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>..\Rely\UnityEngine.IMGUIModule.dll</HintPath>
+      <HintPath>..\Rely\1.6\UnityEngine.IMGUIModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.TextCoreModule">
-      <HintPath>..\Rely\UnityEngine.TextCoreModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Rely\UnityEngine.TextRenderingModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>..\Rely\UnityEngine.UI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UIModule">
-      <HintPath>..\Rely\UnityEngine.UIModule.dll</HintPath>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>..\Rely\1.6\UnityEngine.TextRenderingModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AbilityEffect\AbilityEffectBase.cs" />
-    <Compile Include="AbilityEffect\AddHediff\AbilityEffect_AddHediff.cs" />
-    <Compile Include="AbilityEffect\AddHediff\AddStat\HediffStageProperty.cs" />
-    <Compile Include="AbilityEffect\AddHediff\AddStat\Hediff_DynamicStage.cs" />
-    <Compile Include="AbilityEffect\AddHediff\AddStat\Hediff_DynamicStage_Stacks.cs" />
-    <Compile Include="AbilityEffect\AddHediff\AddStat\Patch_BulletDmgFactor.cs" />
-    <Compile Include="AbilityEffect\AddHediff\DelayedBloodLoss\AE_DelayedBloodLoss.cs" />
-    <Compile Include="AbilityEffect\AddHediff\DelayedBloodLoss\HCP_BloodLoss.cs" />
-    <Compile Include="AbilityEffect\AddHediff\DelayedBloodLoss\HC_BloodLoss.cs" />
-    <Compile Include="AbilityEffect\AddHediff\DelayedSelfExplosion\AE_DelayedSelfExplosion.cs" />
-    <Compile Include="AbilityEffect\AddHediff\DelayedSelfExplosion\HCP_SelfExplosion.cs" />
-    <Compile Include="AbilityEffect\AddHediff\DelayedSelfExplosion\HC_SelfExplosion.cs" />
-    <Compile Include="AbilityEffect\AddHediff\DpsEnhance\AE_DpsEnhance_Melee.cs" />
-    <Compile Include="AbilityEffect\AddHediff\DpsEnhance\AE_DpsEnhance_Ranged.cs" />
-    <Compile Include="AbilityEffect\AddHediff\DpsEnhance\HCP_DpsEnhance_Melee.cs" />
-    <Compile Include="AbilityEffect\AddHediff\DpsEnhance\HCP_DpsEnhance_Ranged.cs" />
-    <Compile Include="AbilityEffect\AddHediff\DpsEnhance\HC_DpsEnhance_Melee.cs" />
-    <Compile Include="AbilityEffect\AddHediff\DpsEnhance\HC_DpsEnhance_Ranged.cs" />
-    <Compile Include="AbilityEffect\AddHediff\Regrow\AE_Regrow.cs" />
-    <Compile Include="AbilityEffect\AddHediff\Regrow\HC_Regrow.cs" />
-    <Compile Include="AbilityEffect\AE_SpawnMote.cs" />
-    <Compile Include="AbilityEffect\AssignJob\JobDriver_AbilityAssignedJob.cs" />
-    <Compile Include="AbilityEffect\Command\AECommand_Window.cs" />
-    <Compile Include="AbilityEffect\Command\AE_CommandTerminal.cs" />
-    <Compile Include="AbilityEffect\Command\AE_CopySkill.cs" />
-    <Compile Include="AbilityEffect\Command\AE_RewardDef.cs" />
-    <Compile Include="AbilityEffect\Command\AE_RewardTool.cs" />
-    <Compile Include="AbilityEffect\CostCharges\AE_CostChargeStatic.cs" />
-    <Compile Include="AbilityEffect\AssignJob\AE_AssignJob.cs" />
-    <Compile Include="AbilityEffect\Effect\AE_CatchMother.cs" />
-    <Compile Include="AbilityEffect\DelayedEffects\AE_DelayedEffects.cs" />
-    <Compile Include="AbilityEffect\Effect\AE_DestroyThing.cs" />
-    <Compile Include="AbilityEffect\FX\AE_DoEffectFX.cs" />
-    <Compile Include="AbilityEffect\Effect\AE_Explode.cs" />
-    <Compile Include="AbilityEffect\Effect\AE_FireExtinguisher.cs" />
-    <Compile Include="AbilityEffect\Effect\AE_GainTrait.cs" />
-    <Compile Include="AbilityEffect\Effect\AbilityEffect_Heal.cs" />
-    <Compile Include="AbilityEffect\Effect\AE_ChangeHair.cs" />
-    <Compile Include="AbilityEffect\Effect\AE_Illustrious_Dilapidate.cs" />
-    <Compile Include="AbilityEffect\Effect\AE_Jump.cs" />
-    <Compile Include="AbilityEffect\Effect\AE_MentalBreak.cs" />
-    <Compile Include="AbilityEffect\Effect\AE_SendLetter.cs" />
-    <Compile Include="AbilityEffect\Effect\AE_SendMessage.cs" />
-    <Compile Include="AbilityEffect\Effect\AE_Kill.cs" />
-    <Compile Include="AbilityEffect\Effect\AE_ShootProjectile.cs" />
-    <Compile Include="AbilityEffect\Effect\AE_TeleportSelfToTarget.cs" />
-    <Compile Include="AbilityEffect\Effect\AE_VanillaEffecterMaintain.cs" />
-    <Compile Include="AbilityEffect\Effect\Mass\AbilityMassEffectBase.cs" />
-    <Compile Include="AbilityEffect\Effect\Mass\AME_Illustrious_Inory.cs" />
-    <Compile Include="AbilityEffect\Effect\Mass\AME_Illustrious_RiseFall.cs" />
-    <Compile Include="AbilityEffect\Effect\Mass\AME_Singularity.cs" />
-    <Compile Include="AbilityEffect\ITargetingValidator.cs" />
-    <Compile Include="AbilityEffect\Reload\AE_ReloadFromThing.cs" />
-    <Compile Include="AbilityEffect\Summon\AE_SummonBase.cs" />
-    <Compile Include="AbilityEffect\Summon\AE_SummonPawn.cs" />
-    <Compile Include="AbilityEffect\Summon\AE_SummonThing.cs" />
-    <Compile Include="AbilityEffect\Summon\AE_SummonThings_Radius.cs" />
-    <Compile Include="Framework\AbilityContainer\HCP_TrackerContainer.cs" />
-    <Compile Include="Framework\AbilityEffectsDef.cs" />
-    <Compile Include="Framework\Conditioners\CastConditioner\CC_HPThresholdOrDowned.cs" />
-    <Compile Include="Framework\Conditioners\CastConditioner\CC_NeedFullCharge.cs" />
-    <Compile Include="Framework\Comp\CompEquippable_AKAbility.cs" />
-    <Compile Include="Framework\Conditioners\CastConditioner\CC_NeedSharedCharge.cs" />
-    <Compile Include="Framework\Conditioners\InertiaConditioner\IC_Grouped.cs" />
-    <Compile Include="Framework\Conditioners\InertiaConditioner\IC_Manual.cs" />
-    <Compile Include="Framework\Conditioners\InertiaConditioner\InertiaConditioner_Base.cs" />
-    <Compile Include="Framework\Cooldown\CD_TrackerShared.cs" />
-    <Compile Include="Framework\Gizmos\ExtraGizmos\ExtraGizmoDrawer_Base.cs" />
-    <Compile Include="Framework\Gizmos\ExtraGizmos\EGD_SelectAllSummoned.cs" />
-    <Compile Include="Framework\Gizmos\Gizmo_SelectAllSummon.cs" />
-    <Compile Include="Framework\SharedData\AbilityTrackerSharedData_Base.cs" />
-    <Compile Include="AbilityEffect\Reload\AbilityReload.cs" />
-    <Compile Include="Framework\SharedData\SD_SharedCharge.cs" />
-    <Compile Include="Framework\Conditioners\TickCondition\TickCondion_Base.cs" />
-    <Compile Include="Framework\Conditioners\TickCondition\TiC_ColonistOnly.cs" />
-    <Compile Include="Harmony\Patch_CraftQualityOffset.cs" />
-    <Compile Include="Summon\Patch_AllowTakeOrder.cs" />
-    <Compile Include="AKA_Algorithm.cs" />
-    <Compile Include="AKA_Utilities.cs" />
-    <Compile Include="AbilityEffect\DelayedEffects\DelayedEffectDef.cs" />
-    <Compile Include="AbilityEffect\DelayedEffects\Effectors\DelayedEffectorBase.cs" />
-    <Compile Include="AbilityEffect\DelayedEffects\Effectors\Effector_ShootProjectile.cs" />
-    <Compile Include="Framework\AbilityContainer\ACP_AbilityAddon.cs" />
-    <Compile Include="Framework\AbilityContainer\TCP_AKATracker.cs" />
-    <Compile Include="Framework\AbilityInstance\AKAbility_Base.cs" />
-    <Compile Include="Framework\AbilityInstance\AKAbility_AutoSelf.cs" />
-    <Compile Include="Framework\AbilityInstance\AKAbility_SelfTarget.cs" />
-    <Compile Include="Framework\AbilityInstance\AKAbility_Auto.cs" />
-    <Compile Include="Framework\AbilityInstance\AKAbility_Summon.cs" />
-    <Compile Include="Framework\AbilityInstance\AKAbility_Targetor.cs" />
-    <Compile Include="Framework\AbilityContainer\AbilityTracker.cs" />
-    <Compile Include="Framework\AbilityInstance\DelayedAbility.cs" />
-    <Compile Include="Framework\Conditioners\CastConditioner\CastConditioner_Base.cs" />
-    <Compile Include="Framework\Conditioners\CastConditioner\CC_Drafted.cs" />
-    <Compile Include="Framework\Conditioners\CastConditioner\CC_HPThreshold.cs" />
-    <Compile Include="Framework\Conditioners\CastConditioner\CC_NeedCharge.cs" />
-    <Compile Include="Framework\Conditioners\CastConditioner\CC_SummonLimit.cs" />
-    <Compile Include="Framework\Cooldown\CD_Passive.cs" />
-    <Compile Include="Framework\Cooldown\CD_Stricken.cs" />
-    <Compile Include="Framework\Cooldown\Cooldown_Regen.cs" />
-    <Compile Include="Framework\AbilityContainer\VAbility_AKATrackerContainer.cs" />
-    <Compile Include="Framework\Cooldown\CD_Illustrious_Dilapidate.cs" />
-    <Compile Include="Framework\Cooldown\Patch_PawnStricken.cs" />
-    <Compile Include="Framework\Gizmos\Gizmo_AbilityCast_Action.cs" />
-    <Compile Include="Framework\Gizmos\Gizmo_AbilityCast_Targetor.cs" />
-    <Compile Include="Framework\Gizmos\Gizmo_AbilityCast_Base.cs" />
-    <Compile Include="Framework\Gizmos\Gizmo_AbilityCast_Toggle.cs" />
-    <Compile Include="AbilityEffect\DelayedEffects\GC_DelayedAbilityManager.cs" />
-    <Compile Include="Framework\Range\RangeWorker_Base.cs" />
-    <Compile Include="Framework\Range\RangeWorker_Illustrious_Dilapidate.cs" />
-    <Compile Include="Harmony\PatchMain.cs" />
-    <Compile Include="Framework\AKAbilityDef.cs" />
-    <Compile Include="Harmony\transpilertest.cs" />
-    <Compile Include="Summon\PawnClass_Summoned.cs" />
-    <Compile Include="Summon\TCP_SummonedProperties.cs" />
-    <Compile Include="TypeDef.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>DEL "$(SolutionDir)\输出\AK_Ability.dll"
-COPY "$(TargetPath)" "$(SolutionDir)\输出\AK_Ability.dll"</PostBuildEvent>
-  </PropertyGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="DEL &quot;$(SolutionDir)\输出\AK_Ability.dll&quot;&#xD;&#xA;COPY &quot;$(TargetPath)&quot; &quot;$(SolutionDir)\输出\AK_Ability.dll&quot;" />
+  </Target>
+
 </Project>

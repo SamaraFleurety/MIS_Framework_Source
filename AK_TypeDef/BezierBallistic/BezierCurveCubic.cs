@@ -72,9 +72,9 @@ namespace AK_DLL.Bezier
             {
                 return new Vector3
                     (
-                        start.x + (end.x - start.x) * p.x - (end.y - start.y) * p.y,
+                        start.x + (end.x - start.x) * p.x - (end.y - start.z) * p.z,
                         0,
-                        start.z + (end.z - start.y) * p.x + (end.x - start.x) * p.y * verticalFlip
+                        start.z + (end.z - start.z) * p.x + (end.x - start.x) * p.z * verticalFlip
                     );
             }
         }

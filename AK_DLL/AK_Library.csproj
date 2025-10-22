@@ -37,8 +37,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\Rely\1.6\Assembly-CSharp.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\Rely\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="com.rlabrecque.steamworks.net">
       <HintPath>..\Rely\com.rlabrecque.steamworks.net.dll</HintPath>

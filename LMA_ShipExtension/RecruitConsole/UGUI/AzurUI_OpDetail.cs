@@ -108,7 +108,7 @@ namespace LMA_Lib.UGUI
         {
             get
             {
-                GameObject traitPrefab = TypeDef.AzurAsset.LoadAsset<GameObject>("RelationDetails");
+                GameObject traitPrefab = TypeDef.AzurAsset.LoadAsset<GameObject>("RelationsDetails");
                 GameObject traitInstance = GameObject.Instantiate(traitPrefab, relationPanel);
                 return traitInstance;
             }

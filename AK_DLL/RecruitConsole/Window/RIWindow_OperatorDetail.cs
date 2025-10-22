@@ -267,7 +267,7 @@ namespace AK_DLL.UI
         private const string OpL2DRenderTargetName = "L2DRenderTarget"; //干员动态立绘的渲染目标的名字
 
         #region 快捷属性
-        protected static OperatorDef OperatorDef => RIWindowHandler.def;
+        public static OperatorDef OperatorDef => RIWindowHandler.def;
 
         public static Thing RecruitConsole => RIWindowHandler.RecruitConsole;
 

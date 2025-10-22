@@ -27,6 +27,8 @@ namespace AKA_Ability
             Scribe_Values.Look(ref stacks, "stacks", 1);
         }
 
+        public override string Label => base.Label + $"x {stacks}层";
+
         protected override void RefreshStage()
         {
             if (cachedStage != null) return;
@@ -63,7 +65,7 @@ namespace AKA_Ability
                 {
                     capacity = modifier.capacity,
                     offset = modifier.offset * stacks,
-                    postFactor = modifier.postFactor * stacks,
+                    postFactor = (modifier.postFactor - 1) * stacks + 1,
                     statFactorMod = modifier.statFactorMod,
                     setMaxCurveOverride = modifier.setMaxCurveOverride,
                     setMaxCurveEvaluateStat = modifier.setMaxCurveEvaluateStat

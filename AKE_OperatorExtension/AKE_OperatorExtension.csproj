@@ -121,6 +121,7 @@
     <Compile Include="Phrolova\Pawn_Phrolova.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SakiChan\Bullet_SakiChan.cs" />
+    <Compile Include="SakiChan\Ext_MultiSegBezierBullet.cs" />
     <Compile Include="SakiChan\Patch_TrailRenderAlternativeTimeScale.cs" />
     <Compile Include="TypeDef.cs" />
   </ItemGroup>

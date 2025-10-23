@@ -14,6 +14,9 @@ namespace LMA_Lib.UGUI
 {
     public class AzurUI_OpDetail : RIWindow_OperatorDetail
     {
+        //key是defname，val是贴图路径
+        static Dictionary<SkillDef, Sprite> skillIcon = null;
+
         protected override GameObject TraitBtnInstance
         {
             get
@@ -36,6 +39,27 @@ namespace LMA_Lib.UGUI
             return navBtn;
         }
 
+        const float SKILL_ICON_SIZE = 24f;
+
+        static string skillIconPath = "UI/SkillIcons/";
+        public override void Initialize()
+        {
+            base.Initialize();
+            if (skillIcon == null)
+            {
+                skillIcon = new();
+                foreach (SkillDef def in DefDatabase<SkillDef>.AllDefs)
+                {
+                    Texture2D iconTex = TypeDef.AzurAsset.LoadAsset<Texture2D>(skillIconPath + def.defName);
+                    Sprite sprite = Sprite.Create(iconTex, new Rect(0, 0, SKILL_ICON_SIZE, SKILL_ICON_SIZE), new Vector2(0.5f, 0.5f));
+                    if (iconTex != null)
+                    {
+                        skillIcon.Add(def, sprite);
+                    }
+                }
+            }
+        }
+
         #region 原版技能点
         //此面板修改极大
         protected override void DrawVanillaSkills()
@@ -46,8 +70,12 @@ namespace LMA_Lib.UGUI
             for (int i = 0; i < AK_DLL.TypeDef.SortOrderSkill.Count; ++i)
             {
                 skillBar = skillBarPanel.transform.GetChild(i).gameObject;
+                //技能图标
+                if (skillIcon.TryGetValue(OperatorDef.SortedSkills[i].skill, out Sprite sprite))
+                {
+                    skillBar.transform.GetChild(0).GetChild(3).GetComponent<Image>().sprite = sprite;
+                }
                 //技能名字
-
                 skillBar.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = $"<color={GetSkillLabelColor(OperatorDef.SortedSkills[i])}>{OperatorDef.SortedSkills[i].skill.label.Translate()}</color>";
                 //技能等级 显示与滑动条
                 skillBar.transform.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text = OperatorDef.SortedSkills[i].level.ToString();
@@ -101,6 +129,11 @@ namespace LMA_Lib.UGUI
             DrawRelationPanel();
         }
 
+        protected override Vector3 OpStaticStandOffset()
+        {
+            return new Vector3(-320, -50, 1);
+        }
+
         #region 人际关系
         static Transform relationPanel;
         //人际关系按钮
@@ -116,6 +149,7 @@ namespace LMA_Lib.UGUI
 
         void DrawRelationPanel()
         {
+            if (OperatorDef.relations.NullOrEmpty()) return;
             relationPanel = GameObject.Find("RelationsLayout").transform;
             foreach (string relation in OperatorDef.relations.Keys)
             {

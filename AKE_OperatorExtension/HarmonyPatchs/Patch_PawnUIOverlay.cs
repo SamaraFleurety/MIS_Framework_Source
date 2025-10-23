@@ -73,13 +73,14 @@ namespace AKE_OperatorExtension
 
         [HarmonyPostfix]
         [HarmonyPatch(typeof(PawnRenderer), "ParallelGetPreRenderResults")]
-        public static bool Prefix_ParallelGetPreRenderResults(Pawn ___pawn, ref bool disableCache)
+        public static void Prefix_ParallelGetPreRenderResults(Pawn ___pawn, ref bool disableCache)
         {
             if (___pawn.RaceProps.Humanlike && AK_ModSettings.drawOutOfCameraZoom)
             {
                 disableCache = true;
+
             }
-            return true;
+            //return HarmonyPrefixRet.keepOriginal;;
         }
     }
 }

@@ -842,7 +842,7 @@ namespace AK_DLL.UI
             if (preferredSkin < 1000)
             {
                 OpStand.SetActive(true);
-                AK_Tool.DrawStaticOperatorStand(OperatorDef, preferredSkin, OpStand);
+                AK_Tool.DrawStaticOperatorStand(OperatorDef, preferredSkin, OpStand, OpStaticStandOffset());
             }
             //l2d
             else if (preferredSkin < 2000)
@@ -870,6 +870,12 @@ namespace AK_DLL.UI
                 compImage.material.mainTexture = camera.targetTexture;*/
                 compImage.material.mainTexture = RIWindow_MainMenu.GetOrSetSpineRenderTexture(spineInstance);
             }
+        }
+
+        //记得x是x，y是环世界一般意义的z，z是缩放！！！
+        protected virtual Vector3 OpStaticStandOffset()
+        {
+            return Vector3.zero;
         }
 
         protected void ChangeStandTo(int val, bool forceChange = false, StandType standType = StandType.Static)

@@ -1,9 +1,9 @@
 ﻿using AK_DLL;
+using AK_DLL.Bezier;
 using RimWorld;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using Verse;
-using AK_DLL.Bezier;
 
 namespace AKE_OperatorExtension
 {
@@ -22,10 +22,7 @@ namespace AKE_OperatorExtension
         {
             get
             {
-                if (ext_Bezier == null)
-                {
-                    ext_Bezier = this.def.GetModExtension<Ext_MultiSegBezierBullet>();
-                }
+                ext_Bezier ??= this.def.GetModExtension<Ext_MultiSegBezierBullet>();
                 return ext_Bezier;
             }
         }
@@ -59,9 +56,9 @@ namespace AKE_OperatorExtension
             float seg = BezierSegmentCount;
             return new Vector3
                 (
-                    origin.y + (float)x / seg * (destination.x - origin.x),
+                    origin.y + (x / seg * (destination.x - origin.x)),
                     0,
-                    origin.y + (float)x / seg * (destination.y - origin.y)
+                    origin.y + (x / seg * (destination.y - origin.y))
                 );
         }
         #endregion 向量计算
@@ -124,7 +121,7 @@ namespace AKE_OperatorExtension
                 Vector3 perpendicular = new(-direction.y, 0, direction.x);
                 return base.DrawPos + (perpendicular * pendulum);*/
                 RecalculateCurve();
-                float t = Mathf.Clamp01((float)tickAfterSpawned_CurrentCurve / (StartingTicksToImpact / (float)BezierSegmentCount));
+                float t = Mathf.Clamp01(tickAfterSpawned_CurrentCurve / (StartingTicksToImpact / BezierSegmentCount));
                 return bezierCurve.GetPoint(t);
             }
         }

@@ -71,16 +71,15 @@ namespace AKE_OperatorExtension
             return ModLister.GetActiveModWithIdentifier("Nals.FacialAnimation") == null;
         }
 
-        [HarmonyPostfix]
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(PawnRenderer), "ParallelGetPreRenderResults")]
-        public static void Prefix_ParallelGetPreRenderResults(Pawn ___pawn, ref bool disableCache)
+        public static bool Prefix_ParallelGetPreRenderResults(Pawn ___pawn, ref bool disableCache)
         {
             if (___pawn.RaceProps.Humanlike && AK_ModSettings.drawOutOfCameraZoom)
             {
                 disableCache = true;
-
             }
-            //return HarmonyPrefixRet.keepOriginal;;
+            return HarmonyPrefixRet.keepOriginal;
         }
     }
 }

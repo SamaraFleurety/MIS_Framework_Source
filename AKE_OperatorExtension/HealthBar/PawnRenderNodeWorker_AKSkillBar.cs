@@ -177,7 +177,7 @@ namespace AKE_OperatorExtension
             float skillPercent = ability != null ? CooldownPercent(ability) : 0f;
 
             DrawSkillBar(BarFilledMat, pawn, skillPercent);
-            Vector3 originCenter = pawn.DrawPos + TopMargin + Vector3.up * 3f;
+            Vector3 originCenter = pawn.DrawPos + TopMargin + (Vector3.up * 3f);
             Vector3 scale = new(0.3f, 1f, 0.3f);
             //自动回复技能
             if (!AK_ModSettings.display_Skillbar_OnDraftedOnly && !pawn.Drafted) return;

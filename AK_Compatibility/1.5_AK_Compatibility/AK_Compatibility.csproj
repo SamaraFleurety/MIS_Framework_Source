@@ -37,6 +37,7 @@
   <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>..\..\Rely\0Harmony.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\Rely\Assembly-CSharp.dll</HintPath>

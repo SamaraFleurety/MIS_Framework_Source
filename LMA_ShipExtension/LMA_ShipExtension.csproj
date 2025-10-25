@@ -112,6 +112,7 @@
     <Compile Include="RecruitConsole\UGUI\AzurUI_MainMenu.cs" />
     <Compile Include="RecruitConsole\UGUI\AzurUI_OpDetail.cs" />
     <Compile Include="RecruitConsole\UGUI\AzurUI_OpList.cs" />
+    <Compile Include="ShipArmsFramework\AKAbility_Shiparm.cs" />
     <Compile Include="ShipDocument.cs" />
     <Compile Include="TypeDef.cs" />
   </ItemGroup>
@@ -131,5 +132,6 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

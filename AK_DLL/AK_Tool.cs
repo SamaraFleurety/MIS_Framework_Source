@@ -54,10 +54,9 @@ namespace AK_DLL
         {
             for (int i = 0; i < Mods.Count; ++i)
             {
-                if (/*Mods[i].Name == "M.I.S. - Framework" ||*/ Mods[i].PackageId == TypeDef.ModID.ToLower())
+                if (Mods[i].PackageId == TypeDef.ModID.ToLower())
                 {
-                    Log.Message(Mods[i].RootDir);
-                    //FSAsset = AssetBundle.LoadFromFile(Mods[i].RootDir + "/Asset/fsassets");
+                    //Log.Message(Mods[i].RootDir);
                     PAAsset = AssetBundle.LoadFromFile(Mods[i].RootDir + "/Asset/paassets");
                     break;
                 }
@@ -194,15 +193,13 @@ namespace AK_DLL
             Image opStand = OpStand.GetComponent<Image>();
             Texture2D tex = def.PreferredStand(preferredSkin);
 
-            /*if (preferredSkin == 0) tex = ContentFinder<Texture2D>.Get(def.commonStand);
-            else if (preferredSkin == 1) tex = ContentFinder<Texture2D>.Get(def.stand);
-            else tex = ContentFinder<Texture2D>.Get(def.fashion[preferredSkin - 2]);*/
-
             opStand.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
 
-            if (offset == null && def.standOffsets != null && def.standOffsets.ContainsKey(preferredSkin))
+            if (offset == null) offset = Vector3.zero;
+
+            if (/*offset == null && */def.standOffsets != null && def.standOffsets.ContainsKey(preferredSkin))
             {
-                offset = def.standOffsets[preferredSkin];
+                offset += def.standOffsets[preferredSkin];
             }
 
             if (offset is { } rOffset)

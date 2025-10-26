@@ -260,7 +260,7 @@ namespace AK_DLL.UI
 
         protected List<GameObject> opSkills = new();  //只有可选技能被加进来。
 
-        private GameObject floatingBubbleInstance;
+        protected GameObject floatingBubbleInstance;
 
         public GameObject OpStand; //干员静态立绘的渲染目标
         public GameObject OpL2DRenderTarget;   //干员动态立绘的渲染目标（不是模型本身）
@@ -601,53 +601,55 @@ namespace AK_DLL.UI
 
         void DrawDebugPanel()
         {
-            if (Prefs.DevMode == false)
+            bool devMode = Prefs.DevMode;
+            if (!devMode)
             {
                 GameObject.Find("DebugToolPanel").SetActive(false);
             }
             else
             {
+                //这里面的if devmode不是废话 有神必脚本会允许键鼠直接调用这些控制方法
                 GameObject.Find("_DPlus").GetComponent<Button>().onClick.AddListener(delegate
                 {
                     Transform loc = GameObject.Find("OpStand").transform;
                     Vector3 v3 = loc.localScale;
                     loc.localScale = new Vector3(v3.z + 0.1f, v3.z + 0.1f, v3.z + 0.1f);
-                    Log.Message($"MIS. {OperatorDef.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
+                    if (devMode) Log.Message($"MIS. {OperatorDef.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
                 });
                 GameObject.Find("_DMinus").GetComponent<Button>().onClick.AddListener(delegate
                 {
                     Transform loc = GameObject.Find("OpStand").transform;
                     Vector3 v3 = loc.localScale;
                     loc.localScale = new Vector3(v3.z - 0.1f, v3.z - 0.1f, v3.z - 0.1f);
-                    Log.Message($"MIS. {OperatorDef.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
+                    if (devMode) Log.Message($"MIS. {OperatorDef.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
                 });
                 GameObject.Find("_DUP").GetComponent<Button>().onClick.AddListener(delegate
                 {
                     Transform loc = GameObject.Find("OpStand").transform;
                     Vector3 v3 = loc.localPosition;
                     loc.localPosition = new Vector3(v3.x, v3.y + 10f, v3.z);
-                    Log.Message($"MIS. {OperatorDef.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
+                    if (devMode) Log.Message($"MIS. {OperatorDef.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
                 });
                 GameObject.Find("_DDown").GetComponent<Button>().onClick.AddListener(delegate
                 {
                     Transform loc = GameObject.Find("OpStand").transform;
                     Vector3 v3 = loc.localPosition;
                     loc.localPosition = new Vector3(v3.x, v3.y - 10f, v3.z);
-                    Log.Message($"MIS. {OperatorDef.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
+                    if (devMode) Log.Message($"MIS. {OperatorDef.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
                 });
                 GameObject.Find("_DLeft").GetComponent<Button>().onClick.AddListener(delegate
                 {
                     Transform loc = GameObject.Find("OpStand").transform;
                     Vector3 v3 = loc.localPosition;
                     loc.localPosition = new Vector3(v3.x - 10f, v3.y, v3.z);
-                    Log.Message($"MIS. {OperatorDef.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
+                    if (devMode) Log.Message($"MIS. {OperatorDef.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
                 });
                 GameObject.Find("_DRight").GetComponent<Button>().onClick.AddListener(delegate
                 {
                     Transform loc = GameObject.Find("OpStand").transform;
                     Vector3 v3 = loc.localPosition;
                     loc.localPosition = new Vector3(v3.x + 10f, v3.y, v3.z);
-                    Log.Message($"MIS. {OperatorDef.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
+                    if (devMode) Log.Message($"MIS. {OperatorDef.nickname} 的 {preferredSkin}号皮肤为 (偏移)({loc.localPosition.x}, {loc.localPosition.y}, (缩放倍率){loc.localScale.x})");
                 });
             }
         }
@@ -926,7 +928,7 @@ namespace AK_DLL.UI
         }
 
         //鼠标指上去的悬浮窗 
-        private void DrawFloatingBubble(string text)
+        protected virtual void DrawFloatingBubble(string text)
         {
             floatingBubbleInstance.GetComponentInChildren<TextMeshProUGUI>().text = text;
             Vector3 mousePosition = Input.mousePosition;

@@ -3,6 +3,7 @@ using AK_DLL.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Verse;
 
 namespace LMA_Lib.UGUI
 {
@@ -33,6 +34,13 @@ namespace LMA_Lib.UGUI
                 GameObject classBtnPrefab = TypeDef.AzurAsset.LoadAsset<GameObject>("Icon_Class");
                 return GameObject.Instantiate(classBtnPrefab, classColumn);
             }
+        }
+
+        protected override void DrawSeriesBtn_OnClick()
+        {
+            base.DrawSeriesBtn_OnClick();
+            previousClassBtn = null;
+            //previousSortBtn = null;
         }
 
         public override void Close(bool closeEV = true)
@@ -73,6 +81,13 @@ namespace LMA_Lib.UGUI
         #endregion
 
         #region 职业按钮
+
+        protected override void RefreshSeriesBtnTexture()
+        {
+            GameObject btnCurrentSeries = GameObject.Find("btnSeries");
+            btnCurrentSeries.transform.GetChild(0).GetComponent<Image>().sprite = Utilities_Unity.Image2Spirit(AllSeries[Series].Icon);
+        }
+
         static GameObject previousClassBtn = null;
         //加了个选中会弹起的功能
         protected override GameObject DrawOneClassBtn(int classIndex)

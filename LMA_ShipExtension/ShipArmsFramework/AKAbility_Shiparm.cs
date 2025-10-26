@@ -28,7 +28,7 @@ namespace LMA_Lib.Shipborne
         {
             base.Tick();
             shiparmVerb.VerbTick();
-            shiparmVerb.TryStartCastOn()
+            //shiparmVerb.TryStartCastOn();
         }
     }
 }

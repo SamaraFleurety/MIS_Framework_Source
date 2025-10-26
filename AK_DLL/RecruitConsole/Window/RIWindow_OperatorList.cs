@@ -135,7 +135,7 @@ namespace AK_DLL.UI
         //相当投机取巧地在名字里面存储数据 字符串内可以随便填。现在的值是12。
         public static int orderInName = "FSUI_whatev_".Length;
 
-        private static List<OperatorSeriesDef> AllSeries => RIWindowHandler.operatorSeries;
+        protected static List<OperatorSeriesDef> AllSeries => RIWindowHandler.operatorSeries;
         private static List<int> ActiveClasses => AllSeries[Series].includedClasses;
 
         private bool choosingSeries;
@@ -242,31 +242,17 @@ namespace AK_DLL.UI
                 i++;
                 //名字
                 classBtnInstance.name = "FSUI_classs_" + node;
-                //按钮 非实时
-                //int j = node;
-                /*classBtnInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
-                {
-                    OperatorClass = j;
-                    cachedOperatorList = RIWindowHandler.operatorDefs[OperatorClass].Values.ToList();
-                    //默认使用 首字母排序
-                    NeedSortTo(sortType, true);
-
-                    //实际排序
-                    SortOperator(sortType);
-                    DrawOperatorListContent();
-                });
-                DrawOneClassBtn(classBtnInstance, opClass.Icon, opClass.label.Translate(), node);*/
             }
         }
 
-        void RefreshSeriesBtnTexture()
+        protected virtual void RefreshSeriesBtnTexture()
         {
             GameObject btnCurrentSeries = GameObject.Find("btnSeries");
             btnCurrentSeries.GetComponent<Image>().sprite = Utilities_Unity.Image2Spirit(AllSeries[Series].Icon);
 
         }
         //按下切换系列按钮后，会重新绘制新的职业按钮组（不在本函数内）
-        private void DrawSeriesBtn()
+        protected virtual void DrawSeriesBtn()
         {
             if (Series == -1)
             {
@@ -277,13 +263,14 @@ namespace AK_DLL.UI
 
             GameObject btnCurrentSeries = GameObject.Find("btnSeries");
             RefreshSeriesBtnTexture();
-            //btnCurrentSeries.GetComponent<Image>().sprite = Utilities_Unity.Image2Spirit(AllSeries[Series].Icon);
-            btnCurrentSeries.GetComponentInChildren<Button>().onClick.AddListener(delegate
-            {
-                choosingSeries = !choosingSeries;
-                DrawSeriesPanel();
-                DrawAllClassBtn();
-            });
+            btnCurrentSeries.GetComponentInChildren<Button>().onClick.AddListener(DrawSeriesBtn_OnClick);
+        }
+
+        protected virtual void DrawSeriesBtn_OnClick()
+        {
+            choosingSeries = !choosingSeries;
+            DrawSeriesPanel();
+            DrawAllClassBtn();
         }
 
         private void DrawSeriesPanel()

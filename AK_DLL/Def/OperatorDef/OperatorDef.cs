@@ -39,7 +39,7 @@ namespace AK_DLL
 
         public VoicePackDef voicePackDef;
 
-        public Dictionary<string, PawnRelationDef> relations;
+        public Dictionary<OperatorDef, PawnRelationDef> relations;
 
         public List<TraitAndDegree> traits;//干员特性
         public ThingDef weapon;//干员武器                                                  
@@ -279,12 +279,14 @@ namespace AK_DLL
             currentlyGenerating = false;
         }
 
+        PawnGenerationRequest temp_Request;
         public virtual Pawn Recruit_NoMap()
         {
             currentlyGenerating = true;
 
             ForceLoadResources();
-            operator_Pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(PawnKindDefOf.Colonist, Faction.OfPlayer, forcedXenotype: xenoType));
+            temp_Request = new PawnGenerationRequest(PawnKindDefOf.Colonist, Faction.OfPlayer, forcedXenotype: xenoType, canGeneratePawnRelations: false, allowPregnant: false);
+            operator_Pawn = PawnGenerator.GeneratePawn(temp_Request);
 
             Recruit_Hediff();
 
@@ -436,11 +438,14 @@ namespace AK_DLL
         {
             operator_Pawn.relations.ClearAllRelations();
             if (this.relations == null || this.relations.Count == 0) return;
-            foreach (KeyValuePair<string, PawnRelationDef> node in relations)
+            foreach (KeyValuePair<OperatorDef, PawnRelationDef> node in relations)
             {
-                if (GC_OperatorDocumentation.opDocArchive.ContainsKey(node.Key))
+                string id = node.Key.defName.GetOperatorIDFrom();
+                if (GC_OperatorDocumentation.opDocArchive.ContainsKey(id))
                 {
-                    operator_Pawn.relations.AddDirectRelation(node.Value, GC_OperatorDocumentation.opDocArchive[node.Key].pawn);
+                    Pawn otherPawn = GC_OperatorDocumentation.opDocArchive[id].pawn;
+                    //PawnRelationDefOf.Sibling.Worker.CreateRelation(operator_Pawn, otherPawn, ref temp_Request);
+                    operator_Pawn.relations.AddDirectRelation(node.Value, GC_OperatorDocumentation.opDocArchive[id].pawn);
                 }
             }
         }

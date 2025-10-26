@@ -81,7 +81,7 @@ namespace AK_DLL
             if (temp.Length <= 1) return null;
             return temp[0];
         }
-        public static string GetOperatorIDFrom(string XMLdefName)
+        public static string GetOperatorIDFrom(this string XMLdefName)
         {
             string[] temp = XMLdefName.Split('_');
             if (temp.Length <= 1) return null;

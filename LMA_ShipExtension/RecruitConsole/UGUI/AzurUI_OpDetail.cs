@@ -41,7 +41,7 @@ namespace LMA_Lib.UGUI
 
         const float SKILL_ICON_SIZE = 24f;
 
-        static string skillIconPath = "UI/SkillIcons/";
+        static string skillIconPath = "UI/VanillaSkillIcon/";
         public override void Initialize()
         {
             base.Initialize();
@@ -50,7 +50,7 @@ namespace LMA_Lib.UGUI
                 skillIcon = new();
                 foreach (SkillDef def in DefDatabase<SkillDef>.AllDefs)
                 {
-                    Texture2D iconTex = TypeDef.AzurAsset.LoadAsset<Texture2D>(skillIconPath + def.defName);
+                    Texture2D iconTex = ContentFinder<Texture2D>.Get(skillIconPath + def.defName);
                     Sprite sprite = Sprite.Create(iconTex, new Rect(0, 0, SKILL_ICON_SIZE, SKILL_ICON_SIZE), new Vector2(0.5f, 0.5f));
                     if (iconTex != null)
                     {
@@ -92,7 +92,8 @@ namespace LMA_Lib.UGUI
             for (int i = 0; i < AK_DLL.TypeDef.SortOrderSkill.Count; ++i)
             {
                 radarChart.vertexLabelValues[i] = $"<color={base.GetSkillLabelColor(OperatorDef.SortedSkills[i])}>{OperatorDef.SortedSkills[i].skill.label.Translate()}</color>";
-                radarChart.data[0].values.Add((float)OperatorDef.SortedSkills[i].level / 20.0f);
+                if (radarChart.data[0].values.Count >= i) radarChart.data[0].values.Add((float)OperatorDef.SortedSkills[i].level / 20.0f);
+                else radarChart.data[0].values[i] = (float)OperatorDef.SortedSkills[i].level / 20.0f;
             }
         }
 
@@ -134,6 +135,13 @@ namespace LMA_Lib.UGUI
             return new Vector3(-320, -50, 1);
         }
 
+        protected override void DrawFloatingBubble(string text)
+        {
+            base.DrawFloatingBubble(text);
+            LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)floatingBubbleInstance.transform.GetChild(1));
+            LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)floatingBubbleInstance.transform);
+        }
+
         #region 人际关系
         static Transform relationPanel;
         //人际关系按钮
@@ -151,17 +159,25 @@ namespace LMA_Lib.UGUI
         {
             if (OperatorDef.relations.NullOrEmpty()) return;
             relationPanel = GameObject.Find("RelationsLayout").transform;
-            foreach (string relation in OperatorDef.relations.Keys)
+            foreach (OperatorDef relation in OperatorDef.relations.Keys)
             {
                 GameObject relationInstance = RelationBtnInstance;
-                relationInstance.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = OperatorDef.relations[relation].label;
-                relationInstance.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = relation;
+                relationInstance.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = relation.isMale ? OperatorDef.relations[relation].label : OperatorDef.relations[relation].labelFemale;
+                relationInstance.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = relation.nickname;
             }
         }
         #endregion
 
         #region op技能
-        protected override GameObject OpAbilityBtnInstance => base.OpAbilityBtnInstance;
+        protected override GameObject OpAbilityBtnInstance
+        {
+            get
+            {
+                GameObject opAbilityPrefab = TypeDef.AzurAsset.LoadAsset<GameObject>("OpAbilityIcon");
+                GameObject opAbilityInstance = GameObject.Instantiate(opAbilityPrefab, opAbilityPanel);
+                return opAbilityInstance;
+            }
+        }
         //本家技能 此面板ui和舟不一样 
         protected override void DrawOperatorAbility()
         {

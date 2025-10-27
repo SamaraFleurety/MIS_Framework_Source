@@ -26,9 +26,9 @@ namespace AK_DLL.Bezier
         public float verticalFlipChance = 0.5f;
 
         //生成一个确定的曲线
-        public BezierCurveCubic GenCurveCubic(Vector3 start, Vector3 destination)
+        public BezierCurveCubic GenCurveCubic(Vector3 start, Vector3 destination, int? flipOverride = null)
         {
-            return new BezierCurveCubic(this, start, destination);
+            return new BezierCurveCubic(this, start, destination, flipOverride);
         }
     }
 
@@ -45,12 +45,13 @@ namespace AK_DLL.Bezier
         {
         }
 
-        public BezierCurveCubic(BezierCurveProperty prop, Vector3 start, Vector3 end)
+        public BezierCurveCubic(BezierCurveProperty prop, Vector3 start, Vector3 end, int? flipOverride = null)
         {
             this.start = start;
             this.end = end;
 
-            float verticalFlip = Rand.Chance(prop.verticalFlipChance) ? -1 : 1;
+            int verticalFlip = Rand.Chance(prop.verticalFlipChance) ? 1 : -1;
+            if (flipOverride is int ovrd) verticalFlip = ovrd; 
 
             Vector3 p1 = GenRandomControlPoint(prop.control1LeftBottom, prop.control1RightTop);
             control1 = GetTransformedPoint(p1);
@@ -60,11 +61,13 @@ namespace AK_DLL.Bezier
 
             Vector3 GenRandomControlPoint(Vector3 leftBottom, Vector3 rightTop)
             {
+                //x肯定左小右大
+                float z = leftBottom.z < rightTop.z ? Rand.Range(leftBottom.z, rightTop.z) : Rand.Range(rightTop.z, leftBottom.z);
                 return new Vector3
                     (
                         Rand.Range(leftBottom.x, rightTop.x),
                         0,
-                        Rand.Range(leftBottom.z, rightTop.z)
+                        z * verticalFlip  //因为标准向量是(0, 0) -> (0, 1)，所以翻转控制点只需要z轴*-1
                     );
             }
 
@@ -72,18 +75,20 @@ namespace AK_DLL.Bezier
             {
                 return new Vector3
                     (
-                        start.x + (end.x - start.x) * p.x - (end.y - start.z) * p.z,
+                        start.x + (end.x - start.x) * p.x - (end.z - start.z) * p.z,
                         0,
-                        start.z + (end.z - start.z) * p.x + (end.x - start.x) * p.z * verticalFlip
+                        start.z + (end.z - start.z) * p.x + (end.x - start.x) * p.z
                     );
             }
+            Log.Message($"generate curve param: start {start}, end {end}, p1 {p1}, cp1 {control1}, p2 {p2}, cp2 {control2}");
         }
 
         public Vector3 GetPoint (float t)
         {
-            //return BezierUtil.GetPointCubic(start, control1, control2, end, t);
-            return Vector3.zero;
+            return BezierUtil.GetPointCubic(start, control1, control2, end, t);
+            //return Vector3.zero;
         }
+
         public void ExposeData()
         {
             Scribe_Values.Look(ref start, "start");

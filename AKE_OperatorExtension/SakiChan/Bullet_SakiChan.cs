@@ -10,43 +10,31 @@ namespace AKE_OperatorExtension
     public class Bullet_SakiChan : Bullet
     {
         //这是untiy原版组件，时间强行和unity时间绑定，但是泰南有自己的想法。这里尊重泰南的想法
-        public static bool allowChangeTime = false;
-        public static ConditionalWeakTable<TrailRenderer, object> cacedTrailRender = new();
+        //public static bool allowChangeTime = false;
+        //public static ConditionalWeakTable<TrailRenderer, object> cacedTrailRender = new();
 
         //每tick视为过去多少现实时间
-        const float REAL_TIME_PER_TICK = 0.01667f;
+        //const float REAL_TIME_PER_TICK = 0.01667f;
 
         #region 贝塞尔弹道相关
-        Ext_MultiSegBezierBullet ext_Bezier = null;
-        Ext_MultiSegBezierBullet Ext_Bezier
-        {
-            get
-            {
-                ext_Bezier ??= this.def.GetModExtension<Ext_MultiSegBezierBullet>();
-                return ext_Bezier;
-            }
-        }
-        int BezierSegmentCount
-        {
-            get
-            {
-                return (int)((destination - origin).magnitude / ext_Bezier.segmentSliceCellCount);
-            }
-        }
-
-        int tickAfterSpawned_CurrentCurve = 0;
-
         #region ----啥比向量计算
+
+        //当前所在片段
         int currentSegment = 0;
 
+        //年龄
+        float tickAfterSpawned;
+        //当前曲线段内的年龄
+        int tickAfterSpawned_CurrentCurve = 0;
         //生命周期tick总数
-        float LifeTick => ticksToImpact - StartingTicksToImpact;
+        float lifeTick;
 
+        //一开始在0段, 也就是取起点和下一个片段点
         int ShouldInSegemnt
         {
             get
             {
-                return (int)(LifeTick / BezierSegmentCount);
+                return (int)((float)tickAfterSpawned / lifeTick * BezierSegmentCount);
             }
         }
 
@@ -56,20 +44,42 @@ namespace AKE_OperatorExtension
             float seg = BezierSegmentCount;
             return new Vector3
                 (
-                    origin.y + (x / seg * (destination.x - origin.x)),
+                    origin.x + (x / seg * (destination.x - origin.x)),
                     0,
-                    origin.y + (x / seg * (destination.y - origin.y))
+                    origin.z + (x / seg * (destination.z - origin.z))
                 );
         }
         #endregion 向量计算
 
+        Ext_MultiSegBezierBullet ext_Bezier = null;
+        Ext_MultiSegBezierBullet Ext_Bezier
+        {
+            get
+            {
+                ext_Bezier ??= this.def.GetModExtension<Ext_MultiSegBezierBullet>();
+                return ext_Bezier;
+            }
+        }
+        //一共分成多少段，最小是1
+        int BezierSegmentCount
+        {
+            get
+            {
+                int segment = (int)((destination - origin).magnitude / Ext_Bezier.segmentSliceCellCount);
+                if (segment <= 0) segment = 1;
+                return segment;
+            }
+        }
+
         BezierCurveCubic bezierCurve = null;
 
+        //镜像翻转贝塞尔函数的全局值。不可以一段翻转一段不翻，不好看
+        int verticalFlip; 
         void RecalculateCurve()
         {
             int seg = ShouldInSegemnt;
-            if (seg == currentSegment) return;
-            bezierCurve = Ext_Bezier.curveProperty.GenCurveCubic(GetXthPoint(seg - 1), GetXthPoint(seg));
+            if (seg == currentSegment && bezierCurve != null) return;
+            bezierCurve = Ext_Bezier.curveProperty.GenCurveCubic(GetXthPoint(seg), GetXthPoint(seg + 1), flipOverride: verticalFlip);
             currentSegment = seg;
             tickAfterSpawned_CurrentCurve = 0;
         }
@@ -92,7 +102,7 @@ namespace AKE_OperatorExtension
         }
 
         //unity component
-        TrailRenderer ucomp_Trail = null;
+        /*TrailRenderer ucomp_Trail = null;
         TrailRenderer UComp_Trail
         {
             get
@@ -105,38 +115,35 @@ namespace AKE_OperatorExtension
                 }
                 return ucomp_Trail;
             }
-        }
-
-        const float FREQUENCY = 12;
+        }*/
 
 
         public override Vector3 DrawPos
         {
             get
             {
-                /*Vector3 direction = (destination - origin).normalized;
-                //入参是弧度
-                float pendulum = Mathf.Sin(tickAfterSpawned * Mathf.Deg2Rad * FREQUENCY) * 1;
-
-                Vector3 perpendicular = new(-direction.y, 0, direction.x);
-                return base.DrawPos + (perpendicular * pendulum);*/
                 RecalculateCurve();
-                float t = Mathf.Clamp01(tickAfterSpawned_CurrentCurve / (StartingTicksToImpact / BezierSegmentCount));
-                return bezierCurve.GetPoint(t);
+                float t = Mathf.Clamp01(tickAfterSpawned_CurrentCurve / (StartingTicksToImpact / (float)BezierSegmentCount));
+                Vector3 bezierPoint = bezierCurve.GetPoint(t);
+                return new Vector3(bezierPoint.x, base.DrawPos.y, bezierPoint.z);
             }
         }
 
         #endregion 贝塞尔弹道
 
+        #region 原版函数
+        public override void Launch(Thing launcher, Vector3 origin, LocalTargetInfo usedTarget, LocalTargetInfo intendedTarget, ProjectileHitFlags hitFlags, bool preventFriendlyFire = false, Thing equipment = null, ThingDef targetCoverDef = null)
+        {
+            base.Launch(launcher, origin, usedTarget, intendedTarget, hitFlags, preventFriendlyFire, equipment, targetCoverDef);
+            lifeTick = lifetime;
+            verticalFlip = Rand.Chance(Ext_Bezier.curveProperty.verticalFlipChance) ? 1 : -1;
+        }
         protected override void Tick()
         {
             if (!Spawned || Destroyed) return;
             ++tickAfterSpawned_CurrentCurve;
-            //return;
-            //allowChangeTime = true;
-            //UComp_Trail.time += REAL_TIME_PER_TICK;
+            ++tickAfterSpawned;
             Mygo_Bullet.transform.position = this.DrawPos;
-            //allowChangeTime = false;
         }
 
         public override void Destroy(DestroyMode mode = DestroyMode.Vanish)
@@ -149,9 +156,13 @@ namespace AKE_OperatorExtension
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Values.Look(ref tickAfterSpawned_CurrentCurve, "tickAfterSpawned");
+            Scribe_Values.Look(ref tickAfterSpawned_CurrentCurve, "tickAfterSpawned_CC");
+            Scribe_Values.Look(ref tickAfterSpawned, "tickAfterSpawned", 0);
             Scribe_Values.Look(ref currentSegment, "currentSegment");
             Scribe_Deep.Look(ref bezierCurve, "bezierCurve");
+            Scribe_Values.Look(ref lifeTick, "life");
+            Scribe_Values.Look(ref verticalFlip, "flip", 1);
         }
+        #endregion
     }
 }

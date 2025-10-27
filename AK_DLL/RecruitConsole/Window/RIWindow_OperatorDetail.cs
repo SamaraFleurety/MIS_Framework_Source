@@ -412,7 +412,7 @@ namespace AK_DLL.UI
 
             //精0/精1立绘 切换按钮
             GameObject fashionIcon = GameObject.Find("Elite0");
-            fashionBtns.Add(1, fashionIcon);
+            fashionBtns.Add(OperatorStandType.Elite0, fashionIcon);
             if ((!OperatorDef.dynaLoadStaticStands && OperatorDef.commonStand != null) || (OperatorDef.dynaLoadStaticStands && OperatorDef.staticStands.ContainsKey(OperatorStandType.Elite0)))
             {
                 fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate
@@ -424,7 +424,7 @@ namespace AK_DLL.UI
 
             //精2立绘按钮。因为历史问题，这是默认立绘，必须有。
             fashionIcon = GameObject.Find("Elite2");
-            fashionBtns.Add(0, fashionIcon);
+            fashionBtns.Add(OperatorStandType.Elite2, fashionIcon);
             fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate
             {
                 ChangeStandTo(OperatorStandType.Elite2);
@@ -891,7 +891,7 @@ namespace AK_DLL.UI
                 {
                     doc.preferedSkin = val;
                 }*/
-            }
+            } 
 
             //禁用之前的换装按钮
             GameObject fBtn = fashionBtns[preferredSkin];

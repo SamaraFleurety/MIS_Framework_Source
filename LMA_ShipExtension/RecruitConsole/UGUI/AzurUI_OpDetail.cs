@@ -259,38 +259,39 @@ namespace LMA_Lib.UGUI
 
             //精0/精1立绘 切换按钮
             fashionIcon = GameObject.Find("Elite0");
-            fashionBtns.Add(0, fashionIcon);
-            if (OperatorDef.commonStand != null)
+            fashionBtns.Add(OperatorStandType.Elite0, fashionIcon);
+            if ((!OperatorDef.dynaLoadStaticStands && OperatorDef.commonStand != null) || (OperatorDef.dynaLoadStaticStands && OperatorDef.staticStands.ContainsKey(OperatorStandType.Elite0)))
             {
                 fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
                 {
-                    ChangeStandTo(0);
+                    ChangeStandTo(OperatorStandType.Elite0);
                 });
             }
             else fashionIcon.SetActive(false);
 
             //精2立绘按钮。因为历史问题，这是默认立绘，必须有。
             fashionIcon = GameObject.Find("Elite2");
-            fashionBtns.Add(1, fashionIcon);
+            fashionBtns.Add(OperatorStandType.Elite2, fashionIcon);
             fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
             {
-                ChangeStandTo(1);
+                ChangeStandTo(OperatorStandType.Elite2);
             });
 
             //换装按钮。第一个换装（面板上第3个）在数组内是2。
             int logicOrder = 2;
-            if (OperatorDef.fashion != null)
+            if (OperatorDef.dynaLoadStaticStands)
             {
                 v3 = fashionIcon.transform.localPosition;
-                for (int i = 0; i < OperatorDef.fashion.Count; ++i)
+                foreach (int key in OperatorDef.staticStands.Keys)
                 {
+                    if (key <= 1) continue;
                     //逻辑顺序 代表这按钮在面板上实际的位置（即精2按钮之后）
                     fashionIcon = FashionBtnInstance;
                     //fashionIcon.transform.localPosition = new Vector3(v3.x * logicOrder, v3.y);
                     fashionIcon.SetActive(true);
-                    fashionIcon.name = "FSUI_FashIc_" + logicOrder;
+                    //fashionIcon.name = "FSUI_FashIc_" + logicOrder;
                     int j = logicOrder;
-                    fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+                    fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate
                     {
                         //ChangeStandTo(btnOrder(ClickedBtn));
                         ChangeStandTo(j);
@@ -299,6 +300,30 @@ namespace LMA_Lib.UGUI
                     ++logicOrder;
                 }
             }
+            else
+            {
+                if (OperatorDef.fashion != null)
+                {
+                    v3 = fashionIcon.transform.localPosition;
+                    for (int i = 0; i < OperatorDef.fashion.Count; ++i)
+                    {
+                        //逻辑顺序 代表这按钮在面板上实际的位置（即精2按钮之后）
+                        fashionIcon = FashionBtnInstance;
+                        //fashionIcon.transform.localPosition = new Vector3(v3.x * logicOrder, v3.y);
+                        fashionIcon.SetActive(true);
+                        //fashionIcon.name = "FSUI_FashIc_" + logicOrder;
+                        int j = logicOrder;
+                        fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate
+                        {
+                            //ChangeStandTo(btnOrder(ClickedBtn));
+                            ChangeStandTo(j);
+                        });
+                        fashionBtns.Add(logicOrder, fashionIcon);
+                        ++logicOrder;
+                    }
+                }
+            }
+
             //在服装按钮界面实例化l2d换装按钮
             if (ModLister.GetActiveModWithIdentifier("FS.LivelyRim") != null)
             {
@@ -313,7 +338,7 @@ namespace LMA_Lib.UGUI
                         ChangeStandTo(j);
                     });
                     fashionBtns.Add(j, fashionIcon);
-                    ++logicOrder;
+                    //++logicOrder;
                 }
             }
             //spine2d动态换装
@@ -330,7 +355,7 @@ namespace LMA_Lib.UGUI
                         ChangeStandTo(k);
                     });
                     fashionBtns.Add(k, fashionIcon);
-                    ++logicOrder;
+                    //++logicOrder;
                 }
             }
         }

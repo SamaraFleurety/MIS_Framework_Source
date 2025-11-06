@@ -6,6 +6,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using Verse;
+using Object = UnityEngine.Object;
 
 namespace AK_DLL
 {
@@ -32,30 +33,31 @@ namespace AK_DLL
 
         public static void ClearAllChild(GameObject obj)
         {
-            if (obj == null) return;
+            if (!obj) return;
             Transform t = obj.transform;
             ClearAllChild(t);
         }
 
         public static void ClearAllChild(Transform t)
         {
-            if (t == null) return;
+            if (!t) return;
             for (int i = 0; i < t.childCount; ++i)
             {
-                GameObject.Destroy(t.GetChild(i).gameObject);
+                Object.Destroy(t.GetChild(i).gameObject);
             }
         }
 
         public static TMP_FontAsset GetUGUIFont(FontDef def)
         {
-            AssetBundle AB = LoadAssetBundle(def.modID, def.assetBundle);
-            return AB.LoadAsset<TMP_FontAsset>(def.modelName);
+            AssetBundle ab = LoadAssetBundle(def.modID, def.assetBundle);
+            return ab.LoadAsset<TMP_FontAsset>(def.modelName);
         }
 
 
         //存所有mod的路径 <packageID(原生), 路径>
-        public static Dictionary<string, string> modPath = new();
-        static void LoadAllModPath()
+        public static readonly Dictionary<string, string> modPath = new();
+
+        private static void LoadAllModPath()
         {
             List<ModContentPack> Mods = LoadedModManager.RunningMods.ToList();
             for (int i = 0; i < Mods.Count; ++i)
@@ -79,7 +81,7 @@ namespace AK_DLL
 
         #region AB包
         //用来缓存ab包。ab包重复从路径读是null。外部不应该直接读这个
-        private static Dictionary<string, AssetBundle> cachedAssetBundle = new();
+        private static readonly Dictionary<string, AssetBundle> cachedAssetBundle = new();
 
         //从随便一个模型/prefab的def，仅读其ab包
         public static AssetBundle LoadAssetBundle(this AssetDef assetDef)
@@ -91,36 +93,36 @@ namespace AK_DLL
         /// 从mod根目录/Asset/开始索引。假设需要读根目录/Aseet/ab，那就入参mod的packageID 和 "ab"
         /// </summary>
         /// <param name="modPackageID">写在About.xml里面的PackageID</param>
-        /// <param name="AssetBundlePath">上述mod根目录/Asset/本参数。也就是说本参数通常是ab包的名字</param>
-        /// <param name="AssetBundleID">如果path和ab包实际名字不一致或有冲突，需要输入想使用的自定义名字</param>>
+        /// <param name="assetBundlePath">上述mod根目录/Asset/本参数。也就是说本参数通常是ab包的名字</param>
+        /// <param name="assetBundleID">如果path和ab包实际名字不一致或有冲突，需要输入想使用的自定义名字</param>>
         /// <returns></returns>
-        public static AssetBundle LoadAssetBundle(string modPackageID, string AssetBundlePath, string AssetBundleID = null)
+        public static AssetBundle LoadAssetBundle(string modPackageID, string assetBundlePath, string assetBundleID = null)
         {
             AssetBundle assetBundle;
 
-            AssetBundleID ??= AssetBundlePath;
+            assetBundleID ??= assetBundlePath;
 
-            if (cachedAssetBundle.ContainsKey(AssetBundleID)) return cachedAssetBundle[AssetBundleID];
+            if (cachedAssetBundle.TryGetValue(assetBundleID, out AssetBundle bundle)) return bundle;
 
-            string fullPath = ModIDtoPath(modPackageID, AssetBundlePath, "/Asset/");
+            string fullPath = ModIDtoPath(modPackageID, assetBundlePath, "/Asset/");
             Log.Message(fullPath);
             try
             {
                 assetBundle = AssetBundle.LoadFromFile(fullPath);
-                if (assetBundle != null)
+                if (assetBundle)
                 {
                     //记录这次加载的ab包
-                    cachedAssetBundle.Add(AssetBundleID, assetBundle);
+                    cachedAssetBundle.Add(assetBundleID, assetBundle);
                 }
                 else
                 {
-                    Log.Error($"[FS.UGUI] Unable to load assetbundle at {fullPath}");
+                    Log.Error($"[FS.UGUI] Unable to load AssetBundle at {fullPath}");
                     return null;
                 }
             }
             catch
             {
-                Log.Error($"[FS.UGUI] Unable to load assetbundle at {fullPath}");
+                Log.Error($"[FS.UGUI] Unable to load AssetBundle at {fullPath}");
                 return null;
             }
             return assetBundle;
@@ -133,10 +135,10 @@ namespace AK_DLL
         /// <returns></returns>
         public static AssetBundle LoadAssetBundle(string AssetBundleID)
         {
-            if (cachedAssetBundle.ContainsKey(AssetBundleID)) return cachedAssetBundle[AssetBundleID];
+            if (cachedAssetBundle.TryGetValue(AssetBundleID, out AssetBundle bundle)) return bundle;
             else
             {
-                Log.Error($"[FS.UGUI] Unable to load assetbundle named {AssetBundleID}");
+                Log.Error($"[FS.UGUI] Unable to load AssetBundle named {AssetBundleID}");
                 return null;
             }
         }
@@ -186,11 +188,12 @@ namespace AK_DLL
         //直接从硬盘上的，环世界开游戏时不会读取的文件夹里面读取贴图/语音。
 
         //需要重复调用的贴图会放在这里(有的在别的地方自带缓存)
-        public static Dictionary<string, Texture2D> dynamicLoadingTextures = new();
+        public static readonly Dictionary<string, Texture2D> dynamicLoadingTextures = new();
+
         public static Texture2D GetDynamicLoadTexture(string itemFullHardwarePath, bool cacheIntoDictionary = false)
         {
             dynamicLoadingTextures.TryGetValue(itemFullHardwarePath, out Texture2D texture);
-            if (texture != null) return texture;
+            if (texture) return texture;
 
             texture = LoadResourceIO<Texture2D>(itemFullHardwarePath);
 
@@ -245,15 +248,16 @@ namespace AK_DLL
         {
             string temp = StandardizePath(fullPath);
             string middlePath = DynContentPath<T>();
-            int index = fullPath.IndexOf(middlePath);
+            int index = fullPath.IndexOf(middlePath, StringComparison.Ordinal);
             if (index == -1)
             {
                 Log.Error($"[AK] {typeof(T).Name} {fullPath} 无法转变为相对路径");
                 return null;
             }
-            temp = fullPath.Substring(index + middlePath.Length);
+            temp = temp.Substring(index + middlePath.Length);
             return Path.GetFileNameWithoutExtension(temp);
         }
+
         public static bool VerifyFileExistIO(string fileFullPath)
         {
             if (!File.Exists(@fileFullPath))
@@ -267,7 +271,8 @@ namespace AK_DLL
         //自动分类和加载路径中的文件。完整路径需要用上面的函数获得
         public static T LoadResourceIO<T>(string fileFullPath) where T : class
         {
-            if (!File.Exists(@fileFullPath)) return default;
+            if (!File.Exists(fileFullPath)) return null;
+
             T val = null;
             if (typeof(T) == typeof(Texture2D))
             {
@@ -303,34 +308,46 @@ namespace AK_DLL
         //从路径到贴图实例，IO在此完成。
         private static Texture2D LoadTexture(string path)
         {
-            FileStream file = new(@path, FileMode.Open, FileAccess.Read);
-            Texture2D texture2D;
-            byte[] data = new byte[file.Length];
-            file.Read(data, 0, data.Length);
-            texture2D = new Texture2D(2, 2, TextureFormat.Alpha8, mipChain: true);
+            byte[] data;
+            using (FileStream fileSource = new(path, FileMode.Open, FileAccess.Read))
+            {
+                data = new byte[fileSource.Length];
+
+                int numBytesToRead = (int)fileSource.Length;
+                int numBytesRead = 0;
+                while (numBytesToRead > 0)
+                {
+                    // Read may return anything from 0 to numBytesToRead.
+                    int read = fileSource.Read(data, numBytesRead, numBytesToRead);
+                    // Break when the end of the file is reached.
+                    if (read == 0) break;
+
+                    numBytesRead += read;
+                    numBytesToRead -= read;
+                }
+            }
+
+            Texture2D texture2D = new(2, 2, TextureFormat.Alpha8, mipChain: true);
             texture2D.LoadImage(data);
             if (texture2D.width % 4 != 0 || texture2D.height % 4 != 0)
             {
                 if (Prefs.LogVerbose)
                 {
-                    Debug.LogWarning($"Texture does not support mipmapping, needs to be divisible by 4 ({texture2D.width}x{texture2D.height}) for '{file.Name}'");
+                    Debug.LogWarning($"Texture does not support mipmapping, needs to be divisible by 4 ({texture2D.width}x{texture2D.height}) for '{path}'");
                 }
                 texture2D = new Texture2D(2, 2, TextureFormat.Alpha8, mipChain: false);
                 texture2D.LoadImage(data);
             }
-            if (Prefs.TextureCompression)
-            {
-                texture2D.Compress(highQuality: true);
-            }
-            texture2D.name = Path.GetFileNameWithoutExtension(file.Name);
+
+            if (Prefs.TextureCompression) texture2D.Compress(highQuality: true);
+
+            texture2D.name = Path.GetFileNameWithoutExtension(path);
             texture2D.filterMode = FilterMode.Trilinear;
             texture2D.anisoLevel = 2;
             texture2D.Apply(updateMipmaps: true, makeNoLongerReadable: true);
 
-            file.Close();
             return texture2D;
         }
-
         #endregion
     }
 }

@@ -88,6 +88,27 @@ namespace AK_DLL
             return temp[temp.Length - 1];
         }
 
+        public static string GetOperatorIDFrom(this OperatorDef opDef)
+        {
+            return opDef.defName.GetOperatorIDFrom();
+        }
+
+        public static string GetOperatorIDFrom(this OperatorFashionSetDef fashionDef)
+        {
+            string XMLdefName = fashionDef.defName;
+            string[] temp = XMLdefName.Split('_');
+            if (temp.Length <= 2) return null;
+            return temp[temp.Length - 2];
+        }
+
+        public static string GetOperatorFashionNameFrom(this OperatorFashionSetDef fashionDef)
+        {
+            string XMLdefName = fashionDef.defName;
+            string[] temp = XMLdefName.Split('_');
+            if (temp.Length <= 1) return null;
+            return temp[temp.Length - 1];
+        }
+
         //要求defName格式：前缀_随便啥_人物名；返回物品defName格式：前缀_{string thingType}_人物名
         public static string GetThingdefNameFrom(string XMLdefName, string thingType)
         {

@@ -17,6 +17,9 @@
       <HintPath>..\Rely\1.6\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.Collections.Generic.RedBlack">
+      <HintPath>..\Rely\System.Collections.Generic.RedBlack.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>..\Rely\1.6\Unity.TextMeshPro.dll</HintPath>
       <Private>False</Private>

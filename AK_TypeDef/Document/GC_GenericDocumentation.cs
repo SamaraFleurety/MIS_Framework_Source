@@ -1,4 +1,5 @@
 ﻿using AK_DLL.Counter;
+using AK_DLL.SharedSingleton;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -18,6 +19,7 @@ namespace AK_DLL.Document
 
         public CountableManager countableManager = new();
 
+        public SharedSingletonManager singletonManager = new();
         public GC_Generic(Game game)
         {
             instance = this;

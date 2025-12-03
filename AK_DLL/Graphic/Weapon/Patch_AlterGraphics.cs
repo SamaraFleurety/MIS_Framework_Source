@@ -47,7 +47,17 @@ namespace AK_DLL.HarmonyPatchs
 
         public static void AlterWeaponGraphics(Thing eq, ref Material material, ref Matrix4x4 matrix, Vector3 drawLoc, float rotate)
         {
-            Ext_WeaponWieldGraphics ext = eq.def.GetModExtension<Ext_WeaponWieldGraphics>();
+            Ext_WeaponWieldGraphics ext = null;
+            Pawn weaponHolder = (eq.ParentHolder as Pawn_EquipmentTracker)?.pawn;
+            //主要用于舰娘，可以让舰娘持有的武器总是有个幻化
+            if (weaponHolder != null && weaponHolder.GetDoc() is OperatorDocument doc)
+            {
+                ext = doc.pendingFashionDef?.GetModExtension<Ext_WeaponWieldGraphics>();
+                ext ??= doc.operatorDef.GetModExtension<Ext_WeaponWieldGraphics>();
+            }
+
+            //武器可以在自己的def上面标记，持有替换贴图
+            ext ??= eq.def.GetModExtension<Ext_WeaponWieldGraphics>();
             if (ext == null) return;
 
             Graphic alterGraphic = ext.DefaultGraphic(eq);

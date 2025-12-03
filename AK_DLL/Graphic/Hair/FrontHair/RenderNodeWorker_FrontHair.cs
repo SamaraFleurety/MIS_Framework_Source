@@ -21,7 +21,16 @@ namespace AK_DLL
         }*/
         protected override Ext_ExtraGraphicData Ext(PawnDrawParms parms)
         {
-            return parms.pawn.story.hairDef.GetModExtension<Ext_FrontHair>();
+            Pawn pawn = parms.pawn;
+            Ext_FrontHair ext_FrontHair = null;
+
+            if (pawn.GetDoc() is OperatorDocument doc)
+            {
+                ext_FrontHair = doc.pendingFashionDef.GetModExtension<Ext_FrontHair>();
+            }
+
+            ext_FrontHair ??= pawn.story?.hairDef?.GetModExtension<Ext_FrontHair>();
+            return ext_FrontHair;
         }
     }
 }

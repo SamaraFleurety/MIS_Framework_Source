@@ -11,13 +11,11 @@ namespace AKA_Ability
     [DefOf]
     public static class AKADefOf
     {
-        /*public static SoundDef AK_SFX_Atkboost;
-        public static SoundDef AK_SFX_Defboost;
-        public static SoundDef AK_SFX_Healboost;
-        public static SoundDef AK_SFX_Tactboost;*/
 
         public static StatDef AKA_Stat_RangedDamageFactor; //远程伤害倍率
         public static StatDef AK_Stat_CraftQualityOffset;  //制作质量偏移（整数）
+
+        public static StatDef AK_Stat_MoveSpeedFactor; //移动速度倍率，默认是1 仍然可以写在衣服的offset。
 
     }
 

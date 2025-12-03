@@ -13,6 +13,8 @@ namespace AK_DLL
             OperatorDocument doc = __instance.pawn.GetDoc();
             if (doc?.voicePack == null) return;
 
+            __instance.pawn.apparel.Notify_ApparelChanged();
+
             if (__instance.Drafted)
                 doc.voicePack.draftSounds.RandomElement().PlaySound();
             else

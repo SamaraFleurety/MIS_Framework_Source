@@ -43,6 +43,9 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Generic.RedBlack">
+      <HintPath>..\Rely\System.Collections.Generic.RedBlack.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -106,6 +109,7 @@
     <Compile Include="DefExtension\DefExt_SkillLossRate.cs" />
     <Compile Include="HarmonyPatchs\PatchMain.cs" />
     <Compile Include="HarmonyPatchs\Patch_SkillLoss.cs" />
+    <Compile Include="HarmonyPatchs\Patch_Stat_MoveSpeed.cs" />
     <Compile Include="HCP\HCP_GrowthSys.cs" />
     <Compile Include="HCP\HCP_RandAddHediff.cs" />
     <Compile Include="HCP\HCP_RandAddTrait.cs" />

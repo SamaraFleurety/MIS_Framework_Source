@@ -33,5 +33,17 @@ namespace AK_DLL
         public GraphicData graphicData;
 
         public DrawOffsets sleepingDrawOffsets = new();
+
+        //为是的话，未征召状态就没有图片
+        //public bool hideWhenUndraft = false;
+
+        //不在床上就不显示
+        //这里处理不了 在render node里面判断
+        public bool showOnlyOnBed = false;
+        public Graphic GraphicFor(Pawn pawn)
+        {
+            //if (hideWhenUndraft && !pawn.Drafted) return null;
+            return graphicData.GraphicColoredFor(pawn);
+        }
     }
 }

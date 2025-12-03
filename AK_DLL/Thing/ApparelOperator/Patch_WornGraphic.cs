@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using AK_DLL.Apparels;
+using HarmonyLib;
 using RimWorld;
 
 namespace AK_DLL
@@ -11,6 +12,7 @@ namespace AK_DLL
         [HarmonyPrefix]
         public static bool Prefix(ref string __result, Apparel __instance)
         {
+            #region 大破逻辑 哪天找个时间删了
             if (forbidRecursion)
             {
                 forbidRecursion = false;
@@ -21,6 +23,12 @@ namespace AK_DLL
                 forbidRecursion = true;
                 __result = apparelOperator.WornGraphicPath_MultiFoam;
                 forbidRecursion = false;
+                return HarmonyPrefixRet.skipOriginal;
+            }
+            #endregion
+            if (__instance is Apparel_Shipgirl aps)
+            {
+                __result = aps.WornGraphicPathOverride;
                 return HarmonyPrefixRet.skipOriginal;
             }
             return HarmonyPrefixRet.keepOriginal;

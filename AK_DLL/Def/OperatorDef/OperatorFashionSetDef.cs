@@ -15,6 +15,8 @@ namespace AK_DLL
         public VoicePackDef voice = null;
         public int? standIndex;             //换装也能改变游戏界面左下角显示立绘
 
+        public string fashionName = null;  //碧蓝航线用新版换装逻辑。原皮的话留空。
+
         //nl表情兼容 带上此换装会强制禁用
         public bool forceDisableNL = false;
     }

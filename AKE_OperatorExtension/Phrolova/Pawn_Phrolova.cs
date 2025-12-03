@@ -9,7 +9,7 @@ namespace AKE_OperatorExtension
         const float HEAL_PER_PULSE = 10;
         const int HEAL_PULSE_INTERVAL = 60;
 
-        const int REPRODUCE_INTERVAL = TimeToTickDirect.hour * 12;
+        static int REPRODUCE_INTERVAL = TimeToTickDirect.hour * 12;
         protected override void Tick()
         {
             base.Tick();

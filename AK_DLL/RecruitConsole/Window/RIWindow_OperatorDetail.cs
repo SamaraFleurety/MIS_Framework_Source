@@ -699,15 +699,19 @@ namespace AK_DLL.UI
                     if (canRecruit)
                     {
                         this.Close();
+                        Log.Message("c");
                         RecruitConsole.TryGetComp<CompRefuelable>().ConsumeFuel(OperatorDef.ticketCost);
                         Pawn resultPawn = OperatorDef.Recruit(RecruitConsole.Map);
                         OperatorDocument document = resultPawn.GetDoc();
                         document.preferedSkin = this.preferredSkin;
+                        Log.Message("d");
                         if (RIWindowHandler.continuousRecruit) //连续招募
                         {
+                            Log.Message("e");
                             ReturnToParent(closeEV: false);
                             //RIWindowHandler.OpenRIWindow(AKDefOf.AK_Prefab_yccOpList /*RIWindowType.Op_List*/);
                         }
+                        Log.Message("f");
                     }
                 });
             }

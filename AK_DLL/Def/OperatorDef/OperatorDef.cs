@@ -1,4 +1,5 @@
 ﻿using AK_DLL.DynamicLoading;
+using AK_DLL.Apparels;
 using AK_TypeDef;
 using AKA_Ability;
 using AKA_Ability.TickCondition;
@@ -42,9 +43,16 @@ namespace AK_DLL
         public Dictionary<OperatorDef, PawnRelationDef> relations;
 
         public List<TraitAndDegree> traits;//干员特性
+
+        #region 旧版(高情商:兼容版)原皮
         public ThingDef weapon;//干员武器                                                  
         public List<ItemOnSpawn> apparels = new();//干员衣服
         public List<ThingDef> accessory = new(); //干员配件。和衣服的区别是在换装时不会丢掉。适合填入比如护盾。
+        #endregion
+
+        //新版原皮
+        public OperatorFashionSetDef defaultFashion = null;
+
         public List<ItemOnSpawn> items;
         public BodyTypeDef bodyTypeDef;//干员的体型
         public HeadTypeDef headTypeDef;
@@ -196,7 +204,7 @@ namespace AK_DLL
         #endregion
 
         //新换装写法 如果给定def就换，如果def是空的就换成原装
-        public void ChangeFashion(OperatorFashionSetDef def, Pawn p)
+        public void ChangeFashion(OperatorFashionSetDef fashionDef, Pawn p)
         {
             OperatorDocument doc = p.GetDoc();
             if (doc == null)
@@ -212,7 +220,7 @@ namespace AK_DLL
             clothTemp = new List<Thing>();
 
             int apparelTextureIndex = -1;
-            if (def == null)  //换回初始换装
+            if (fashionDef == null)  //换回初始换装
             {
                 foreach (ItemOnSpawn apparelDef in this.apparels)
                 {
@@ -238,30 +246,30 @@ namespace AK_DLL
             }
             else
             {
-                if (def.apparelTextureIndex is { } textureIndex) apparelTextureIndex = textureIndex;
-                foreach (ThingDef apparelDef in def.apparels)
+                if (fashionDef.apparelTextureIndex is int textureIndex) apparelTextureIndex = textureIndex;
+                foreach (ThingDef apparelDef in fashionDef.apparels)
                 {
                     Recruit_Inventory_Wear(apparelDef, operator_Pawn);
                 }
-                if (def.hair != null) operator_Pawn.story.hairDef = def.hair;
-                if (def.voice != null)
+                if (fashionDef.hair != null) operator_Pawn.story.hairDef = fashionDef.hair;
+                if (fashionDef.voice != null)
                 {
-                    doc.voicePack = def.voice;
+                    doc.voicePack = fashionDef.voice;
                 }
-                if (def.weapon != null)
+                if (fashionDef.weapon != null)
                 {
                     if (doc.weapon != null && !doc.weapon.DestroyedOrNull()) doc.weapon.Destroy();
                     if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null && ModLister.GetActiveModWithIdentifier("paluto22.ak.combatextended") == null)
                     {
                         return;
                     }
-                    ThingWithComps weaponEq = (ThingWithComps)ThingMaker.MakeThing(def.weapon);
+                    ThingWithComps weaponEq = (ThingWithComps)ThingMaker.MakeThing(fashionDef.weapon);
                     CompBiocodable comp = weaponEq.GetComp<CompBiocodable>();
                     comp?.CodeFor(operator_Pawn);
                     operator_Pawn.equipment.AddEquipment(weaponEq);
                     doc.weapon = weaponEq;
                 }
-                doc.forceDisableNL = def.forceDisableNL;
+                doc.forceDisableNL = fashionDef.forceDisableNL;
             }
 
             foreach (Apparel apparel in operator_Pawn.apparel.WornApparel)
@@ -270,10 +278,16 @@ namespace AK_DLL
                 {
                     ap.SetGraphicIndex(apparelTextureIndex);
                 }
+                if (apparel is Apparel_Shipgirl aps)
+                {
+                    aps.operatorDef = doc.operatorDef;
+                    aps.fashion = fashionDef;
+                    aps.SetDirty();
+                }
             }
 
             operator_Pawn.style.Notify_StyleItemChanged();
-            operator_Pawn.style.MakeHairFilth();
+            if (operator_Pawn.Map != null) operator_Pawn.style.MakeHairFilth();
             doc.RegisterFashionSet(clothTemp);
             clothTemp.Clear();
             currentlyGenerating = false;
@@ -314,15 +328,23 @@ namespace AK_DLL
 
             //对vab容器进行aka技能以外的处理
             Recruit_OperatorID(operatorVabID);
+            OperatorDocument operatorDoc = operatorVabID.Document;
             //(operatorID.AKATracker as AK_AbilityTracker).doc = doc;
             clothTemp.Clear();
 
             Recruit_AKAbility(operatorVabID);
 
-            Recruit_PostEffects();
-
             if (ModLister.GetActiveModWithIdentifier("Paluto22.SpriteEvo") != null) Recruit_SpineModel();
+
+            Recruit_PostEffects();
             currentlyGenerating = false;
+
+            if (defaultFashion != null)
+            {
+                operatorDoc.pendingFashionDef = defaultFashion;
+                ChangeFashion(defaultFashion, operator_Pawn);
+            }
+
             return operator_Pawn;
         }
 
@@ -617,6 +639,7 @@ namespace AK_DLL
         protected Apparel Recruit_Inventory_Wear(ThingDef apparelDef, Pawn p, bool isFashion = true, ThingDef stuff = null)
         {
             Apparel apparel = (Apparel)ThingMaker.MakeThing(apparelDef, stuff);
+            
             CompBiocodable comp = apparel.GetComp<CompBiocodable>();
             comp?.CodeFor(p);
             p.apparel.Wear(apparel);
@@ -700,8 +723,12 @@ namespace AK_DLL
         {
             string temp;
 
+            string id = AK_Tool.GetOperatorIDFrom(this.defName);
+
             string portraitPath = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorIDFrom(this.defName) + "Portrait";
             string standPath = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorIDFrom(this.defName) + "Stand";
+
+
             if (!dynaLoadStaticStands)
             {
                 if (this.headPortrait == null)
@@ -749,12 +776,13 @@ namespace AK_DLL
             }
             else  //新版动态加载立绘
             {
+                AutoFill_V2();
+
                 if (!staticStands.ContainsKey(-1))
                 {
                     temp = Utilities_Unity.DynaLoad_PathRelativeToFull<Texture2D>(portraitPath, modPackageID);
                     if (File.Exists(temp))
                     {
-                        //string portrait = temp;
                         staticStands.Add(-1, portraitPath);
                     }
                     else
@@ -801,6 +829,52 @@ namespace AK_DLL
             }
 
             if (AK_Tool.Live2DActivated) AutoFill_Live2D();
+
+            void AutoFill_V2()
+            {
+                string tempV2;
+                string portraitPathV2 = this.operatorType.textureFolder + "/" + id + "/" + id + "Portrait";
+                string standPathV2 = this.operatorType.textureFolder + "/" + id + "/" + id + "Stand";
+
+                if (!staticStands.ContainsKey(-1))
+                {
+                    tempV2 = Utilities_Unity.DynaLoad_PathRelativeToFull<Texture2D>(portraitPathV2, modPackageID);
+                    if (File.Exists(tempV2))
+                    {
+                        staticStands.Add(-1, portraitPathV2);
+                    }
+                }
+                if (!staticStands.ContainsKey(0))
+                {
+                    tempV2 = Utilities_Unity.DynaLoad_PathRelativeToFull<Texture2D>(standPathV2, modPackageID);
+                    if (File.Exists(tempV2))
+                    {
+                        staticStands.Add(0, standPathV2);
+                    }
+                }
+                if (!staticStands.ContainsKey(1))
+                {
+                    standPathV2 = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorIDFrom(this.defName) + "Common";
+                    tempV2 = Utilities_Unity.DynaLoad_PathRelativeToFull<Texture2D>(standPathV2, modPackageID);
+                    if (File.Exists(tempV2))
+                    {
+                        string standCommon = standPathV2;
+                        staticStands.Add(1, standCommon);
+                    }
+                }
+                standPathV2 = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorIDFrom(this.defName) + "Fashion";
+                for (int i = 0; i < 10; ++i)
+                {
+                    int fashionIndex = i + 2;
+                    tempV2 = standPathV2 + TypeDef.romanNumber[i];
+                    string temp2 = Utilities_Unity.DynaLoad_PathRelativeToFull<Texture2D>(tempV2, modPackageID);
+                    if (!staticStands.ContainsKey(fashionIndex) && File.Exists(temp2))
+                    {
+                        string temp3 = tempV2;
+                        staticStands.Add(fashionIndex, temp3);
+                    }
+                }
+            }
         }
 
         private void AutoFill_Live2D()

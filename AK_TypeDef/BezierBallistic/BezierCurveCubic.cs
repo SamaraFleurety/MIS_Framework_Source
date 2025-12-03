@@ -26,7 +26,7 @@ namespace AK_DLL.Bezier
         public float verticalFlipChance = 0.5f;
 
         //生成一个确定的曲线
-        public BezierCurveCubic GenCurveCubic(Vector3 start, Vector3 destination, int? flipOverride = null)
+        public virtual BezierCurveCubic GenCurveCubic(Vector3 start, Vector3 destination, int? flipOverride = null)
         {
             return new BezierCurveCubic(this, start, destination, flipOverride);
         }
@@ -80,7 +80,7 @@ namespace AK_DLL.Bezier
                         start.z + (end.z - start.z) * p.x + (end.x - start.x) * p.z
                     );
             }
-            Log.Message($"generate curve param: start {start}, end {end}, p1 {p1}, cp1 {control1}, p2 {p2}, cp2 {control2}");
+            //Log.Message($"generate curve param: start {start}, end {end}, p1 {p1}, cp1 {control1}, p2 {p2}, cp2 {control2}");
         }
 
         public Vector3 GetPoint (float t)
@@ -89,7 +89,7 @@ namespace AK_DLL.Bezier
             //return Vector3.zero;
         }
 
-        public void ExposeData()
+        public virtual void ExposeData()
         {
             Scribe_Values.Look(ref start, "start");
             Scribe_Values.Look(ref control1, "control1");

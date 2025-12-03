@@ -29,6 +29,7 @@ namespace AK_DLL
 
         public int preferedSkin = OperatorStandType.Elite2;    //选定立绘,0是精2, 1是精0, 后面是换装
 
+        //将要或者已经换上的衣服套装 会保存
         public OperatorFashionSetDef pendingFashionDef;
 
         public OperatorDocument()

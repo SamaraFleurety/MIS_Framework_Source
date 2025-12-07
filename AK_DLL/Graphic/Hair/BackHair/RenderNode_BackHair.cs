@@ -14,7 +14,7 @@ namespace AK_DLL
 
             if (pawn.GetDoc() is OperatorDocument doc)
             {
-                ext = doc.pendingFashionDef.GetModExtension<Ext_BackHair>();
+                ext = doc.pendingFashionDef?.GetModExtension<Ext_BackHair>();
             }
 
             ext ??= pawn.story?.hairDef?.GetModExtension<Ext_BackHair>();

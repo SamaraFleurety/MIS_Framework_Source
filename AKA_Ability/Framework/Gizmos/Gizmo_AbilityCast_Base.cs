@@ -10,6 +10,16 @@ namespace AKA_Ability.Gizmos
 
         private Cooldown_Regen Cooldown => parent.cooldown;
 
+        public Gizmo_AbilityCast_Base(AKAbility_Base parent)
+        {
+            this.parent = parent;
+        }
+
+        public virtual void GetExplanation()
+        {
+            defaultDescPostfix = Cooldown.GetExplanation();
+        }
+
         public override void DrawIcon(Rect rect, Material buttonMat, GizmoRenderParms parms)
         {
             Texture2D badTex = this.icon as Texture2D;

@@ -14,12 +14,11 @@ namespace AKA_Ability
 
         protected override void InitializeGizmoInnate()
         {
-            cachedGizmo = new Gizmo_AbilityCast_Action
+            cachedGizmo = new Gizmo_AbilityCast_Action(this)
             {
+                icon = def.Icon,
                 defaultLabel = def.label,
                 defaultDesc = def.description,
-                icon = def.Icon,
-                parent = this,
                 action = delegate ()
                 {
                     this.TryCastShot(CasterPawn);

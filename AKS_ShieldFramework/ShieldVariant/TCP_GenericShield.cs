@@ -121,6 +121,12 @@ namespace AKS_Shield
 
         public override void PostPreApplyDamage(ref DamageInfo dinfo, out bool absorbed)
         {
+            if (Wearer == null) 
+            {
+                absorbed = false;
+                return;
+            }
+
             Wearer.Drawer.renderer.renderTree.SetDirty();
             if (Energy <= 0)
             {

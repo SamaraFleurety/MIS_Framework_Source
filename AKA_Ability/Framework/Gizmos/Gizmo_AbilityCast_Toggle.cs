@@ -11,6 +11,10 @@ namespace AKA_Ability.Gizmos
         //是否允许控制技能开关，false的话按按钮并没有用，仅显示状态
         public bool allowToggle = true;
 
+        public Gizmo_AbilityCast_Toggle(AKAbility_Base parent) : base(parent)
+        {
+        }
+
         public override void DrawIcon(Rect rect, Material buttonMat, GizmoRenderParms parms)
         {
             base.DrawIcon(rect, buttonMat, parms);

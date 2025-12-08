@@ -1,5 +1,7 @@
 ﻿using AK_DLL;
+using RimWorld;
 using System;
+using System.Text;
 using Verse;
 
 namespace AKA_Ability.Cooldown
@@ -64,6 +66,16 @@ namespace AKA_Ability.Cooldown
             charge = 0;
             SP = prop.initSP;
             Tick(0);
+        }
+
+        public virtual TaggedString GetExplanation() 
+        {
+            StringBuilder sb = new();
+            sb.Append("\n");
+            sb.Append("CooldownTime".Translate());
+            sb.Append(": ");
+            sb.Append(GenDate.ToStringTicksToPeriod(MaxSP));
+            return sb.ToString().Colorize(ColorLibrary.Yellow);
         }
 
         public virtual void ExposeData()

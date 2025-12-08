@@ -7,6 +7,11 @@ namespace AKA_Ability.Gizmos
     public class Gizmo_AbilityCast_Action : Gizmo_AbilityCast_Base
     {
         public Action action;
+
+        public Gizmo_AbilityCast_Action(AKAbility_Base parent) : base(parent)
+        {
+        }
+
         public override void ProcessInput(Event ev)
         {
             base.ProcessInput(ev);

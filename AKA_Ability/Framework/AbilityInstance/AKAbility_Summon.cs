@@ -49,12 +49,11 @@ namespace AKA_Ability
                 yield return c;
             }
             //先随便整整 结构不好 日后悔过
-            yield return new Gizmo_SelectAllSummon
+            yield return new Gizmo_SelectAllSummon(this)
             {
-                parent = this,
+                icon = def.Icon,
                 defaultLabel = "选中所有召唤物",
                 defaultDesc = "选中所有召唤物",
-                icon = def.Icon
             };
         }
 

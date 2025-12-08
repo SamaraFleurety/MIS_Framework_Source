@@ -5,7 +5,7 @@ namespace AKA_Ability.Gizmos
 {
     public class Gizmo_SelectAllSummon : Gizmo_AbilityCast_Action
     {
-        public Gizmo_SelectAllSummon()
+        public Gizmo_SelectAllSummon(AKAbility_Base parent) : base(parent)
         {
             action = delegate ()
             {

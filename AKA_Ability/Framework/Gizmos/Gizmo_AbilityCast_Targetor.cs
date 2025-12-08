@@ -6,6 +6,10 @@ namespace AKA_Ability.Gizmos
     //需要用targetor手动选择目标的技能
     public class Gizmo_AbilityCast_Targetor : Gizmo_AbilityCast_Base
     {
+        public Gizmo_AbilityCast_Targetor(AKAbility_Base parent) : base(parent)
+        {
+        }
+
         private AKAbility_Targetor Parent => parent as AKAbility_Targetor;
         public override void ProcessInput(Event ev)
         {

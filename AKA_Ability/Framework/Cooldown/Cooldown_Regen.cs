@@ -68,7 +68,7 @@ namespace AKA_Ability.Cooldown
             Tick(0);
         }
 
-        public virtual TaggedString GetExplanation() 
+        public virtual TaggedString GetExplanation()
         {
             StringBuilder sb = new();
             sb.Append("\n");
@@ -109,7 +109,7 @@ namespace AKA_Ability.Cooldown
         public virtual float CooldownPercent()
         {
             if (charge == MaxCharge) return 0;
-            return (float)this.SP / (float)this.MaxSP;
+            return SP / (float)this.MaxSP;
         }
 
         public virtual void CostCharge(int cost)

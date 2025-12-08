@@ -1,4 +1,5 @@
 ﻿using AKA_Ability.SharedData;
+using Verse;
 
 namespace AKA_Ability.Cooldown
 {
@@ -28,6 +29,11 @@ namespace AKA_Ability.Cooldown
             prop = property;
             charge = 0;
             Tick(0);
+        }
+
+        public override TaggedString GetExplanation()
+        {
+            return string.Empty;
         }
 
         public override void Tick(int amt)

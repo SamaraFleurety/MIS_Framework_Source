@@ -8,6 +8,11 @@ namespace AKA_Ability.Cooldown
         {
         }
 
+        public override TaggedString GetExplanation()
+        {
+            return string.Empty;
+        }
+
         //不衰减
         public override void Tick(int amt)
         {

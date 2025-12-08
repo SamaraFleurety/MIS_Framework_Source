@@ -14,6 +14,11 @@ namespace AKA_Ability.CastConditioner
 
         public bool invert = false;  //如果是true的话，会反着输出结果
 
+        public virtual string GetExplanation()
+        {
+            return null;
+        }
+
         public virtual bool Castable_New(AKAbility_Base instance)
         {
             if (ignoredByAuto && instance is AKAbility_Auto) return true;

@@ -8,7 +8,7 @@ namespace AKA_Ability.Cooldown
         {
         }
 
-        public override TaggedString GetExplanation()
+        public override string GetExplanation()
         {
             return string.Empty;
         }

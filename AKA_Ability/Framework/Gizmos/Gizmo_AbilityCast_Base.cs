@@ -1,4 +1,6 @@
 ﻿using AKA_Ability.Cooldown;
+using System.Linq;
+using System.Text;
 using UnityEngine;
 using Verse;
 
@@ -13,11 +15,31 @@ namespace AKA_Ability.Gizmos
         public Gizmo_AbilityCast_Base(AKAbility_Base parent)
         {
             this.parent = parent;
+            defaultDescPostfix = GetInspectStringExtra();
         }
 
-        public virtual void GetExplanation()
+        public virtual string GetInspectStringExtra()
         {
-            defaultDescPostfix = Cooldown.GetExplanation();
+            StringBuilder sb = new();
+            sb.AppendLine();
+
+            string cooldown = Cooldown?.GetExplanation();
+            if (!string.IsNullOrEmpty(cooldown))
+            {
+                sb.AppendLine(cooldown);
+            }
+
+            var conditions = parent.def.castConditions.Select(cc => cc.GetExplanation())
+                .Where(explanation => !string.IsNullOrEmpty(explanation)).ToList();
+            if (conditions.Any())
+            {
+                sb.AppendLine($"{"SkillRequirements".Translate()}: ".Colorize(ColorLibrary.Yellow));
+                foreach (var condition in conditions)
+                {
+                    sb.AppendLine(condition);
+                }
+            }
+            return sb.ToString();
         }
 
         public override void DrawIcon(Rect rect, Material buttonMat, GizmoRenderParms parms)

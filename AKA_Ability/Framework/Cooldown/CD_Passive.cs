@@ -14,7 +14,7 @@ namespace AKA_Ability.Cooldown
             maxSP = prop.SPPerCharge * (int)prop.SPUnit;
         }
 
-        public override TaggedString GetExplanation()
+        public override string GetExplanation()
         {
             return string.Empty;
         }

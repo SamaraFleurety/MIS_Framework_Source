@@ -31,7 +31,7 @@ namespace AKA_Ability.Cooldown
             Tick(0);
         }
 
-        public override TaggedString GetExplanation()
+        public override string GetExplanation()
         {
             return string.Empty;
         }

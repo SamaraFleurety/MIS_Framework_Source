@@ -68,12 +68,10 @@ namespace AKA_Ability.Cooldown
             Tick(0);
         }
 
-        public virtual TaggedString GetExplanation()
+        public virtual string GetExplanation()
         {
             StringBuilder sb = new();
-            sb.Append("\n");
-            sb.Append("CooldownTime".Translate());
-            sb.Append(": ");
+            sb.Append($"{"CooldownTime".Translate()}: ");
             sb.Append(GenDate.ToStringTicksToPeriod(MaxSP));
             return sb.ToString().Colorize(ColorLibrary.Yellow);
         }

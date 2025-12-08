@@ -16,10 +16,11 @@ namespace AKE_OperatorExtension.HarmonyPatchs
     {
         [HarmonyPostfix]
         public static void postfix(StatWorker __instance, StatRequest req, ref float __result, StatDef ___stat)
-        {
+        {   
             if (___stat == StatDefOf.MoveSpeed)
             {
-                float factor = (req.Thing as Pawn).GetStatValue(AKA_Ability.AKADefOf.AK_Stat_MoveSpeedFactor);
+                if (req.Thing is not Pawn p) return;
+                float factor = p.GetStatValue(AKA_Ability.AKADefOf.AK_Stat_MoveSpeedFactor);
                 __result *= factor;
             }
         }

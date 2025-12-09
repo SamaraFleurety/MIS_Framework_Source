@@ -9,6 +9,7 @@ namespace AK_DLL
     {
         protected abstract Ext_ExtraGraphicData Ext(PawnDrawParms parms);
 
+
         public override bool CanDrawNow(PawnRenderNode node, PawnDrawParms parms)
         {
             Ext_ExtraGraphicData ext = Ext(parms);
@@ -27,6 +28,8 @@ namespace AK_DLL
             {
                 offset += ext.sleepingDrawOffsets.DrawOffsetForRot(parms.facing);
             }
+
+            offset += MIS_DebugAction.debugOffset;
 
             return offset;
         }

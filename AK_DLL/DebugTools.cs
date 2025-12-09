@@ -1,6 +1,7 @@
 ﻿using AK_DLL.UI;
 using LudeonTK;
 using System.Collections.Generic;
+using UnityEngine;
 using Verse;
 
 namespace AK_DLL
@@ -10,6 +11,9 @@ namespace AK_DLL
         private static Map Map => Find.CurrentMap;
         private static BoolGrid _usedCells;
         private static CellRect _overRect;
+
+
+        public static Vector3 debugOffset = Vector3.zero;
 
         [DebugAction("MIS-AK Actions", "Make colony (Operators)", false, false, false, false, false, 0, false, allowedGameStates = AllowedGameStates.PlayingOnMap)]
         public static void MakeColonyWeapon()
@@ -84,6 +88,40 @@ namespace AK_DLL
             {
                 Log.Message($"[AK] {doc.pawn.Name} bound sound: {sound.defName}");
             }
+        }
+
+        [DebugAction("MIS-AK Actions", "重置贴图偏移", false, false, false, false, false, 0, false, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+        public static void OffsetGraphics()
+        {
+            debugOffset = Vector3.zero;
+        }
+
+        [DebugAction("MIS-AK Actions", "贴图偏移: x + 0.01", false, false, false, false, false, 0, false, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+        public static void OffsetGraphicsX_Plus1()
+        {
+            debugOffset.x += 0.01f;
+            Log.Message($"[AK] 当前偏移: x:{debugOffset.x}, z: {debugOffset.z}");
+        }
+
+        [DebugAction("MIS-AK Actions", "贴图偏移: x - 0.01", false, false, false, false, false, 0, false, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+        public static void OffsetGraphicsX_Minus1()
+        {
+            debugOffset.x -= 0.01f;
+            Log.Message($"[AK] 当前偏移: x:{debugOffset.x}, z: {debugOffset.z}");
+        }
+
+        [DebugAction("MIS-AK Actions", "贴图偏移: z + 0.01", false, false, false, false, false, 0, false, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+        public static void OffsetGraphicsZ_Plus1()
+        {
+            debugOffset.z += 0.01f;
+            Log.Message($"[AK] 当前偏移: x:{debugOffset.x}, z: {debugOffset.z}");
+        }
+
+        [DebugAction("MIS-AK Actions", "贴图偏移: z - 0.01", false, false, false, false, false, 0, false, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+        public static void OffsetGraphicsZ_Minus1()
+        {
+            debugOffset.z -= 0.01f;
+            Log.Message($"[AK] 当前偏移: x:{debugOffset.x}, z: {debugOffset.z}");
         }
     }
 }

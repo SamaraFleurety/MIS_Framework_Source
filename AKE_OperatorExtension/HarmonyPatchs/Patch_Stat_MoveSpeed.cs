@@ -17,11 +17,19 @@ namespace AKE_OperatorExtension.HarmonyPatchs
         [HarmonyPostfix]
         public static void postfix(StatWorker __instance, StatRequest req, ref float __result, StatDef ___stat)
         {   
-            if (___stat == StatDefOf.MoveSpeed)
+            try
             {
-                if (req.Thing is not Pawn p) return;
-                float factor = p.GetStatValue(AKA_Ability.AKADefOf.AK_Stat_MoveSpeedFactor);
-                __result *= factor;
+                if (___stat == StatDefOf.MoveSpeed)
+                {
+                    if (req.Thing is not Pawn p) return;
+                    float factor = p.GetStatValue(AKA_Ability.AKADefOf.AK_Stat_MoveSpeedFactor);
+                    __result *= factor;
+                    if (__result <= 0.1) __result = 0.1f;
+                }
+            }
+            catch (Exception e)
+            {
+                Log.ErrorOnce($"[AKE]更改移速失败 {e.StackTrace}", 114515);
             }
         }
     }

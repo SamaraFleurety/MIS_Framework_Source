@@ -8,6 +8,10 @@ namespace AKA_Ability.Gizmos
     {
         public Action action;
 
+        public Gizmo_AbilityCast_Action() : base()
+        {
+
+        }
         public Gizmo_AbilityCast_Action(AKAbility_Base parent) : base(parent)
         {
         }

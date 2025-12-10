@@ -8,11 +8,17 @@ namespace AKA_Ability.Gizmos
 {
     public abstract class Gizmo_AbilityCast_Base : Command
     {
+        //不是必然有 只是给个地方存
         public AKAbility_Base parent;
 
         private Cooldown_Regen Cooldown => parent.cooldown;
 
-        public Gizmo_AbilityCast_Base(AKAbility_Base parent)
+        public Gizmo_AbilityCast_Base()
+        {
+
+        }
+
+        public Gizmo_AbilityCast_Base(AKAbility_Base parent) : this()
         {
             this.parent = parent;
             defaultDescPostfix = GetInspectStringExtra();

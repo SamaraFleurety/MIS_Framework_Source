@@ -20,5 +20,14 @@ namespace AK_DLL
         {
         }
 
+        public override void ExposeData()
+        {
+            base.ExposeData();
+
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                Document.parentContainer = this;
+            }
+        }
     }
 }

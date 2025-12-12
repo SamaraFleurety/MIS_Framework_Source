@@ -1,8 +1,10 @@
 ﻿using AKA_Ability.CastConditioner;
 using AKA_Ability.Cooldown;
+using AKA_Ability.InertiaConditioner;
 using RimWorld;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 using Verse;
 
@@ -47,9 +49,23 @@ namespace AKA_Ability
 
         public int sortOrder = 999; //自动排序，值越小越前
 
+        //没做完 判断技能是否活跃
         public List<Type> inertiaConditions = new();
         #region 非xml可填参数
         public Texture2D Icon => ContentFinder<Texture2D>.Get(icon);
         #endregion
+
+        public AKAbility_Base MakeAbility(AbilityTracker tracker)
+        {
+            AKAbility_Base ability = (AKAbility_Base)Activator.CreateInstance(abilityClass, this, tracker);
+
+            foreach (Type icType in inertiaConditions)
+            {
+                InertiaConditioner_Base ic = (InertiaConditioner_Base)Activator.CreateInstance(icType, ability);
+                ability.inertiaConditions.Add(ic);
+            }
+
+            return ability;
+        }
     }
 }

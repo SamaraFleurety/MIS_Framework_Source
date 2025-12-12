@@ -10,6 +10,9 @@ namespace AK_DLL
     //这玩意不和单个pawn一对一绑定，不是通用文档
     public class OperatorDocument : IExposable, ILoadReferenceable
     {
+        //父类容器的双向指针
+        public VAbility_Operator parentContainer;
+
         //开放开盒干员的权限
         public string operatorID;
         public bool currentExist;

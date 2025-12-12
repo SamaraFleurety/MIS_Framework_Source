@@ -28,12 +28,5 @@ namespace AK_DLL
             if (!VoicePlayer.CanPlayNow()) return;
             doc?.voicePack.abilitySounds?.RandomElement()?.PlaySound();
         }
-
-        /*public override void AbilityPostEffect_PlayAbilitySound(AKAbility ability)
-        {
-            if (VoicePlayer.CanPlayNow()) return;
-            base.AbilityPostEffect_PlayAbilitySound(ability);
-            if (doc != null) doc.voicePack.abilitySounds.RandomElement().PlaySound();
-        }*/
     }
 }

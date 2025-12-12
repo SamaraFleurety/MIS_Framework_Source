@@ -122,8 +122,6 @@ namespace AKA_Ability
                 {
                     yield return c1;
                 }
-                /*c = i.GetGizmos();
-                if (c != null) yield return c;*/
             }
             //分组技能 仅显示最多1个
             if (indexActiveGroupedAbility != -1 && groupedAbilities.Count > 0)
@@ -132,8 +130,6 @@ namespace AKA_Ability
                 {
                     yield return c2;
                 }
-                /*c = groupedAbilities[indexActiveGroupedAbility].GetGizmos();
-                if (c != null) yield return c;*/
             }
             if (Prefs.DevMode)
             {
@@ -156,13 +152,15 @@ namespace AKA_Ability
 
         public virtual AKAbility_Base AddAbility(AKAbilityDef def)
         {
-            AKAbility_Base ability = (AKAbility_Base)Activator.CreateInstance(def.abilityClass, def, this);
+           /* AKAbility_Base ability = (AKAbility_Base)Activator.CreateInstance(def.abilityClass, def, this);
 
             foreach (Type icType in def.inertiaConditions)
             {
                 InertiaConditioner_Base ic = (InertiaConditioner_Base)Activator.CreateInstance(icType, ability);
                 ability.inertiaConditions.Add(ic);
-            }
+            }*/
+
+            AKAbility_Base ability = def.MakeAbility(this);
 
             List<AKAbility_Base> allAbilities = this.innateAbilities;
             if (def.grouped)
@@ -188,12 +186,6 @@ namespace AKA_Ability
             }
 
             allAbilities.Add(ability);
-
-            /*if (def.grouped)
-            {
-                //this.groupedAbilities.Add(ability);
-            }*/
-            //else this.innateAbilities.Add(ability);
 
             return ability;
         }

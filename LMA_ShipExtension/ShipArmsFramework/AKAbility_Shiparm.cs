@@ -16,11 +16,11 @@ namespace LMA_Lib.Shipborne
     {
         Verb_LaunchProjectile shiparmVerb;
 
-        public AKAbility_Shiparm(AbilityTracker tracker) : base(tracker)
+        public AKAbility_Shiparm(LMA_AbilityTracker tracker) : base(tracker)
         {
         }
 
-        public AKAbility_Shiparm(AKAbilityDef def, AbilityTracker tracker) : base(def, tracker)
+        public AKAbility_Shiparm(AKAbilityDef def, LMA_AbilityTracker tracker) : base(def, tracker)
         {
         }
 

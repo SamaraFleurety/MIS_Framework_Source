@@ -329,6 +329,7 @@ namespace AK_DLL
             //对vab容器进行aka技能以外的处理
             Recruit_OperatorID(operatorVabID);
             OperatorDocument operatorDoc = operatorVabID.Document;
+            operatorDoc.parentContainer = operatorVabID;
             //(operatorID.AKATracker as AK_AbilityTracker).doc = doc;
             clothTemp.Clear();
 

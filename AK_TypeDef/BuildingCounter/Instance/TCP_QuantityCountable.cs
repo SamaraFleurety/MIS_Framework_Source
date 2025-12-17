@@ -44,14 +44,18 @@ namespace AK_DLL.Counter
             base.PostSpawnSetup(respawningAfterLoad);
             TryRegister();
         }
+
+        public override void PostDestroy(DestroyMode mode, Map previousMap)
+        {
+            base.PostDestroy(mode, previousMap);
+            TryDeregister();
+        }
+
         public virtual void TryRegister()
         {
             if (ParentThing == null) return;
             bool res = CountableManager.Instance.TryAddCountable(this);
             if (res) RegisterEffect();
-        }
-        public virtual void RegisterEffect()
-        {
         }
 
         public virtual void TryDeregister(Map map = null)
@@ -59,6 +63,10 @@ namespace AK_DLL.Counter
             if (ParentThing == null) return;
             bool res = CountableManager.Instance.TryRemoveCountable(this, map);
             if (res) DeregisterEffect();
+        }
+
+        public virtual void RegisterEffect()
+        {
         }
 
         public virtual void DeregisterEffect()

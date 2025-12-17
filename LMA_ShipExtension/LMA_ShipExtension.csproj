@@ -96,6 +96,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ability\AE_SetShipEqTarget.cs" />
+    <Compile Include="Ability\AKAbility_ShipEq.cs" />
     <Compile Include="Ability\LMA_AbilityTracker.cs" />
     <Compile Include="Ability\TCP_ShipEq.cs" />
     <Compile Include="FireControlSystem\Patch_ApparealWearNotify.cs" />

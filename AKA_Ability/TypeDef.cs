@@ -5,7 +5,7 @@ namespace AKA_Ability
 {
     public static class TypeDef
     {
-        //public static SoundDef[] abilitySFX = new SoundDef[4] { AKADefOf.AK_SFX_Atkboost, AKADefOf.AK_SFX_Defboost, AKADefOf.AK_SFX_Healboost, AKADefOf.AK_SFX_Tactboost };
+        public const int AUTO_ABILITY_TICK_INTERVAL = 180; //自动技能的间隔时间，默认180tick（3秒）
     }
 
     [DefOf]

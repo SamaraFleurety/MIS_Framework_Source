@@ -8,10 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Verse;
 
-namespace LMA_Lib
+namespace LMA_Lib.Ability
 {
     public class LMA_AbilityTracker : AK_AbilityTracker
     {
+        public Dictionary<int, LocalTargetInfo> shipEqTargets = new();
         //舰装用 基本上是开火的效果，伪装成技能
         public Dictionary<int, AKAbility_Base> equipmentAbilities = new();
 

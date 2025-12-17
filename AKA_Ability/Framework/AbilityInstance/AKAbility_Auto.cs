@@ -21,7 +21,7 @@ namespace AKA_Ability
         public override void Tick()
         {
             base.Tick();
-            if (AutoCast && Find.TickManager.TicksGame % 180 == 0 && CastableNow())
+            if (AutoCast && Find.TickManager.TicksGame % TypeDef.AUTO_ABILITY_TICK_INTERVAL == 0 && CastableNow())
             {
                 if (Target == null) return;
                 TryCastShot(Target);

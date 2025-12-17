@@ -1,4 +1,5 @@
 ﻿using AKA_Ability;
+using LMA_Lib.Ability;
 using RimWorld;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Verse;
 
-namespace LMA_Lib.Shipborne
+/*namespace LMA_Lib.Shipborne
 {
     //舰娘用舰装火炮
     //此技能的gizmo可以手动确定目标覆盖，若无目标会使用一个共享目标
@@ -31,4 +32,4 @@ namespace LMA_Lib.Shipborne
             //shiparmVerb.TryStartCastOn();
         }
     }
-}
+}*/

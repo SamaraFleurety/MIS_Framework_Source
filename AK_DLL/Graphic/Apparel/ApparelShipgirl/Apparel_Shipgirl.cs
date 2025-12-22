@@ -114,6 +114,7 @@ namespace AK_DLL.Apparels
                     //这后面是体型和朝向。此处不处理
 
                     cachedWornGraphicPath = sb.ToString();
+                    //Log.Message($"[AK] set fashion path {cachedWornGraphicPath}");
                 }
                 return cachedWornGraphicPath;
             }

@@ -53,8 +53,9 @@ namespace AK_DLL
                 yield return new FloatMenuOption("AK_ChangeFashionDefault".Translate(),
                 delegate
                 {
-                    //doc.pendingFashion = -1;
-                    doc.pendingFashionDef = null;
+                    OperatorFashionSetDef nextFashion = null;
+                    if (doc.operatorDef.defaultFashion != null) nextFashion = doc.operatorDef.defaultFashion;
+                    doc.pendingFashionDef = nextFashion;
                     selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AKDefOf.AK_Job_OperatorChangeFashion, this));
                 }
                 );

@@ -261,13 +261,16 @@ namespace AK_DLL
                     if (doc.weapon != null && !doc.weapon.DestroyedOrNull()) doc.weapon.Destroy();
                     if (ModLister.GetActiveModWithIdentifier("ceteam.combatextended") != null && ModLister.GetActiveModWithIdentifier("paluto22.ak.combatextended") == null)
                     {
-                        return;
+                        //return;
                     }
-                    ThingWithComps weaponEq = (ThingWithComps)ThingMaker.MakeThing(fashionDef.weapon);
-                    CompBiocodable comp = weaponEq.GetComp<CompBiocodable>();
-                    comp?.CodeFor(operator_Pawn);
-                    operator_Pawn.equipment.AddEquipment(weaponEq);
-                    doc.weapon = weaponEq;
+                    else
+                    {
+                        ThingWithComps weaponEq = (ThingWithComps)ThingMaker.MakeThing(fashionDef.weapon);
+                        CompBiocodable comp = weaponEq.GetComp<CompBiocodable>();
+                        comp?.CodeFor(operator_Pawn);
+                        operator_Pawn.equipment.AddEquipment(weaponEq);
+                        doc.weapon = weaponEq;
+                    }
                 }
                 doc.forceDisableNL = fashionDef.forceDisableNL;
             }

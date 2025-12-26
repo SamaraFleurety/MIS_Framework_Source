@@ -104,6 +104,9 @@
     <Compile Include="ApparelBreak\Apparel_Breakdown.cs" />
     <Compile Include="ApparelBreak\Ext_ApparelBreakGraphic.cs" />
     <Compile Include="ApparelBreak\Patch_ApparelGraphic.cs" />
+    <Compile Include="DefExtension\CountAsTraitKind\Ext_TraitKind.cs" />
+    <Compile Include="DefExtension\CountAsTraitKind\Patch_InsultFactor.cs" />
+    <Compile Include="DefExtension\CountAsTraitKind\Patch_KindWordWeight.cs" />
     <Compile Include="HarmonyPatchs\Patch_Inspiration.cs" />
     <Compile Include="CombatRecords\TCP_UseEffect_CombatRecord.cs" />
     <Compile Include="DefExtension\DefExt_SkillLossRate.cs" />

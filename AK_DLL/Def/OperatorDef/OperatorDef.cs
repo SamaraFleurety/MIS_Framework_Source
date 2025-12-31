@@ -84,6 +84,7 @@ namespace AK_DLL
         public List<OperatorFashionSetDef> clothSets = new();
         public List<string> live2dModel = new();
 
+        //fixme:下面的数字应该和上面那句（即TypeDef里）的数字统一
         //因为并不知道是否有某种立绘，所以用字典存。约定-1为头像，0是精0立绘，1是精2立绘，2-后面是换装
         //这里的V3，x和y是x轴和y轴的偏移，z其实是缩放
         public Dictionary<int, Vector3> standOffsets = new();
@@ -834,13 +835,14 @@ namespace AK_DLL
 
             if (AK_Tool.Live2DActivated) AutoFill_Live2D();
 
+
+            //纪传体式放贴图的新标准
             void AutoFill_V2()
             {
                 string tempV2;
-                string portraitPathV2 = this.operatorType.textureFolder + "/" + id + "/" + id + "Portrait";
-                string standPathV2 = this.operatorType.textureFolder + "/" + id + "/" + id + "Stand";
 
-                if (!staticStands.ContainsKey(-1))
+                string portraitPathV2 = this.operatorType.textureFolder + "/" + id + "/" + id + "Portrait";
+                if (!staticStands.ContainsKey(OperatorStandType.Portrait))
                 {
                     tempV2 = Utilities_Unity.DynaLoad_PathRelativeToFull<Texture2D>(portraitPathV2, modPackageID);
                     if (File.Exists(tempV2))
@@ -848,7 +850,11 @@ namespace AK_DLL
                         staticStands.Add(-1, portraitPathV2);
                     }
                 }
-                if (!staticStands.ContainsKey(0))
+
+                //stand是指默认（精二）立绘。一个角色必须存在此默认立绘
+                //本项目立项时，没有做换立绘系统，每角色仅一个立绘，然后因为精二立绘往往比较好看所以默认用的这个。
+                string standPathV2 = this.operatorType.textureFolder + "/" + id + "/" + id + "Stand";
+                if (!staticStands.ContainsKey(OperatorStandType.Elite2))
                 {
                     tempV2 = Utilities_Unity.DynaLoad_PathRelativeToFull<Texture2D>(standPathV2, modPackageID);
                     if (File.Exists(tempV2))
@@ -856,9 +862,11 @@ namespace AK_DLL
                         staticStands.Add(0, standPathV2);
                     }
                 }
-                if (!staticStands.ContainsKey(1))
+
+                //common立绘是指精0立绘 没有这个概念的可以不要。
+                if (!staticStands.ContainsKey(OperatorStandType.Elite0))
                 {
-                    standPathV2 = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorIDFrom(this.defName) + "Common";
+                    standPathV2 = this.operatorType.textureFolder + "/" + id + "/" + id + "Common";
                     tempV2 = Utilities_Unity.DynaLoad_PathRelativeToFull<Texture2D>(standPathV2, modPackageID);
                     if (File.Exists(tempV2))
                     {
@@ -866,7 +874,7 @@ namespace AK_DLL
                         staticStands.Add(1, standCommon);
                     }
                 }
-                standPathV2 = "UI/Image/" + this.operatorType.textureFolder + "/" + AK_Tool.GetOperatorIDFrom(this.defName) + "Fashion";
+                standPathV2 = this.operatorType.textureFolder + "/" + id + "/" + id + "Fashion";
                 for (int i = 0; i < 10; ++i)
                 {
                     int fashionIndex = i + 2;

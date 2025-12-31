@@ -110,6 +110,7 @@ namespace AK_DLL
 
     public static class OperatorStandType
     {
+        public static int Portrait = -1;
         public static int Elite2 = 0;
         public static int Elite0 = 1;
     }

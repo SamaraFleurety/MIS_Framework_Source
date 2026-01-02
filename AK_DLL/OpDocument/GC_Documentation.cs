@@ -28,7 +28,7 @@ namespace AK_DLL
         public OperatorDef operatorDef;
         //public int oripathySeverity = 0;
 
-        public bool forceDisableNL;
+        //public bool forceDisableNL;
 
         public int preferedSkin = OperatorStandType.Elite2;    //选定立绘,0是精2, 1是精0, 后面是换装
 

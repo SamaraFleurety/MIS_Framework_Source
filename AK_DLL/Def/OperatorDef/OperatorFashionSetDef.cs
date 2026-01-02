@@ -18,6 +18,6 @@ namespace AK_DLL
         public string fashionName = null;  //碧蓝航线用新版换装逻辑。原皮的话留空。
 
         //nl表情兼容 带上此换装会强制禁用
-        public bool forceDisableNL = false;
+        //public bool forceDisableNL = false;
     }
 }

@@ -113,7 +113,7 @@ namespace AK_DLL
 
         public string modPackageID = "MIS.Arknights";  //about.xml里面的package id，用于动态加载资源
 
-        public bool forceDisableNL = false;
+        //public bool forceDisableNL = false;
         #endregion
 
         //年龄阈值，小于此年龄就无成人故事。
@@ -243,7 +243,7 @@ namespace AK_DLL
                     operator_Pawn.equipment.AddEquipment(weaponEq);
                     doc.weapon = weaponEq;
                 }
-                doc.forceDisableNL = this.forceDisableNL;
+                //doc.forceDisableNL = this.forceDisableNL;
             }
             else
             {
@@ -273,7 +273,7 @@ namespace AK_DLL
                         doc.weapon = weaponEq;
                     }
                 }
-                doc.forceDisableNL = fashionDef.forceDisableNL;
+                //doc.forceDisableNL = fashionDef.forceDisableNL;
             }
 
             foreach (Apparel apparel in operator_Pawn.apparel.WornApparel)

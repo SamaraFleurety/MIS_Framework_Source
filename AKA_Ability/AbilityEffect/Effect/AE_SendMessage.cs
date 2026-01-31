@@ -13,7 +13,7 @@ namespace AKA_Ability.AbilityEffect
         public MessageTypeDef messageType;
         public override bool DoEffect(AKAbility_Base caster, GlobalTargetInfo globalTargetInfo = default, LocalTargetInfo localTargetInfo = default)
         {
-            messageType ??= MessageTypeDefOf.NegativeHealthEvent;
+            messageType ??= MessageTypeDefOf.NeutralEvent;
             Messages.Message(content, caster.CasterPawn, messageType, false);
             return true;
         }

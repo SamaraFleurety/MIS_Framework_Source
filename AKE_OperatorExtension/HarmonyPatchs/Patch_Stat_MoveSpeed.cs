@@ -18,7 +18,11 @@ namespace AKE_OperatorExtension.HarmonyPatchs
                 if (___stat == StatDefOf.MoveSpeed)
                 {
                     if (req.Thing is not Pawn p) return;
-                    float factor = p.GetStatValue(AKA_Ability.AKADefOf.AK_Stat_MoveSpeedFactor);
+
+                    StatDef def = AKA_Ability.AKADefOf.AK_Stat_MoveSpeedFactor;
+                    if (def == null) return;
+
+                    float factor = p.GetStatValue(def);
                     __result *= factor;
                     if (__result <= 0.1) __result = 0.1f;
                 }

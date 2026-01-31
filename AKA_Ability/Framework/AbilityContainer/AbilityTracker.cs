@@ -10,6 +10,8 @@ namespace AKA_Ability
     //aka tracker生成时参数。此参数在生成后不可被调用，也不见得一定使用此参数生成tracker。
     public class AbilityTrackerGenerationProperty
     {
+        public bool forceIgnoreCasterCheck = false; //允许忽略施法者检查 违背框架设计初衷 使用的话后果自负
+
         public Type AKATrackerClass = typeof(AbilityTracker);
 
         //必须这玩意返回true，同时满足trakcer内其他条件才会tick。
@@ -44,6 +46,7 @@ namespace AKA_Ability
                     //AKAbilityMaker.MakeAKAbility(i, AKATracker);
                 }
             }
+            tracker.forceIgnoreCasterCheck = forceIgnoreCasterCheck;
             return tracker;
         }
     }
@@ -53,6 +56,7 @@ namespace AKA_Ability
     {
         //不可以改，许多ae都默认使用者是pawn
         public Pawn owner;
+        public bool forceIgnoreCasterCheck = false;  //强制忽略施法者检查 违背框架设计初衷 使用的话后果自负
 
         public ThingWithComps holder;//为TC_AKATracker新增的载体引用字段
 
@@ -110,11 +114,14 @@ namespace AKA_Ability
 
         public IEnumerable<Command> GetGizmos()
         {
-            if (owner == null) yield break;
+            if (!forceIgnoreCasterCheck)
+            {
+                if (owner == null) yield break;
 
-            if (Find.World == null || Find.CurrentMap == null || Find.Selector == null || Find.Selector.AnyPawnSelected == false || Find.Selector.SelectedPawns.Count > 1) yield break;
+            }
 
-            //Command c;
+            if (Find.World == null || Find.CurrentMap == null || Find.Selector == null || Find.Selector.SelectedObjects.Count > 1) yield break;
+
             //固有的 不取决于分组的技能会一直显示
             foreach (AKAbility_Base i in innateAbilities)
             {
@@ -197,6 +204,8 @@ namespace AKA_Ability
 
         public virtual void ExposeData()
         {
+            Scribe_Values.Look(ref forceIgnoreCasterCheck, "forceNoCaster", false);
+
             Scribe_Values.Look(ref indexActiveGroupedAbility, "indexAGA");
             Scribe_Collections.Look(ref innateAbilities, "iA", LookMode.Deep, this);
             Scribe_Collections.Look(ref groupedAbilities, "gA", LookMode.Deep, this);
@@ -211,7 +220,7 @@ namespace AKA_Ability
                 foreach (AKAbility_Base i in innateAbilities) i.container = this;
                 foreach (AKAbility_Base j in groupedAbilities) j.container = this;
 
-                if (owner != null) SpawnSetup();
+                if (forceIgnoreCasterCheck || owner != null) SpawnSetup();
             }
         }
 
@@ -269,6 +278,20 @@ namespace AKA_Ability
                 if (ab.def == def) return ab;
             }
             return null;
+        }
+
+        public void Debug_ForceClearCharges()
+        {
+            if (SelectedGroupedAbility != null)
+            {
+                SelectedGroupedAbility.cooldown.Charge = 0;
+                SelectedGroupedAbility.cooldown.SP = 0;
+            }
+            foreach (AKAbility_Base ab in innateAbilities)
+            {
+                ab.cooldown.Charge = 0;
+                ab.cooldown.SP = 0;
+            }
         }
     }
 }

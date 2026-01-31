@@ -91,7 +91,7 @@ namespace AKA_Ability
         public virtual IEnumerable<Command> GetGizmos()
         {
             if (Inertia) yield break;
-            if (!CasterPawn.Drafted && !def.displayGizmoUndraft) yield break;
+            if (!container.forceIgnoreCasterCheck && !CasterPawn.Drafted && !def.displayGizmoUndraft) yield break;
             if (cachedGizmo == null) InitializeGizmoInnate();
             UpdateGizmoInnate();
 
@@ -141,7 +141,7 @@ namespace AKA_Ability
 
         public virtual void TryCastShot(LocalTargetInfo target)
         {
-            if (target == null)
+            if (!container.forceIgnoreCasterCheck && target == null)
             {
                 Log.Error($"[AK] 释放技能{def.label} 时目标非法");
                 return;

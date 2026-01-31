@@ -1,4 +1,5 @@
 ﻿using AK_DLL.Document;
+using System;
 using System.Collections.Generic;
 using Verse;
 
@@ -85,6 +86,20 @@ namespace AK_DLL.Counter
         public int GetCountablesCount(string id, CountLevel level)
         {
             return GetCountables(id, level).Count;
+        }
+
+        public int GetVaildCountablesCount(string id, CountLevel level, Func<IQuantityCountable, bool> vaildator = null)
+        {
+            HashSet<IQuantityCountable> countables = GetCountables(id, level);
+            int count = 0;
+            foreach (IQuantityCountable countable in countables)
+            {
+                if (vaildator == null || vaildator(countable))
+                {
+                    count++;
+                }
+            }
+            return count;
         }
     }
 }

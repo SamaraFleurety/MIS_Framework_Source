@@ -1,5 +1,6 @@
 ﻿using RimWorld;
 using System;
+using Verse;
 
 namespace AKA_Ability
 {
@@ -12,10 +13,10 @@ namespace AKA_Ability
     public static class AKADefOf
     {
 
-        public static StatDef AKA_Stat_RangedDamageFactor; //远程伤害倍率
-        public static StatDef AK_Stat_CraftQualityOffset;  //制作质量偏移（整数）
+        public static StatDef AKA_Stat_RangedDamageFactor => DefDatabase<StatDef>.GetNamedSilentFail("AKA_Stat_RangedDamageFactor"); //远程伤害倍率
+        public static StatDef AK_Stat_CraftQualityOffset => DefDatabase<StatDef>.GetNamedSilentFail("AK_Stat_CraftQualityOffset");  //制作质量偏移（整数）
 
-        public static StatDef AK_Stat_MoveSpeedFactor; //移动速度倍率，默认是1 仍然可以写在衣服的offset。
+        public static StatDef AK_Stat_MoveSpeedFactor => DefDatabase<StatDef>.GetNamedSilentFail("AK_Stat_MoveSpeedFactor"); //移动速度倍率，默认是1 仍然可以写在衣服的offset。
 
     }
 

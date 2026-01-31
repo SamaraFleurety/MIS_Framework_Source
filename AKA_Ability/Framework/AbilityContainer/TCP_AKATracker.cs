@@ -133,19 +133,31 @@ namespace AKA_Ability
 
         public override IEnumerable<Gizmo> CompGetGizmosExtra()
         {
-            if (CasterPawn == null || CasterPawn.Faction != Faction.OfPlayer) return Enumerable.Empty<Gizmo>();
+            if (!tracker.forceIgnoreCasterCheck)
+            {
+                if (CasterPawn == null || CasterPawn.Faction != Faction.OfPlayer) return Enumerable.Empty<Gizmo>();
+            }
+
             return tracker.GetGizmos();
         }
 
         public override IEnumerable<Gizmo> CompGetWornGizmosExtra()
         {
-            if (CasterPawn == null || CasterPawn.Faction != Faction.OfPlayer) return Enumerable.Empty<Gizmo>();
+            if (!tracker.forceIgnoreCasterCheck)
+            {
+                if (CasterPawn == null || CasterPawn.Faction != Faction.OfPlayer) return Enumerable.Empty<Gizmo>();
+            }
+
             return tracker.GetGizmos();
         }
 
         public virtual IEnumerable<Gizmo> CompGetWeaponGizmosExtra()
         {
-            if (EquipmentOwner == null || EquipmentOwner.Faction != Faction.OfPlayer) return Enumerable.Empty<Gizmo>();
+            if (!tracker.forceIgnoreCasterCheck)
+            {
+                if (CasterPawn == null || CasterPawn.Faction != Faction.OfPlayer) return Enumerable.Empty<Gizmo>();
+            }
+
             return tracker.GetGizmos();
         }
 

@@ -17,7 +17,9 @@ namespace AKA_Ability.HarmonyPatchs
         {
             if (pawn != null)
             {
-                int offset = (int)pawn.GetStatValue(AKADefOf.AK_Stat_CraftQualityOffset);
+                StatDef def = AKADefOf.AK_Stat_CraftQualityOffset;
+                if (def == null) return;
+                int offset = (int)pawn.GetStatValue(def);
                 if (offset != 0)
                 {
                     int newQuality = (int)__result + offset;

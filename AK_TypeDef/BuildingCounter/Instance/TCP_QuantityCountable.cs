@@ -48,7 +48,7 @@ namespace AK_DLL.Counter
         public override void PostDestroy(DestroyMode mode, Map previousMap)
         {
             base.PostDestroy(mode, previousMap);
-            TryDeregister();
+            TryDeregister(previousMap);
         }
 
         public virtual void TryRegister()

@@ -13,7 +13,9 @@ namespace AKA_Ability.HarmonyPatchs
         {
             if (attacker != null && !__instance.IsMeleeAttack)
             {
-                __result *= attacker.GetStatValue(AKADefOf.AKA_Stat_RangedDamageFactor);
+                StatDef def = AKADefOf.AKA_Stat_RangedDamageFactor;
+                if (def == null) return;
+                __result *= attacker.GetStatValue(def);
             }
         }
     }

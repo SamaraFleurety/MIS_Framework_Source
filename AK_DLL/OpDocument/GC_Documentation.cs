@@ -115,7 +115,7 @@ namespace AK_DLL
 
             Scribe_Defs.Look(ref this.pendingFashionDef, "fashionDef");
 
-            Scribe_Values.Look(ref this.forceDisableNL, "disableNL");
+            //Scribe_Values.Look(ref this.forceDisableNL, "disableNL");
         }
 
         //记录当前干员所有技能

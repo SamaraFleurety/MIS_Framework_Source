@@ -33,7 +33,7 @@ namespace AKA_Ability
         public bool allowInterrupt = false;   //是否允许技能效果执行时中断 如果是true 那会跟游戏王一样依次执行ae效果直到返回第一个false为止
 
         //目标选择
-        public TargetingParameters targetParams = TargetingParameters.ForPawns();
+        public TargetingParameters targetParams/* = TargetingParameters.ForPawns()*/;
         public float range = 0;
         public float field = 0;                 //技能范围
         public Type rangeWorker = null;         //可变射程 这个比上面的float优先

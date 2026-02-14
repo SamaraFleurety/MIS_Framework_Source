@@ -39,7 +39,7 @@ namespace AKA_Ability
 
         public bool HidePawnTooltips => false;
 
-        public Thing Caster => CasterPawn;
+        public virtual Thing Caster => CasterPawn;
 
         public Verb GetVerb => null;
 
@@ -76,8 +76,8 @@ namespace AKA_Ability
         public bool CanHitTarget(LocalTargetInfo target)
         {
             if (!target.IsValid) return false;
-            if (target.Cell.DistanceTo(CasterPawn.Position) > Range) return false;
-            if (def.reqLineofSight && !GenSight.LineOfSight(CasterPawn.Position, target.Cell, CasterPawn.Map)) return false;
+            if (target.Cell.DistanceTo(Caster.Position) > Range) return false;
+            if (def.reqLineofSight && !GenSight.LineOfSight(Caster.Position, target.Cell, Caster.Map)) return false;
             return true;
         }
 

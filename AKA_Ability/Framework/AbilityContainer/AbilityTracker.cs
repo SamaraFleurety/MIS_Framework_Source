@@ -56,6 +56,7 @@ namespace AKA_Ability
     {
         //不可以改，许多ae都默认使用者是pawn
         public Pawn owner;
+
         public bool forceIgnoreCasterCheck = false;  //强制忽略施法者检查 违背框架设计初衷 使用的话后果自负
 
         public ThingWithComps holder;//为TC_AKATracker新增的载体引用字段

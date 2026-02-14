@@ -19,8 +19,9 @@ namespace AKA_Ability
         public override void GameComponentTick()
         {
             base.GameComponentTick();
-            if (!delayedAbilities.Any())
+            if (!delayedAbilities.Any() || !delayedAbilities.ContainsKey(first))
             {
+                first = -1;
                 return;
             }
             if (first <= 0) first = delayedAbilities.GetMinKey();

@@ -32,7 +32,7 @@ namespace AKA_Ability
         public TCP_AKATracker Props => props as TCP_AKATracker;
         //弃用字段找个日子全删了
         private List<AKAbilityDef> Abilities => Props.abilities;
-        AbilityTrackerSharedDataProperty SharedDataProp => Props.sharedDataProperty ?? Props.trackerGenProp?.sharedDataProperty;
+        protected virtual AbilityTrackerSharedDataProperty SharedDataProp => Props.sharedDataProperty ?? Props.trackerGenProp?.sharedDataProperty;
 
         Apparel Parent => parent as Apparel;
         Pawn EquipmentOwner => (EquipmentSource?.ParentHolder as Pawn_EquipmentTracker)?.pawn;
@@ -44,7 +44,7 @@ namespace AKA_Ability
                 return Parent.Wearer;
             }
         }
-        Pawn CasterPawn
+        protected Pawn CasterPawn
         {
             get
             {
@@ -164,7 +164,6 @@ namespace AKA_Ability
         public override void PostExposeData()
         {
             base.PostExposeData();
-            //Log.Message("expose tcp tracker");
             Scribe_Deep.Look(ref tracker, "AKATracker", CasterPawn);
             if (SharedDataProp != null) tracker.sharedData.props = SharedDataProp;
 

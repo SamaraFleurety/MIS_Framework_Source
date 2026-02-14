@@ -39,5 +39,15 @@ namespace AKA_Ability
         {
             tracker.Tick();
         }
+
+        public override void PostExposeData()
+        {
+            if (CasterPawn != null)
+            {
+                base.PostExposeData();
+            }
+            Scribe_Deep.Look(ref tracker, "AKATracker");
+            if (SharedDataProp != null) tracker.sharedData.props = SharedDataProp;
+        }
     }
 }

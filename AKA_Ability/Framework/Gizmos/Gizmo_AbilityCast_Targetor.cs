@@ -16,7 +16,6 @@ namespace AKA_Ability.Gizmos
         {
             base.ProcessInput(ev);
             Find.DesignatorManager.Deselect();
-            //Find.Targeter.BeginTargeting(parent.def.targetParams, parent.TryCastShot, parent.CasterPawn, actionWhenFinished: null);
             Find.Targeter.BeginTargeting(Parent);
         }
     }

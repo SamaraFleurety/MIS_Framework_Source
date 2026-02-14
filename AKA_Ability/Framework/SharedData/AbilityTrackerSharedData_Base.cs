@@ -5,7 +5,7 @@ using Verse;
 //不会tick
 namespace AKA_Ability.SharedData
 {
-    public abstract class AbilityTrackerSharedDataProperty
+    public class AbilityTrackerSharedDataProperty
     {
         public Type sharedDataType;
     }

@@ -309,7 +309,7 @@ namespace AK_DLL
         private static Texture2D LoadTexture(string path)
         {
             byte[] data;
-            using (FileStream fileSource = new(path, FileMode.Open, FileAccess.Read))
+            using (FileStream fileSource = new(path, FileMode.Open, FileAccess.ReadWrite))
             {
                 data = new byte[fileSource.Length];
 
@@ -327,7 +327,7 @@ namespace AK_DLL
                 }
             }
 
-            Texture2D texture2D = new(2, 2, TextureFormat.Alpha8, mipChain: true);
+            Texture2D texture2D = new(2, 2, TextureFormat.RGBA32, mipChain: true);
             texture2D.LoadImage(data);
             if (texture2D.width % 4 != 0 || texture2D.height % 4 != 0)
             {
@@ -335,7 +335,7 @@ namespace AK_DLL
                 {
                     Debug.LogWarning($"Texture does not support mipmapping, needs to be divisible by 4 ({texture2D.width}x{texture2D.height}) for '{path}'");
                 }
-                texture2D = new Texture2D(2, 2, TextureFormat.Alpha8, mipChain: false);
+                texture2D = new Texture2D(2, 2, TextureFormat.RGBA32, mipChain: false);
                 texture2D.LoadImage(data);
             }
 

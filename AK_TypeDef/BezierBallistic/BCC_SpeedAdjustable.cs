@@ -1,10 +1,4 @@
-﻿using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Collections.Generic.RedBlack;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
@@ -47,7 +41,7 @@ namespace AK_DLL.Bezier
                 pointCount = (int)(magnitude * props.precision);
             }
             //precision = pointCount;
-            stride = 1.0f / (float)pointCount;
+            stride = 1.0f / pointCount;
             lastPosition = start;
             /*float dist = 0;
             for (int i = 0; i <= pointCount; i++)
@@ -61,7 +55,7 @@ namespace AK_DLL.Bezier
         //给定一个速度，返回下一个点的位置，以及溢出的距离（如果已经超过终点）
         public Vector3 GetPoint(float speed, out float overflowDistance)
         {
-            while(lastT <= 1.0f && speed > 0)
+            while (lastT <= 1.0f && speed > 0)
             {
                 lastT += stride;
                 Vector3 point = BezierUtil.GetPointCubic(start, control1, control2, end, Mathf.Min(lastT, 1.0f));

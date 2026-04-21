@@ -1,9 +1,4 @@
-﻿using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
@@ -21,7 +16,7 @@ namespace AK_DLL.Bezier
         public static Vector3 GetPointQuadratic(Vector3 start, Vector3 control, Vector3 end, float t)
         {
             float num = 1f - t;
-            return num * num * start + 2f * num * t * control + t * t * end;
+            return (num * num * start) + (2f * num * t * control) + (t * t * end);
         }
 
         //三阶，可以绘制出类似S型的曲线，也可能十分多变
@@ -47,7 +42,7 @@ namespace AK_DLL.Bezier
             Vector3 a = start;
             for (int i = 1; i <= steps; i++)
             {
-                float t = (float)i / (float)steps;
+                float t = i / (float)steps;
                 Vector3 point = GetPointQuadratic(start, control, end, t);
                 GenDraw.DrawLineBetween(a, point, layer, mat, width);
                 a = point;
@@ -73,7 +68,7 @@ namespace AK_DLL.Bezier
             Vector3 a = start;
             for (int i = 1; i <= steps; i++)
             {
-                float t = (float)i / (float)steps;
+                float t = i / (float)steps;
                 Vector3 point = GetPointQuadratic(start, control, end, t);
                 length += Vector3.Distance(a, point);
                 a = point;
@@ -97,7 +92,7 @@ namespace AK_DLL.Bezier
 
         public static List<Vector3> GenerateCubicPoints(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, int steps)
         {
-            List<Vector3> result = new List<Vector3>(steps + 1);
+            List<Vector3> result = new(steps + 1);
             for (int i = 0; i <= steps; i++)
             {
                 float t = i / (float)steps;
@@ -107,7 +102,7 @@ namespace AK_DLL.Bezier
         }
         public static List<Vector3> GenerateQuadraticPoints(Vector3 p0, Vector3 p1, Vector3 p2, int steps)
         {
-            List<Vector3> result = new List<Vector3>(steps + 1);
+            List<Vector3> result = new(steps + 1);
             for (int i = 0; i <= steps; i++)
             {
                 float t = i / (float)steps;

@@ -1,10 +1,4 @@
-﻿using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 using Verse;
 
 namespace AK_DLL.Bezier
@@ -16,11 +10,11 @@ namespace AK_DLL.Bezier
         //起点固定在(0,0,0)，终点为(1,0,0)
 
         //2个控制点都可以在一个方形里面随机
-        public Vector3 control1LeftBottom = new Vector3(0.33f, 0f, 0.33f);
-        public Vector3 control1RightTop = new Vector3(0.4f, 0f, 0.66f);
+        public Vector3 control1LeftBottom = new(0.33f, 0f, 0.33f);
+        public Vector3 control1RightTop = new(0.4f, 0f, 0.66f);
 
-        public Vector3 control2LeftBottom = new Vector3(0.33f, 0f, 0.33f);
-        public Vector3 control2RightTop = new Vector3(0.66f, 0f, 0.66f);
+        public Vector3 control2LeftBottom = new(0.33f, 0f, 0.33f);
+        public Vector3 control2RightTop = new(0.66f, 0f, 0.66f);
 
         //弹道垂直翻转的概率，使其子弹轨迹会类似dna螺旋
         public float verticalFlipChance = 0.5f;
@@ -51,7 +45,7 @@ namespace AK_DLL.Bezier
             this.end = end;
 
             int verticalFlip = Rand.Chance(prop.verticalFlipChance) ? 1 : -1;
-            if (flipOverride is int ovrd) verticalFlip = ovrd; 
+            if (flipOverride is int ovrd) verticalFlip = ovrd;
 
             Vector3 p1 = GenRandomControlPoint(prop.control1LeftBottom, prop.control1RightTop);
             control1 = GetTransformedPoint(p1);
@@ -75,15 +69,15 @@ namespace AK_DLL.Bezier
             {
                 return new Vector3
                     (
-                        start.x + (end.x - start.x) * p.x - (end.z - start.z) * p.z,
+                        start.x + ((end.x - start.x) * p.x) - ((end.z - start.z) * p.z),
                         0,
-                        start.z + (end.z - start.z) * p.x + (end.x - start.x) * p.z
+                        start.z + ((end.z - start.z) * p.x) + ((end.x - start.x) * p.z)
                     );
             }
             //Log.Message($"generate curve param: start {start}, end {end}, p1 {p1}, cp1 {control1}, p2 {p2}, cp2 {control2}");
         }
 
-        public Vector3 GetPoint (float t)
+        public Vector3 GetPoint(float t)
         {
             return BezierUtil.GetPointCubic(start, control1, control2, end, t);
             //return Vector3.zero;

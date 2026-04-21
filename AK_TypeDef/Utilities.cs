@@ -39,7 +39,7 @@ namespace AK_TypeDef
         }
 
         //尝试添加文档，如果已经存在则返回false
-        public static bool TryAddDoc<T>(this Thing t, T doc, string givenID = null ) where T : DocumentBase
+        public static bool TryAddDoc<T>(this Thing t, T doc, string givenID = null) where T : DocumentBase
         {
             T docExisting = t.TryGetDoc<T>(givenID);
             if (docExisting != null) return false; //已经存在

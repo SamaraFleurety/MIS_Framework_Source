@@ -4,8 +4,8 @@ using Verse;
 
 namespace AK_DLL
 {
-    [HarmonyPatch(typeof(Pawn_DraftController), "Drafted", MethodType.Setter)]
-    public class PatchDraftSound
+    [HarmonyPatch(typeof(Pawn_DraftController), nameof(Pawn_DraftController.Drafted), MethodType.Setter)]
+    public class Patch_DraftSound
     {
         [HarmonyPostfix]
         public static void Postfix(bool value, Pawn_DraftController __instance)

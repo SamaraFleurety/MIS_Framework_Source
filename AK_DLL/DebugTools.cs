@@ -1,5 +1,4 @@
-﻿using AK_DLL.UI;
-using LudeonTK;
+﻿using LudeonTK;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -8,14 +7,9 @@ namespace AK_DLL
 {
     public static class MIS_DebugAction
     {
-        private static Map Map => Find.CurrentMap;
-        private static BoolGrid _usedCells;
-        private static CellRect _overRect;
-
-
         public static Vector3 debugOffset = Vector3.zero;
 
-        [DebugAction("MIS-AK Actions", "Make colony (Operators)", false, false, false, false, false, 0, false, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+        /*[DebugAction("MIS-AK Actions", "Make colony (Operators)", false, false, false, false, false, 0, false, allowedGameStates = AllowedGameStates.PlayingOnMap)]
         public static void MakeColonyWeapon()
         {
             bool godMode = DebugSettings.godMode;
@@ -56,7 +50,7 @@ namespace AK_DLL
 
             DebugSettings.godMode = godMode;
             Thing.allowDestroyNonDestroyable = false;
-        }
+        }*/
 
         [DebugAction("MIS-AK Actions", "Print Recruited Operators", false, false, false, false, false, 0, false, allowedGameStates = AllowedGameStates.PlayingOnMap)]
         public static void PrintOperators()

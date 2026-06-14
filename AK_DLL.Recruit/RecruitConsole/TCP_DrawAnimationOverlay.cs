@@ -1,9 +1,4 @@
-﻿using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
@@ -21,7 +16,7 @@ namespace AK_DLL
 
         public float scale = 9f;
 
-        public Vector3 offset = new Vector3(0, 0, 0);
+        public Vector3 offset = new(0, 0, 0);
         public TCP_DrawAnimationOverlay()
         {
             compClass = typeof(TC_DrawAnimationOverlay);
@@ -40,7 +35,7 @@ namespace AK_DLL
         {
             if (frames != null) return;
             frames = new();
-            for(int i = 0; i < Props.frameCount; ++i)
+            for (int i = 0; i < Props.frameCount; ++i)
             {
                 string tempPath = Props.path + $"/{i}";
                 Material mat = MaterialPool.MatFrom(tempPath, ShaderDatabase.Transparent);
@@ -64,7 +59,7 @@ namespace AK_DLL
             Vector3 vector = parent.DrawPos + Props.offset;
             float angle = 0;
             vector.y = AltitudeLayer.Blueprint.AltitudeFor();
-            Matrix4x4 matrix = default(Matrix4x4);
+            Matrix4x4 matrix = default;
             matrix.SetTRS(vector, Quaternion.AngleAxis(angle, Vector3.up), s);
             Material mat = frames[(int)crtFrame];
 

@@ -138,9 +138,19 @@
       <Name>AKA_Ability</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\AKR_WeightedRandomUnified\2AKR_WeightedRandomUnified.csproj">
+      <Project>{edd8a0b2-8fd0-ee2a-7667-6d66b2bf10c4}</Project>
+      <Name>2AKR_WeightedRandomUnified</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\AKS_ShieldFramework\AKS_ShieldFramework.csproj">
       <Project>{8c33efd6-9006-4cf3-8c33-50cc0418238c}</Project>
       <Name>AKS_ShieldFramework</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\AK_DLL.UI\AK_Library.UIModule.csproj">
+      <Project>{f140ee23-a962-a3dd-0a0e-56e89f0c6800}</Project>
+      <Name>AK_Library.UIModule</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\AK_DLL\AK_Library.csproj">

@@ -430,7 +430,7 @@ namespace AK_DLL.UI
             {
                 OpStand.SetActive(true);
                 GameObject opStandObj = GameObject.Find("OpStand");
-                AK_Tool.DrawStaticOperatorStand(SecretaryDef, preferredSkin, opStandObj, SecretaryLoc);
+                AK_UITool.DrawStaticOperatorStand(SecretaryDef, preferredSkin, opStandObj, SecretaryLoc);
             }
             else if (preferredSkin < (int)SkinType.SPINE_2D_START) //1000-1999是l2d
             {

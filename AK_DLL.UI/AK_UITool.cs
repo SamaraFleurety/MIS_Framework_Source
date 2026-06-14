@@ -1,28 +1,30 @@
-﻿using AK_TypeDef;
-using RimWorld;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using UnityEngine;
+using UnityEngine.UI;
 using Verse;
+using Object = UnityEngine.Object;
 
-namespace AK_DLL
+namespace AK_DLL.UI
 {
     [StaticConstructorOnStartup]
-    public static class AK_Tool
+    public static class AK_UITool
     {
-        /*public static bool disableIMGUI = false;
+        public static bool disableIMGUI = false;
 
         public static AssetBundle FSAsset => Utilities_Unity.LoadAssetBundle(AKDefOf.AK_Prefab_yccMainMenu);
         public static AssetBundle PAAsset;
         public static AssetBundle l2dAsset;
         private static GameObject EVSystem;
-        public static GameObject EVSystemInstance;*/
+        public static GameObject EVSystemInstance;
 
         public static bool Live2DActivated => ModLister.GetActiveModWithIdentifier("FS.LivelyRim") != null;
 
         private static List<ModContentPack> Mods => LoadedModManager.RunningMods.ToList();
 
-        /*static AK_Tool()
+        static AK_UITool()
         {
             try
             {
@@ -66,59 +68,9 @@ namespace AK_DLL
             }
 
             EVSystem = FSAsset.LoadAsset<GameObject>("EventSystem");
-
-        }*/
-
-        #region 字符串处理，文档/干员ID/def转换
-        public static string GetPrefixFrom(string XMLdefName)
-        {
-            string[] temp = XMLdefName.Split('_');
-            if (temp.Length <= 1) return null;
-            return temp[0];
-        }
-        public static string GetOperatorIDFrom(this string XMLdefName)
-        {
-            string[] temp = XMLdefName.Split('_');
-            if (temp.Length <= 1) return null;
-            return temp[temp.Length - 1];
         }
 
-        public static string GetOperatorIDFrom(this OperatorDef opDef)
-        {
-            return opDef.defName.GetOperatorIDFrom();
-        }
-
-        public static string GetOperatorIDFrom(this OperatorFashionSetDef fashionDef)
-        {
-            string XMLdefName = fashionDef.defName;
-            string[] temp = XMLdefName.Split('_');
-            if (temp.Length <= 2) return null;
-            return temp[temp.Length - 2];
-        }
-
-        public static string GetOperatorFashionNameFrom(this OperatorFashionSetDef fashionDef)
-        {
-            string XMLdefName = fashionDef.defName;
-            string[] temp = XMLdefName.Split('_');
-            if (temp.Length <= 1) return null;
-            return temp[temp.Length - 1];
-        }
-
-        //要求defName格式：前缀_随便啥_人物名；返回物品defName格式：前缀_{string thingType}_人物名
-        public static string GetThingdefNameFrom(string XMLdefName, string thingType)
-        {
-            string[] temp = XMLdefName.Split('_');
-            if (temp.Length <= 1) return null;
-
-            return temp[0] + "_" + thingType + "_" + temp[temp.Length - 1];
-        }
-
-        public static string GetThingdefNameFrom(string operatorID, string prefix, string thingType)
-        {
-            return prefix + "_" + thingType + "_" + operatorID;
-        }
-
-        /*public static OperatorDef GetDef(OperatorClassDef classDef, string operatorID)
+        public static OperatorDef GetDef(OperatorClassDef classDef, string operatorID)
         {
             return RIWindowHandler.operatorDefs[classDef.sortingOrder][operatorID];
         }
@@ -133,60 +85,43 @@ namespace AK_DLL
                 if (i.ContainsKey(operatorID)) return i[operatorID];
             }
             return null;
-        }*/
-
-        public static OperatorDocument GetDoc(this OperatorDef def)
-        {
-            if (GC_OperatorDocumentation.opDocArchive == null) return null;
-            GC_OperatorDocumentation.opDocArchive.TryGetValue(def.OperatorID, out OperatorDocument doc);
-            return doc;
         }
 
-        public static OperatorDocument GetDoc(string ID)
+        #region UGUI绘制立绘/L2D
+        //普通的图片立绘
+        public static void DrawStaticOperatorStand(OperatorDef def, int preferredSkin, GameObject OpStand, Vector3? offset = null)
         {
-            if (GC_OperatorDocumentation.opDocArchive == null) return null;
-            GC_OperatorDocumentation.opDocArchive.TryGetValue(ID, out OperatorDocument doc);
-            return doc;
+            Transform containerLoc = OpStand.transform;
+            containerLoc.localPosition = Vector3.zero;
+            Image opStand = OpStand.GetComponent<Image>();
+            Texture2D tex = def.PreferredStand(preferredSkin);
+
+            opStand.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
+
+            if (offset == null) offset = Vector3.zero;
+
+            if (/*offset == null && */def.standOffsets != null && def.standOffsets.ContainsKey(preferredSkin))
+            {
+                offset += def.standOffsets[preferredSkin];
+            }
+
+            if (offset is { } rOffset)
+            {
+                containerLoc.localPosition = new Vector3(rOffset.x, rOffset.y);
+                containerLoc.localScale = new Vector3(rOffset.z, rOffset.z, rOffset.z);
+            }
+
         }
-        //只有OpDocContainer才有Doc
-        public static OperatorDocument GetDoc(this Pawn p)
+
+        //我真的不知道为什么这个ev system过一会自己就会变null。
+        public static void SetEV(bool value)
         {
-            if (OperatorDef.currentlyGenerating) return null;
-            if (p == null) return null;
-
-            OperatorDocument doc = p.TryGetDoc<OpDocContainer>()?.va?.Document;
-
-            if (doc != null) return doc;
-
-            if (p.abilities == null) return null;
-            if (!p.IsColonist) return null;
-            if (GC_OperatorDocumentation.cachedOperators.ContainsKey(p))
+            if (value)
             {
-                return GC_OperatorDocumentation.cachedOperators[p];
+                if (!EVSystemInstance) EVSystemInstance = Object.Instantiate(EVSystem);
+                EVSystemInstance.SetActive(true);
             }
-            else if (GC_OperatorDocumentation.cachedNonOperators.Contains(p))
-            {
-                return null;
-            }
-            VAbility_Operator va = null;
-            foreach (Ability i in p.abilities.abilities)
-            {
-                if (i is VAbility_Operator vab)
-                {
-                    //Log.Message($"g1 at {p.Name}, {i.GetType()}, {i.def.defName}");
-                    va = vab;
-                    GC_OperatorDocumentation.cachedOperators.Add(p, va.Document);
-                    p.AddDoc(new OpDocContainer() { parent = p, va = vab });
-                    break;
-                }
-            }
-            if (va == null)
-            {
-                GC_OperatorDocumentation.cachedNonOperators.Add(p);
-                return null;
-            }
-            doc = va.Document;
-            return doc;
+            else EVSystemInstance.SetActive(false);
         }
         #endregion
 

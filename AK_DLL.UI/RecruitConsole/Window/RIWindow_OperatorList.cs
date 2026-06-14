@@ -148,7 +148,7 @@ namespace AK_DLL.UI
         {
             get
             {
-                GameObject opRectPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("OperatorTemplate");
+                GameObject opRectPrefab = AK_UITool.FSAsset.LoadAsset<GameObject>("OperatorTemplate");
                 return Object.Instantiate(opRectPrefab, opListPanel);
             }
         }
@@ -209,7 +209,7 @@ namespace AK_DLL.UI
         {
             get
             {
-                GameObject classBtnPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("btnClassTemplate");
+                GameObject classBtnPrefab = AK_UITool.FSAsset.LoadAsset<GameObject>("btnClassTemplate");
                 return Object.Instantiate(classBtnPrefab, classColumn);
             }
         }
@@ -276,7 +276,7 @@ namespace AK_DLL.UI
         private void DrawSeriesPanel()
         {
             if (!choosingSeries) return;
-            GameObject classBtnPrefab = AK_Tool.FSAsset.LoadAsset<GameObject>("btnClassTemplate");
+            GameObject classBtnPrefab = AK_UITool.FSAsset.LoadAsset<GameObject>("btnClassTemplate");
             Transform seriesColumn = GameObject.Find("seriesSelectPanel").transform;
             GameObject seriesBtnInstance;
             Utilities_Unity.ClearAllChild(seriesColumn);
@@ -610,7 +610,7 @@ namespace AK_DLL.UI
                 if (w.tools != null)
                 {
                     double weight = 0;
-                    foreach (Tool i in w.tools)
+                    foreach (Verse.Tool i in w.tools)
                     {
                         localDPS = 0;
                         localDPS += i.power;

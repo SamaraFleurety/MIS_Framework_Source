@@ -1,12 +1,11 @@
-﻿using AK_DLL.UI;
-using HarmonyLib;
+﻿using HarmonyLib;
 using System.Linq;
 using UnityEngine;
 using Verse;
 
-namespace AK_DLL
+namespace AK_DLL.UI
 {
-    [HarmonyPatch(typeof(Window), "WindowOnGUI")]
+    [HarmonyPatch(typeof(Window), nameof(Window.WindowOnGUI))]
     public class Patch_WindowOnGUI
     {
         private static string _lastSpineDefName = "";
@@ -17,7 +16,6 @@ namespace AK_DLL
         {
             DrawBottomLeftPortrait();
         }
-
 
         public static void DrawBottomLeftPortrait()
         {

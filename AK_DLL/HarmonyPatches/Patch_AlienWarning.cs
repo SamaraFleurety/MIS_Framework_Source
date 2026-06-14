@@ -1,16 +1,20 @@
 ﻿using HarmonyLib;
 using RimWorld;
 using Steamworks;
+using System;
 using Verse;
 
 namespace AK_DLL
 {
     //外星人兼容警告Patch
-    [HarmonyPatch(typeof(Page_SelectScenario), "BeginScenarioConfiguration")]
-    public class Patch_AlienNewGameDialog
+    [Obsolete("在1.7废弃")]
+    [HarmonyPatch]
+    public class Patch_AlienWarning
     {
         private static bool _disabledAlienWarningNewColony;
+        private static bool _disabledAlienWarningLoadGame;
 
+        [HarmonyPatch(typeof(Page_SelectScenario), nameof(Page_SelectScenario.BeginScenarioConfiguration))]
         [HarmonyPostfix]
         public static void NewColonyPostfix()
         {
@@ -28,13 +32,8 @@ namespace AK_DLL
                 ));
             }
         }
-    }
 
-    [HarmonyPatch(typeof(Dialog_SaveFileList_Load), "DoFileInteraction")]
-    public class Patch_AlienLoadGameDialog
-    {
-        private static bool _disabledAlienWarningLoadGame;
-
+        [HarmonyPatch(typeof(Dialog_SaveFileList_Load), "DoFileInteraction")]
         [HarmonyPostfix]
         public static void LoadGamePostfix()
         {

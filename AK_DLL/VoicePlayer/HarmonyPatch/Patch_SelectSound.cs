@@ -1,15 +1,14 @@
 ﻿using HarmonyLib;
 using RimWorld;
-using System;
 using Verse;
 
 namespace AK_DLL
 {
-    [HarmonyPatch(typeof(Selector), "Select")]
-    public class PatchSelectSound
+    [HarmonyPatch(typeof(Selector), nameof(Selector.Select))]
+    public class Patch_SelectSound
     {
         [HarmonyPostfix]
-        public static void postfix(Object obj)
+        public static void Postfix(object obj)
         {
             if (obj is Pawn pawn)
             {

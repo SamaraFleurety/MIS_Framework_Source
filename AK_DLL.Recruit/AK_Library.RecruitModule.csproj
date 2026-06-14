@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net48</TargetFramework>
+		<LangVersion>9.0</LangVersion>
+		<AssemblyName>AK_DLL.Recruit</AssemblyName>
+		<RootNamespace>AK_DLL</RootNamespace>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\AK_DLL.UI\AK_Library.UIModule.csproj">
+	    <Private>False</Private>
+	  </ProjectReference>
+	  <ProjectReference Include="..\AK_DLL\AK_Library.csproj">
+	    <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+	    <Private>False</Private>
+	  </ProjectReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="Assembly-CSharp">
+	    <HintPath>..\Rely\Assembly-CSharp.dll</HintPath>
+	    <Private>False</Private>
+	  </Reference>
+	  <Reference Include="UnityEngine">
+	    <HintPath>..\Rely\UnityEngine.dll</HintPath>
+	    <Private>False</Private>
+	  </Reference>
+	  <Reference Include="UnityEngine.CoreModule">
+	    <HintPath>..\Rely\UnityEngine.CoreModule.dll</HintPath>
+	    <Private>False</Private>
+	  </Reference>
+	  <Reference Include="UnityEngine.TextRenderingModule">
+	    <HintPath>..\Rely\UnityEngine.TextRenderingModule.dll</HintPath>
+	    <Private>False</Private>
+	  </Reference>
+	</ItemGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	  <Exec Command="DEL &quot;$(SolutionDir)\输出\AK_DLL.RecruitModule.dll&quot;&#xD;&#xA;COPY &quot;$(TargetPath)&quot; &quot;$(SolutionDir)\输出\AK_DLL.RecruitModule.dll&quot;" />
+	</Target>
+
+</Project>

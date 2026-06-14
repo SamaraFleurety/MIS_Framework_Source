@@ -7,7 +7,7 @@ namespace AK_DLL
     [HarmonyPatch(typeof(Pawn)/*, "Kill",new Type[] { typeof(DamageInfo),typeof(Hediff) }*/)]
     public class Patch_KillCorpse
     {
-        [HarmonyPatch("Kill")]
+        [HarmonyPatch(nameof(Pawn.Kill))]
         [HarmonyPostfix]
         public static void Postfix(Pawn __instance)
         {
@@ -18,7 +18,7 @@ namespace AK_DLL
             doc.currentExist = false;
         }
 
-        [HarmonyPatch("Destroy")]
+        [HarmonyPatch(nameof(Pawn.Destroy))]
         [HarmonyPostfix]
         public static void Postfix_des(Pawn __instance)
         {

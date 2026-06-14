@@ -73,7 +73,7 @@ namespace AKA_Ability.Gizmos
             //充能
             Widgets.Label(rect, this.Cooldown.Charge + "/" + this.Cooldown.MaxCharge);
             //技能冷却
-            GUI.DrawTexture(new Rect(rect.x, rect.y + rect.height, rect.width, rect.height * Cooldown.CooldownPercent() * -1), ContentFinder<Texture2D>.Get("UI/Abilities/White"));
+            GUI.DrawTexture(new Rect(rect.x, rect.y + rect.height, rect.width, rect.height * Cooldown.CooldownPercent() * -1), BaseContent.WhiteTex);
             GUI.color = Color.white;
         }
 

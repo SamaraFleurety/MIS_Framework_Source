@@ -4,7 +4,7 @@ using Verse.Sound;
 
 namespace AK_DLL
 {
-    [HarmonyPatch(typeof(Pawn)/*, "Kill",new Type[] { typeof(DamageInfo),typeof(Hediff) }*/)]
+    [HarmonyPatch(typeof(Pawn))]
     public class Patch_KillCorpse
     {
         [HarmonyPatch(nameof(Pawn.Kill))]

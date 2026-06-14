@@ -131,11 +131,6 @@
       <Name>AK_Library.RecruitModule</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\AK_DLL.UI\AK_Library.UIModule.csproj">
-      <Project>{f140ee23-a962-a3dd-0a0e-56e89f0c6800}</Project>
-      <Name>AK_Library.UIModule</Name>
-      <Private>False</Private>
-    </ProjectReference>
     <ProjectReference Include="..\AK_DLL\AK_Library.csproj">
       <Project>{7b4c58f6-3566-4dec-927f-9d30bdaf8d22}</Project>
       <Name>AK_Library</Name>

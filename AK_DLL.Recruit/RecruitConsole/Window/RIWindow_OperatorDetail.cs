@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Verse;
 
-namespace AK_DLL.UI
+namespace AK_DLL.Recruit
 {
     public class RIWindow_OperatorDetail : RIWindow
     {
@@ -169,7 +169,7 @@ namespace AK_DLL.UI
         {
             get
             {
-                GameObject fashionIconPrefab = AK_UITool.FSAsset.LoadAsset<GameObject>("FashionIcon");
+                GameObject fashionIconPrefab = AK_AssetTool.FSAsset.LoadAsset<GameObject>("FashionIcon");
                 return Object.Instantiate(fashionIconPrefab, fashionPanel);
             }
         }
@@ -177,7 +177,7 @@ namespace AK_DLL.UI
         protected virtual void DrawFashionBtn()
         {
             fashionPanel = GameObject.Find("FashionPanel").transform;  //切换换装按钮的面板。因为做的时候不会用Grid，所以需要手动设置按钮位置，乐
-            GameObject fashionIconPrefab = AK_UITool.FSAsset.LoadAsset<GameObject>("FashionIcon");
+            GameObject fashionIconPrefab = AK_AssetTool.FSAsset.LoadAsset<GameObject>("FashionIcon");
             Vector3 v3;
 
             fashionBtns = new Dictionary<int, GameObject>();
@@ -517,7 +517,7 @@ namespace AK_DLL.UI
         {
             get
             {
-                GameObject opAbilityPrefab = AK_UITool.FSAsset.LoadAsset<GameObject>("OpAbilityIcon");
+                GameObject opAbilityPrefab = AK_AssetTool.FSAsset.LoadAsset<GameObject>("OpAbilityIcon");
                 return Object.Instantiate(opAbilityPrefab, opAbilityPanel);
             }
         }
@@ -547,7 +547,7 @@ namespace AK_DLL.UI
                 if (!opAbilty.grouped)
                 {
                     //右下角的勾 常驻技能橙色。
-                    opAbilityInstance.transform.GetChild(1).GetComponent<Image>().sprite = AK_UITool.FSAsset.LoadAsset<Sprite>("InnateAb");
+                    opAbilityInstance.transform.GetChild(1).GetComponent<Image>().sprite = AK_AssetTool.FSAsset.LoadAsset<Sprite>("InnateAb");
                 }
                 //可选技能
                 else
@@ -580,7 +580,7 @@ namespace AK_DLL.UI
         {
             get
             {
-                GameObject traitPrefab = AK_UITool.FSAsset.LoadAsset<GameObject>("TraitTemplate");
+                GameObject traitPrefab = AK_AssetTool.FSAsset.LoadAsset<GameObject>("TraitTemplate");
                 GameObject traitInstance = Object.Instantiate(traitPrefab, traitPanel);
                 return traitInstance;
             }
@@ -616,7 +616,7 @@ namespace AK_DLL.UI
             if (preferredSkin < 1000)
             {
                 OpStand.SetActive(true);
-                AK_UITool.DrawStaticOperatorStand(OperatorDef, preferredSkin, OpStand, OpStaticStandOffset());
+                AK_AssetTool.DrawStaticOperatorStand(OperatorDef, preferredSkin, OpStand, OpStaticStandOffset());
             }
             //l2d
             else if (preferredSkin < 2000)
@@ -717,13 +717,13 @@ namespace AK_DLL.UI
 
         public override void ReturnToParent(bool closeEV = true)
         {
-            RIWindowHandler.OpenRIWindow(AKDefOf.AK_Prefab_yccOpList/* RIWindowType.Op_List*/);
+            RIWindowHandler.OpenRIWindow(AK_RecruitDefOf.AK_Prefab_yccOpList/* RIWindowType.Op_List*/);
             base.ReturnToParent(closeEV);
         }
 
         public virtual void ReturnToMainMenu()
         {
-            RIWindowHandler.OpenRIWindow(AKDefOf.AK_Prefab_yccMainMenu, purpose: OpDetailType.Recruit);
+            RIWindowHandler.OpenRIWindow(AK_RecruitDefOf.AK_Prefab_yccMainMenu, purpose: OpDetailType.Recruit);
             this.Close(closeEV: false);
         }
 

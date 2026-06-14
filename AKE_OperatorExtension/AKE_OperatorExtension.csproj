@@ -148,9 +148,9 @@
       <Name>AKS_ShieldFramework</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\AK_DLL.UI\AK_Library.UIModule.csproj">
-      <Project>{f140ee23-a962-a3dd-0a0e-56e89f0c6800}</Project>
-      <Name>AK_Library.UIModule</Name>
+    <ProjectReference Include="..\AK_DLL.Recruit\AK_Library.RecruitModule.csproj">
+      <Project>{ca4696b1-a933-3034-8bb5-2d32c9596db9}</Project>
+      <Name>AK_Library.RecruitModule</Name>
       <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\AK_DLL\AK_Library.csproj">

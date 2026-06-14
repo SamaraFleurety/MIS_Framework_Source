@@ -9,6 +9,8 @@ namespace AK_DLL
     //MOD设置 是跨存档全局的 细节没写
     public class AK_ModSettings : ModSettings
     {
+        public const string DEFAULT_FONT = "AK_Font_YouYuan";
+
         //开启一些正常游戏不会使用的测试功能
         public static bool debugOverride;
 
@@ -82,12 +84,13 @@ namespace AK_DLL
         public static int secretarySkin = 1;
         public static Vector3 secretaryLoc = new(400, 0, 1); //(x坐标, y坐标, 缩放倍率)。坐标使用unity体系，即左下角是(0,0)，上右为正。
         public static int secLocSensitive = 1; //调整主界面秘书位置时，每次按钮移动的像素数量；实际效果是值*10
-        public static string font = "AK_Font_YouYuan";
+        public static string font = DEFAULT_FONT;
+
         public static FontDef Font
         {
             get
             {
-                if (font == null || DefDatabase<FontDef>.GetNamedSilentFail(font) == null) font = "AK_Font_YouYuan";
+                if (font == null || DefDatabase<FontDef>.GetNamedSilentFail(font) == null) font = DEFAULT_FONT;
                 return DefDatabase<FontDef>.GetNamedSilentFail(font);
             }
             set { font = value.defName; }
@@ -174,7 +177,7 @@ namespace AK_DLL
             Scribe_Values.Look(ref secretarySkin, "secSkin", 1);
             Scribe_Values.Look(ref secretaryLoc, "secLoc", new Vector3(400, 0, 1), true);
             Scribe_Values.Look(ref secLocSensitive, "secSense", 1, true);
-            Scribe_Values.Look(ref font, "font", "AK_Font_YouYuan", true);
+            Scribe_Values.Look(ref font, "font", DEFAULT_FONT, true);
             Scribe_Values.Look(ref lastViewedClass, "lastClass", -1);
             Scribe_Values.Look(ref lastViewedSeries, "lastSeries", -1);
             Scribe_Values.Look(ref allowManualRegister, "manualReg");

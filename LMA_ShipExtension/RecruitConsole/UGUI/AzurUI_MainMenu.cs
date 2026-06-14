@@ -1,5 +1,5 @@
 ﻿using AK_DLL;
-using AK_DLL.UI;
+using AK_DLL.Recruit;
 using UnityEngine;
 using UnityEngine.UI;
 

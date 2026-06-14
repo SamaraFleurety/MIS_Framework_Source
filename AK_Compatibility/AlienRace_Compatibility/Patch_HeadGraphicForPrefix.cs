@@ -6,7 +6,7 @@ using Verse;
 
 namespace Paluto22.AK.Patch.AlienRace
 {
-    [HarmonyPatch(typeof(AlienRenderTreePatches), "HeadGraphicForPrefix")]
+    [HarmonyPatch(typeof(AlienRenderTreePatches), nameof(AlienRenderTreePatches.HeadGraphicForPrefix))]
     [HarmonyPatch(new Type[] { typeof(PawnRenderNode_Head), typeof(Pawn), typeof(Graphic) }, new ArgumentType[] { ArgumentType.Normal, ArgumentType.Normal, ArgumentType.Ref })]
     public class Patch_HeadGraphicForPrefix
     {

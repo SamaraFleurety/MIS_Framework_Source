@@ -1,9 +1,8 @@
-﻿using AK_DLL.UI;
-using LudeonTK;
+﻿using LudeonTK;
 using System.Collections.Generic;
 using Verse;
 
-namespace AK_DLL
+namespace AK_DLL.Recruit
 {
     public static class DebugAction_Recruit
     {

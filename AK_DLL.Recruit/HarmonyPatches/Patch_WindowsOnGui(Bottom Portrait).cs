@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 using Verse;
 
-namespace AK_DLL.UI
+namespace AK_DLL.Recruit
 {
     [HarmonyPatch(typeof(Window), nameof(Window.WindowOnGUI))]
     public class Patch_WindowOnGUI

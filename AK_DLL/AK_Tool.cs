@@ -1,6 +1,5 @@
 ﻿using AK_TypeDef;
 using RimWorld;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Verse;
@@ -20,7 +19,7 @@ namespace AK_DLL
 
         public static bool Live2DActivated => ModLister.GetActiveModWithIdentifier("FS.LivelyRim") != null;
 
-        private static List<ModContentPack> Mods => LoadedModManager.RunningMods.ToList();
+        //private static List<ModContentPack> Mods => LoadedModManager.RunningMods.ToList();
 
         /*static AK_Tool()
         {

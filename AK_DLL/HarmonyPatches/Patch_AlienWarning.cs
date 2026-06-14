@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿#if V16
+using HarmonyLib;
 using RimWorld;
 using Steamworks;
 using System;
@@ -7,7 +8,7 @@ using Verse;
 namespace AK_DLL
 {
     //外星人兼容警告Patch
-    [Obsolete("在1.7废弃")]
+
     [HarmonyPatch]
     public class Patch_AlienWarning
     {
@@ -53,3 +54,4 @@ namespace AK_DLL
         }
     }
 }
+#endif

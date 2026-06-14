@@ -1,4 +1,4 @@
-﻿using AK_DLL.UI;
+﻿using AK_DLL.Recruit;
 using RimWorld;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,7 +22,7 @@ namespace AK_DLL
         //ui
         public override void DoEditInterface(Listing_ScenEdit listing)
         {
-            Rect scenPartRect = listing.GetScenPartRect(this, ScenPart.RowHeight * 2f);
+            Rect scenPartRect = listing.GetScenPartRect(this, RowHeight * 2f);
             Rect rect = new(scenPartRect.x, scenPartRect.y, scenPartRect.width, scenPartRect.height / 2f);
             if (operatorDef == null)
             {

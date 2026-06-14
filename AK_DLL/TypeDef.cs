@@ -52,14 +52,12 @@ namespace AK_DLL
 
         public static AbilityDef AK_VAbility_Operator;
 
-        public static JobDef AK_Job_UseRecruitConsole;
-        public static JobDef AK_Job_OperatorChangeFashion;
-
         public static FontDef AK_Font_YouYuan;
 
-        public static UIPrefabDef AK_Prefab_yccMainMenu;
-        public static UIPrefabDef AK_Prefab_yccOpList;
-        public static UIPrefabDef AK_Prefab_OpDetail;
+        static AKDefOf()
+        {
+            DefOfHelper.EnsureInitializedInCtor(typeof(AKDefOf));
+        }
     }
 
     public enum OpDetailType : byte

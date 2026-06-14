@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
-namespace AK_DLL.UI
+namespace AK_DLL.Recruit
 {
     //RI: Rhodes Island 也许会叫罗德岛通用信息终端啥的;不是 riw window的意思。
     //调用之前记得关闭现有的window

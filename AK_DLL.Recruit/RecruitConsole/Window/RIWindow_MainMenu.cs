@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Verse;
 
-namespace AK_DLL.UI
+namespace AK_DLL.Recruit
 {
     /* legacy
      * [HotSwappable]
@@ -286,7 +286,7 @@ namespace AK_DLL.UI
             GameObject.Find("MBtn_Recruit").GetComponentInChildren<Button>().onClick.AddListener(delegate
             {
                 //RIWindow_OperatorDetail.windowPurpose = OpDetailType.Recruit;
-                RIWindowHandler.OpenRIWindow(AKDefOf.AK_Prefab_yccOpList, purpose: OpDetailType.Recruit);
+                RIWindowHandler.OpenRIWindow(AK_RecruitDefOf.AK_Prefab_yccOpList, purpose: OpDetailType.Recruit);
                 this.Close(false);
             });
 
@@ -301,7 +301,7 @@ namespace AK_DLL.UI
         {
             GameObject.Find("SBtn_ChangeSecretary").GetComponentInChildren<Button>().onClick.AddListener(delegate
             {
-                RIWindowHandler.OpenRIWindow(AKDefOf.AK_Prefab_yccOpList, purpose: OpDetailType.Secretary);
+                RIWindowHandler.OpenRIWindow(AK_RecruitDefOf.AK_Prefab_yccOpList, purpose: OpDetailType.Secretary);
                 this.Close(false);
             });
         }
@@ -430,7 +430,7 @@ namespace AK_DLL.UI
             {
                 OpStand.SetActive(true);
                 GameObject opStandObj = GameObject.Find("OpStand");
-                AK_UITool.DrawStaticOperatorStand(SecretaryDef, preferredSkin, opStandObj, SecretaryLoc);
+                AK_AssetTool.DrawStaticOperatorStand(SecretaryDef, preferredSkin, opStandObj, SecretaryLoc);
             }
             else if (preferredSkin < (int)SkinType.SPINE_2D_START) //1000-1999是l2d
             {

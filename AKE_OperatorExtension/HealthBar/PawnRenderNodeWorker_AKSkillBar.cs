@@ -1,5 +1,5 @@
 ﻿using AK_DLL;
-using AK_DLL.UI;
+using AK_DLL.Recruit;
 using AKA_Ability;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,9 +27,10 @@ namespace AKE_OperatorExtension
         private static Material BurstButton => AKE_BarUITool.BurstIcon;
         private string OperatorID(Pawn p) => p.GetDoc()?.operatorID ?? p.Label;
         private string ObjectName(Pawn p) => (p.GetDoc()?.operatorID ?? p.Label) + ".objTMP";
-        private GameObject PrefabTMP => AK_UITool.PAAsset.LoadAsset<GameObject>("PrefabTMPPopup");
+        private GameObject PrefabTMP => AK_AssetTool.PAAsset.LoadAsset<GameObject>("PrefabTMPPopup");
         //使用prefab可以避免new GameObject出来的object被回收不能用Find方法找到；
         private Dictionary<string, GameObject> PrefabTMPInstancesDictionary => AKE_BarUITool.PrefabTMPInstancesDictionary;
+
         private void InitObjectOnce(Pawn p)
         {
             if (PrefabTMPInstancesDictionary.NullOrEmpty() || !PrefabTMPInstancesDictionary.ContainsKey(OperatorID(p)))

@@ -1,9 +1,8 @@
 ﻿using AK_DLL;
-using AK_DLL.UI;
+using AK_DLL.Recruit;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Verse;
 
 namespace LMA_Lib.UGUI
 {

@@ -3,7 +3,7 @@ using System;
 using UnityEngine;
 using Verse;
 
-namespace AK_DLL.UI
+namespace AK_DLL.Recruit
 {
     //fixme：从power++抄的输入框，有空看一下
     public class Dialog_Input : Window

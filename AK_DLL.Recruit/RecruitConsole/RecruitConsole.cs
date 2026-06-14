@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using AK_DLL.Recruit;
+using RimWorld;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
@@ -19,7 +20,7 @@ namespace AK_DLL
             {
                 yield return new FloatMenuOption("CannotUseNoPower".Translate(), null); yield break;
             }
-            if (selPawn.health.Dead || (selPawn == null && selPawn.CanReach(this, PathEndMode.Touch, Danger.Deadly)))
+            if (selPawn.health.Dead || selPawn == null && selPawn.CanReach(this, PathEndMode.Touch, Danger.Deadly))
             {
                 yield return new FloatMenuOption("AK_PawnNull".Translate(), null); yield break;
             }
@@ -56,7 +57,7 @@ namespace AK_DLL
                     OperatorFashionSetDef nextFashion = null;
                     if (doc.operatorDef.defaultFashion != null) nextFashion = doc.operatorDef.defaultFashion;
                     doc.pendingFashionDef = nextFashion;
-                    selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AKDefOf.AK_Job_OperatorChangeFashion, this));
+                    selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AK_RecruitDefOf.AK_Job_OperatorChangeFashion, this));
                 }
                 );
                 foreach (OperatorFashionSetDef set in doc.operatorDef.clothSets)
@@ -65,7 +66,7 @@ namespace AK_DLL
                         delegate
                         {
                             doc.pendingFashionDef = set;
-                            selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AKDefOf.AK_Job_OperatorChangeFashion, this));
+                            selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AK_RecruitDefOf.AK_Job_OperatorChangeFashion, this));
                         });
 
                 }
@@ -94,12 +95,12 @@ namespace AK_DLL
             yield return new FloatMenuOption("AK_CanReach".Translate(),
                 delegate
                 {
-                    selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AKDefOf.AK_Job_UseRecruitConsole, this));
+                    selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AK_RecruitDefOf.AK_Job_UseRecruitConsole, this));
                 }
                 );
             yield return new FloatMenuOption("AK_RecruitContinuous".Translate(), delegate
             {
-                selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AKDefOf.AK_Job_UseRecruitConsole, this, this));  //用target B做标记，要是不为null就是连续招募模式
+                selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AK_RecruitDefOf.AK_Job_UseRecruitConsole, this, this));  //用target B做标记，要是不为null就是连续招募模式
             });
         }
 

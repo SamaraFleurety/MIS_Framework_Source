@@ -7,14 +7,14 @@ using UnityEngine.UI;
 using Verse;
 using Object = UnityEngine.Object;
 
-namespace AK_DLL.UI
+namespace AK_DLL.Recruit
 {
     [StaticConstructorOnStartup]
-    public static class AK_UITool
+    public static class AK_AssetTool
     {
         public static bool disableIMGUI = false;
 
-        public static AssetBundle FSAsset => Utilities_Unity.LoadAssetBundle(AKDefOf.AK_Prefab_yccMainMenu);
+        public static AssetBundle FSAsset => AK_RecruitDefOf.AK_Prefab_yccMainMenu.LoadAssetBundle();
         public static AssetBundle PAAsset;
         public static AssetBundle l2dAsset;
         private static GameObject EVSystem;
@@ -24,7 +24,7 @@ namespace AK_DLL.UI
 
         private static List<ModContentPack> Mods => LoadedModManager.RunningMods.ToList();
 
-        static AK_UITool()
+        static AK_AssetTool()
         {
             try
             {
@@ -173,9 +173,9 @@ namespace AK_DLL.UI
         public static string DescriptionManualResolve(string s, string name, Gender gender)
         {
             s = Regex.Replace(s, @"\{PAWN_nameDef\}|\[PAWN_nameDef\]", name);
-            s = Regex.Replace(s, @"\{PAWN_pronoun\}|\[PAWN_pronoun\]", GenderUtility.GetPronoun(gender));
-            s = Regex.Replace(s, @"\{PAWN_objective\}|\[PAWN_objective\]", GenderUtility.GetObjective(gender));
-            s = Regex.Replace(s, @"\{PAWN_possessive\}|\[PAWN_possessive\]", GenderUtility.GetPossessive(gender));
+            s = Regex.Replace(s, @"\{PAWN_pronoun\}|\[PAWN_pronoun\]", gender.GetPronoun());
+            s = Regex.Replace(s, @"\{PAWN_objective\}|\[PAWN_objective\]", gender.GetObjective());
+            s = Regex.Replace(s, @"\{PAWN_possessive\}|\[PAWN_possessive\]", gender.GetPossessive());
             return s;
         }
         #endregion

@@ -1,7 +1,7 @@
 ﻿using FS_UGUIFramework.UI;
 using UnityEngine;
 
-namespace AK_DLL.UI
+namespace AK_DLL.Recruit
 {
     //使用UGUI做UI 因为不会写shader，所以渲染UGUI时会禁用UIROOT/IMGUI
     public abstract class RIWindow : UGUIWindow_Base
@@ -9,7 +9,7 @@ namespace AK_DLL.UI
         public GameObject L2DInstance = null; //干员l2d的模型本身
         public GameObject spineInstance = null;
 
-        internal static AssetBundle Bundle => AK_UITool.FSAsset;
+        internal static AssetBundle Bundle => AK_AssetTool.FSAsset;
 
         //要是从UGUI转UGUI就不要关ev。UGUI转IMGUI或者全关可以关掉ev。
         public override void Close(bool closeEV = true)

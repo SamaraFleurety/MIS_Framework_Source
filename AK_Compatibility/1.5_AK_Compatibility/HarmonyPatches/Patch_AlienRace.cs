@@ -7,7 +7,7 @@ using Verse;
 namespace PA_AKPatch
 {
     //种族修复
-    [HarmonyPatch(typeof(PawnGenerator), "GeneratePawn", new Type[] { typeof(PawnGenerationRequest) })]
+    [HarmonyPatch(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn), new Type[] { typeof(PawnGenerationRequest) })]
     public class Patch_GeneratePawn
     {
         [HarmonyPrefix]

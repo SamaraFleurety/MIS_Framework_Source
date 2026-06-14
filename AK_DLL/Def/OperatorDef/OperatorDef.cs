@@ -1,5 +1,5 @@
-﻿using AK_DLL.DynamicLoading;
-using AK_DLL.Apparels;
+﻿using AK_DLL.Apparels;
+using AK_DLL.DynamicLoading;
 using AK_TypeDef;
 using AKA_Ability;
 using AKA_Ability.TickCondition;
@@ -644,7 +644,7 @@ namespace AK_DLL
         protected Apparel Recruit_Inventory_Wear(ThingDef apparelDef, Pawn p, bool isFashion = true, ThingDef stuff = null)
         {
             Apparel apparel = (Apparel)ThingMaker.MakeThing(apparelDef, stuff);
-            
+
             CompBiocodable comp = apparel.GetComp<CompBiocodable>();
             comp?.CodeFor(p);
             p.apparel.Wear(apparel);

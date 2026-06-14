@@ -1,10 +1,7 @@
 ﻿using AK_DLL.Document;
 using RimWorld;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Verse;
 
 namespace AK_DLL.Apparels
@@ -70,7 +67,7 @@ namespace AK_DLL.Apparels
                     }
 
                     string opID = AK_Tool.GetOperatorIDFrom(operatorDef.defName);
-                    StringBuilder sb = new StringBuilder();
+                    StringBuilder sb = new();
                     sb.Append(TextureRootPath);
 
                     //按职业分文件夹
@@ -140,7 +137,7 @@ namespace AK_DLL.Apparels
                 if (descriptionDetailedCached == null)
                 {
                     string description = NameRuleWorker.Description(this);
-                    StringBuilder stringBuilder = new StringBuilder();
+                    StringBuilder stringBuilder = new();
                     stringBuilder.Append(description);
 
                     stringBuilder.AppendLine();

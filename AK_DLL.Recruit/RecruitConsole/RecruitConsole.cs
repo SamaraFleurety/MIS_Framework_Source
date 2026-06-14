@@ -20,7 +20,7 @@ namespace AK_DLL
             {
                 yield return new FloatMenuOption("CannotUseNoPower".Translate(), null); yield break;
             }
-            if (selPawn.health.Dead || selPawn == null && selPawn.CanReach(this, PathEndMode.Touch, Danger.Deadly))
+            if (selPawn.health.Dead || (selPawn == null && selPawn.CanReach(this, PathEndMode.Touch, Danger.Deadly)))
             {
                 yield return new FloatMenuOption("AK_PawnNull".Translate(), null); yield break;
             }

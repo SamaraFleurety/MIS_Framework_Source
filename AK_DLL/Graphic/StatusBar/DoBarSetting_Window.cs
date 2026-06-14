@@ -6,7 +6,7 @@ using Verse;
 namespace AK_DLL
 {
     [StaticConstructorOnStartup]
-    internal class DoBarSetting_Window : Window
+    public class DoBarSetting_Window : Window
     {
         public override Vector2 InitialSize => new(800f, 650f);
         private static string ValueSpacing => "  ";

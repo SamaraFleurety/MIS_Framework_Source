@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
@@ -188,9 +189,13 @@ namespace AK_DLL
     {
         public static AK_ModSettings settings;
 
+        //fixme: 这些字段找个时间迁移到AKE去
         public static readonly bool ArknightsEnabled;
         public static readonly bool CameraPlusModEnabled;
         public static readonly bool SimpleCameraModEnabled;
+
+        //可能当SoftRely, 我觉得不是框架本体就不该拿这个ModSettings存档
+        public bool IsActive => string.Equals(Content.PackageId, TypeDef.ModID, StringComparison.OrdinalIgnoreCase);
 
         static AK_Mod()
         {
@@ -202,7 +207,7 @@ namespace AK_DLL
         public AK_Mod(ModContentPack content) : base(content)
         {
             ParseHelper.Parsers<ItemOnSpawn>.Register(ItemOnSpawn.Parser);
-            settings = GetSettings<AK_ModSettings>();
+            if (IsActive) settings = GetSettings<AK_ModSettings>();
             Harmony instance = new("AK_DLL");
             instance.PatchAll(Assembly.GetExecutingAssembly());
         }
@@ -234,7 +239,7 @@ namespace AK_DLL
 
             if (AK_ModSettings.font == null) AK_ModSettings.Font = AKDefOf.AK_Font_YouYuan;
             List<FontDef> allFontDefs = DefDatabase<FontDef>.AllDefsListForReading;
-            if (listingStandard.ButtonTextLabeled("AK_Option_selectFont".Translate(), AK_ModSettings.Font.label.Translate()))
+            if (listingStandard.ButtonTextLabeled("AK_Option_selectFont".Translate(), AK_ModSettings.Font?.label.Translate() ?? "N/A"))
             {
                 List<FloatMenuOption> list = new();
                 foreach (FontDef i in allFontDefs)
@@ -254,7 +259,8 @@ namespace AK_DLL
 
         public override string SettingsCategory()
         {
-            return "MIS.Arknights";
+            //return TypeDef.ModID;
+            return IsActive ? TypeDef.ModID : null;
         }
     }
 }

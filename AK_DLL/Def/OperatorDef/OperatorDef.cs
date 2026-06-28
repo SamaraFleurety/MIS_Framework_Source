@@ -19,6 +19,9 @@ namespace AK_DLL
 {
     public class OperatorDef : Def
     {
+        private const string PATH_DEFAULT_STAND = "UI/Image/Caster/DuskStand";
+        private const string PATH_DEFAULT_PORTRAIT = "UI/Image/Caster/DuskPortrait";
+
         #region 干员属性 xml里面的
         [MustTranslate]
         public string name;//名字
@@ -746,7 +749,7 @@ namespace AK_DLL
                     catch
                     {
                         Log.Error($"{this.nickname}缺乏头像。");
-                        this.headPortrait = "UI/Image/Caster/DuskPortrait";
+                        this.headPortrait = PATH_DEFAULT_PORTRAIT;
                     }
                 }
 
@@ -760,7 +763,7 @@ namespace AK_DLL
                     catch
                     {
                         Log.Error($"{this.nickname}缺乏立绘。");
-                        this.stand = "UI/Image/Caster/DuskStand";
+                        this.stand = PATH_DEFAULT_STAND;
                     }
                 }
 
@@ -793,7 +796,7 @@ namespace AK_DLL
                     else
                     {
                         Log.Error($"[AK] {this.nickname}缺乏头像。");
-                        staticStands.Add(-1, "UI/Image/Caster/DuskPortrait");
+                        staticStands.Add(-1, PATH_DEFAULT_PORTRAIT);
                     }
                 }
                 if (!staticStands.ContainsKey(0))
@@ -806,7 +809,7 @@ namespace AK_DLL
                     else
                     {
                         Log.Error($"[AK] {this.nickname}缺乏默认立绘。");
-                        staticStands.Add(0, "UI/Image/Caster/DuskStand");
+                        staticStands.Add(0, PATH_DEFAULT_STAND);
                     }
                 }
                 if (!staticStands.ContainsKey(1))

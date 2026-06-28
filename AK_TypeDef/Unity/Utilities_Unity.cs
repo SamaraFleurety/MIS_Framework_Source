@@ -86,7 +86,11 @@ namespace AK_DLL
         //从随便一个模型/prefab的def，仅读其ab包
         public static AssetBundle LoadAssetBundle(this AssetDef assetDef)
         {
-            return LoadAssetBundle(assetDef.modID, assetDef.assetBundle);
+            if (File.Exists(ModIDtoPath(assetDef.modID, assetDef.assetBundle, "/Asset/")))
+            {
+                return LoadAssetBundle(assetDef.modID, assetDef.assetBundle);
+            }
+            return LoadAssetBundle(assetDef.modID, assetDef.AssetBundleForCurrentOs);
         }
 
         /// <summary>
@@ -108,8 +112,7 @@ namespace AK_DLL
             Log.Message(fullPath);
             try
             {
-                assetBundle = AssetBundle.LoadFromFile(fullPath);
-                if (assetBundle)
+                if (assetBundle = AssetBundle.LoadFromFile(fullPath))
                 {
                     //记录这次加载的ab包
                     cachedAssetBundle.Add(assetBundleID, assetBundle);

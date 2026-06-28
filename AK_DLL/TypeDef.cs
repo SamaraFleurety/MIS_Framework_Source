@@ -52,6 +52,7 @@ namespace AK_DLL
 
         public static AbilityDef AK_VAbility_Operator;
 
+        [MayRequireAnyOf("MIS.Framework")]
         public static FontDef AK_Font_YouYuan;
 
         static AKDefOf()

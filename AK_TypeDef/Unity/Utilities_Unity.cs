@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
 using Verse;
@@ -49,8 +50,185 @@ namespace AK_DLL
 
         public static TMP_FontAsset GetUGUIFont(FontDef def)
         {
+            if (def == null)
+            {
+                return null;
+            }
+
+            if (RuntimeSystemFontCache.TryGetUGUIFont(def, out TMP_FontAsset runtimeFont))
+            {
+                return runtimeFont;
+            }
+
+            if (def.assetBundle.NullOrEmpty() || def.modelName.NullOrEmpty())
+            {
+                return null;
+            }
+
             AssetBundle ab = LoadAssetBundle(def.modID, def.assetBundle);
-            return ab.LoadAsset<TMP_FontAsset>(def.modelName);
+            return ab?.LoadAsset<TMP_FontAsset>(def.modelName);
+        }
+
+        private static class RuntimeSystemFontCache
+        {
+            private const string JapaneseFontDefName = "AK_Font_JapaneseJP";
+            private const string JapaneseMediumFontDefName = "AK_Font_JapaneseMediumJP";
+            private const string JapaneseBoldFontDefName = "AK_Font_JapaneseBoldJP";
+            private const int GlyphRenderModeSdFAA = 4165;
+
+            private static readonly Dictionary<string, TMP_FontAsset> CachedFontAssets = new();
+            private static readonly HashSet<string> LoggedMissingFonts = new();
+            private static readonly HashSet<string> LoggedFallbacks = new();
+            private static readonly string[] JapaneseMediumFontPaths =
+            {
+                @"C:\Windows\Fonts\YuGothM.ttc",
+                @"C:\Windows\Fonts\NotoSansJP-VF.ttf",
+                @"C:\Windows\Fonts\meiryo.ttc",
+                @"C:\Windows\Fonts\BIZ-UDGothicR.ttc",
+                @"C:\Windows\Fonts\msgothic.ttc"
+            };
+            private static readonly string[] JapaneseBoldFontPaths =
+            {
+                @"C:\Windows\Fonts\YuGothB.ttc",
+                @"C:\Windows\Fonts\meiryob.ttc",
+                @"C:\Windows\Fonts\BIZ-UDGothicB.ttc",
+                @"C:\Windows\Fonts\NotoSansJP-VF.ttf",
+                @"C:\Windows\Fonts\msgothic.ttc"
+            };
+
+            public static bool TryGetUGUIFont(FontDef def, out TMP_FontAsset fontAsset)
+            {
+                fontAsset = null;
+
+                List<string> fontPaths = def.systemFontPaths;
+                if ((fontPaths == null || fontPaths.Count == 0) && IsBuiltInJapaneseRuntimeFont(def.defName))
+                {
+                    fontPaths = BuiltInJapaneseRuntimeFontPaths(def.defName).ToList();
+                }
+
+                if (fontPaths == null || fontPaths.Count == 0)
+                {
+                    return false;
+                }
+
+                if (CachedFontAssets.TryGetValue(def.defName, out fontAsset) && fontAsset != null)
+                {
+                    return true;
+                }
+
+                string fontPath = fontPaths.FirstOrDefault(File.Exists);
+                if (fontPath == null)
+                {
+                    if (LoggedMissingFonts.Add(def.defName))
+                    {
+                        Log.Warning($"[MIS] No system font found for FontDef {def.defName}.");
+                    }
+                    return false;
+                }
+
+                try
+                {
+                    Font font = new(fontPath);
+                    fontAsset = CreateFontAsset(font, def);
+                    fontAsset.name = $"{def.defName}_{Path.GetFileNameWithoutExtension(fontPath)}";
+                    fontAsset.atlasPopulationMode = AtlasPopulationMode.Dynamic;
+                    CachedFontAssets[def.defName] = fontAsset;
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning($"[MIS] Failed to create runtime font for FontDef {def.defName}: {ex.GetType().Name}: {ex.Message}");
+                    CachedFontAssets.Remove(def.defName);
+                    fontAsset = null;
+                    return false;
+                }
+            }
+
+            private static bool IsBuiltInJapaneseRuntimeFont(string defName)
+            {
+                return defName == JapaneseFontDefName ||
+                       defName == JapaneseMediumFontDefName ||
+                       defName == JapaneseBoldFontDefName;
+            }
+
+            private static IEnumerable<string> BuiltInJapaneseRuntimeFontPaths(string defName)
+            {
+                return defName == JapaneseBoldFontDefName ? JapaneseBoldFontPaths : JapaneseMediumFontPaths;
+            }
+
+            private static TMP_FontAsset CreateFontAsset(Font font, FontDef def)
+            {
+                Type glyphRenderModeType = GetGlyphRenderModeType();
+                MethodInfo createFontAsset = GetDetailedCreateFontAssetMethod(glyphRenderModeType);
+                if (createFontAsset != null)
+                {
+                    try
+                    {
+                        object glyphRenderMode = Enum.ToObject(glyphRenderModeType, GlyphRenderModeSdFAA);
+                        return (TMP_FontAsset)createFontAsset.Invoke(null, new[]
+                        {
+                            font,
+                            def.samplingPointSize,
+                            def.atlasPadding,
+                            glyphRenderMode,
+                            def.atlasWidth,
+                            def.atlasHeight,
+                            AtlasPopulationMode.Dynamic,
+                            true
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        if (LoggedFallbacks.Add(def.defName))
+                        {
+                            Log.Warning($"[MIS] Failed to create detailed runtime font for FontDef {def.defName}; falling back to TMP defaults: {ex.GetType().Name}: {ex.Message}");
+                        }
+                    }
+                }
+
+                return TMP_FontAsset.CreateFontAsset(font);
+            }
+
+            private static Type GetGlyphRenderModeType()
+            {
+                Type type = Type.GetType("UnityEngine.TextCore.LowLevel.GlyphRenderMode, UnityEngine.TextCoreFontEngineModule");
+                if (type != null)
+                {
+                    return type;
+                }
+
+                return AppDomain.CurrentDomain.GetAssemblies()
+                    .Select(assembly => assembly.GetType("UnityEngine.TextCore.LowLevel.GlyphRenderMode"))
+                    .FirstOrDefault(foundType => foundType != null);
+            }
+
+            private static MethodInfo GetDetailedCreateFontAssetMethod(Type glyphRenderModeType)
+            {
+                if (glyphRenderModeType == null)
+                {
+                    return null;
+                }
+
+                return typeof(TMP_FontAsset).GetMethods(BindingFlags.Public | BindingFlags.Static)
+                    .FirstOrDefault(method =>
+                    {
+                        if (method.Name != nameof(TMP_FontAsset.CreateFontAsset))
+                        {
+                            return false;
+                        }
+
+                        ParameterInfo[] parameters = method.GetParameters();
+                        return parameters.Length == 8 &&
+                               parameters[0].ParameterType == typeof(Font) &&
+                               parameters[1].ParameterType == typeof(int) &&
+                               parameters[2].ParameterType == typeof(int) &&
+                               parameters[3].ParameterType == glyphRenderModeType &&
+                               parameters[4].ParameterType == typeof(int) &&
+                               parameters[5].ParameterType == typeof(int) &&
+                               parameters[6].ParameterType == typeof(AtlasPopulationMode) &&
+                               parameters[7].ParameterType == typeof(bool);
+                    });
+            }
         }
 
 

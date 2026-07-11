@@ -1,7 +1,8 @@
-﻿using FS_UGUIFramework.UI;
+using AK_DLL.Recruit;
+using FS_UGUIFramework.UI;
 using UnityEngine;
 
-namespace AK_DLL.Recruit
+namespace AK_DLL.UI
 {
     //使用UGUI做UI 因为不会写shader，所以渲染UGUI时会禁用UIROOT/IMGUI
     public abstract class RIWindow : UGUIWindow_Base

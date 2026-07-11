@@ -1,5 +1,5 @@
-﻿using AK_DLL;
-using AK_DLL.Recruit;
+using AK_DLL;
+using AK_DLL.UI;
 using AKA_Ability;
 using FSUI;
 using RimWorld;
@@ -92,8 +92,8 @@ namespace LMA_Lib.UGUI
             for (int i = 0; i < AK_DLL.TypeDef.SortOrderSkill.Count; ++i)
             {
                 radarChart.vertexLabelValues[i] = $"<color={base.GetSkillLabelColor(OperatorDef.SortedSkills[i])}>{OperatorDef.SortedSkills[i].skill.label.Translate()}</color>";
-                if (radarChart.data[0].values.Count >= i) radarChart.data[0].values.Add((float)OperatorDef.SortedSkills[i].level / 20.0f);
-                else radarChart.data[0].values[i] = (float)OperatorDef.SortedSkills[i].level / 20.0f;
+                if (radarChart.data[0].values.Count >= i) radarChart.data[0].values.Add(OperatorDef.SortedSkills[i].level / 20.0f);
+                else radarChart.data[0].values[i] = OperatorDef.SortedSkills[i].level / 20.0f;
             }
         }
 

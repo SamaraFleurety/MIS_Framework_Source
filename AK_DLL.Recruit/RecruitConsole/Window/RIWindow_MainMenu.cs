@@ -1,4 +1,5 @@
-﻿using FS_LivelyRim;
+using AK_DLL.Recruit;
+using FS_LivelyRim;
 using SpriteEvo;
 using System.Collections.Generic;
 using System.Reflection;
@@ -6,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Verse;
 
-namespace AK_DLL.Recruit
+namespace AK_DLL.UI
 {
     /* legacy
      * [HotSwappable]

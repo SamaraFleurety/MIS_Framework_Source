@@ -1,8 +1,6 @@
-﻿using AK_DLL;
+using AK_DLL;
 using LMA_Lib.FCS;
 using RimWorld;
-using System.Collections.Generic;
-using Verse;
 
 namespace LMA_Lib
 {
@@ -30,7 +28,7 @@ namespace LMA_Lib
                 return FCS;
             }
         }
-        
+
         #endregion
 
     }

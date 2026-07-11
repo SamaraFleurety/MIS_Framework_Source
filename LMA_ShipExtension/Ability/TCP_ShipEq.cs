@@ -1,11 +1,6 @@
-﻿using AK_DLL;
+using AK_DLL;
 using AKA_Ability;
-using RimWorld;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Verse;
 
 namespace LMA_Lib.Ability
@@ -38,7 +33,7 @@ namespace LMA_Lib.Ability
             for (int i = 0; i < Props.abilities.Count; i++)
             {
                 AKAbilityDef def = Props.abilities[i];
-                tracker.AddAbility(def, parent.thingIDNumber * 100 + i); //我不相信技能能有100个
+                tracker.AddAbility(def, (parent.thingIDNumber * 100) + i); //我不相信技能能有100个
             }
 
             lastEquippedShipgirl = pawn;
@@ -51,7 +46,7 @@ namespace LMA_Lib.Ability
             if (pawn.GetDoc() is not OperatorDocument doc || doc.parentContainer.AK_Tracker is not LMA_AbilityTracker tracker) return;
             for (int i = 0; i < Props.abilities.Count; i++)
             {
-                tracker.RemoveAbility(parent.thingIDNumber * 100 + i); //我不相信技能能有100个
+                tracker.RemoveAbility((parent.thingIDNumber * 100) + i); //我不相信技能能有100个
             }
 
             lastEquippedShipgirl = null;

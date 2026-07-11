@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -187,6 +187,8 @@ namespace AK_DLL
 
     public class AK_Mod : Mod
     {
+        private const string PackageId = "MIS.Framework";
+
         public static AK_ModSettings settings;
 
         //fixme: 这些字段找个时间迁移到AKE去
@@ -195,7 +197,7 @@ namespace AK_DLL
         public static readonly bool SimpleCameraModEnabled;
 
         //可能当SoftRely, 我觉得不是框架本体就不该拿这个ModSettings存档
-        public bool IsActive => string.Equals(Content.PackageId, TypeDef.ModID, StringComparison.OrdinalIgnoreCase);
+        public bool IsActive => string.Equals(Content.PackageId, PackageId, StringComparison.OrdinalIgnoreCase);
 
         static AK_Mod()
         {
@@ -259,8 +261,7 @@ namespace AK_DLL
 
         public override string SettingsCategory()
         {
-            //return TypeDef.ModID;
-            return IsActive ? TypeDef.ModID : null;
+            return IsActive ? PackageId : null;
         }
     }
 }

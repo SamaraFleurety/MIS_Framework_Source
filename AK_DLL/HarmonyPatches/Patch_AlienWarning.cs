@@ -1,4 +1,4 @@
-﻿#if V16
+#if V16
 using HarmonyLib;
 using RimWorld;
 using Steamworks;

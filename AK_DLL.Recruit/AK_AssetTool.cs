@@ -1,4 +1,5 @@
-﻿using System;
+using AK_DLL.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -14,7 +15,15 @@ namespace AK_DLL.Recruit
     {
         public static bool disableIMGUI = false;
 
-        public static AssetBundle FSAsset => AK_RecruitDefOf.AK_Prefab_yccMainMenu.LoadAssetBundle();
+        //草 现在用不了DefOf了
+        public static AssetBundle FSAsset
+        {
+            get
+            {
+                return DefDatabase<UIPrefabDef>.GetNamedSilentFail("AK_Prefab_yccMainMenu")?.LoadAssetBundle();
+            }
+        }
+
         public static AssetBundle PAAsset;
         public static AssetBundle l2dAsset;
         private static GameObject EVSystem;

@@ -1,4 +1,5 @@
-﻿using RimWorld;
+using AK_DLL.Recruit;
+using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ using Object = UnityEngine.Object;
 //记得给干员页面写下拉 series
 //sortOperator可能封装一下更好 特别是按字母排序
 //有没有可能按钮效果不用委托而是封装好一点呢
-namespace AK_DLL.Recruit
+namespace AK_DLL.UI
 {
     #region legacy
     /*public class RIWindow_OperatorList : Dialog_NodeTree

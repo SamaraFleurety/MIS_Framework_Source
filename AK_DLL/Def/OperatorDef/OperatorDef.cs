@@ -1,4 +1,4 @@
-﻿using AK_DLL.Apparels;
+using AK_DLL.Apparels;
 using AK_DLL.DynamicLoading;
 using AK_TypeDef;
 using AKA_Ability;
@@ -201,8 +201,15 @@ namespace AK_DLL
         {
             get
             {
-                OperatorDocument doc = GC_OperatorDocumentation.opDocArchive[this.OperatorID];
-                return doc is not { currentExist: true };
+                if (GC_OperatorDocumentation.opDocArchive == null)
+                {
+                    return false;
+                }
+                if (!GC_OperatorDocumentation.opDocArchive.TryGetValue(this.OperatorID, out OperatorDocument doc))
+                {
+                    return false;
+                }
+                return doc is { currentExist: true };
             }
         }
         #endregion

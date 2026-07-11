@@ -1,4 +1,5 @@
-﻿using AKA_Ability;
+using AK_DLL.Recruit;
+using AKA_Ability;
 using FSUI;
 using RimWorld;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Verse;
 
-namespace AK_DLL.Recruit
+namespace AK_DLL.UI
 {
     public class RIWindow_OperatorDetail : RIWindow
     {

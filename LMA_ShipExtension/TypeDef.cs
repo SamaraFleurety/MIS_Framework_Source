@@ -1,4 +1,5 @@
-﻿using AK_DLL;
+using AK_DLL;
+using AKR_Random;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -19,5 +20,12 @@ namespace LMA_Lib
         public static UIPrefabDef LMA_Prefab_OpList;
         public static UIPrefabDef LMA_Prefab_OpDetail;
         public static UIPrefabDef LMA_Prefab_Gacha;
+
+        public static RandomizerDef LMA_Rander_Operators;
+
+        static AzurDefOf()
+        {
+            DefOfHelper.EnsureInitializedInCtor(typeof(AzurDefOf));
+        }
     }
 }

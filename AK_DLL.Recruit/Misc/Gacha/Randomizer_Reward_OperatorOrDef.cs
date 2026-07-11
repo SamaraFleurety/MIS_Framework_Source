@@ -1,4 +1,4 @@
-﻿using AK_DLL.Rewards;
+using AK_DLL.Rewards;
 using AKR_Random;
 using System.Collections.Generic;
 using Verse;
@@ -18,7 +18,7 @@ namespace AK_DLL.Gacha
             Rewards_Operator op = rewardOperator[RandRewardIndex()];
             if (op.operatorDef.CurrentRecruited)
             {
-                return duplicateOperatorSubstitude.root.TryIssueGachaResult();
+                return duplicateOperatorSubstitude.root.TryIssueGachaResult(cell, map, gambler, point);
             }
             return op.GenerateGachaResult(cell, map, gambler, point);
         }

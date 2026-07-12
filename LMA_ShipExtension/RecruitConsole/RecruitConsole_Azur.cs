@@ -8,8 +8,9 @@ namespace LMA_Lib
     //最后还是觉得写个新类 兼容性更好
     public class RecruitConsole_Azur : RecruitConsole
     {
-        private const int SingleRecruitCount = 1;
-        private const int TenRecruitCount = 10;
+
+        public const int SingleRecruitCount = 1;
+        public const int TenRecruitCount = 10;
 
         public override IEnumerable<FloatMenuOption> GetExtendedFloatMenuOptions(Pawn selPawn)
         {
@@ -35,13 +36,20 @@ namespace LMA_Lib
             }
         }
 
-        private void DrawOperators(Pawn selPawn, int count)
+        public void DrawOperators(Pawn selPawn, int count)
         {
+            GC_AzurManager manager = GC_AzurManager.Instance;
+            manager.GetUpOperators(AzurDefOf.LMA_Rander_Operators);
+
             CompRefuelable.ConsumeFuel(count);
             for (int index = 0; index < count; index++)
             {
-                foreach (object ignored in AzurDefOf.LMA_Rander_Operators.root.TryIssueGachaResult(InteractionCell, Map, selPawn, 0f))
+                foreach (object result in AzurDefOf.LMA_Rander_Operators.root.TryIssueGachaResult(InteractionCell, Map, selPawn, 0f))
                 {
+                    if (result is not null and Thing t)
+                    {
+                        Messages.Message("LMA_GachaReport".Translate(t.LabelShort), MessageTypeDefOf.NeutralEvent);
+                    }
                 }
             }
         }

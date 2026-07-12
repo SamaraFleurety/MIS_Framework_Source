@@ -15,6 +15,12 @@ namespace LMA_Lib.UGUI
                 RIWindowHandler.OpenRIWindow(AzurDefOf.LMA_Prefab_OpList, purpose: OpDetailType.Recruit);
                 this.Close(false);
             });
+
+            GameObject.Find("MBtn_Gacha").GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            {
+                RIWindowHandler.OpenRIWindow(AzurDefOf.LMA_Prefab_Gacha, purpose: OpDetailType.Recruit);
+                this.Close(false);
+            });
         }
 
         protected override void DrawSubFeature_ChangeSecretary()

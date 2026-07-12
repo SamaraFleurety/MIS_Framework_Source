@@ -1,8 +1,9 @@
-﻿using RimWorld;
+using RimWorld;
 using Verse;
 
 namespace AK_DLL.Recruit
 {
+    [DefOf]
     public static class AK_RecruitDefOf
     {
         public static JobDef AK_Job_UseRecruitConsole;

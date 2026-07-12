@@ -201,10 +201,7 @@ namespace AK_DLL
         {
             get
             {
-                if (GC_OperatorDocumentation.opDocArchive == null)
-                {
-                    return false;
-                }
+                if (GC_OperatorDocumentation.opDocArchive == null) return false;
                 if (!GC_OperatorDocumentation.opDocArchive.TryGetValue(this.OperatorID, out OperatorDocument doc))
                 {
                     return false;

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net48</TargetFramework>
@@ -69,6 +69,10 @@
 			<HintPath>..\Rely\UnityEngine.ImageConversionModule.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
+		<Reference Include="UnityEngine.InputLegacyModule">
+			<HintPath>..\Rely\UnityEngine.InputLegacyModule.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
 		<Reference Include="UnityEngine.IMGUIModule">
 			<HintPath>..\Rely\UnityEngine.IMGUIModule.dll</HintPath>
 			<Private>False</Private>
@@ -81,6 +85,10 @@
 			<HintPath>..\Rely\UnityEngine.UIModule.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="RecruitConsole\Mono\" />
 	</ItemGroup>
 
 </Project>

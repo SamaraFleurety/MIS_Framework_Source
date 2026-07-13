@@ -19,6 +19,13 @@ namespace LMA_Lib
                 yield break;
             }
 
+            GC_AzurManager manager = GC_AzurManager.Instance;
+            if (manager.storedSilver < SingleRecruitCost * GC_AzurManager.SilverExchangeRate)
+            {
+                yield return new FloatMenuOption("LMA_NoCube".Translate(), null);
+                yield break;
+            }
+
             //GC_AzurManager manager = GC_AzurManager.Instance;
             //if (manager.storedSilver >= SingleRecruitCost * GC_AzurManager.SilverExchangeRate)
             yield return new FloatMenuOption("LMA_Invest_6480".Translate(), delegate

@@ -52,8 +52,14 @@ namespace AK_DLL
 
         public static AbilityDef AK_VAbility_Operator;
 
-        [MayRequireAnyOf("MIS.Framework")]
-        public static FontDef AK_Font_YouYuan;
+        [MayRequireAnyOf("MIS.Framework")] public static JobDef AK_Job_UseRecruitConsole;
+        [MayRequireAnyOf("MIS.Framework")] public static JobDef AK_Job_OperatorChangeFashion;
+
+        [MayRequireAnyOf("MIS.Framework")] public static FontDef AK_Font_YouYuan;
+
+        [MayRequireAnyOf("MIS.Framework")] public static UIPrefabDef AK_Prefab_yccMainMenu;
+        [MayRequireAnyOf("MIS.Framework")] public static UIPrefabDef AK_Prefab_yccOpList;
+        [MayRequireAnyOf("MIS.Framework")] public static UIPrefabDef AK_Prefab_OpDetail;
 
         static AKDefOf()
         {

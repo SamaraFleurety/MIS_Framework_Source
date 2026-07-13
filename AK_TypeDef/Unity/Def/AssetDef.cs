@@ -7,6 +7,7 @@ namespace AK_DLL
     public class AssetDef : Def
     {
         public string modID;
+        //public string path;
         public string assetBundle;
         public string modelName;
 

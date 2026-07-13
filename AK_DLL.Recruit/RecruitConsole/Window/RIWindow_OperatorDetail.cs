@@ -96,7 +96,7 @@ namespace AK_DLL.UI
                 preferredSkin = doc.preferedSkin;
             }
             canRecruit = false;
-            if (RecruitConsole.TryGetComp<CompRefuelable>().Fuel >= OperatorDef.ticketCost - 0.01)
+            if (RecruitConsole.TryGetComp<CompRefuelable>(out var refuelable) && refuelable.Fuel >= OperatorDef.ticketCost - 0.01)
             {
                 if (doc is not { currentExist: true })
                 {
@@ -170,7 +170,7 @@ namespace AK_DLL.UI
         {
             get
             {
-                GameObject fashionIconPrefab = AK_AssetTool.FSAsset.LoadAsset<GameObject>("FashionIcon");
+                GameObject fashionIconPrefab = AssetTool.FSAsset.LoadAsset<GameObject>("FashionIcon");
                 return Object.Instantiate(fashionIconPrefab, fashionPanel);
             }
         }
@@ -178,7 +178,7 @@ namespace AK_DLL.UI
         protected virtual void DrawFashionBtn()
         {
             fashionPanel = GameObject.Find("FashionPanel").transform;  //切换换装按钮的面板。因为做的时候不会用Grid，所以需要手动设置按钮位置，乐
-            GameObject fashionIconPrefab = AK_AssetTool.FSAsset.LoadAsset<GameObject>("FashionIcon");
+            GameObject fashionIconPrefab = AssetTool.FSAsset.LoadAsset<GameObject>("FashionIcon");
             Vector3 v3;
 
             fashionBtns = new Dictionary<int, GameObject>();
@@ -472,7 +472,7 @@ namespace AK_DLL.UI
                     if (canRecruit)
                     {
                         this.Close();
-                        RecruitConsole.TryGetComp<CompRefuelable>().ConsumeFuel(OperatorDef.ticketCost);
+                        RecruitConsole.TryGetComp<CompRefuelable>()?.ConsumeFuel(OperatorDef.ticketCost);
                         Pawn resultPawn = OperatorDef.Recruit(RecruitConsole.Map);
                         OperatorDocument document = resultPawn.GetDoc();
                         document.preferedSkin = this.preferredSkin;
@@ -518,10 +518,11 @@ namespace AK_DLL.UI
         {
             get
             {
-                GameObject opAbilityPrefab = AK_AssetTool.FSAsset.LoadAsset<GameObject>("OpAbilityIcon");
+                GameObject opAbilityPrefab = AssetTool.FSAsset.LoadAsset<GameObject>("OpAbilityIcon");
                 return Object.Instantiate(opAbilityPrefab, opAbilityPanel);
             }
         }
+
         //FIXME:切换技能逻辑不对 需要大修
         protected virtual void DrawOperatorAbility()
         {
@@ -548,7 +549,7 @@ namespace AK_DLL.UI
                 if (!opAbilty.grouped)
                 {
                     //右下角的勾 常驻技能橙色。
-                    opAbilityInstance.transform.GetChild(1).GetComponent<Image>().sprite = AK_AssetTool.FSAsset.LoadAsset<Sprite>("InnateAb");
+                    opAbilityInstance.transform.GetChild(1).GetComponent<Image>().sprite = AssetTool.FSAsset.LoadAsset<Sprite>("InnateAb");
                 }
                 //可选技能
                 else
@@ -581,7 +582,7 @@ namespace AK_DLL.UI
         {
             get
             {
-                GameObject traitPrefab = AK_AssetTool.FSAsset.LoadAsset<GameObject>("TraitTemplate");
+                GameObject traitPrefab = AssetTool.FSAsset.LoadAsset<GameObject>("TraitTemplate");
                 GameObject traitInstance = Object.Instantiate(traitPrefab, traitPanel);
                 return traitInstance;
             }
@@ -617,7 +618,7 @@ namespace AK_DLL.UI
             if (preferredSkin < 1000)
             {
                 OpStand.SetActive(true);
-                AK_AssetTool.DrawStaticOperatorStand(OperatorDef, preferredSkin, OpStand, OpStaticStandOffset());
+                AssetTool.DrawStaticOperatorStand(OperatorDef, preferredSkin, OpStand, OpStaticStandOffset());
             }
             //l2d
             else if (preferredSkin < 2000)
@@ -718,13 +719,13 @@ namespace AK_DLL.UI
 
         public override void ReturnToParent(bool closeEV = true)
         {
-            RIWindowHandler.OpenRIWindow(AK_RecruitDefOf.AK_Prefab_yccOpList/* RIWindowType.Op_List*/);
+            RIWindowHandler.OpenRIWindow(AKDefOf.AK_Prefab_yccOpList/* RIWindowType.Op_List*/);
             base.ReturnToParent(closeEV);
         }
 
         public virtual void ReturnToMainMenu()
         {
-            RIWindowHandler.OpenRIWindow(AK_RecruitDefOf.AK_Prefab_yccMainMenu, purpose: OpDetailType.Recruit);
+            RIWindowHandler.OpenRIWindow(AKDefOf.AK_Prefab_yccMainMenu, purpose: OpDetailType.Recruit);
             this.Close(closeEV: false);
         }
 

@@ -1,4 +1,3 @@
-﻿using AK_DLL.Recruit;
 using RimWorld;
 using System.Collections.Generic;
 using Verse;
@@ -47,30 +46,7 @@ namespace AK_DLL
 
             foreach (FloatMenuOption extraOptions in GetExtendedFloatMenuOptions(selPawn)) yield return extraOptions;
 
-            //换装 右键直接出选项，没有ui
-            OperatorDocument doc = selPawn.GetDoc();
-            if (doc != null && !doc.operatorDef.clothSets.NullOrEmpty())
-            {
-                yield return new FloatMenuOption("AK_ChangeFashionDefault".Translate(),
-                delegate
-                {
-                    OperatorFashionSetDef nextFashion = null;
-                    if (doc.operatorDef.defaultFashion != null) nextFashion = doc.operatorDef.defaultFashion;
-                    doc.pendingFashionDef = nextFashion;
-                    selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AK_RecruitDefOf.AK_Job_OperatorChangeFashion, this));
-                }
-                );
-                foreach (OperatorFashionSetDef set in doc.operatorDef.clothSets)
-                {
-                    yield return new FloatMenuOption("AK_ChangeFashionTo".Translate() + set.label.Translate(),
-                        delegate
-                        {
-                            doc.pendingFashionDef = set;
-                            selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AK_RecruitDefOf.AK_Job_OperatorChangeFashion, this));
-                        });
-
-                }
-            }
+            foreach (FloatMenuOption fashionOptions in GetFloatMenuFashionOptions(selPawn)) yield return fashionOptions;
 
             foreach (FloatMenuOption i in base.GetFloatMenuOptions(selPawn))
             {
@@ -78,7 +54,7 @@ namespace AK_DLL
             }
 
             //可以招募
-            if (CompRefuelable.Fuel < 0.1)
+            if (CompRefuelable is { Fuel: < 0.1f })
             {
                 yield return new FloatMenuOption("AK_NoTicket".Translate(), null);
                 yield break;
@@ -92,16 +68,42 @@ namespace AK_DLL
 
         public virtual IEnumerable<FloatMenuOption> GetFloatMenuRecruitOptions(Pawn selPawn)
         {
-            yield return new FloatMenuOption("AK_CanReach".Translate(),
-                delegate
-                {
-                    selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AK_RecruitDefOf.AK_Job_UseRecruitConsole, this));
-                }
-                );
+            yield return new FloatMenuOption("AK_CanReach".Translate(), delegate
+            {
+                selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AKDefOf.AK_Job_UseRecruitConsole, this));
+            }
+            );
             yield return new FloatMenuOption("AK_RecruitContinuous".Translate(), delegate
             {
-                selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AK_RecruitDefOf.AK_Job_UseRecruitConsole, this, this));  //用target B做标记，要是不为null就是连续招募模式
+                selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AKDefOf.AK_Job_UseRecruitConsole, this, this));  //用target B做标记，要是不为null就是连续招募模式
             });
+        }
+
+        public virtual IEnumerable<FloatMenuOption> GetFloatMenuFashionOptions(Pawn selPawn)
+        {
+            //换装 右键直接出选项，没有ui
+            OperatorDocument doc = selPawn.GetDoc();
+            if (doc != null && !doc.operatorDef.clothSets.NullOrEmpty())
+            {
+                yield return new FloatMenuOption("AK_ChangeFashionDefault".Translate(), delegate
+                {
+                    OperatorFashionSetDef nextFashion = null;
+                    if (doc.operatorDef.defaultFashion != null) nextFashion = doc.operatorDef.defaultFashion;
+                    doc.pendingFashionDef = nextFashion;
+                    selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AKDefOf.AK_Job_OperatorChangeFashion, this));
+                }
+                );
+                foreach (OperatorFashionSetDef set in doc.operatorDef.clothSets)
+                {
+                    yield return new FloatMenuOption("AK_ChangeFashionTo".Translate() + set.label.Translate(), delegate
+                    {
+                        doc.pendingFashionDef = set;
+                        selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AKDefOf.AK_Job_OperatorChangeFashion, this));
+                    });
+
+                }
+            }
+            yield break;
         }
 
         public virtual IEnumerable<FloatMenuOption> GetExtendedFloatMenuOptions(Pawn selPawn)

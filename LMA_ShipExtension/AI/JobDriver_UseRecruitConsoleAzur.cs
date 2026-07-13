@@ -21,11 +21,10 @@ namespace LMA_Lib.AI
                 {
                     Find.TickManager.Pause();
                     RIWindowHandler.continuousRecruit = TargetThingB != null;    //用target B做标记，要是不为null就是连续招募模式
-                    RIWindowHandler.OpenRIWindow(AzurDefOf.LMA_Prefab_MainMenu, TargetThingA, pawn, OpDetailType.Recruit);
+                    RIWindowHandler.OpenRIWindow(AzurDefOf.LMA_Prefab_MainMenu, TargetThingA, pawn);
                 }
             };
             yield return t;
-            yield break;
         }
     }
 }

@@ -11,7 +11,7 @@ using Object = UnityEngine.Object;
 namespace AK_DLL.Recruit
 {
     [StaticConstructorOnStartup]
-    public static class AK_AssetTool
+    public static class AssetTool
     {
         public static bool disableIMGUI = false;
 
@@ -33,7 +33,7 @@ namespace AK_DLL.Recruit
 
         private static List<ModContentPack> Mods => LoadedModManager.RunningMods.ToList();
 
-        static AK_AssetTool()
+        static AssetTool()
         {
             try
             {

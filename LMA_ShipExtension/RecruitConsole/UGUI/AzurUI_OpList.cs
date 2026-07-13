@@ -8,12 +8,18 @@ namespace LMA_Lib.UGUI
 {
     public class AzurUI_OpList : RIWindow_OperatorList
     {
+        public override void Initialize()
+        {
+            base.Initialize();
+            GameObject.Find("Silver").GetComponentInChildren<TextMeshProUGUI>().text = GC_AzurManager.Instance.storedSilver.ToString();
+        }
+
         protected override GameObject OperatorPortraitInstance
         {
             get
             {
                 GameObject opRectPrefab = TypeDef.AzurAsset.LoadAsset<GameObject>("OperatorTemplate");
-                return GameObject.Instantiate(opRectPrefab, opListPanel);
+                return Object.Instantiate(opRectPrefab, opListPanel);
             }
         }
 
@@ -22,7 +28,7 @@ namespace LMA_Lib.UGUI
             get
             {
                 GameObject sortBtnPrefab = TypeDef.AzurAsset.LoadAsset<GameObject>("btnSortTemplate");
-                return GameObject.Instantiate(sortBtnPrefab, sorterColumnLoc);
+                return Object.Instantiate(sortBtnPrefab, sorterColumnLoc);
             }
         }
 
@@ -31,7 +37,7 @@ namespace LMA_Lib.UGUI
             get
             {
                 GameObject classBtnPrefab = TypeDef.AzurAsset.LoadAsset<GameObject>("Icon_Class");
-                return GameObject.Instantiate(classBtnPrefab, classColumn);
+                return Object.Instantiate(classBtnPrefab, classColumn);
             }
         }
 
@@ -57,18 +63,18 @@ namespace LMA_Lib.UGUI
         protected override void OpPortraitBtnOnClickListener(int index)
         {
             RIWindowHandler.OpenRIWindow_OpDetail(AzurDefOf.LMA_Prefab_OpDetail, cachedOperatorList[index]);
-            this.Close(false);
+            Close(false);
         }
 
         #region 排序按钮
-        static GameObject previousSortBtn = null;
+        static GameObject previousSortBtn;
         //增添了一个按下会弹出的效果
         protected override GameObject DrawOneSortBtn(int sortID, string label)
         {
             GameObject btn = base.DrawOneSortBtn(sortID, label);
 
             btn.transform.GetChild(1).GetComponentInChildren<TextMeshProUGUI>().text = label;
-            btn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            btn.GetComponentInChildren<Button>().onClick.AddListener(delegate
             {
                 previousSortBtn?.transform.GetChild(1).gameObject.SetActive(false);  //弹出的视觉效果
                 previousSortBtn = btn;
@@ -84,17 +90,17 @@ namespace LMA_Lib.UGUI
         protected override void RefreshSeriesBtnTexture()
         {
             GameObject btnCurrentSeries = GameObject.Find("btnSeries");
-            btnCurrentSeries.transform.GetChild(0).GetComponent<Image>().sprite = Utilities_Unity.Image2Spirit(AllSeries[Series].Icon);
+            btnCurrentSeries.transform.GetChild(0).GetComponent<Image>().sprite = AllSeries[Series].Icon.Image2Spirit();
         }
 
-        static GameObject previousClassBtn = null;
+        static GameObject previousClassBtn;
         //加了个选中会弹起的功能
         protected override GameObject DrawOneClassBtn(int classIndex)
         {
             GameObject btn = base.DrawOneClassBtn(classIndex);
 
             btn.transform.GetChild(2).gameObject.SetActive(false);
-            btn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            btn.GetComponentInChildren<Button>().onClick.AddListener(delegate
             {
                 previousClassBtn?.transform.GetChild(2).gameObject.SetActive(false);
 

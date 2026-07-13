@@ -1,6 +1,7 @@
-using AK_DLL;
+﻿using AK_DLL;
 using AK_DLL.UI;
 using FS_UGUIFramework.UI;
+using RimWorld;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -22,12 +23,19 @@ namespace LMA_Lib.UGUI
         private Image periodUpStand;
         private TextMeshProUGUI periodUpName;
         private Button gachaButton;
+        private TextMeshProUGUI availableCubeText;
+        private TextMeshProUGUI storedSilverText;
 
         public override void Initialize()
         {
             base.Initialize();
 
             GC_AzurManager manager = GC_AzurManager.Instance;
+            TextMeshProUGUI[] silverTexts = GameObject.Find("Silver").GetComponentsInChildren<TextMeshProUGUI>();
+            availableCubeText = silverTexts[0];
+            storedSilverText = silverTexts[1];
+            availableCubeText.text = manager.AvaliableCube.ToString();
+            storedSilverText.text = manager.storedSilver.ToString();
             recruitConsole = RIWindowHandler.RecruitConsole as RecruitConsole_Azur;
             gambler = UGUIHandler.pawn as Pawn;
             upOperators = manager.GetUpOperators(AzurDefOf.LMA_Rander_Operators);
@@ -46,20 +54,18 @@ namespace LMA_Lib.UGUI
 
             //剩余时间
             TextMeshProUGUI remainingTime = GameObject.Find("UP Remaining Time").GetComponentInChildren<TextMeshProUGUI>();
-            DateTime upPeriodEnd = GachaGenerator.GetPeriodStart(DateTime.Now).AddDays(7);
+            int upPeriodEndTick = GachaGenerator.GetPeriodStartTick(Find.TickManager.TicksGame) + GenDate.TicksPerQuadrum;
             remainingTime.gameObject.AddComponent<Mono_TextUpdater>().Bind(delegate
             {
-                DateTime currentTime = DateTime.Now;
-                TimeSpan remaining = currentTime >= upPeriodEnd ? TimeSpan.Zero : manager.GetWeeklyUpRemainingTime(currentTime);
-
+                TimeSpan remaining = TimeSpan.FromDays((double)manager.GetMonthlyUpRemainingTicks() / GenDate.TicksPerDay);
                 string formattedTime = $"{(int)remaining.TotalDays:D2}:{remaining.Hours:D2}:{remaining.Minutes:D2}";
                 return "LMA_GachaUpRemaining".Translate(formattedTime).ToString();
-            }, upPeriodEnd);
+            }, upPeriodEndTick);
 
             gachaButton = GameObject.Find("Btn Gacha").GetComponentInChildren<Button>();
 
             GameObject gachaPanel = GameObject.Find("Panel_Gacha");
-            gachaPanel.transform.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text = "LMA_GachaUpChance".Translate();
+            gachaPanel.transform.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text = "LMA_GachaUpChance".Translate(GC_AzurManager.UpProbability.ToString("P1"));
         }
 
         public override void DoContent()
@@ -75,10 +81,10 @@ namespace LMA_Lib.UGUI
             }
         }
 
-        public override void ReturnToParent(bool closeEV)
+        public override void ReturnToParent(bool closeEv)
         {
             RIWindowHandler.OpenRIWindow(AzurDefOf.LMA_Prefab_MainMenu, purpose: OpDetailType.Recruit);
-            Close(closeEV);
+            Close(closeEv);
         }
 
         private void BindHomeButton()
@@ -94,7 +100,7 @@ namespace LMA_Lib.UGUI
             homeEscape.onClick.AddListener(delegate
             {
                 RIWindow_OperatorDetail.windowPurpose = OpDetailType.Recruit;
-                this.Close();
+                Close();
             });
         }
 
@@ -104,20 +110,27 @@ namespace LMA_Lib.UGUI
             gachaButton.onClick.RemoveAllListeners();
             gachaButton.onClick.AddListener(delegate
             {
-                if (recruitConsole.CompRefuelable.Fuel < RecruitConsole_Azur.SingleRecruitCount - 0.01f)
+                if (GC_AzurManager.Instance.storedSilver < RecruitConsole_Azur.SingleRecruitCost * GC_AzurManager.SilverExchangeRate)
                 {
                     RefreshGachaButtonState();
                     return;
                 }
 
-                recruitConsole.DrawOperators(gambler, RecruitConsole_Azur.SingleRecruitCount);
+                recruitConsole.DrawOperators(gambler, RecruitConsole_Azur.SingleRecruitCost);
                 RefreshGachaButtonState();
+                if (!RIWindowHandler.continuousRecruit)
+                {
+                    Close();
+                }
             });
         }
 
         private void RefreshGachaButtonState()
         {
-            gachaButton.interactable = recruitConsole.CompRefuelable.Fuel >= RecruitConsole_Azur.SingleRecruitCount - 0.01f;
+            GC_AzurManager manager = GC_AzurManager.Instance;
+            availableCubeText.text = manager.AvaliableCube.ToString();
+            storedSilverText.text = manager.storedSilver.ToString();
+            gachaButton.interactable = manager.storedSilver >= RecruitConsole_Azur.SingleRecruitCost * GC_AzurManager.SilverExchangeRate;
         }
 
         private void DrawUpButtons()

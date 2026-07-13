@@ -22,7 +22,7 @@ namespace LMA_Lib.UGUI
             get
             {
                 GameObject traitPrefab = TypeDef.AzurAsset.LoadAsset<GameObject>("TraitTemplate");
-                GameObject traitInstance = GameObject.Instantiate(traitPrefab, traitPanel);
+                GameObject traitInstance = Object.Instantiate(traitPrefab, traitPanel);
                 return traitInstance;
             }
         }
@@ -30,10 +30,10 @@ namespace LMA_Lib.UGUI
         protected override GameObject DrawNavBtn_Home()
         {
             GameObject navBtn = GameObject.Find("BtnHome");
-            navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            navBtn.GetComponentInChildren<Button>().onClick.AddListener(delegate
             {
-                this.Close(false);
-                RIWindow_OperatorDetail.windowPurpose = OpDetailType.Recruit;
+                Close(false);
+                windowPurpose = OpDetailType.Recruit;
                 RIWindowHandler.OpenRIWindow(AzurDefOf.LMA_Prefab_MainMenu, purpose: OpDetailType.Recruit);
             });
             return navBtn;
@@ -45,6 +45,10 @@ namespace LMA_Lib.UGUI
         public override void Initialize()
         {
             base.Initialize();
+            GC_AzurManager manager = GC_AzurManager.Instance;
+            TextMeshProUGUI[] silverTexts = GameObject.Find("Silver").GetComponentsInChildren<TextMeshProUGUI>();
+            silverTexts[0].text = manager.AvaliableCube.ToString();
+            silverTexts[1].text = manager.storedSilver.ToString();
             if (skillIcon == null)
             {
                 skillIcon = new();
@@ -105,7 +109,7 @@ namespace LMA_Lib.UGUI
             {
                 1 => "#d9b341",//黄
                 2 => "#f66539",//红
-                _ => "\"black\"",
+                _ => "\"black\""
             };
         }
 
@@ -122,7 +126,7 @@ namespace LMA_Lib.UGUI
         public override void ReturnToMainMenu()
         {
             RIWindowHandler.OpenRIWindow(AzurDefOf.LMA_Prefab_MainMenu, purpose: OpDetailType.Recruit);
-            this.Close(closeEV: false);
+            Close(closeEV: false);
         }
         public override void DoContent()
         {
@@ -150,7 +154,7 @@ namespace LMA_Lib.UGUI
             get
             {
                 GameObject traitPrefab = TypeDef.AzurAsset.LoadAsset<GameObject>("RelationsDetails");
-                GameObject traitInstance = GameObject.Instantiate(traitPrefab, relationPanel);
+                GameObject traitInstance = Object.Instantiate(traitPrefab, relationPanel);
                 return traitInstance;
             }
         }
@@ -174,11 +178,11 @@ namespace LMA_Lib.UGUI
             get
             {
                 GameObject opAbilityPrefab = TypeDef.AzurAsset.LoadAsset<GameObject>("OpAbilityIcon");
-                GameObject opAbilityInstance = GameObject.Instantiate(opAbilityPrefab, opAbilityPanel);
+                GameObject opAbilityInstance = Object.Instantiate(opAbilityPrefab, opAbilityPanel);
                 return opAbilityInstance;
             }
         }
-        //本家技能 此面板ui和舟不一样 
+        //本家技能 此面板ui和舟不一样
         protected override void DrawOperatorAbility()
         {
             int skillCnt = OperatorDef.AKAbilities.Count;
@@ -214,7 +218,7 @@ namespace LMA_Lib.UGUI
                     logicOrder++;
                     //opAbilityInstance.transform.GetChild(1).gameObject.SetActive(false);
                     int j = logicOrder;
-                    opAbilityInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+                    opAbilityInstance.GetComponentInChildren<Button>().onClick.AddListener(delegate
                     {
                         SwitchGroupedSkillTo(j);
                     });
@@ -244,7 +248,7 @@ namespace LMA_Lib.UGUI
             get
             {
                 GameObject fashionIconPrefab = TypeDef.AzurAsset.LoadAsset<GameObject>("FashionIcon");
-                return GameObject.Instantiate(fashionIconPrefab, fashionPanel);
+                return Object.Instantiate(fashionIconPrefab, fashionPanel);
             }
         }
 
@@ -262,7 +266,7 @@ namespace LMA_Lib.UGUI
             fashionBtns.Add(OperatorStandType.Elite0, fashionIcon);
             if ((!OperatorDef.dynaLoadStaticStands && OperatorDef.commonStand != null) || (OperatorDef.dynaLoadStaticStands && OperatorDef.staticStands.ContainsKey(OperatorStandType.Elite0)))
             {
-                fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+                fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate
                 {
                     ChangeStandTo(OperatorStandType.Elite0);
                 });
@@ -272,7 +276,7 @@ namespace LMA_Lib.UGUI
             //精2立绘按钮。因为历史问题，这是默认立绘，必须有。
             fashionIcon = GameObject.Find("Elite2");
             fashionBtns.Add(OperatorStandType.Elite2, fashionIcon);
-            fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+            fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate
             {
                 ChangeStandTo(OperatorStandType.Elite2);
             });
@@ -333,7 +337,7 @@ namespace LMA_Lib.UGUI
                     fashionIcon = FashionBtnInstance;
                     //fashionIcon.transform.localPosition = new Vector3(v3.x * logicOrder, v3.y);
                     int j = i + 1000; //用j来标记选中的哪个l2d。+1000代表选的l2d而不是静态换装。
-                    fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate ()
+                    fashionIcon.GetComponentInChildren<Button>().onClick.AddListener(delegate
                     {
                         ChangeStandTo(j);
                     });

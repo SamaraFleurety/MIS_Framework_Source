@@ -149,7 +149,7 @@ namespace AK_DLL.UI
         {
             get
             {
-                GameObject opRectPrefab = AK_AssetTool.FSAsset.LoadAsset<GameObject>("OperatorTemplate");
+                GameObject opRectPrefab = AssetTool.FSAsset.LoadAsset<GameObject>("OperatorTemplate");
                 return Object.Instantiate(opRectPrefab, opListPanel);
             }
         }
@@ -194,7 +194,7 @@ namespace AK_DLL.UI
         public override void ReturnToParent(bool closeEV = true)
         {
             //RIWindow_OperatorDetail.windowPurpose = OpDetailType.Recruit;
-            RIWindowHandler.OpenRIWindow(AK_RecruitDefOf.AK_Prefab_yccMainMenu, purpose: OpDetailType.Recruit /*RIWindowType.MainMenu*/);
+            RIWindowHandler.OpenRIWindow(AKDefOf.AK_Prefab_yccMainMenu, purpose: OpDetailType.Recruit /*RIWindowType.MainMenu*/);
             base.ReturnToParent(closeEV);
         }
 
@@ -210,7 +210,7 @@ namespace AK_DLL.UI
         {
             get
             {
-                GameObject classBtnPrefab = AK_AssetTool.FSAsset.LoadAsset<GameObject>("btnClassTemplate");
+                GameObject classBtnPrefab = AssetTool.FSAsset.LoadAsset<GameObject>("btnClassTemplate");
                 return Object.Instantiate(classBtnPrefab, classColumn);
             }
         }
@@ -277,7 +277,7 @@ namespace AK_DLL.UI
         private void DrawSeriesPanel()
         {
             if (!choosingSeries) return;
-            GameObject classBtnPrefab = AK_AssetTool.FSAsset.LoadAsset<GameObject>("btnClassTemplate");
+            GameObject classBtnPrefab = AssetTool.FSAsset.LoadAsset<GameObject>("btnClassTemplate");
             Transform seriesColumn = GameObject.Find("seriesSelectPanel").transform;
             GameObject seriesBtnInstance;
             Utilities_Unity.ClearAllChild(seriesColumn);
@@ -460,7 +460,7 @@ namespace AK_DLL.UI
 
         protected virtual void OpPortraitBtnOnClickListener(int index)
         {
-            RIWindowHandler.OpenRIWindow_OpDetail(AK_RecruitDefOf.AK_Prefab_OpDetail, cachedOperatorList[index]);
+            RIWindowHandler.OpenRIWindow_OpDetail(AKDefOf.AK_Prefab_OpDetail, cachedOperatorList[index]);
             this.Close(false);
         }
         #endregion

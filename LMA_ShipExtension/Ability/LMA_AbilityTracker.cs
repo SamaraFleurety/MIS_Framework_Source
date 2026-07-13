@@ -13,10 +13,10 @@ namespace LMA_Lib.Ability
 
         public AKAbility_Base AddAbility(AKAbilityDef def, int id)
         {
-            if (equipmentAbilities.ContainsKey(id))
+            if (equipmentAbilities.TryGetValue(id, out AKAbility_Base ea))
             {
                 Log.Error($"[LMA]AbilityTracker for {owner} already has an equipment ability with ID {id}.");
-                return equipmentAbilities[id];
+                return ea;
             }
 
             AKAbility_Base ability = def.MakeAbility(this);

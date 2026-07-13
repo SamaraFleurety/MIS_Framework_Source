@@ -2,36 +2,56 @@ using AK_DLL;
 using RimWorld;
 using System.Collections.Generic;
 using Verse;
+using Verse.AI;
 
 namespace LMA_Lib
 {
     //最后还是觉得写个新类 兼容性更好
     public class RecruitConsole_Azur : RecruitConsole
     {
-
-        public const int SingleRecruitCount = 1;
-        public const int TenRecruitCount = 10;
+        public const int SingleRecruitCost = 1;
 
         public override IEnumerable<FloatMenuOption> GetExtendedFloatMenuOptions(Pawn selPawn)
         {
             if (AzurDefOf.LMA_Rander_Operators?.root == null)
             {
-                Log.Warning("[LMA] 舰娘卡池LMA_Rander_Operators未配置，无法抽卡");
+                //Log.Warning("[LMA] 舰娘卡池LMA_Rander_Operators未配置，无法抽卡");
                 yield break;
             }
 
-            if (CompRefuelable.Fuel >= SingleRecruitCount - 0.01f)
+            //GC_AzurManager manager = GC_AzurManager.Instance;
+            //if (manager.storedSilver >= SingleRecruitCost * GC_AzurManager.SilverExchangeRate)
+            yield return new FloatMenuOption("LMA_Invest_6480".Translate(), delegate
             {
-                yield return new FloatMenuOption("LMA_Invest_6480".Translate(), delegate
+                selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AzurDefOf.LMA_Job_UseGachaConsole, this));
+            });
+            yield return new FloatMenuOption("LMA_Invest_All".Translate(), delegate
+            {
+                selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AzurDefOf.LMA_Job_UseGachaConsole, this, this));
+            });
+
+            List<LocalTargetInfo> silverTargets = new();
+            int silverCount = 0;
+            List<Thing> silverThings = Map.listerThings.ThingsOfDef(ThingDefOf.Silver);
+            for (int index = 0; index < silverThings.Count && silverCount < GC_AzurManager.SilverExchangeRate; index++)
+            {
+                Thing silver = silverThings[index];
+                if (!silver.Spawned || silver.IsForbidden(selPawn) || !selPawn.CanReserveAndReach(silver, PathEndMode.ClosestTouch, Danger.Deadly))
                 {
-                    DrawOperators(selPawn, SingleRecruitCount);
-                });
+                    continue;
+                }
+
+                silverTargets.Add(silver);
+                silverCount += silver.stackCount;
             }
-            if (CompRefuelable.Fuel >= TenRecruitCount - 0.01f)
+
+            if (silverCount >= GC_AzurManager.SilverExchangeRate)
             {
-                yield return new FloatMenuOption("LMA_Invest_All".Translate(), delegate
+                yield return new FloatMenuOption("LMA_StoreSilver".Translate(GC_AzurManager.SilverExchangeRate), delegate
                 {
-                    DrawOperators(selPawn, TenRecruitCount);
+                    Job job = JobMaker.MakeJob(AzurDefOf.LMA_Job_StoreSilver, this);
+                    job.targetQueueB = silverTargets;
+                    selPawn.jobs.TryTakeOrderedJob(job);
                 });
             }
         }
@@ -39,14 +59,21 @@ namespace LMA_Lib
         public void DrawOperators(Pawn selPawn, int count)
         {
             GC_AzurManager manager = GC_AzurManager.Instance;
-            manager.GetUpOperators(AzurDefOf.LMA_Rander_Operators);
 
-            CompRefuelable.ConsumeFuel(count);
+            int silverCost = count * GC_AzurManager.SilverExchangeRate;
+            if (manager.storedSilver < silverCost)
+            {
+                Log.Warning($"[LMA] 抽取 {count} 次需要 {silverCost} 白银，当前仅有 {manager.storedSilver}");
+                return;
+            }
+
+            manager.storedSilver -= silverCost;
+            manager.GetUpOperators(AzurDefOf.LMA_Rander_Operators);
             for (int index = 0; index < count; index++)
             {
-                foreach (object result in AzurDefOf.LMA_Rander_Operators.root.TryIssueGachaResult(InteractionCell, Map, selPawn, 0f))
+                foreach (object result in AzurDefOf.LMA_Rander_Operators.root.TryIssueGachaResult(InteractionCell, Map, selPawn))
                 {
-                    if (result is not null and Thing t)
+                    if (result is Thing t)
                     {
                         Messages.Message("LMA_GachaReport".Translate(t.LabelShort), MessageTypeDefOf.NeutralEvent);
                     }

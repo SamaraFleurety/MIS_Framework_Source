@@ -1,12 +1,12 @@
+using RimWorld;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Verse;
 
 namespace LMA_Lib
 {
-    //每周刷新的卡池 使用伪随机种子生成器
+    //每个游戏月刷新一次的卡池，使用伪随机种子生成器
     public static class GachaGenerator
     {
         public static int GenerateSeed(uint seed, uint iteration)
@@ -14,13 +14,18 @@ namespace LMA_Lib
             return MurmurHash.GetInt(seed, iteration);
         }
 
-        public static int SeedWeekly(DateTime dateTime)
+        public static int GetPeriodStartTick(int gameTick)
         {
-            DateTime periodStart = GetPeriodStart(dateTime);
-            return GenerateSeed((uint)periodStart.Year, (uint)WeekOfYear(periodStart));
+            return gameTick / GenDate.TicksPerQuadrum * GenDate.TicksPerQuadrum;
         }
 
-        public static List<T> RequestWeekly<T>(IList<T> pool, int count, DateTime dateTime)
+        public static int SeedMonthly(int gameTick)
+        {
+            int periodStartTick = GetPeriodStartTick(gameTick);
+            return GenerateSeed((uint)periodStartTick, (uint)(periodStartTick / GenDate.TicksPerQuadrum));
+        }
+
+        public static List<T> RequestPerQuadrum<T>(IList<T> pool, int count, int gameTick)
         {
             if (pool == null)
             {
@@ -30,14 +35,14 @@ namespace LMA_Lib
             List<T> candidates = pool.Distinct().ToList();
             if (candidates.Count == 0)
             {
-                throw new InvalidOperationException("每周卡池没有可用候选项。");
+                throw new InvalidOperationException("月度卡池没有可用候选项。");
             }
             if (count < 0 || count > candidates.Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(count), count, "生成数量不能小于0或超过卡池唯一候选项数量。");
             }
 
-            Random random = new(SeedWeekly(dateTime));
+            Random random = new(SeedMonthly(gameTick));
             for (int index = candidates.Count - 1; index > 0; index--)
             {
                 int targetIndex = random.Next(index + 1);
@@ -45,20 +50,6 @@ namespace LMA_Lib
             }
 
             return candidates.Take(count).ToList();
-        }
-
-        //本年内的第几周
-        public static int WeekOfYear(DateTime date)
-        {
-            Calendar calendar = CultureInfo.InvariantCulture.Calendar;
-            return calendar.GetWeekOfYear(date, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
-        }
-
-        public static DateTime GetPeriodStart(DateTime dateTime)
-        {
-            DateTime date = dateTime.Date;
-            int daysSinceMonday = ((int)date.DayOfWeek + 6) % 7;
-            return date.AddDays(-daysSinceMonday);
         }
     }
 }

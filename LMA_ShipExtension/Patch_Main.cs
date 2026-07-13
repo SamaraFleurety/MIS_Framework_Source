@@ -5,9 +5,9 @@ using Verse;
 namespace LMA_Lib
 {
     [StaticConstructorOnStartup]
-    public class PatchMain
+    public class Patch_Main
     {
-        static PatchMain()
+        static Patch_Main()
         {
             var instance = new Harmony("LMA_Library");
             instance.PatchAll(Assembly.GetExecutingAssembly());

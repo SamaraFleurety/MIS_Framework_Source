@@ -23,7 +23,7 @@ namespace LMA_Lib.HarmonyPatchs
 
         private static float GetMoveSpeedOnWaterFor(Pawn pawn)
         {
-            if (cachedPawn.ContainsKey(pawn)) return cachedPawn[pawn];
+            if (cachedPawn.TryGetValue(pawn, out float value)) return value;
 
             if (!pawn.IsColonist) return 1;
 

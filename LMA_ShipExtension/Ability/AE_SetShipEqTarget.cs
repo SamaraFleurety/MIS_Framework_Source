@@ -10,7 +10,7 @@ namespace LMA_Lib.Ability
         public int? idOverride = null;
         protected override bool DoEffect(AKAbility_Base caster, LocalTargetInfo target)
         {
-            int id = idOverride != null ? idOverride.Value : caster.ID;
+            int id = idOverride ?? caster.ID;
             LMA_AbilityTracker tracker = (LMA_AbilityTracker)caster.container;
             if (tracker.shipEqTargets.ContainsKey(id))
             {

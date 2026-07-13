@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using TMPro;
 using UnityEngine;
+using Verse;
 
 namespace LMA_Lib
 {
@@ -11,16 +12,16 @@ namespace LMA_Lib
 
         private TextMeshProUGUI text;
         private Func<string> textGetter;
-        private DateTime stopTime;
+        private int stopTick;
         private float nextUpdateTime;
 
-        public void Bind(Func<string> getter, DateTime endTime)
+        public void Bind(Func<string> getter, int endTick)
         {
             textGetter = getter;
-            stopTime = endTime;
+            stopTick = endTick;
             text = GetComponent<TextMeshProUGUI>();
             text.text = textGetter();
-            if (DateTime.Now >= stopTime)
+            if (Find.TickManager.TicksGame >= stopTick)
             {
                 enabled = false;
                 return;
@@ -34,7 +35,7 @@ namespace LMA_Lib
             if (textGetter == null || Time.realtimeSinceStartup < nextUpdateTime) return;
 
             text.text = textGetter();
-            if (DateTime.Now >= stopTime)
+            if (Find.TickManager.TicksGame >= stopTick)
             {
                 enabled = false;
                 return;

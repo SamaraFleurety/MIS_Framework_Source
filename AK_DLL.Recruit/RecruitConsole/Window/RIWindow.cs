@@ -10,7 +10,7 @@ namespace AK_DLL.UI
         public GameObject L2DInstance = null; //干员l2d的模型本身
         public GameObject spineInstance = null;
 
-        internal static AssetBundle Bundle => AK_AssetTool.FSAsset;
+        internal static AssetBundle Bundle => AssetTool.FSAsset;
 
         //要是从UGUI转UGUI就不要关ev。UGUI转IMGUI或者全关可以关掉ev。
         public override void Close(bool closeEV = true)

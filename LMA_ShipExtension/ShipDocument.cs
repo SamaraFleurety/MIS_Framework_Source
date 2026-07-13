@@ -17,7 +17,7 @@ namespace LMA_Lib
             {
                 if (FCS_Dirty)
                 {
-                    FCS = new();
+                    FCS = new ShipFCS();
                     foreach (Apparel ap in pawn.apparel.WornApparel)
                     {
                         Ext_FireControlSystem ext = ap.def.GetModExtension<Ext_FireControlSystem>();

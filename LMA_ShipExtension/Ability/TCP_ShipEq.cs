@@ -20,7 +20,7 @@ namespace LMA_Lib.Ability
     {
         TCP_ShipEq Props => (TCP_ShipEq)props;
 
-        Pawn lastEquippedShipgirl = null;
+        Pawn lastEquippedShipgirl;
 
         public override void Notify_Equipped(Pawn pawn)
         {
@@ -29,7 +29,7 @@ namespace LMA_Lib.Ability
             Notify_Unequipped(lastEquippedShipgirl);
 
 
-            if (pawn.GetDoc() is not OperatorDocument doc || doc.parentContainer.AK_Tracker is not LMA_AbilityTracker tracker) return;
+            if (pawn.GetDoc() is not { } doc || doc.parentContainer.AK_Tracker is not LMA_AbilityTracker tracker) return;
             for (int i = 0; i < Props.abilities.Count; i++)
             {
                 AKAbilityDef def = Props.abilities[i];
@@ -43,7 +43,7 @@ namespace LMA_Lib.Ability
         {
             if (pawn == null) return;
             base.Notify_Unequipped(pawn);
-            if (pawn.GetDoc() is not OperatorDocument doc || doc.parentContainer.AK_Tracker is not LMA_AbilityTracker tracker) return;
+            if (pawn.GetDoc() is not { } doc || doc.parentContainer.AK_Tracker is not LMA_AbilityTracker tracker) return;
             for (int i = 0; i < Props.abilities.Count; i++)
             {
                 tracker.RemoveAbility((parent.thingIDNumber * 100) + i); //我不相信技能能有100个

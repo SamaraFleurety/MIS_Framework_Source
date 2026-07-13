@@ -5,10 +5,10 @@ using RimWorld;
 namespace LMA_Lib.HarmonyPatchs
 {
     [HarmonyPatch(typeof(Pawn_ApparelTracker), "Notify_ApparelChanged")]
-    public class Patch_ApparealWearNotify
+    public class Patch_ApparelWearNotify
     {
         [HarmonyPostfix]
-        public static void fix(Pawn_ApparelTracker __instance)
+        public static void Postfix(Pawn_ApparelTracker __instance)
         {
             if (__instance.pawn.GetDoc() is ShipDocument doc)
             {

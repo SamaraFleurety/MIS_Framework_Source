@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using RimWorld;
 using Verse;
 
@@ -14,13 +14,13 @@ namespace AK_DLL.Recruit
         [HarmonyPatch(typeof(UIRoot), nameof(UIRoot.UIRootOnGUI))]
         public static bool Prefix_UIRootOnGUI()
         {
-            return !AK_AssetTool.disableIMGUI;
+            return !AssetTool.disableIMGUI;
         }
         [HarmonyPrefix]
         [HarmonyPatch(typeof(UIRoot), nameof(UIRoot.UIRootUpdate))]
         public static bool Prefix_UIRootUpdate()
         {
-            return !AK_AssetTool.disableIMGUI;
+            return !AssetTool.disableIMGUI;
         }
 
         //UIRoot_Entry
@@ -28,13 +28,13 @@ namespace AK_DLL.Recruit
         [HarmonyPatch(typeof(UIRoot_Entry), nameof(UIRoot_Entry.UIRootOnGUI))]
         public static bool Prefix_UIRootEntryOnGUI()
         {
-            return !AK_AssetTool.disableIMGUI;
+            return !AssetTool.disableIMGUI;
         }
         [HarmonyPrefix]
         [HarmonyPatch(nameof(UIRoot_Entry.UIRootUpdate))]
         public static bool Prefix_UIRootEntryUpdate()
         {
-            return !AK_AssetTool.disableIMGUI;
+            return !AssetTool.disableIMGUI;
         }
 
         //UIRoot_Play
@@ -42,14 +42,14 @@ namespace AK_DLL.Recruit
         [HarmonyPatch(nameof(UIRoot_Play.UIRootOnGUI))]
         public static bool Prefix_UIRootPlayOnGUI()
         {
-            return !AK_AssetTool.disableIMGUI;
+            return !AssetTool.disableIMGUI;
         }
 
         [HarmonyPrefix]
         [HarmonyPatch(nameof(UIRoot_Play.UIRootUpdate))]
         public static bool Prefix_UIRootPlayUpdate()
         {
-            return !AK_AssetTool.disableIMGUI;
+            return !AssetTool.disableIMGUI;
         }
     }
 }

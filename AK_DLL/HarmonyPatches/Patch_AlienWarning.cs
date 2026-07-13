@@ -2,7 +2,6 @@
 using HarmonyLib;
 using RimWorld;
 using Steamworks;
-using System;
 using Verse;
 
 namespace AK_DLL
@@ -29,8 +28,7 @@ namespace AK_DLL
                 delegate
                 {
                     _disabledAlienWarningNewColony = true;
-                }
-                ));
+                }));
             }
         }
 
@@ -48,8 +46,7 @@ namespace AK_DLL
                 delegate
                 {
                     _disabledAlienWarningLoadGame = true;
-                }
-                ));
+                }));
             }
         }
     }

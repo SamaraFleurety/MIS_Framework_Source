@@ -86,11 +86,11 @@ namespace AK_DLL
         //从随便一个模型/prefab的def，仅读其ab包
         public static AssetBundle LoadAssetBundle(this AssetDef assetDef)
         {
-            if (File.Exists(ModIDtoPath(assetDef.modID, assetDef.assetBundle, "/Asset/")))
+            if (File.Exists(ModIDtoPath(assetDef.modID, assetDef.AssetBundleForCurrentOs, "/Asset/")))
             {
-                return LoadAssetBundle(assetDef.modID, assetDef.assetBundle);
+                return LoadAssetBundle(assetDef.modID, assetDef.AssetBundleForCurrentOs);
             }
-            return LoadAssetBundle(assetDef.modID, assetDef.AssetBundleForCurrentOs);
+            return LoadAssetBundle(assetDef.modID, assetDef.assetBundle);
         }
 
         /// <summary>

@@ -1,4 +1,4 @@
-﻿using AKA_Ability.Cooldown;
+using AKA_Ability.Cooldown;
 using System.Linq;
 using System.Text;
 using UnityEngine;
@@ -8,6 +8,9 @@ namespace AKA_Ability.Gizmos
 {
     public abstract class Gizmo_AbilityCast_Base : Command
     {
+
+        public static readonly Texture2D CooldownFillTex = SolidColorMaterials.NewSolidColorTexture(new Color(1f, 1f, 1f, 0.7f));
+
         //不是必然有 只是给个地方存
         public AKAbility_Base parent;
 
@@ -73,7 +76,7 @@ namespace AKA_Ability.Gizmos
             //充能
             Widgets.Label(rect, this.Cooldown.Charge + "/" + this.Cooldown.MaxCharge);
             //技能冷却
-            GUI.DrawTexture(new Rect(rect.x, rect.y + rect.height, rect.width, rect.height * Cooldown.CooldownPercent() * -1), BaseContent.WhiteTex);
+            GUI.DrawTexture(new Rect(rect.x, rect.y + rect.height, rect.width, rect.height * Cooldown.CooldownPercent() * -1), CooldownFillTex);
             GUI.color = Color.white;
         }
 

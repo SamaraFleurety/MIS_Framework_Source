@@ -1,4 +1,4 @@
-﻿using AK_DLL;
+using AK_DLL;
 using AlienRace;
 using HarmonyLib;
 using System;
@@ -15,6 +15,8 @@ namespace Paluto22.AK.Patch.AlienRace
         [HarmonyPrefix]
         public static bool HeadGraphicForPrefix_Prefix(ref bool __result, PawnRenderNode_Head __instance, Pawn pawn)
         {
+            if (pawn == null) return HarmonyPatches.ORIGINAL_KEEP;
+
             __result = true;
             if (OperatorDef.currentlyGenerating == true || pawn.GetDoc() != null)
             {

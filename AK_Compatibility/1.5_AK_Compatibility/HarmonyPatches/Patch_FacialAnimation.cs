@@ -28,7 +28,7 @@ namespace PA_AKPatch
 
         public static void Postfix_CompRenderNodes(ref List<PawnRenderNode> __result, Pawn ___pawn)
         {
-            if (___pawn == null|| AKC_ModSettings.disable_FacialAnimation) return;
+            if (___pawn == null || AKC_ModSettings.disable_FacialAnimation) return;
 
             var ext = ___pawn.kindDef.GetModExtension<Ext_MarkNLIncompatible>();
             var doc = ___pawn.GetDoc();
@@ -43,7 +43,7 @@ namespace PA_AKPatch
         {
             if (cachedPawn.Contains(pawn)) return false;
 
-            var ext = pawn.kindDef.GetModExtension<Ext_MarkNLIncompatible>();
+            var ext = pawn?.kindDef.GetModExtension<Ext_MarkNLIncompatible>();
             if (ext != null)
             {
                 cachedPawn.Add(pawn);

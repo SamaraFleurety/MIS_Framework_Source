@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <TargetFramework>net48</TargetFramework>
+	  <OutputType>Library</OutputType>
+	  <AppDesignerFolder>Properties</AppDesignerFolder>
+	  <RootNamespace>PA_WutheringWave</RootNamespace>
+	  <AssemblyName>PA_WutheringWave</AssemblyName>
+	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	  <LangVersion>9.0</LangVersion>
+  </PropertyGroup>
+
+</Project>

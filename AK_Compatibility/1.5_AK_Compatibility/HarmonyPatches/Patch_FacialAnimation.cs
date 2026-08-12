@@ -1,4 +1,4 @@
-﻿using AK_DLL;
+using AK_DLL;
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
@@ -28,7 +28,7 @@ namespace PA_AKPatch
 
         public static void Postfix_CompRenderNodes(ref List<PawnRenderNode> __result, Pawn ___pawn)
         {
-            if (AKC_ModSettings.disable_FacialAnimation) return;
+            if (___pawn == null|| AKC_ModSettings.disable_FacialAnimation) return;
 
             var ext = ___pawn.kindDef.GetModExtension<Ext_MarkNLIncompatible>();
             var doc = ___pawn.GetDoc();

@@ -55,6 +55,7 @@ nunit-*.xml
 /Source/.vs
 
 .vs
+.idea
 *.cache
 */packages/*
 *.pdb

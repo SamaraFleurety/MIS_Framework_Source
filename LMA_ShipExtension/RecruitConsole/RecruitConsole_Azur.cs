@@ -19,24 +19,6 @@ namespace LMA_Lib
                 yield break;
             }
 
-            GC_AzurManager manager = GC_AzurManager.Instance;
-            if (manager.storedSilver < SingleRecruitCost * GC_AzurManager.SilverExchangeRate)
-            {
-                yield return new FloatMenuOption("LMA_NoCube".Translate(), null);
-                yield break;
-            }
-
-            //GC_AzurManager manager = GC_AzurManager.Instance;
-            //if (manager.storedSilver >= SingleRecruitCost * GC_AzurManager.SilverExchangeRate)
-            yield return new FloatMenuOption("LMA_Invest_6480".Translate(), delegate
-            {
-                selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AzurDefOf.LMA_Job_UseGachaConsole, this));
-            });
-            yield return new FloatMenuOption("LMA_Invest_All".Translate(), delegate
-            {
-                selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AzurDefOf.LMA_Job_UseGachaConsole, this, this));
-            });
-
             List<LocalTargetInfo> silverTargets = new();
             int silverCount = 0;
             List<Thing> silverThings = Map.listerThings.ThingsOfDef(ThingDefOf.Silver);
@@ -61,6 +43,22 @@ namespace LMA_Lib
                     selPawn.jobs.TryTakeOrderedJob(job);
                 });
             }
+
+            GC_AzurManager manager = GC_AzurManager.Instance;
+            if (manager.storedSilver < SingleRecruitCost * GC_AzurManager.SilverExchangeRate)
+            {
+                yield return new FloatMenuOption("LMA_NoCube".Translate(), null);
+                yield break;
+            }
+
+            yield return new FloatMenuOption("LMA_Invest_6480".Translate(), delegate
+            {
+                selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AzurDefOf.LMA_Job_UseGachaConsole, this));
+            });
+            yield return new FloatMenuOption("LMA_Invest_All".Translate(), delegate
+            {
+                selPawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(AzurDefOf.LMA_Job_UseGachaConsole, this, this));
+            });
         }
 
         public void DrawOperators(Pawn selPawn, int count)

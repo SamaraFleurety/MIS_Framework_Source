@@ -94,7 +94,7 @@ namespace AK_DLL
                 if (font == null || DefDatabase<FontDef>.GetNamedSilentFail(font) == null) font = DEFAULT_FONT;
                 return DefDatabase<FontDef>.GetNamedSilentFail(font);
             }
-            set { font = value.defName; }
+            set { font = value?.defName ?? DEFAULT_FONT; }
         }
 
         //记录上次选择的系列以及职业
@@ -251,8 +251,8 @@ namespace AK_DLL
                     {
                         AK_ModSettings.Font = j;
                     }));
-                    Find.WindowStack.Add(new FloatMenu(list));
                 }
+                Find.WindowStack.Add(new FloatMenu(list));
             }
 
             listingStandard.End();
